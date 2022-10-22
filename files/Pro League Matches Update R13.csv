@@ -1,0 +1,118 @@
+﻿Wk,Day,Date,Home,Score,Away,Downloaded,Match,Round,HomeID,AwayID,HomeEndColor,HomeKitLine,AwayEndColor,AwayKitLine,MatchSelect
+1,Fri,44764,Standard Liège,2--2,Gent,y,Standard Liège 2-2 Gent,Round 1 - 7/22/2022,261,231,#5D3A9B,black,#E66100,black,Round 1 - 7/22/2022: Standard Liège 2-2 Gent
+1,Sat,44765,Charleroi,3--1,Eupen,y,Charleroi 3-1 Eupen,Round 1 - 7/23/2022,260,2166,#5D3A9B,black,#E66100,black,Round 1 - 7/23/2022: Charleroi 3-1 Eupen
+1,Sat,44765,Kortrijk,0--2,OH Leuven,y,Kortrijk 0-2 OH Leuven,Round 1 - 7/23/2022,886,1406,#5D3A9B,black,#E66100,black,Round 1 - 7/23/2022: Kortrijk 0-2 OH Leuven
+1,Sat,44765,Zulte Waregem,2--0,Seraing,y,Zulte Waregem 2-0 Seraing,Round 1 - 7/23/2022,2164,5747,#5D3A9B,black,#E66100,black,Round 1 - 7/23/2022: Zulte Waregem 2-0 Seraing
+1,Sat,44765,Sint-Truiden,1--1,Union Saint-Gilloise,y,Sint-Truiden 1-1 Union Saint-Gilloise,Round 1 - 7/23/2022,239,2647,#5D3A9B,black,#E66100,black,Round 1 - 7/23/2022: Sint-Truiden 1-1 Union Saint-Gilloise
+1,Sun,44766,Club Brugge,3--2,Genk,y,Club Brugge 3-2 Genk,Round 1 - 7/24/2022,124,140,#5D3A9B,black,#E66100,black,Round 1 - 7/24/2022: Club Brugge 3-2 Genk
+1,Sun,44766,Mechelen,0--2,Antwerp,y,Mechelen 0-2 Antwerp,Round 1 - 7/24/2022,237,752,#5D3A9B,black,#E66100,black,Round 1 - 7/24/2022: Mechelen 0-2 Antwerp
+1,Sun,44766,Anderlecht,2--0,Oostende,y,Anderlecht 2-0 Oostende,Round 1 - 7/24/2022,240,2165,#5D3A9B,black,#E66100,black,Round 1 - 7/24/2022: Anderlecht 2-0 Oostende
+1,Sun,44766,Westerlo,2--0,Cercle Brugge,y,Westerlo 2-0 Cercle Brugge,Round 1 - 7/24/2022,238,885,#5D3A9B,black,#E66100,black,Round 1 - 7/24/2022: Westerlo 2-0 Cercle Brugge
+2,Fri,44771,Union Saint-Gilloise,1--0,Charleroi,y,Union Saint-Gilloise 1-0 Charleroi,Round 2 - 7/29/2022,2647,260,#5D3A9B,black,#E66100,black,Round 2 - 7/29/2022: Union Saint-Gilloise 1-0 Charleroi
+2,Sat,44772,Cercle Brugge,1--0,Anderlecht,y,Cercle Brugge 1-0 Anderlecht,Round 2 - 7/30/2022,885,240,#5D3A9B,black,#E66100,black,Round 2 - 7/30/2022: Cercle Brugge 1-0 Anderlecht
+2,Sat,44772,OH Leuven,2--0,Westerlo,y,OH Leuven 2-0 Westerlo,Round 2 - 7/30/2022,1406,238,#5D3A9B,black,#E66100,black,Round 2 - 7/30/2022: OH Leuven 2-0 Westerlo
+2,Sat,44772,Oostende,2--1,Mechelen,y,Oostende 2-1 Mechelen,Round 2 - 7/30/2022,2165,237,#5D3A9B,black,#E66100,black,Round 2 - 7/30/2022: Oostende 2-1 Mechelen
+2,Sat,44772,Gent,1--1,Sint-Truiden,y,Gent 1-1 Sint-Truiden,Round 2 - 7/30/2022,231,239,#5D3A9B,black,#E66100,black,Round 2 - 7/30/2022: Gent 1-1 Sint-Truiden
+2,Sun,44773,Genk,3--1,Standard Liège,y,Genk 3-1 Standard Liège,Round 2 - 7/31/2022,140,261,#5D3A9B,black,#E66100,black,Round 2 - 7/31/2022: Genk 3-1 Standard Liège
+2,Sun,44773,Eupen,2--1,Club Brugge,y,Eupen 2-1 Club Brugge,Round 2 - 7/31/2022,2166,124,#5D3A9B,black,#E66100,black,Round 2 - 7/31/2022: Eupen 2-1 Club Brugge
+2,Sun,44773,Seraing,0--1,Kortrijk,y,Seraing 0-1 Kortrijk,Round 2 - 7/31/2022,5747,886,#5D3A9B,black,#E66100,black,Round 2 - 7/31/2022: Seraing 0-1 Kortrijk
+2,Sun,44773,Antwerp,1--0,Zulte Waregem,y,Antwerp 1-0 Zulte Waregem,Round 2 - 7/31/2022,752,2164,#5D3A9B,black,#E66100,black,Round 2 - 7/31/2022: Antwerp 1-0 Zulte Waregem
+3,Fri,44778,Club Brugge,1--1,Zulte Waregem,y,Club Brugge 1-1 Zulte Waregem,Round 3 - 8/5/2022,124,2164,#5D3A9B,black,#E66100,black,Round 3 - 8/5/2022: Club Brugge 1-1 Zulte Waregem
+3,Sat,44779,Genk,4--2,Eupen,y,Genk 4-2 Eupen,Round 3 - 8/6/2022,140,2166,#5D3A9B,black,#E66100,black,Round 3 - 8/6/2022: Genk 4-2 Eupen
+3,Sat,44779,Kortrijk,0--0,Sint-Truiden,y,Kortrijk 0-0 Sint-Truiden,Round 3 - 8/6/2022,886,239,#5D3A9B,black,#E66100,black,Round 3 - 8/6/2022: Kortrijk 0-0 Sint-Truiden
+3,Sat,44779,Charleroi,1--3,Oostende,y,Charleroi 1-3 Oostende,Round 3 - 8/6/2022,260,2165,#5D3A9B,black,#E66100,black,Round 3 - 8/6/2022: Charleroi 1-3 Oostende
+3,Sat,44779,Mechelen,3--0,Union Saint-Gilloise,y,Mechelen 3-0 Union Saint-Gilloise,Round 3 - 8/6/2022,237,2647,#5D3A9B,black,#E66100,black,Round 3 - 8/6/2022: Mechelen 3-0 Union Saint-Gilloise
+3,Sun,44780,Standard Liège,2--0,Cercle Brugge,y,Standard Liège 2-0 Cercle Brugge,Round 3 - 8/7/2022,261,885,#5D3A9B,black,#E66100,black,Round 3 - 8/7/2022: Standard Liège 2-0 Cercle Brugge
+3,Sun,44780,Gent,2--1,Westerlo,y,Gent 2-1 Westerlo,Round 3 - 8/7/2022,231,238,#5D3A9B,black,#E66100,black,Round 3 - 8/7/2022: Gent 2-1 Westerlo
+3,Sun,44780,Anderlecht,3--1,Seraing,y,Anderlecht 3-1 Seraing,Round 3 - 8/7/2022,240,5747,#5D3A9B,black,#E66100,black,Round 3 - 8/7/2022: Anderlecht 3-1 Seraing
+3,Sun,44780,Antwerp,4--2,OH Leuven,y,Antwerp 4-2 OH Leuven,Round 3 - 8/7/2022,752,1406,#5D3A9B,black,#E66100,black,Round 3 - 8/7/2022: Antwerp 4-2 OH Leuven
+4,Fri,44785,Oostende,1--3,Gent,y,Oostende 1-3 Gent,Round 4 - 8/12/2022,2165,231,#5D3A9B,black,#E66100,black,Round 4 - 8/12/2022: Oostende 1-3 Gent
+4,Sat,44786,Westerlo,4--2,Standard Liège,y,Westerlo 4-2 Standard Liège,Round 4 - 8/13/2022,238,261,#5D3A9B,black,#E66100,black,Round 4 - 8/13/2022: Westerlo 4-2 Standard Liège
+4,Sat,44786,Seraing,0--1,Charleroi,y,Seraing 0-1 Charleroi,Round 4 - 8/13/2022,5747,260,#5D3A9B,black,#E66100,black,Round 4 - 8/13/2022: Seraing 0-1 Charleroi
+4,Sat,44786,Cercle Brugge,0--0,Mechelen,y,Cercle Brugge 0-0 Mechelen,Round 4 - 8/13/2022,885,237,#5D3A9B,black,#E66100,black,Round 4 - 8/13/2022: Cercle Brugge 0-0 Mechelen
+4,Sat,44786,Union Saint-Gilloise,2--1,Kortrijk,y,Union Saint-Gilloise 2-1 Kortrijk,Round 4 - 8/13/2022,2647,886,#5D3A9B,black,#E66100,black,Round 4 - 8/13/2022: Union Saint-Gilloise 2-1 Kortrijk
+4,Sun,44787,Sint-Truiden,0--3,Anderlecht,y,Sint-Truiden 0-3 Anderlecht,Round 4 - 8/14/2022,239,240,#5D3A9B,black,#E66100,black,Round 4 - 8/14/2022: Sint-Truiden 0-3 Anderlecht
+4,Sun,44787,Eupen,0--1,Antwerp,y,Eupen 0-1 Antwerp,Round 4 - 8/14/2022,2166,752,#5D3A9B,black,#E66100,black,Round 4 - 8/14/2022: Eupen 0-1 Antwerp
+4,Sun,44787,OH Leuven,0--3,Club Brugge,y,OH Leuven 0-3 Club Brugge,Round 4 - 8/14/2022,1406,124,#5D3A9B,black,#E66100,black,Round 4 - 8/14/2022: OH Leuven 0-3 Club Brugge
+4,Sun,44787,Zulte Waregem,1--4,Genk,y,Zulte Waregem 1-4 Genk,Round 4 - 8/14/2022,2164,140,#5D3A9B,black,#E66100,black,Round 4 - 8/14/2022: Zulte Waregem 1-4 Genk
+5,Fri,44792,Eupen,1--3,Seraing,y,Eupen 1-3 Seraing,Round 5 - 8/19/2022,2166,5747,#5D3A9B,black,#E66100,black,Round 5 - 8/19/2022: Eupen 1-3 Seraing
+5,Sat,44793,Oostende,0--1,Sint-Truiden,y,Oostende 0-1 Sint-Truiden,Round 5 - 8/20/2022,2165,239,#5D3A9B,black,#E66100,black,Round 5 - 8/20/2022: Oostende 0-1 Sint-Truiden
+5,Sat,44793,Genk,2--1,Cercle Brugge,y,Genk 2-1 Cercle Brugge,Round 5 - 8/20/2022,140,885,#5D3A9B,black,#E66100,black,Round 5 - 8/20/2022: Genk 2-1 Cercle Brugge
+5,Sun,44794,Club Brugge,2--1,Kortrijk,y,Club Brugge 2-1 Kortrijk,Round 5 - 8/21/2022,124,886,#5D3A9B,black,#E66100,black,Round 5 - 8/21/2022: Club Brugge 2-1 Kortrijk
+5,Sun,44794,Zulte Waregem,1--3,Charleroi,y,Zulte Waregem 1-3 Charleroi,Round 5 - 8/21/2022,2164,260,#5D3A9B,black,#E66100,black,Round 5 - 8/21/2022: Zulte Waregem 1-3 Charleroi
+5,Sun,44794,Standard Liège,1--3,OH Leuven,y,Standard Liège 1-3 OH Leuven,Round 5 - 8/21/2022,261,1406,#5D3A9B,black,#E66100,black,Round 5 - 8/21/2022: Standard Liège 1-3 OH Leuven
+5,Sun,44794,Mechelen,5--4,Westerlo,y,Mechelen 5-4 Westerlo,Round 5 - 8/21/2022,237,238,#5D3A9B,black,#E66100,black,Round 5 - 8/21/2022: Mechelen 5-4 Westerlo
+6,Fri,44799,Charleroi,1--3,Club Brugge,y,Charleroi 1-3 Club Brugge,Round 6 - 8/26/2022,260,124,#5D3A9B,black,#E66100,black,Round 6 - 8/26/2022: Charleroi 1-3 Club Brugge
+6,Sat,44800,Seraing,0--4,Genk,y,Seraing 0-4 Genk,Round 6 - 8/27/2022,5747,140,#5D3A9B,black,#E66100,black,Round 6 - 8/27/2022: Seraing 0-4 Genk
+6,Sat,44800,OH Leuven,2--1,Oostende,y,OH Leuven 2-1 Oostende,Round 6 - 8/27/2022,1406,2165,#5D3A9B,black,#E66100,black,Round 6 - 8/27/2022: OH Leuven 2-1 Oostende
+6,Sat,44800,Cercle Brugge,1--1,Zulte Waregem,y,Cercle Brugge 1-1 Zulte Waregem,Round 6 - 8/27/2022,885,2164,#5D3A9B,black,#E66100,black,Round 6 - 8/27/2022: Cercle Brugge 1-1 Zulte Waregem
+6,Sat,44800,Sint-Truiden,3--1,Mechelen,y,Sint-Truiden 3-1 Mechelen,Round 6 - 8/27/2022,239,237,#5D3A9B,black,#E66100,black,Round 6 - 8/27/2022: Sint-Truiden 3-1 Mechelen
+6,Sun,44801,Gent,1--2,Antwerp,y,Gent 1-2 Antwerp,Round 6 - 8/28/2022,231,752,#5D3A9B,black,#E66100,black,Round 6 - 8/28/2022: Gent 1-2 Antwerp
+6,Sun,44801,Kortrijk,0--1,Standard Liège,y,Kortrijk 0-1 Standard Liège,Round 6 - 8/28/2022,886,261,#5D3A9B,black,#E66100,black,Round 6 - 8/28/2022: Kortrijk 0-1 Standard Liège
+6,Sun,44801,Union Saint-Gilloise,2--1,Anderlecht,y,Union Saint-Gilloise 2-1 Anderlecht,Round 6 - 8/28/2022,2647,240,#5D3A9B,black,#E66100,black,Round 6 - 8/28/2022: Union Saint-Gilloise 2-1 Anderlecht
+6,Sun,44801,Westerlo,0--1,Eupen,y,Westerlo 0-1 Eupen,Round 6 - 8/28/2022,238,2166,#5D3A9B,black,#E66100,black,Round 6 - 8/28/2022: Westerlo 0-1 Eupen
+5,Wed,44804,Antwerp,4--2,Union Saint-Gilloise,y,Antwerp 4-2 Union Saint-Gilloise,Round 5 - 8/31/2022,752,2647,#5D3A9B,black,#E66100,black,Round 5 - 8/31/2022: Antwerp 4-2 Union Saint-Gilloise
+5,Thu,44805,Anderlecht,0--1,Gent,y,Anderlecht 0-1 Gent,Round 5 - 9/1/2022,240,231,#5D3A9B,black,#E66100,black,Round 5 - 9/1/2022: Anderlecht 0-1 Gent
+7,Fri,44806,Club Brugge,4--0,Cercle Brugge,y,Club Brugge 4-0 Cercle Brugge,Round 7 - 9/2/2022,124,885,#5D3A9B,black,#E66100,black,Round 7 - 9/2/2022: Club Brugge 4-0 Cercle Brugge
+7,Sat,44807,Genk,0--0,Sint-Truiden,y,Genk 0-0 Sint-Truiden,Round 7 - 9/3/2022,140,239,#5D3A9B,black,#E66100,black,Round 7 - 9/3/2022: Genk 0-0 Sint-Truiden
+7,Sat,44807,Mechelen,2--3,Seraing,y,Mechelen 2-3 Seraing,Round 7 - 9/3/2022,237,5747,#5D3A9B,black,#E66100,black,Round 7 - 9/3/2022: Mechelen 2-3 Seraing
+7,Sat,44807,Eupen,0--1,Kortrijk,y,Eupen 0-1 Kortrijk,Round 7 - 9/3/2022,2166,886,#5D3A9B,black,#E66100,black,Round 7 - 9/3/2022: Eupen 0-1 Kortrijk
+7,Sat,44807,Standard Liège,1--0,Oostende,y,Standard Liège 1-0 Oostende,Round 7 - 9/3/2022,261,2165,#5D3A9B,black,#E66100,black,Round 7 - 9/3/2022: Standard Liège 1-0 Oostende
+7,Sun,44808,Anderlecht,2--2,OH Leuven,y,Anderlecht 2-2 OH Leuven,Round 7 - 9/4/2022,240,1406,#5D3A9B,black,#E66100,black,Round 7 - 9/4/2022: Anderlecht 2-2 OH Leuven
+7,Sun,44808,Antwerp,3--0,Westerlo,y,Antwerp 3-0 Westerlo,Round 7 - 9/4/2022,752,238,#5D3A9B,black,#E66100,black,Round 7 - 9/4/2022: Antwerp 3-0 Westerlo
+7,Sun,44808,Charleroi,2--1,Gent,y,Charleroi 2-1 Gent,Round 7 - 9/4/2022,260,231,#5D3A9B,black,#E66100,black,Round 7 - 9/4/2022: Charleroi 2-1 Gent
+7,Sun,44808,Zulte Waregem,1--3,Union Saint-Gilloise,y,Zulte Waregem 1-3 Union Saint-Gilloise,Round 7 - 9/4/2022,2164,2647,#5D3A9B,black,#E66100,black,Round 7 - 9/4/2022: Zulte Waregem 1-3 Union Saint-Gilloise
+8,Fri,44813,Sint-Truiden,1--2,Standard Liège,y,Sint-Truiden 1-2 Standard Liège,Round 8 - 9/9/2022,239,261,#5D3A9B,black,#E66100,black,Round 8 - 9/9/2022: Sint-Truiden 1-2 Standard Liège
+8,Sat,44814,Kortrijk,1--4,Mechelen,y,Kortrijk 1-4 Mechelen,Round 8 - 9/10/2022,886,237,#5D3A9B,black,#E66100,black,Round 8 - 9/10/2022: Kortrijk 1-4 Mechelen
+8,Sat,44814,Oostende,1--0,Eupen,y,Oostende 1-0 Eupen,Round 8 - 9/10/2022,2165,2166,#5D3A9B,black,#E66100,black,Round 8 - 9/10/2022: Oostende 1-0 Eupen
+8,Sat,44814,Seraing,0--2,Club Brugge,y,Seraing 0-2 Club Brugge,Round 8 - 9/10/2022,5747,124,#5D3A9B,black,#E66100,black,Round 8 - 9/10/2022: Seraing 0-2 Club Brugge
+8,Sat,44814,OH Leuven,3--2,Charleroi,y,OH Leuven 3-2 Charleroi,Round 8 - 9/10/2022,1406,260,#5D3A9B,black,#E66100,black,Round 8 - 9/10/2022: OH Leuven 3-2 Charleroi
+8,Sun,44815,Westerlo,2--1,Anderlecht,y,Westerlo 2-1 Anderlecht,Round 8 - 9/11/2022,238,240,#5D3A9B,black,#E66100,black,Round 8 - 9/11/2022: Westerlo 2-1 Anderlecht
+8,Sun,44815,Cercle Brugge,0--2,Antwerp,y,Cercle Brugge 0-2 Antwerp,Round 8 - 9/11/2022,885,752,#5D3A9B,black,#E66100,black,Round 8 - 9/11/2022: Cercle Brugge 0-2 Antwerp
+8,Sun,44815,Union Saint-Gilloise,1--2,Genk,y,Union Saint-Gilloise 1-2 Genk,Round 8 - 9/11/2022,2647,140,#5D3A9B,black,#E66100,black,Round 8 - 9/11/2022: Union Saint-Gilloise 1-2 Genk
+8,Sun,44815,Gent,2--0,Zulte Waregem,y,Gent 2-0 Zulte Waregem,Round 8 - 9/11/2022,231,2164,#5D3A9B,black,#E66100,black,Round 8 - 9/11/2022: Gent 2-0 Zulte Waregem
+9,Fri,44820,Antwerp,2--1,Seraing,y,Antwerp 2-1 Seraing,Round 9 - 9/16/2022,752,5747,#5D3A9B,black,#E66100,black,Round 9 - 9/16/2022: Antwerp 2-1 Seraing
+9,Sat,44821,Mechelen,0--0,OH Leuven,y,Mechelen 0-0 OH Leuven,Round 9 - 9/17/2022,237,1406,#5D3A9B,black,#E66100,black,Round 9 - 9/17/2022: Mechelen 0-0 OH Leuven
+9,Sat,44821,Cercle Brugge,2--2,Oostende,y,Cercle Brugge 2-2 Oostende,Round 9 - 9/17/2022,885,2165,#5D3A9B,black,#E66100,black,Round 9 - 9/17/2022: Cercle Brugge 2-2 Oostende
+9,Sat,44821,Zulte Waregem,0--3,Sint-Truiden,y,Zulte Waregem 0-3 Sint-Truiden,Round 9 - 9/17/2022,2164,239,#5D3A9B,black,#E66100,black,Round 9 - 9/17/2022: Zulte Waregem 0-3 Sint-Truiden
+9,Sat,44821,Charleroi,2--3,Westerlo,y,Charleroi 2-3 Westerlo,Round 9 - 9/17/2022,260,238,#5D3A9B,black,#E66100,black,Round 9 - 9/17/2022: Charleroi 2-3 Westerlo
+9,Sun,44822,Genk,1--0,Gent,y,Genk 1-0 Gent,Round 9 - 9/18/2022,140,231,#5D3A9B,black,#E66100,black,Round 9 - 9/18/2022: Genk 1-0 Gent
+9,Sun,44822,Eupen,1--2,Union Saint-Gilloise,y,Eupen 1-2 Union Saint-Gilloise,Round 9 - 9/18/2022,2166,2647,#5D3A9B,black,#E66100,black,Round 9 - 9/18/2022: Eupen 1-2 Union Saint-Gilloise
+9,Sun,44822,Standard Liège,3--0,Club Brugge,y,Standard Liège 3-0 Club Brugge,Round 9 - 9/18/2022,261,124,#5D3A9B,black,#E66100,black,Round 9 - 9/18/2022: Standard Liège 3-0 Club Brugge
+9,Sun,44822,Anderlecht,4--1,Kortrijk,y,Anderlecht 4-1 Kortrijk,Round 9 - 9/18/2022,240,886,#5D3A9B,black,#E66100,black,Round 9 - 9/18/2022: Anderlecht 4-1 Kortrijk
+10,Fri,44834,Standard Liège,0--2,Seraing,y,Standard Liège 0-2 Seraing,Round 10 - 9/30/2022,261,5747,#5D3A9B,black,#E66100,black,Round 10 - 9/30/2022: Standard Liège 0-2 Seraing
+10,Sat,44835,OH Leuven,0--3,Union Saint-Gilloise,y,OH Leuven 0-3 Union Saint-Gilloise,Round 10 - 10/1/2022,1406,2647,#5D3A9B,black,#E66100,black,Round 10 - 10/1/2022: OH Leuven 0-3 Union Saint-Gilloise
+10,Sat,44835,Oostende,1--2,Genk,y,Oostende 1-2 Genk,Round 10 - 10/1/2022,2165,140,#5D3A9B,black,#E66100,black,Round 10 - 10/1/2022: Oostende 1-2 Genk
+10,Sat,44835,Westerlo,2--0,Zulte Waregem,y,Westerlo 2-0 Zulte Waregem,Round 10 - 10/1/2022,238,2164,#5D3A9B,black,#E66100,black,Round 10 - 10/1/2022: Westerlo 2-0 Zulte Waregem
+10,Sat,44835,Club Brugge,3--0,Mechelen,y,Club Brugge 3-0 Mechelen,Round 10 - 10/1/2022,124,237,#5D3A9B,black,#E66100,black,Round 10 - 10/1/2022: Club Brugge 3-0 Mechelen
+10,Sun,44836,Anderlecht,0--1,Charleroi,y,Anderlecht 0-1 Charleroi,Round 10 - 10/2/2022,240,260,#5D3A9B,black,#E66100,black,Round 10 - 10/2/2022: Anderlecht 0-1 Charleroi
+10,Sun,44836,Gent,3--4,Cercle Brugge,y,Gent 3-4 Cercle Brugge,Round 10 - 10/2/2022,231,885,#5D3A9B,black,#E66100,black,Round 10 - 10/2/2022: Gent 3-4 Cercle Brugge
+10,Sun,44836,Kortrijk,2--1,Antwerp,y,Kortrijk 2-1 Antwerp,Round 10 - 10/2/2022,886,752,#5D3A9B,black,#E66100,black,Round 10 - 10/2/2022: Kortrijk 2-1 Antwerp
+10,Sun,44836,Sint-Truiden,0--1,Eupen,y,Sint-Truiden 0-1 Eupen,Round 10 - 10/2/2022,239,2166,#5D3A9B,black,#E66100,black,Round 10 - 10/2/2022: Sint-Truiden 0-1 Eupen
+11,Fri,44841,Antwerp,2--0,Sint-Truiden,y,Antwerp 2-0 Sint-Truiden,Round 11 - 10/7/2022,752,239,#5D3A9B,black,#E66100,black,Round 11 - 10/7/2022: Antwerp 2-0 Sint-Truiden
+11,Sat,44842,Genk,2--1,Kortrijk,y,Genk 2-1 Kortrijk,Round 11 - 10/8/2022,140,886,#5D3A9B,black,#E66100,black,Round 11 - 10/8/2022: Genk 2-1 Kortrijk
+11,Sat,44842,Zulte Waregem,2--5,OH Leuven,y,Zulte Waregem 2-5 OH Leuven,Round 11 - 10/8/2022,2164,1406,#5D3A9B,black,#E66100,black,Round 11 - 10/8/2022: Zulte Waregem 2-5 OH Leuven
+11,Sat,44842,Seraing,1--1,Oostende,y,Seraing 1-1 Oostende,Round 11 - 10/8/2022,5747,2165,#5D3A9B,black,#E66100,black,Round 11 - 10/8/2022: Seraing 1-1 Oostende
+11,Sat,44842,Club Brugge,0--2,Westerlo,y,Club Brugge 0-2 Westerlo,Round 11 - 10/8/2022,124,238,#5D3A9B,black,#E66100,black,Round 11 - 10/8/2022: Club Brugge 0-2 Westerlo
+11,Sun,44843,Mechelen,1--3,Anderlecht,y,Mechelen 1-3 Anderlecht,Round 11 - 10/9/2022,237,240,#5D3A9B,black,#E66100,black,Round 11 - 10/9/2022: Mechelen 1-3 Anderlecht
+11,Sun,44843,Eupen,0--4,Gent,y,Eupen 0-4 Gent,Round 11 - 10/9/2022,2166,231,#5D3A9B,black,#E66100,black,Round 11 - 10/9/2022: Eupen 0-4 Gent
+11,Sun,44843,Charleroi,0--1,Standard Liège,y,Charleroi 0-1 Standard Liège,Round 11 - 10/9/2022,260,261,#5D3A9B,black,#E66100,black,Round 11 - 10/9/2022: Charleroi 0-1 Standard Liège
+11,Sun,44843,Union Saint-Gilloise,2--1,Cercle Brugge,y,Union Saint-Gilloise 2-1 Cercle Brugge,Round 11 - 10/9/2022,2647,885,#5D3A9B,black,#E66100,black,Round 11 - 10/9/2022: Union Saint-Gilloise 2-1 Cercle Brugge
+12,Fri,44848,Westerlo,2--2,Seraing,y,Westerlo 2-2 Seraing,Round 12 - 10/14/2022,238,5747,#5D3A9B,black,#E66100,black,Round 12 - 10/14/2022: Westerlo 2-2 Seraing
+12,Sat,44849,Kortrijk,1--3,Zulte Waregem,y,Kortrijk 1-3 Zulte Waregem,Round 12 - 10/15/2022,886,2164,#5D3A9B,black,#E66100,black,Round 12 - 10/15/2022: Kortrijk 1-3 Zulte Waregem
+12,Sat,44849,Cercle Brugge,5--1,Eupen,y,Cercle Brugge 5-1 Eupen,Round 12 - 10/15/2022,885,2166,#5D3A9B,black,#E66100,black,Round 12 - 10/15/2022: Cercle Brugge 5-1 Eupen
+12,Sat,44849,Sint-Truiden,2--1,Charleroi,y,Sint-Truiden 2-1 Charleroi,Round 12 - 10/15/2022,239,260,#5D3A9B,black,#E66100,black,Round 12 - 10/15/2022: Sint-Truiden 2-1 Charleroi
+12,Sat,44849,OH Leuven,0--1,Genk,y,OH Leuven 0-1 Genk,Round 12 - 10/15/2022,1406,140,#5D3A9B,black,#E66100,black,Round 12 - 10/15/2022: OH Leuven 0-1 Genk
+12,Sun,44850,Standard Liège,3--0,Antwerp,y,Standard Liège 3-0 Antwerp,Round 12 - 10/16/2022,261,752,#5D3A9B,black,#E66100,black,Round 12 - 10/16/2022: Standard Liège 3-0 Antwerp
+12,Sun,44850,Gent,3--0,Mechelen,y,Gent 3-0 Mechelen,Round 12 - 10/16/2022,231,237,#5D3A9B,black,#E66100,black,Round 12 - 10/16/2022: Gent 3-0 Mechelen
+12,Sun,44850,Anderlecht,0--1,Club Brugge,y,Anderlecht 0-1 Club Brugge,Round 12 - 10/16/2022,240,124,#5D3A9B,black,#E66100,black,Round 12 - 10/16/2022: Anderlecht 0-1 Club Brugge
+12,Sun,44850,Oostende,1--6,Union Saint-Gilloise,y,Oostende 1-6 Union Saint-Gilloise,Round 12 - 10/16/2022,2165,2647,#5D3A9B,black,#E66100,black,Round 12 - 10/16/2022: Oostende 1-6 Union Saint-Gilloise
+13,Tue,44852,Eupen,4--2,OH Leuven,y,Eupen 4-2 OH Leuven,Round 13 - 10/18/2022,2166,1406,#5D3A9B,black,#E66100,black,Round 13 - 10/18/2022: Eupen 4-2 OH Leuven
+13,Tue,44852,Charleroi,2--2,Kortrijk,y,Charleroi 2-2 Kortrijk,Round 13 - 10/18/2022,260,886,#5D3A9B,black,#E66100,black,Round 13 - 10/18/2022: Charleroi 2-2 Kortrijk
+13,Tue,44852,Genk,6--1,Westerlo,y,Genk 6-1 Westerlo,Round 13 - 10/18/2022,140,238,#5D3A9B,black,#E66100,black,Round 13 - 10/18/2022: Genk 6-1 Westerlo
+13,Tue,44852,Seraing,0--1,Cercle Brugge,y,Seraing 0-1 Cercle Brugge,Round 13 - 10/18/2022,5747,885,#5D3A9B,black,#E66100,black,Round 13 - 10/18/2022: Seraing 0-1 Cercle Brugge
+13,Wed,44853,Union Saint-Gilloise,2--0,Gent,y,Union Saint-Gilloise 2-0 Gent,Round 13 - 10/19/2022,2647,231,#5D3A9B,black,#E66100,black,Round 13 - 10/19/2022: Union Saint-Gilloise 2-0 Gent
+13,Wed,44853,Club Brugge,3--0,Sint-Truiden,y,Club Brugge 3-0 Sint-Truiden,Round 13 - 10/19/2022,124,239,#5D3A9B,black,#E66100,black,Round 13 - 10/19/2022: Club Brugge 3-0 Sint-Truiden
+13,Wed,44853,Mechelen,2--0,Standard Liège,y,Mechelen 2-0 Standard Liège,Round 13 - 10/19/2022,237,261,#5D3A9B,black,#E66100,black,Round 13 - 10/19/2022: Mechelen 2-0 Standard Liège
+13,Thu,44854,Antwerp,3--0,Oostende,y,Antwerp 3-0 Oostende,Round 13 - 10/20/2022,752,2165,#5D3A9B,black,#E66100,black,Round 13 - 10/20/2022: Antwerp 3-0 Oostende
+13,Thu,44854,Zulte Waregem,3--2,Anderlecht,y,Zulte Waregem 3-2 Anderlecht,Round 13 - 10/20/2022,2164,240,#5D3A9B,black,#E66100,black,Round 13 - 10/20/2022: Zulte Waregem 3-2 Anderlecht

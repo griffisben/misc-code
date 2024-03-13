@@ -586,8 +586,8 @@ formation_positions = {442:['GK','RCB','LCB','RB','LB','RCM','LCM','RM','LM','RS
                       433:['GK','RCB','LCB','RB','LB','RCM','CM','LCM','RW','LW','ST']
                       }
 
-rank_11_base = read_csv('https://raw.githubusercontent.com/griffisben/misc-code/main/Role%20Ranks%20App/Ranking_XI.csv')
-role_position_lookup = read_csv('https://raw.githubusercontent.com/griffisben/misc-code/main/Role%20Ranks%20App/Role_Positions_Lookup.csv')
+rank_11_base = read_csv('https://raw.githubusercontent.com/griffisben/misc-code/main/RoleRanksApp/Ranking_XI.csv')
+role_position_lookup = read_csv('https://raw.githubusercontent.com/griffisben/misc-code/main/RoleRanksApp/Role_Positions_Lookup.csv')
 
 st.title('Best XI Players')
 st.subheader("All data from Wyscout")

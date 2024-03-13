@@ -1,0 +1,59 @@
+﻿pos_,pos,pos_bucket,foot,main_position,num,pos_role,form_pos
+Shot-Stopping Distributor,GK,single,either,any,5,Shot-Stopping Distributor,GK
+Ball Playing CB,CB,single,either,any,5,Ball Playing CB,LCB
+CB,CB,single,either,any,5,Defensive CB,LCB
+Spurs LCB,CB,single,either,any,5,Wide CB,LCB
+Ball Playing CB,CB,single,either,any,5,Ball Playing CB,RCB
+CB,CB,single,either,any,5,Defensive CB,RCB
+Spurs LCB,CB,single,either,any,5,Wide CB,RCB
+Attacking FB,Fullback,mult,either,LB|LWB,5,Attacking LB,LB
+Inverted FB,Fullback,mult,either,LB|LWB,5,Inverted LB,LB
+Inverted FB,Fullback,mult,either,LB|LWB,5,Defensive LB,LB
+Attacking FB,Fullback,mult,either,any,5,Attacking FB,LB
+Inverted FB,Fullback,mult,either,any,5,Inverted FB,LB
+Inverted FB,Fullback,mult,either,any,5,Defensive FB,LB
+Attacking FB,Fullback,mult,either,RB|RWB,5,Attacking RB,RB
+Inverted FB,Fullback,mult,either,RB|RWB,5,Inverted RB,RB
+Inverted FB,Fullback,mult,either,RB|RWB,5,Defensive RB,RB
+Attacking FB,Fullback,mult,either,any,5,Attacking FB,RB
+Inverted FB,Fullback,mult,either,any,5,Inverted FB,RB
+Inverted FB,Fullback,mult,either,any,5,Defensive FB,RB
+Defensive Mid,Midfielder no CAM,mult,either,any,5,Defensive Mid,CM
+Number 6,Midfielder no CAM,mult,either,any,5,Number 6,CM
+Deep-Lying Playmaker,Midfielder no CAM,mult,either,any,5,Deep-Lying Playmaker,CM
+Progressive Midfielder,Midfielder no CAM,mult,either,any,5,Progressive Midfielder,CM
+Defensive Mid,Midfielder no CAM,mult,either,any,5,Defensive Mid,LCM
+Number 6,Midfielder no CAM,mult,either,any,5,Number 6,LCM
+Deep-Lying Playmaker,Midfielder no CAM,mult,either,any,5,Deep-Lying Playmaker,LCM
+Progressive Midfielder,Midfielder no CAM,mult,either,any,5,Progressive Midfielder,LCM
+Advanced Playmaker,Midfielder no DM,mult,either,any,5,Advanced Playmaker,LCM
+Defensive Mid,Midfielder no CAM,mult,either,any,5,Defensive Mid,RCM
+Number 6,Midfielder no CAM,mult,either,any,5,Number 6,RCM
+Deep-Lying Playmaker,Midfielder no CAM,mult,either,any,5,Deep-Lying Playmaker,RCM
+Progressive Midfielder,Midfielder no CAM,mult,either,any,5,Progressive Midfielder,RCM
+Advanced Playmaker,Midfielder no DM,mult,either,any,5,Advanced Playmaker,RCM
+Advanced Playmaker,Midfielder no DM,mult,either,any,5,Advanced Playmaker,CAM
+Second Striker,Midfielder no DM,mult,either,any,5,Second Striker,CAM
+Playmaking Winger,Winger,mult,either,any,5,Playmaking Winger,LW
+Inverted Winger,Winger,mult,either,any,5,Inverted Winger,LW
+Traditional Winger,Winger,mult,either,any,5,Traditional Winger,LW
+Inside Forward,Winger,mult,either,any,5,Inside Forward,LW
+Playmaking Winger,Winger,mult,either,any,5,Playmaking Winger,RW
+Inverted Winger,Winger,mult,either,any,5,Inverted Winger,RW
+Traditional Winger,Winger,mult,either,any,5,Traditional Winger,RW
+Inside Forward,Winger,mult,either,any,5,Inside Forward,RW
+Advanced Striker,CF,single,either,any,200,Advanced Striker,ST
+Deep-Lying Striker,CF,single,either,any,200,Deep-Lying Striker,ST
+Focal Point Striker,CF,single,either,any,200,Focal Point Striker,ST
+Playmaking Striker,CF,single,either,any,200,Playmaking Striker,ST
+Link-Up Striker,CF,single,either,any,200,Link-Up Striker,ST
+Advanced Striker,CF,single,either,any,200,Advanced Striker,LS
+Deep-Lying Striker,CF,single,either,any,200,Deep-Lying Striker,LS
+Focal Point Striker,CF,single,either,any,200,Focal Point Striker,LS
+Playmaking Striker,CF,single,either,any,200,Playmaking Striker,LS
+Link-Up Striker,CF,single,either,any,200,Link-Up Striker,LS
+Advanced Striker,CF,single,either,any,200,Advanced Striker,RS
+Deep-Lying Striker,CF,single,either,any,200,Deep-Lying Striker,RS
+Focal Point Striker,CF,single,either,any,200,Focal Point Striker,RS
+Playmaking Striker,CF,single,either,any,200,Playmaking Striker,RS
+Link-Up Striker,CF,single,either,any,200,Link-Up Striker,RS

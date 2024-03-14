@@ -109,12 +109,25 @@ def load_league_data(data):
     return df
 
 
-def make_rankings(formation, mins, data, role_position_df, leagues, exp_contracts, min_age, max_age):
+def make_rankings(formation, mins, data, role_position_df, leagues, exp_contracts, expiration_date, min_age, max_age):
+    
     formation_positions = {442:['GK','RCB','LCB','RB','LB','RCM','LCM','RM','LM','RS','LS',],
                           4231:['GK','RCB','LCB','RB','LB','RCM','LCM','CAM','RW','LW','ST'],
                           433:['GK','RCB','LCB','RB','LB','RCM','CM','LCM','RW','LW','ST']
                           }
     df = data
+    
+    ###
+    expirations = df['Contract expires'].unique()
+    expirations[expirations == 0] = np.nan
+    
+    expirations = pd.DataFrame({'Expiration':pd.to_datetime(expirations)}).sort_values(by=['Expiration']).reset_index(drop=True)
+    exp_datetime = expirations[expirations.Expiration <= pd.to_datetime([expiration_date])[0]].Expiration
+    exp_dates = []
+    for i in range(len(exp_datetime)):
+        exp_dates+=[exp_datetime[i].strftime('%Y-%m-%d')]
+    ###
+    
     cols = ['Player', 'Team', 'Age', 'Pos.', 'Score',
            'Minutes played', 'Contract expires', 'Squad Position']
     rank_list = pd.DataFrame(columns=cols)
@@ -621,8 +634,10 @@ with st.sidebar:
     exp_contracts_ = st.selectbox('Only Expiring Contracts?', (['No','Yes']))
     if exp_contracts_ == 'Yes':
         exp_contracts = 'y'
+        expiration_date = st.date_input("Contract Expires On Or Before", datetime.date(2024, 8, 1), format='YYYY-MM-DD')
     else:
         exp_contracts = 'n'
+        expiration_date = '2024-08-01'
 
 with st.sidebar:
     st.header('Role-Positions')

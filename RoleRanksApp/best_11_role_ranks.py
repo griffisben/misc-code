@@ -107,6 +107,15 @@ def load_league_data(data, league_season):
     df['Main Position'] = df['Position'].str.split().str[0].str.rstrip(',')
     df.fillna(0,inplace=True)
     df['Minutes played'] /= 90 * max(df['Matches played'])
+    df['Main Position'] = df['Main Position'].replace('LAMF','LW')
+    df['Main Position'] = df['Main Position'].replace('RAMF','RW')
+    df['Main Position'] = df['Main Position'].replace('LCB3','LCB')
+    df['Main Position'] = df['Main Position'].replace('RCB3','RCB')
+    df['Main Position'] = df['Main Position'].replace('LCB5','LCB')
+    df['Main Position'] = df['Main Position'].replace('RCB5','RCB')
+    df['Main Position'] = df['Main Position'].replace('LB5','LB')
+    df['Main Position'] = df['Main Position'].replace('RB5','RB')
+
     return df
 
 

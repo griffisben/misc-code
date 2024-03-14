@@ -581,7 +581,7 @@ def make_rankings(formation, mins, data, rank_11_base):
 
 #######################################################################################################################################
 #######################################################################################################################################
-formation_positions = {442:['GK','RCB','LCB','RB','LB','RCM','LCM','RM','LM','RS','LS',],
+formation_positions = {442:['GK','RCB','LCB','RB','LB','RCM','LCM','RW','LW','RS','LS',],
                       4231:['GK','RCB','LCB','RB','LB','RCM','LCM','CAM','RW','LW','ST'],
                       433:['GK','RCB','LCB','RB','LB','RCM','CM','LCM','RW','LW','ST']
                       }
@@ -630,3 +630,8 @@ with st.sidebar:
     pos10 = st.selectbox(formation_positions[formation][9], (role_position_lookup[role_position_lookup.form_pos == formation_positions[formation][9]].pos_role.tolist()))
     pos11 = st.selectbox(formation_positions[formation][10], (role_position_lookup[role_position_lookup.form_pos == formation_positions[formation][10]].pos_role.tolist()))
 
+chosen_roles = [pos1,pos2,pos3,pos4,pos5,pos6,pos7,pos8,pos9,pos10,pos11]
+role_position_df = pd.DataFrame()
+for i in range(0,10):
+    role_position_df = pd,concat([role_position_df,role_position_lookup[(role_position_lookup.pos_role == chosen_roles[i]) & (role_position_lookup.form_pos == formation_positions[formation][i])]], ignore_index=True)
+role_position_df

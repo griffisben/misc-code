@@ -661,7 +661,9 @@ rank_list = make_rankings(formation, mins/100, clean_df, role_position_df, [lg],
                           min_age=ages[0], max_age=ages[1], num=number_of_players, normalize_to_100=normalize_to_100)
 show_ranks = rank_list[['Player','Team','Age','Squad Position','Player Pos.','Score','Role Rank']].copy()
 
-# tab1, tab2, tab3, tab4, tab5, tab6, tab7, tab8, tab9, tab10, tab11 = st.tabs(chosen_roles)
+with st.expander('All Roles'):
+   show_ranks
+
 with st.expander(chosen_roles[0]):
    show_ranks[show_ranks['Squad Position']==chosen_roles[0]]
 with st.expander(chosen_roles[1]):

@@ -85,35 +85,32 @@ def contract_expirations(contract_exp_date):
     return exp_dates
 
 def load_league_data(data, league_season):
-    df1 = pd.DataFrame()
-    for i in range(len(league_season)):
-        df = data.copy()
-        df = df[df['League']==league_season[i]].reset_index(drop=True)
-    
-        df['pAdj Tkl+Int per 90'] = df['PAdj Sliding tackles'] + df['PAdj Interceptions']
-        df['1st, 2nd, 3rd assists'] = df['Assists per 90'] + df['Second assists per 90'] + df['Third assists per 90']
-        df['xA per Shot Assist'] = df['xA per 90'] / df['Shot assists per 90']
-        df['Aerial duels won per 90'] = df['Aerial duels per 90'] * (df['Aerial duels won, %']/100)
-        df['Cards per 90'] = df['Yellow cards per 90'] + df['Red cards per 90']
-        df['Clean sheets, %'] = df['Clean sheets'] / df['Matches played']
-        df['npxG'] = df['xG'] - (.76 * df['Penalties taken'])
-        df['npxG per 90'] = df['npxG'] / (df['Minutes played'] / 90)
-        df['npxG per shot'] = df['npxG'] / (df['Shots'] - df['Penalties taken'])
-        df['Passes to final third & deep completions'] = df['Passes to final third per 90'] + df['Deep completions per 90']
-        df['Pct of passes being short'] = df['Short / medium passes per 90'] / df['Passes per 90'] * 100
-        df['Prog passes and runs per 90'] = df['Progressive passes per 90'] + df['Progressive runs per 90']
-        df['Set pieces per 90'] = df['Corners per 90'] + df['Free kicks per 90']
-    
-        df = df.dropna(subset=['Position']).reset_index(drop=True)
-    
-        df['Main Position'] = df['Position'].str.split().str[0].str.rstrip(',')
-        df.fillna(0,inplace=True)
-        df['Minutes played'] /= 90 * max(df['Matches played'])
-        df1 = pd.concat([df1,df])
-    return df1
+    df = data
+    df = df[df['League']==league_season].reset_index(drop=True)
+
+    df['pAdj Tkl+Int per 90'] = df['PAdj Sliding tackles'] + df['PAdj Interceptions']
+    df['1st, 2nd, 3rd assists'] = df['Assists per 90'] + df['Second assists per 90'] + df['Third assists per 90']
+    df['xA per Shot Assist'] = df['xA per 90'] / df['Shot assists per 90']
+    df['Aerial duels won per 90'] = df['Aerial duels per 90'] * (df['Aerial duels won, %']/100)
+    df['Cards per 90'] = df['Yellow cards per 90'] + df['Red cards per 90']
+    df['Clean sheets, %'] = df['Clean sheets'] / df['Matches played']
+    df['npxG'] = df['xG'] - (.76 * df['Penalties taken'])
+    df['npxG per 90'] = df['npxG'] / (df['Minutes played'] / 90)
+    df['npxG per shot'] = df['npxG'] / (df['Shots'] - df['Penalties taken'])
+    df['Passes to final third & deep completions'] = df['Passes to final third per 90'] + df['Deep completions per 90']
+    df['Pct of passes being short'] = df['Short / medium passes per 90'] / df['Passes per 90'] * 100
+    df['Prog passes and runs per 90'] = df['Progressive passes per 90'] + df['Progressive runs per 90']
+    df['Set pieces per 90'] = df['Corners per 90'] + df['Free kicks per 90']
+
+    df = df.dropna(subset=['Position']).reset_index(drop=True)
+
+    df['Main Position'] = df['Position'].str.split().str[0].str.rstrip(',')
+    df.fillna(0,inplace=True)
+    df['Minutes played'] /= 90 * max(df['Matches played'])
+    return df
 
 
-def make_rankings(formation, mins, data, role_position_df, leagues, exp_contracts, expiration_date, min_age, max_age, num):
+def make_rankings(formation, mins, data, role_position_df, leagues, exp_contracts, expiration_date, min_age, max_age, num, normalize_to_100):
     formation_positions = {442:['GK','RCB','LCB','RB','LB','RCM','LCM','RM','LM','RS','LS',],
                           4231:['GK','RCB','LCB','RB','LB','RCM','LCM','CAM','RW','LW','ST'],
                           433:['GK','RCB','LCB','RB','LB','RCM','CM','LCM','RW','LW','ST']
@@ -561,9 +558,9 @@ def make_rankings(formation, mins, data, role_position_df, leagues, exp_contract
                                'KVO CAM Score', 'Inverted FB Score', 'Inside Forward Score']]
             ranks = ranks.rename(columns={'Team within selected timeframe': 'Team'})
     
-            # Final normalize, so that we get #1 player to be 100, instead of like, 60ish
-            for i in range(6,len(ranks.columns)):
-                ranks.iloc[:,i] = NormalizeData(ranks.iloc[:,i])
+            if normalize_to_100 == 'Yes':
+                for i in range(6,len(ranks.columns)):
+                    ranks.iloc[:,i] = NormalizeData(ranks.iloc[:,i])
     
             # make the table
             ranks['Score'] = round(ranks['%s Score' %pos_]*100,1)
@@ -579,7 +576,6 @@ def make_rankings(formation, mins, data, role_position_df, leagues, exp_contract
     
             rank_list = pd.concat([rank_list,ranks])
     
-    # rank_list.to_csv('player ranks.csv')
     rank_list.Age = rank_list.Age.astype(int)
     rank_list = rank_list.reset_index().rename(columns={'index':'Role Rank'})
     
@@ -614,7 +610,6 @@ if gender == 'Women':
     lg_lookup = read_csv('https://raw.githubusercontent.com/griffisben/Wyscout_Prospect_Research/main/league_info_lookup_women.csv')
     df = read_csv('https://raw.githubusercontent.com/griffisben/Wyscout_Prospect_Research/main/WS_Data_Women.csv')
 df = df.dropna(subset=['Position','Team within selected timeframe', 'Age']).reset_index(drop=True)
-lg_lookup['League-Season'] = lg_lookup['League'] + ' ' + lg_lookup['Season']
 ##########
 
 with st.sidebar:
@@ -624,9 +619,9 @@ with st.sidebar:
         Please note that with prior seasons, the players & leagues are correct but the team names can sometimes be off. Ages are also current ages, not ages in the season... I'm working on remedying this.
         ''')
 
-    # seasons = st.multiselect('Season', (['23-24','2023','22-23','2022','21-22']))
-    # lg_lookup_ssn = lg_lookup[lg_lookup.Season.str.contains('|'.join(seasons))]
-    lg = st.multiselect('Leagues', (lg_lookup['League-Season'].tolist()))
+    season = st.selectbox('Season', (['23-24','2023','22-23','2022','21-22']))
+    lg_lookup_ssn = lg_lookup[lg_lookup.Season==season]
+    lg = st.selectbox('League', (lg_lookup_ssn.League.tolist()))
     formation = st.selectbox('Fomation', (433, 4231, 442))
     mins = st.number_input('Minimum % of Season Played', 30, 75, 40)
     ages = st.slider('Age Range', 0, 100, (0, 100))
@@ -638,6 +633,7 @@ with st.sidebar:
         exp_contracts = 'n'
         expiration_date = '2024-08-01'
     number_of_players = st.slider('Top X Players Per Role', 3, 20,5)
+    normalize_to_100 = st.selectbox('Normalize Scores so #1 = 100?', (['Yes','No']))
 
 with st.sidebar:
     st.header('Role-Positions')
@@ -659,11 +655,10 @@ for i in range(0,11):
     role_position_df = pd.concat([role_position_df,role_position_lookup[(role_position_lookup.pos_role == chosen_roles[i]) & (role_position_lookup.form_pos == formation_positions[formation][i])]], ignore_index=True)
 role_position_df['formation'] = formation
 
-if len(lg) == 1:
-    lg = [lg]
 
-clean_df = load_league_data(df, lg)
-rank_list = make_rankings(formation, mins/100, clean_df, role_position_df, lg, exp_contracts, expiration_date, min_age=ages[0], max_age=ages[1], num=number_of_players)
+clean_df = load_league_data(df, f"{lg} {season}")
+rank_list = make_rankings(formation, mins/100, clean_df, role_position_df, [lg], exp_contracts, expiration_date,
+                          min_age=ages[0], max_age=ages[1], num=number_of_players, normalize_to_100=normalize_to_100)
 show_ranks = rank_list[['Player','Team','Age','Squad Position','Player Pos.','Score','Role Rank']].copy()
 
 # tab1, tab2, tab3, tab4, tab5, tab6, tab7, tab8, tab9, tab10, tab11 = st.tabs(chosen_roles)

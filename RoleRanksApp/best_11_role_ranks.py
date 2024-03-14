@@ -658,4 +658,40 @@ role_position_df['formation'] = formation
 
 clean_df = load_league_data(df, f"{lg} {season}")
 rank_list = make_rankings(formation, mins/100, clean_df, role_position_df, [lg], exp_contracts, expiration_date, min_age=ages[0], max_age=ages[1])
-rank_list[['Player','Team','Age','Squad Position','Score','Role Rank']]
+show_ranks = rank_list[['Player','Team','Age','Squad Position','Score','Role Rank']].copy()
+
+tab1, tab2, tab3, tab4, tab5, tab6, tab7, tab8, tab9, tab10, tab11 = st.tabs(chosen_roles)
+with tab1:
+   st.header(chosen_roles[0])
+   show_ranks[show_ranks['Squad Position']==chosen_roles[0]]
+with tab2:
+   st.header(chosen_roles[1])
+   show_ranks[show_ranks['Squad Position']==chosen_roles[1]]
+with tab3:
+   st.header(chosen_roles[2])
+   show_ranks[show_ranks['Squad Position']==chosen_roles[2]]
+with tab4:
+   st.header(chosen_roles[3])
+   show_ranks[show_ranks['Squad Position']==chosen_roles[3]]
+with tab5:
+   st.header(chosen_roles[4])
+   show_ranks[show_ranks['Squad Position']==chosen_roles[4]]
+with tab6:
+   st.header(chosen_roles[5])
+   show_ranks[show_ranks['Squad Position']==chosen_roles[5]]
+with tab7:
+   st.header(chosen_roles[6])
+   show_ranks[show_ranks['Squad Position']==chosen_roles[6]]
+with tab8:
+   st.header(chosen_roles[7])
+   show_ranks[show_ranks['Squad Position']==chosen_roles[7]]
+with tab9:
+   st.header(chosen_roles[8])
+   show_ranks[show_ranks['Squad Position']==chosen_roles[8]]
+with tab10:
+   st.header(chosen_roles[9])
+   show_ranks[show_ranks['Squad Position']==chosen_roles[9]]
+with tab11:
+   st.header(chosen_roles[10])
+   show_ranks[show_ranks['Squad Position']==chosen_roles[10]]
+

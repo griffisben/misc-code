@@ -136,7 +136,7 @@ def make_rankings(formation, mins, data, role_position_df, leagues, exp_contract
                 'CM Score', 'CAM Score', 'Traditional Winger Score', 'Inverted Winger Score', 'Ball Playing CB Score', 'CB Score',
                 'Advanced Playmaker Score', 'Deep-Lying Playmaker Score', 'Playmaking Winger Score', 'Focal Point Striker Score',
                 'Link-Up Striker Score', 'Playmaking Striker Score', 'Advanced Striker Score', 'Deep-Lying Striker Score',
-                'Defensive Mid Score', 'Progressive Midfielder Score', 'Box-to-Box Score', 'Attacking FB Score', 'Second Striker Score',
+                'Defensive Mid Score', 'Progressive Midfielder Score', 'Box-to-Box Score', 'Attacking FB Score', 'Second Striker Score', 'Inside Forward Score',
                'Shot-Stopping Distributor Score', 'Spurs LCB Score', 'Number 6 Score', 'Defensive FB Score', 'KVO CAM Score', 'Inverted FB Score']
     full_prospect_df = pd.DataFrame(columns=all_cols)
     
@@ -556,7 +556,7 @@ def make_rankings(formation, mins, data, role_position_df, leagues, exp_contract
                                 'Advanced Striker Score', 'Playmaking Winger Score', 'Box-to-Box Score', 'Playmaking Striker Score',
                                    'Attacking FB Score', 'Deep-Lying Playmaker Score', 'Second Striker Score', 'Progressive Midfielder Score',
                                'Defensive Mid Score', 'Shot-Stopping Distributor Score', 'Spurs LCB Score', 'Number 6 Score', 'Defensive FB Score',
-                               'KVO CAM Score', 'Inverted FB Score']]
+                               'KVO CAM Score', 'Inverted FB Score', 'Inside Forward Score']]
             ranks = ranks.rename(columns={'Team within selected timeframe': 'Team'})
     
             # Final normalize, so that we get #1 player to be 100, instead of like, 60ish

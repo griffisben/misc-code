@@ -111,7 +111,6 @@ def load_league_data(data):
 
 
 def make_rankings(formation, mins, data, role_position_df, leagues, exp_contracts, expiration_date, min_age, max_age):
-    
     formation_positions = {442:['GK','RCB','LCB','RB','LB','RCM','LCM','RM','LM','RS','LS',],
                           4231:['GK','RCB','LCB','RB','LB','RCM','LCM','CAM','RW','LW','ST'],
                           433:['GK','RCB','LCB','RB','LB','RCM','CM','LCM','RW','LW','ST']
@@ -658,5 +657,6 @@ role_position_df['formation'] = formation
 # role_position_df
 
 clean_df = load_league_data(df)
-rank11, rank_list = make_rankings(formation, mins/100, clean_df, role_position_df, [lg], exp_contracts, expiration_date, min_age=ages[0], max_age=ages[1])
-rank11
+clean_df
+# rank11, rank_list = make_rankings(formation, mins/100, clean_df, role_position_df, [lg], exp_contracts, expiration_date, min_age=ages[0], max_age=ages[1])
+# rank11

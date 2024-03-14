@@ -626,7 +626,7 @@ with st.sidebar:
 
     # seasons = st.multiselect('Season', (['23-24','2023','22-23','2022','21-22']))
     # lg_lookup_ssn = lg_lookup[lg_lookup.Season.str.contains('|'.join(seasons))]
-    lg = st.multiselect('Leagues', (lg_lookup_ssn['League-Season'].tolist()))
+    lg = st.multiselect('Leagues', (lg_lookup['League-Season'].tolist()))
     formation = st.selectbox('Fomation', (433, 4231, 442))
     mins = st.number_input('Minimum % of Season Played', 30, 75, 40)
     ages = st.slider('Age Range', 0, 100, (0, 100))

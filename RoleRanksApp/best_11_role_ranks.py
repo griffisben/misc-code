@@ -549,10 +549,6 @@ def make_rankings(formation, mins, data, role_position_df, leagues, exp_contract
                 dfProspect = dfProspect[dfProspect['Foot']==foot]
             if main_pos != 'any':
                 dfProspect = dfProspect[dfProspect['Main Position'].str.contains(main_pos)]
-    #         full_prospect_df = full_prospect_df.append(dfProspect)
-            
-        
-    #     full_prospect_df = full_prospect_df.drop_duplicates()
     
     
             ranks = dfProspect[["Player", "Main Position", "Team within selected timeframe", "Age", 'Contract expires', 'Minutes played',
@@ -591,7 +587,7 @@ def make_rankings(formation, mins, data, role_position_df, leagues, exp_contract
     for q in range(len(rank_11)):
         rank_list_final = pd.concat([rank_list_final,rank_list[rank_list['Squad Position']==rank_11.pos_role[q]].sort_values(by=['Score','Age'],ascending=[False,True]).head(num)])
     rank_list = rank_list_final.copy()
-    return rank_11, rank_list
+    return dfProspect, rank_list
 
 #######################################################################################################################################
 #######################################################################################################################################

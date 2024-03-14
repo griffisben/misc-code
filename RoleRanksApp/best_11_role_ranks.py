@@ -109,7 +109,7 @@ def load_league_data(data):
     return df
 
 
-def make_rankings(formation, mins, data, rank_11_base):
+def make_rankings(formation, mins, data, role_position_df, leagues):
     formation_positions = {442:['GK','RCB','LCB','RB','LB','RCM','LCM','RM','LM','RS','LS',],
                           4231:['GK','RCB','LCB','RB','LB','RCM','LCM','CAM','RW','LW','ST'],
                           433:['GK','RCB','LCB','RB','LB','RCM','CM','LCM','RW','LW','ST']
@@ -128,7 +128,7 @@ def make_rankings(formation, mins, data, rank_11_base):
     full_prospect_df = pd.DataFrame(columns=all_cols)
     
     
-    rank_11 = rank_11_base[rank_11_base['formation']==formation].copy().reset_index(drop=True)
+    rank_11 = role_position_df[role_position_df['formation']==formation].copy().reset_index(drop=True)
     
     for q in range(len(rank_11)):
         pos_ = rank_11.pos_[q]
@@ -616,7 +616,7 @@ with st.sidebar:
     lg_lookup_ssn = lg_lookup[lg_lookup.Season==season]
     lg = st.selectbox('League', (lg_lookup_ssn.League.tolist()))
     formation = st.selectbox('Fomation', (433, 4231, 442))
-    mins = st.number_input('Minimum % of Season Played', 0.3, 0.75, 0.4)
+    mins = st.number_input('Minimum % of Season Played', 30, 75, 40)
 
     pos1 = st.selectbox(formation_positions[formation][0], (role_position_lookup[role_position_lookup.form_pos == formation_positions[formation][0]].pos_role.tolist()))
     pos2 = st.selectbox(formation_positions[formation][1], (role_position_lookup[role_position_lookup.form_pos == formation_positions[formation][1]].pos_role.tolist()))
@@ -635,4 +635,7 @@ role_position_df = pd.DataFrame()
 for i in range(0,11):
     role_position_df = pd.concat([role_position_df,role_position_lookup[(role_position_lookup.pos_role == chosen_roles[i]) & (role_position_lookup.form_pos == formation_positions[formation][i])]], ignore_index=True)
 role_position_df['formation'] = formation
-role_position_df
+# role_position_df
+
+rank_list = make_rankings(formation, mins/100, df, role_position_df, [lg])
+rank_list

@@ -109,7 +109,7 @@ def load_league_data(data):
     return df
 
 
-def make_rankings(formation, mins, data, role_position_df, leagues, exp_contracts):
+def make_rankings(formation, mins, data, role_position_df, leagues, exp_contracts, min_age, max_age):
     formation_positions = {442:['GK','RCB','LCB','RB','LB','RCM','LCM','RM','LM','RS','LS',],
                           4231:['GK','RCB','LCB','RB','LB','RCM','LCM','CAM','RW','LW','ST'],
                           433:['GK','RCB','LCB','RB','LB','RCM','CM','LCM','RW','LW','ST']
@@ -617,12 +617,15 @@ with st.sidebar:
     lg = st.selectbox('League', (lg_lookup_ssn.League.tolist()))
     formation = st.selectbox('Fomation', (433, 4231, 442))
     mins = st.number_input('Minimum % of Season Played', 30, 75, 40)
+    ages = st.slider('Age Range', 0, 100, (0, 100))
     exp_contracts_ = st.selectbox('Only Expiring Contracts?', (['No','Yes']))
     if exp_contracts_ == 'Yes':
         exp_contracts = 'y'
     else:
         exp_contracts = 'n'
 
+with st.sidebar:
+    st.header('Role-Positions')
     pos1 = st.selectbox(formation_positions[formation][0], (role_position_lookup[role_position_lookup.form_pos == formation_positions[formation][0]].pos_role.tolist()))
     pos2 = st.selectbox(formation_positions[formation][1], (role_position_lookup[role_position_lookup.form_pos == formation_positions[formation][1]].pos_role.tolist()))
     pos3 = st.selectbox(formation_positions[formation][2], (role_position_lookup[role_position_lookup.form_pos == formation_positions[formation][2]].pos_role.tolist()))
@@ -643,5 +646,5 @@ role_position_df['formation'] = formation
 # role_position_df
 
 clean_df = load_league_data(df)
-rank_list = make_rankings(formation, mins/100, clean_df, role_position_df, [lg], exp_contracts)
+rank_list = make_rankings(formation, mins/100, clean_df, role_position_df, [lg], exp_contracts, min_age=ages[0], max_age=ages[1])
 rank_list

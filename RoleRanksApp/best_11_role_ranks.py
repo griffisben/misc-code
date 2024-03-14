@@ -658,4 +658,4 @@ role_position_df['formation'] = formation
 
 clean_df = load_league_data(df, f"{lg} {season}")
 rank_list = make_rankings(formation, mins/100, clean_df, role_position_df, [lg], exp_contracts, expiration_date, min_age=ages[0], max_age=ages[1])
-rank_list
+rank_list[['Player','Team','Age','Squad Position','Score']]

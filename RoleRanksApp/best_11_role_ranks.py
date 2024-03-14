@@ -637,5 +637,6 @@ for i in range(0,11):
 role_position_df['formation'] = formation
 # role_position_df
 
-rank_list = make_rankings(formation, mins/100, df, role_position_df, [lg])
+clean_df = load_league_data(df)
+rank_list = make_rankings(formation, mins/100, clean_df, role_position_df, [lg])
 rank_list

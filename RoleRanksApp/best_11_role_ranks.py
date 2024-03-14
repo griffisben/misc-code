@@ -618,7 +618,8 @@ with st.sidebar:
     formation = st.selectbox('Fomation', (433, 4231, 442))
     mins = st.number_input('Minimum % of Season Played', 30, 75, 40)
     exp_contracts_ = st.selectbox('Only Expiring Contracts?', (['No','Yes']))
-    exp_contracts = 'y' if exp_contracts_ == 'Yes'
+    if exp_contracts_ == 'Yes':
+        exp_contracts = 'y'
 
     pos1 = st.selectbox(formation_positions[formation][0], (role_position_lookup[role_position_lookup.form_pos == formation_positions[formation][0]].pos_role.tolist()))
     pos2 = st.selectbox(formation_positions[formation][1], (role_position_lookup[role_position_lookup.form_pos == formation_positions[formation][1]].pos_role.tolist()))

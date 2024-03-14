@@ -84,8 +84,9 @@ def contract_expirations(contract_exp_date):
         exp_dates+=[exp_datetime[i].strftime('%Y-%m-%d')]
     return exp_dates
 
-def load_league_data(data):
+def load_league_data(data, league_season):
     df = data
+    df = df[df['League']==league_season].reset_index(drop=True)
 
     df['pAdj Tkl+Int per 90'] = df['PAdj Sliding tackles'] + df['PAdj Interceptions']
     df['1st, 2nd, 3rd assists'] = df['Assists per 90'] + df['Second assists per 90'] + df['Third assists per 90']
@@ -105,7 +106,6 @@ def load_league_data(data):
 
     df['Main Position'] = df['Position'].str.split().str[0].str.rstrip(',')
     df.fillna(0,inplace=True)
-    leagues = [lg]
     df['Minutes played'] /= 90 * max(df['Matches played'])
     return df
 
@@ -656,7 +656,7 @@ for i in range(0,11):
 role_position_df['formation'] = formation
 # role_position_df
 
-clean_df = load_league_data(df)
+clean_df = load_league_data(df, f"{lg} {season}")
 clean_df
 # rank11, rank_list = make_rankings(formation, mins/100, clean_df, role_position_df, [lg], exp_contracts, expiration_date, min_age=ages[0], max_age=ages[1])
 # rank11

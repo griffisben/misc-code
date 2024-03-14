@@ -110,7 +110,7 @@ def load_league_data(data, league_season):
     return df
 
 
-def make_rankings(formation, mins, data, role_position_df, leagues, exp_contracts, expiration_date, min_age, max_age):
+def make_rankings(formation, mins, data, role_position_df, leagues, exp_contracts, expiration_date, min_age, max_age, num):
     formation_positions = {442:['GK','RCB','LCB','RB','LB','RCM','LCM','RM','LM','RS','LS',],
                           4231:['GK','RCB','LCB','RB','LB','RCM','LCM','CAM','RW','LW','ST'],
                           433:['GK','RCB','LCB','RB','LB','RCM','CM','LCM','RW','LW','ST']
@@ -148,7 +148,6 @@ def make_rankings(formation, mins, data, role_position_df, leagues, exp_contract
         pos = rank_11.pos[q]
         pos_buckets = rank_11.pos_bucket[q]
         foot = rank_11.foot[q]
-        num = rank_11.num[q]
         main_pos = rank_11.main_position[q]
         
         
@@ -634,6 +633,7 @@ with st.sidebar:
     else:
         exp_contracts = 'n'
         expiration_date = '2024-08-01'
+    number_of_players = st.slider('Top X Players Per Role', 3, 20,5)
 
 with st.sidebar:
     st.header('Role-Positions')
@@ -657,7 +657,7 @@ role_position_df['formation'] = formation
 # role_position_df
 
 clean_df = load_league_data(df, f"{lg} {season}")
-rank_list = make_rankings(formation, mins/100, clean_df, role_position_df, [lg], exp_contracts, expiration_date, min_age=ages[0], max_age=ages[1])
+rank_list = make_rankings(formation, mins/100, clean_df, role_position_df, [lg], exp_contracts, expiration_date, min_age=ages[0], max_age=ages[1], num=number_of_players)
 show_ranks = rank_list[['Player','Team','Age','Squad Position','Score','Role Rank']].copy()
 
 # tab1, tab2, tab3, tab4, tab5, tab6, tab7, tab8, tab9, tab10, tab11 = st.tabs(chosen_roles)

@@ -567,7 +567,7 @@ def make_rankings(formation, mins, data, role_position_df, leagues, exp_contract
             ranks.sort_values(by=['Score', 'Age'], ascending=[False,True], inplace=True)
             ranks = ranks.reset_index(drop=True)
             ranks = ranks[['Player', 'Team', 'Age', 'Main Position', 'Score', 'Minutes played','Contract expires']]
-            ranks = ranks.rename(columns={'Main Position': 'Pos.'})
+            ranks = ranks.rename(columns={'Main Position': 'Player Pos.'})
             ranks.index = ranks.index+1
             ranks['Squad Position'] = rank_11.pos_role[q]
             if exp_contracts == 'y':
@@ -658,7 +658,7 @@ role_position_df['formation'] = formation
 
 clean_df = load_league_data(df, f"{lg} {season}")
 rank_list = make_rankings(formation, mins/100, clean_df, role_position_df, [lg], exp_contracts, expiration_date, min_age=ages[0], max_age=ages[1], num=number_of_players)
-show_ranks = rank_list[['Player','Team','Age','Squad Position','Score','Role Rank']].copy()
+show_ranks = rank_list[['Player','Team','Age','Squad Position','Player Pos.','Score','Role Rank']].copy()
 
 # tab1, tab2, tab3, tab4, tab5, tab6, tab7, tab8, tab9, tab10, tab11 = st.tabs(chosen_roles)
 with st.expander(chosen_roles[0]):

@@ -153,7 +153,7 @@ def make_rankings(formation, mins, data, role_position_df, leagues, exp_contract
         
         
         for z in range(len(leagues)):
-            dfProspect = df[(df['Minutes played']>=mins) & (df['League']==leagues[z])].copy()
+            dfProspect = df[(df['Minutes played']>=mins)].copy()
             dfProspect = filter_by_position(dfProspect, pos)
             dfProspect = dfProspect.reset_index(drop=True)
     
@@ -586,7 +586,7 @@ def make_rankings(formation, mins, data, role_position_df, leagues, exp_contract
     for q in range(len(rank_11)):
         rank_list_final = pd.concat([rank_list_final,rank_list[rank_list['Squad Position']==rank_11.pos_role[q]].sort_values(by=['Score','Age'],ascending=[False,True]).head(num)])
     rank_list = rank_list_final.copy()
-    return dfProspect, rank_list
+    return rank_list
 
 #######################################################################################################################################
 #######################################################################################################################################
@@ -657,5 +657,5 @@ role_position_df['formation'] = formation
 # role_position_df
 
 clean_df = load_league_data(df, f"{lg} {season}")
-rank11, rank_list = make_rankings(formation, mins/100, clean_df, role_position_df, [lg], exp_contracts, expiration_date, min_age=ages[0], max_age=ages[1])
-rank11
+rank_list = make_rankings(formation, mins/100, clean_df, role_position_df, [lg], exp_contracts, expiration_date, min_age=ages[0], max_age=ages[1])
+rank_list

@@ -69,6 +69,11 @@ def filter_by_position(df, position):
     cb = ["CB"]
     if position == "CB":
         return df[df['Main Position'].str.contains('|'.join(cb), na=False)]
+
+    gk = ["GK"]
+    if position == "GK":
+        return df[df['Main Position'].str.contains('|'.join(gk), na=False)]
+
     else:
         return df
 

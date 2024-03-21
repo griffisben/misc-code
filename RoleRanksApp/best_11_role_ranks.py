@@ -618,12 +618,6 @@ st.subheader('')
 with st.sidebar:
     st.header('Choose Gender')
     gender = st.selectbox('Gender', ('Men','Women'))
-    
-    st.header('Choose Basic Options')    
-    season = st.selectbox('Season', (['23-24','2024','2023','22-23','2022','21-22']))
-    lg_lookup_ssn = lg_lookup[lg_lookup.Season==season]
-    lg = st.selectbox('League', (lg_lookup_ssn.League.tolist()))
-
 if gender == 'Men':
     lg_lookup = read_csv('https://raw.githubusercontent.com/griffisben/Wyscout_Prospect_Research/main/league_info_lookup.csv')
     df = read_csv('https://raw.githubusercontent.com/griffisben/Wyscout_Prospect_Research/main/WS_Data.csv')
@@ -634,6 +628,10 @@ df = df.dropna(subset=['Position','Team within selected timeframe', 'Age']).rese
 ##########
 
 with st.sidebar:
+    st.header('Choose Basic Options')    
+    season = st.selectbox('Season', (['23-24','2024','2023','22-23','2022','21-22']))
+    lg_lookup_ssn = lg_lookup[lg_lookup.Season==season]
+    lg = st.selectbox('League', (lg_lookup_ssn.League.tolist()))
     formation = st.selectbox('Fomation', (4231, 433, 442))
     mins = st.number_input('Minimum % of Season Played', 30, 75, 40)
     ages = st.slider('Age Range', 0, 100, (0, 100))

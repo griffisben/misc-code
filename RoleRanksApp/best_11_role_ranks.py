@@ -644,7 +644,9 @@ with st.sidebar:
     number_of_players = st.slider('Top X Players Per Role', 1, 20, 5)
     normalize_to_100 = st.selectbox('Normalize Scores so #1 = 100?', (['Yes','No']))
 
+with st.form('Role-Positions'):
     st.header('Role-Positions')
+    submitted = st.form_submit_button("Update Roles")
     pos1 = st.selectbox(formation_positions[formation][0], (role_position_lookup[role_position_lookup.form_pos == formation_positions[formation][0]].pos_role.tolist()))
     pos2 = st.selectbox(formation_positions[formation][1], (role_position_lookup[role_position_lookup.form_pos == formation_positions[formation][1]].pos_role.tolist()))
     pos3 = st.selectbox(formation_positions[formation][2], (role_position_lookup[role_position_lookup.form_pos == formation_positions[formation][2]].pos_role.tolist()), index=2)
@@ -694,3 +696,4 @@ with st.expander(chosen_roles[9]):
    show_ranks[show_ranks['Squad Position']==chosen_roles[9]]
 with st.expander(chosen_roles[10]):
    show_ranks[show_ranks['Squad Position']==chosen_roles[10]]
+

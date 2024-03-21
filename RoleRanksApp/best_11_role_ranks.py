@@ -668,7 +668,7 @@ role_position_df['formation'] = formation
 
 
 clean_df = load_league_data(df, f"{lg} {season}")
-st.write(clean_df.Team.unique())
+st.write(clean_df['Team within selected timeframe'].unique())
 rank_list = make_rankings(formation, mins/100, clean_df, role_position_df, [lg], exp_contracts, expiration_date,
                           min_age=ages[0], max_age=ages[1], num=number_of_players, normalize_to_100=normalize_to_100)
 show_ranks = rank_list[['Player','Team','Age','Squad Position','Player Pos.','Score','Role Rank']].copy()

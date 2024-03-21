@@ -627,41 +627,39 @@ df = df.dropna(subset=['Position','Team within selected timeframe', 'Age']).rese
 ##########
 
 with st.sidebar:
-    st.header('Choose Basic Options')
-    with st.expander('Note on Seasons'):
-        st.write('''
-        Please note that with prior seasons, the players & leagues are correct but the team names can sometimes be off. Ages are also current ages, not ages in the season... I'm working on remedying this.
-        ''')
+    with st.form('Choose Basic Options'):
+        st.header('Choose Basic Options')
+        
+        submitted = st.form_submit_button("Update Ranking Tables")
+    
+        season = st.selectbox('Season', (['23-24','2024','2023','22-23','2022','21-22']))
+        lg_lookup_ssn = lg_lookup[lg_lookup.Season==season]
+        lg = st.selectbox('League', (lg_lookup_ssn.League.tolist()))
+        formation = st.selectbox('Fomation', (4231, 433, 442))
+        mins = st.number_input('Minimum % of Season Played', 30, 75, 40)
+        ages = st.slider('Age Range', 0, 100, (0, 100))
+        exp_contracts_ = st.selectbox('Only Expiring Contracts?', (['No','Yes']))
+        if exp_contracts_ == 'Yes':
+            exp_contracts = 'y'
+            expiration_date = st.date_input("Contract Expires On Or Before", datetime.date(2024, 8, 1), format='YYYY-MM-DD')
+        else:
+            exp_contracts = 'n'
+            expiration_date = '2024-08-01'
+        number_of_players = st.slider('Top X Players Per Role', 1, 20, 5)
+        normalize_to_100 = st.selectbox('Normalize Scores so #1 = 100?', (['Yes','No']))
 
-    season = st.selectbox('Season', (['23-24','2023','22-23','2022','21-22']))
-    lg_lookup_ssn = lg_lookup[lg_lookup.Season==season]
-    lg = st.selectbox('League', (lg_lookup_ssn.League.tolist()))
-    formation = st.selectbox('Fomation', (433, 4231, 442))
-    mins = st.number_input('Minimum % of Season Played', 30, 75, 40)
-    ages = st.slider('Age Range', 0, 100, (0, 100))
-    exp_contracts_ = st.selectbox('Only Expiring Contracts?', (['No','Yes']))
-    if exp_contracts_ == 'Yes':
-        exp_contracts = 'y'
-        expiration_date = st.date_input("Contract Expires On Or Before", datetime.date(2024, 8, 1), format='YYYY-MM-DD')
-    else:
-        exp_contracts = 'n'
-        expiration_date = '2024-08-01'
-    number_of_players = st.slider('Top X Players Per Role', 3, 20,5)
-    normalize_to_100 = st.selectbox('Normalize Scores so #1 = 100?', (['Yes','No']))
-
-with st.sidebar:
-    st.header('Role-Positions')
-    pos1 = st.selectbox(formation_positions[formation][0], (role_position_lookup[role_position_lookup.form_pos == formation_positions[formation][0]].pos_role.tolist()))
-    pos2 = st.selectbox(formation_positions[formation][1], (role_position_lookup[role_position_lookup.form_pos == formation_positions[formation][1]].pos_role.tolist()))
-    pos3 = st.selectbox(formation_positions[formation][2], (role_position_lookup[role_position_lookup.form_pos == formation_positions[formation][2]].pos_role.tolist()), index=2)
-    pos4 = st.selectbox(formation_positions[formation][3], (role_position_lookup[role_position_lookup.form_pos == formation_positions[formation][3]].pos_role.tolist()))
-    pos5 = st.selectbox(formation_positions[formation][4], (role_position_lookup[role_position_lookup.form_pos == formation_positions[formation][4]].pos_role.tolist()))
-    pos6 = st.selectbox(formation_positions[formation][5], (role_position_lookup[role_position_lookup.form_pos == formation_positions[formation][5]].pos_role.tolist()), index=0)
-    pos7 = st.selectbox(formation_positions[formation][6], (role_position_lookup[role_position_lookup.form_pos == formation_positions[formation][6]].pos_role.tolist()), index=3)
-    pos8 = st.selectbox(formation_positions[formation][7], (role_position_lookup[role_position_lookup.form_pos == formation_positions[formation][7]].pos_role.tolist()), index=1)
-    pos9 = st.selectbox(formation_positions[formation][8], (role_position_lookup[role_position_lookup.form_pos == formation_positions[formation][8]].pos_role.tolist()))
-    pos10 = st.selectbox(formation_positions[formation][9], (role_position_lookup[role_position_lookup.form_pos == formation_positions[formation][9]].pos_role.tolist()), index=1)
-    pos11 = st.selectbox(formation_positions[formation][10], (role_position_lookup[role_position_lookup.form_pos == formation_positions[formation][10]].pos_role.tolist()), index=0)
+        st.header('Role-Positions')
+        pos1 = st.selectbox(formation_positions[formation][0], (role_position_lookup[role_position_lookup.form_pos == formation_positions[formation][0]].pos_role.tolist()))
+        pos2 = st.selectbox(formation_positions[formation][1], (role_position_lookup[role_position_lookup.form_pos == formation_positions[formation][1]].pos_role.tolist()), index=0)
+        pos3 = st.selectbox(formation_positions[formation][2], (role_position_lookup[role_position_lookup.form_pos == formation_positions[formation][2]].pos_role.tolist()), index=2)
+        pos4 = st.selectbox(formation_positions[formation][3], (role_position_lookup[role_position_lookup.form_pos == formation_positions[formation][3]].pos_role.tolist()), index=1)
+        pos5 = st.selectbox(formation_positions[formation][4], (role_position_lookup[role_position_lookup.form_pos == formation_positions[formation][4]].pos_role.tolist()))
+        pos6 = st.selectbox(formation_positions[formation][5], (role_position_lookup[role_position_lookup.form_pos == formation_positions[formation][5]].pos_role.tolist()), index=0)
+        pos7 = st.selectbox(formation_positions[formation][6], (role_position_lookup[role_position_lookup.form_pos == formation_positions[formation][6]].pos_role.tolist()), index=3)
+        pos8 = st.selectbox(formation_positions[formation][7], (role_position_lookup[role_position_lookup.form_pos == formation_positions[formation][7]].pos_role.tolist()), index=1)
+        pos9 = st.selectbox(formation_positions[formation][8], (role_position_lookup[role_position_lookup.form_pos == formation_positions[formation][8]].pos_role.tolist()))
+        pos10 = st.selectbox(formation_positions[formation][9], (role_position_lookup[role_position_lookup.form_pos == formation_positions[formation][9]].pos_role.tolist()), index=1)
+        pos11 = st.selectbox(formation_positions[formation][10], (role_position_lookup[role_position_lookup.form_pos == formation_positions[formation][10]].pos_role.tolist()), index=0)
 
 chosen_roles = [pos1,pos2,pos3,pos4,pos5,pos6,pos7,pos8,pos9,pos10,pos11]
 role_position_df = pd.DataFrame()

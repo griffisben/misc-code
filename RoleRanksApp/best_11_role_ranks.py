@@ -617,6 +617,7 @@ st.subheader('Created by Ben Griffis (Twitter: @BeGriffis)')
 with st.sidebar:
     st.header('Choose Gender')
     gender = st.selectbox('Gender', ('Men','Women'))
+    season = st.selectbox('Season', (['23-24','2024','2023','22-23','2022','21-22']))
 if gender == 'Men':
     lg_lookup = read_csv('https://raw.githubusercontent.com/griffisben/Wyscout_Prospect_Research/main/league_info_lookup.csv')
     df = read_csv('https://raw.githubusercontent.com/griffisben/Wyscout_Prospect_Research/main/WS_Data.csv')
@@ -632,7 +633,6 @@ with st.sidebar:
         
         submitted = st.form_submit_button("Update Ranking Tables")
     
-        season = st.selectbox('Season', (['23-24','2024','2023','22-23','2022','21-22']))
         lg_lookup_ssn = lg_lookup[lg_lookup.Season==season]
         lg = st.selectbox('League', (lg_lookup_ssn.League.tolist()))
         formation = st.selectbox('Fomation', (4231, 433, 442))

@@ -611,12 +611,19 @@ rank_11_base = read_csv('https://raw.githubusercontent.com/griffisben/misc-code/
 role_position_lookup = read_csv('https://raw.githubusercontent.com/griffisben/misc-code/main/RoleRanksApp/Role_Positions_Lookup.csv')
 
 st.title('Best XI Players')
-st.subheader("All data from Wyscout")
-st.subheader('Created by Ben Griffis (Twitter: @BeGriffis)')
+st.subheader("All data from Wyscout. Created by Ben Griffis (Twitter: @BeGriffis)")
+st.subheader('')
+
 
 with st.sidebar:
     st.header('Choose Gender')
     gender = st.selectbox('Gender', ('Men','Women'))
+    
+    st.header('Choose Basic Options')    
+    season = st.selectbox('Season', (['23-24','2024','2023','22-23','2022','21-22']))
+    lg_lookup_ssn = lg_lookup[lg_lookup.Season==season]
+    lg = st.selectbox('League', (lg_lookup_ssn.League.tolist()))
+
 if gender == 'Men':
     lg_lookup = read_csv('https://raw.githubusercontent.com/griffisben/Wyscout_Prospect_Research/main/league_info_lookup.csv')
     df = read_csv('https://raw.githubusercontent.com/griffisben/Wyscout_Prospect_Research/main/WS_Data.csv')
@@ -627,10 +634,6 @@ df = df.dropna(subset=['Position','Team within selected timeframe', 'Age']).rese
 ##########
 
 with st.sidebar:
-    st.header('Choose Basic Options')    
-    season = st.selectbox('Season', (['23-24','2024','2023','22-23','2022','21-22']))
-    lg_lookup_ssn = lg_lookup[lg_lookup.Season==season]
-    lg = st.selectbox('League', (lg_lookup_ssn.League.tolist()))
     formation = st.selectbox('Fomation', (4231, 433, 442))
     mins = st.number_input('Minimum % of Season Played', 30, 75, 40)
     ages = st.slider('Age Range', 0, 100, (0, 100))
@@ -671,9 +674,10 @@ rank_list = make_rankings(formation, mins/100, clean_df, role_position_df, [lg],
                           min_age=ages[0], max_age=ages[1], num=number_of_players, normalize_to_100=normalize_to_100)
 show_ranks = rank_list[['Player','Team','Age','Squad Position','Player Pos.','Score','Role Rank']].copy()
 
+st.subheader(f'{lg} {season}')
+
 with st.expander('All Roles'):
    show_ranks
-
 with st.expander(chosen_roles[0]):
    show_ranks[show_ranks['Squad Position']==chosen_roles[0]]
 with st.expander(chosen_roles[1]):

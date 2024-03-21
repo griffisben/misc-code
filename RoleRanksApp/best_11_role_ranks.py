@@ -694,5 +694,3 @@ with st.expander(chosen_roles[9]):
    show_ranks[show_ranks['Squad Position']==chosen_roles[9]]
 with st.expander(chosen_roles[10]):
    show_ranks[show_ranks['Squad Position']==chosen_roles[10]]
-
-v

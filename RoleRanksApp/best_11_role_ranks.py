@@ -124,7 +124,9 @@ def load_league_data(data, league_season):
     return df
 
 
-def make_rankings(formation, mins, data, role_position_df, leagues, exp_contracts, expiration_date, min_age, max_age, num, normalize_to_100):
+def make_rankings(formation, mins, data, role_position_df, leagues, exp_contracts, expiration_date,
+                  min_age, max_age, num, normalize_to_100, chosen_team
+                 ):
     formation_positions = {442:['GK','RCB','LCB','RB','LB','RCM','LCM','RM','LM','RS','LS',],
                           4231:['GK','RCB','LCB','RB','LB','RCM','LCM','CAM','RW','LW','ST'],
                           433:['GK','RCB','LCB','RB','LB','RCM','CM','LCM','RW','LW','ST']
@@ -594,6 +596,8 @@ def make_rankings(formation, mins, data, role_position_df, leagues, exp_contract
     rank_list = rank_list.reset_index().rename(columns={'index':'Role Rank'})
     
     rank_list_final = pd.DataFrame(columns=rank_list.columns)
+    if chosen_team != 'N/A':
+        rank_list_final = rank_list_final[rank_list_final['Team']==chosen_team].reset_index(drop=True)
     
     for q in range(len(rank_11)):
         rank_list_final = pd.concat([rank_list_final,rank_list[rank_list['Squad Position']==rank_11.pos_role[q]].sort_values(by=['Score','Age'],ascending=[False,True]).head(num)])
@@ -668,9 +672,16 @@ role_position_df['formation'] = formation
 
 
 clean_df = load_league_data(df, f"{lg} {season}")
-st.write(clean_df['Team within selected timeframe'].unique())
+
+with st.sidebar:
+    one_team_choice = st.selectbox('One Team Depth Chart?', (['No','Yes']))
+    if one_choice_team == 'Yes':
+        chosen_team = st.selectbox('League', (clean_df['Team within selected timeframe'].tolist()))
+    else:
+        chosen_team = 'N/A'
+
 rank_list = make_rankings(formation, mins/100, clean_df, role_position_df, [lg], exp_contracts, expiration_date,
-                          min_age=ages[0], max_age=ages[1], num=number_of_players, normalize_to_100=normalize_to_100)
+                          min_age=ages[0], max_age=ages[1], num=number_of_players, normalize_to_100=normalize_to_100, chosen_team=chosen_team)
 show_ranks = rank_list[['Player','Team','Age','Squad Position','Player Pos.','Score','Role Rank']].copy()
 
 st.subheader(f'{lg} {season}')

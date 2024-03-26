@@ -676,7 +676,7 @@ clean_df = load_league_data(df, f"{lg} {season}")
 with st.sidebar:
     one_team_choice = st.selectbox('One Team Depth Chart?', (['No','Yes']))
     if one_team_choice == 'Yes':
-        chosen_team = st.selectbox('League', (sorted(clean_df['Team within selected timeframe'].tolist())))
+        chosen_team = st.selectbox('League', (sorted(clean_df['Team within selected timeframe'].unique().tolist())))
     else:
         chosen_team = 'N/A'
 

@@ -597,7 +597,7 @@ def make_rankings(formation, mins, data, role_position_df, leagues, exp_contract
     
     rank_list_final = pd.DataFrame(columns=rank_list.columns)
     if chosen_team != 'N/A':
-        rank_list_final = rank_list_final[rank_list_final['Team']==chosen_team].reset_index(drop=True)
+        rank_list = rank_list[rank_list['Team']==chosen_team].reset_index(drop=True)
     
     for q in range(len(rank_11)):
         rank_list_final = pd.concat([rank_list_final,rank_list[rank_list['Squad Position']==rank_11.pos_role[q]].sort_values(by=['Score','Age'],ascending=[False,True]).head(num)])
@@ -676,7 +676,7 @@ clean_df = load_league_data(df, f"{lg} {season}")
 with st.sidebar:
     one_team_choice = st.selectbox('One Team Depth Chart?', (['No','Yes']))
     if one_team_choice == 'Yes':
-        chosen_team = st.selectbox('League', (clean_df['Team within selected timeframe'].tolist()))
+        chosen_team = st.selectbox('League', (sorted(clean_df['Team within selected timeframe'].tolist())))
     else:
         chosen_team = 'N/A'
 

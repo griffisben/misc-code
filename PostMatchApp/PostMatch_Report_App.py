@@ -5,11 +5,8 @@ import requests
 import io
 import warnings
 warnings.filterwarnings('ignore')
-@st.cache_data(ttl=6*60*60)
-def read_csv(link):
-    return pd.read_csv(link)
 
-df = read_csv('https://raw.githubusercontent.com/griffisben/misc-code/main/PostMatchApp/USL%20Championship%20Full%20Match%20List.csv')
+df = pd.read_csv('https://raw.githubusercontent.com/griffisben/misc-code/main/PostMatchApp/USL%20Championship%20Full%20Match%20List.csv')
 df['Match_Name'] = df['Match'] + ' ' + df['Date']
 team_list = sorted(list(set(df.Home.unique().tolist() + df.Away.unique().tolist())))
 

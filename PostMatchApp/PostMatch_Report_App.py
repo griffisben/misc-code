@@ -2,6 +2,7 @@ import pandas as pd
 import streamlit as st
 from PIL import Image
 import requests
+import io
 import warnings
 warnings.filterwarnings('ignore')
 @st.cache_data(ttl=6*60*60)
@@ -33,7 +34,7 @@ with st.sidebar:
 for i in range(len(render_matches)):
     url = f"https://github.com/griffisben/misc-code/blob/main/PostMatchApp/USLC_2024/{render_matches[i].replace(' ','%20')}.png"
     response = requests.get(url)
-    game_image = Image.open(BytesIO(response.content))
+    game_image = Image.open(io.BytesIO(response.content))
     # st.pyplot(game_image)
 
 

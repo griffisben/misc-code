@@ -30,7 +30,7 @@ with st.sidebar:
         render_matches = match_list.head(num_matches).Match.tolist()
 
 for i in range(len(render_matches)):
-    game_image = Image.open(f"/PostMatchApp/USLC_2024/{render_matches[i]}.png")
+    game_image = Image.open(f"https://github.com/griffisben/misc-code/blob/main/PostMatchApp/USLC_2024/{render_matches[i]}.png")
     st.image(game_image)
 
 

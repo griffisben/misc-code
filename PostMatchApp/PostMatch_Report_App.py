@@ -36,10 +36,12 @@ for i in range(len(render_matches)):
     try:
         url = f"https://raw.githubusercontent.com/griffisben/misc-code/main/PostMatchApp/USLC_2024/{match_string}.png"
         response = requests.get(url)
+        st.write(url)
         game_image = Image.open(io.BytesIO(response.content))
     except:
         url = f"https://raw.githubusercontent.com/griffisben/misc-code/main/PostMatchApp/USLC_2024/{match_string.replace('2024-','')+'-2024'}.png"
         response = requests.get(url)
+        st.write(url)
         game_image = Image.open(io.BytesIO(response.content))
     game_image
 

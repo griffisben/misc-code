@@ -16,7 +16,7 @@ st.title('Post-Match Reports, 2024 USL Championship')
 
 with st.sidebar:
     # st.header('What Team Do You Want Reports For?')
-    team = st.selectbox('What Team Do You Want Reports For?', team_list, index=6)
+    team = st.selectbox('What Team Do You Want Reports For?', team_list, index=team_list.index('Loudoun United'))
 
     # st.header('Specific Match or Most Recent Matches?')
     specific = st.selectbox('Specific Match or Most Recent Matches?', ('Specific Match','Recent Matches'))
@@ -30,7 +30,7 @@ with st.sidebar:
         render_matches = match_list.head(num_matches).Match.tolist()
 
 for i in range(len(render_matches)):
-    game_image = Image.open(f"https://raw.githubusercontent.com/griffisben/misc-code/main/PostMatchApp/USLC_2024/{render_matches[i].replace(' ','%20')}.png")
+    game_image = Image.open(f"https://raw.githubusercontent.com/griffisben/misc-code/main/PostMatchApp/USLC_2024/{render_matches[i]}.png")
     st.image(game_image)
 
 

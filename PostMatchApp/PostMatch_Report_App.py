@@ -30,8 +30,8 @@ with st.sidebar:
         render_matches = match_list.head(num_matches).Match.tolist()
 
 for i in range(len(render_matches)):
-    game_image = Image.open(f"https://github.com/griffisben/misc-code/blob/main/PostMatchApp/USLC_2024/{render_matches[i]}.png")
-    st.image(game_image)
-
+    game_image = Image.open(f"https://github.com/griffisben/misc-code/blob/1feb8fee54cc518d44dddc60238ef70e849ff45f/PostMatchApp/USLC_2024/{render_matches[i]}.png")
+    # st.pyplot(game_image)
+    st.image(f"https://github.com/griffisben/misc-code/blob/1feb8fee54cc518d44dddc60238ef70e849ff45f/PostMatchApp/USLC_2024/{render_matches[i]}.png")
 
 

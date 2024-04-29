@@ -30,8 +30,9 @@ with st.sidebar:
         render_matches = match_list.head(num_matches).Match.tolist()
 
 for i in range(len(render_matches)):
-    url = f"./PostMatchApp/USLC_2024/{render_matches[i]}.png"
-    game_image = Image.open(url)
+    url = f"https://github.com/griffisben/misc-code/blob/main/PostMatchApp/USLC_2024/{render_matches[i].replace(' ','%20')}.png"
+    response = requests.get(url)
+    game_image = Image.open(BytesIO(response.content))
     # st.pyplot(game_image)
 
 

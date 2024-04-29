@@ -29,7 +29,7 @@ with st.sidebar:
     if specific == 'Recent Matches':
         match_list = df[(df.Home == team) | (df.Away == team)].copy()
         num_matches = st.slider('Number of Recent Matches', min_value=1, max_value=5, value=3)
-        render_matches = match_list.head(num_matches).Match.tolist()
+        render_matches = match_list.head(num_matches).Match_Name.tolist()
 
 for i in range(len(render_matches)):
     match_string = render_matches[i].replace(' ','%20')

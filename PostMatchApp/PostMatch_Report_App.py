@@ -1,5 +1,6 @@
 import pandas as pd
 import streamlit as st
+from PIL import Image
 import warnings
 warnings.filterwarnings('ignore')
 @st.cache_data(ttl=6*60*60)
@@ -15,7 +16,7 @@ st.title('Post-Match Reports, 2024 USL Championship')
 
 with st.sidebar:
     # st.header('What Team Do You Want Reports For?')
-    team = st.selectbox('What Team Do You Want Reports For?', team_list)
+    team = st.selectbox('What Team Do You Want Reports For?', team_list, 'Loudoun United')
 
     # st.header('Specific Match or Most Recent Matches?')
     specific = st.selectbox('Specific Match or Most Recent Matches?', ('Specific Match','Recent Matches'))
@@ -29,7 +30,8 @@ with st.sidebar:
         render_matches = match_list.head(num_matches).Match.tolist()
 
 for i in range(len(render_matches)):
-    st.image(f"https://raw.githubusercontent.com/griffisben/misc-code/main/PostMatchApp/USLC_2024/{render_matches[i].replace(' ','%20')}.png")
+    game_image = Image.open(f"https://raw.githubusercontent.com/griffisben/misc-code/main/PostMatchApp/USLC_2024/{render_matches[i].replace(' ','%20')}.png")
+    st.image(game_image)
 
 
 

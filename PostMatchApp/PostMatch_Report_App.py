@@ -1,6 +1,7 @@
 import pandas as pd
 import streamlit as st
 from PIL import Image
+import urllib.request
 import warnings
 warnings.filterwarnings('ignore')
 @st.cache_data(ttl=6*60*60)

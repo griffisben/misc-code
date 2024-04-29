@@ -16,7 +16,7 @@ st.title('Post-Match Reports, 2024 USL Championship')
 
 with st.sidebar:
     # st.header('What Team Do You Want Reports For?')
-    team = st.selectbox('What Team Do You Want Reports For?', team_list, 'Loudoun United')
+    team = st.selectbox('What Team Do You Want Reports For?', team_list, index=6)
 
     # st.header('Specific Match or Most Recent Matches?')
     specific = st.selectbox('Specific Match or Most Recent Matches?', ('Specific Match','Recent Matches'))

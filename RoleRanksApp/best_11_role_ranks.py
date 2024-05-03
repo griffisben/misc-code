@@ -685,6 +685,10 @@ with st.sidebar:
 rank_list = make_rankings(formation, mins/100, clean_df, role_position_df, [lg], exp_contracts, expiration_date,
                           min_age=ages[0], max_age=ages[1], num=number_of_players, normalize_to_100=normalize_to_100, chosen_team=chosen_team)
 show_ranks = rank_list[['Player','Team','Age','Squad Position','Player Pos.','Score','Role Rank']].copy()
+pitch_pos = []
+for i in range(0,11):
+    pitch_pos += [formation_positions[formation][i]]*number_of_players
+show_ranks['Formation Pos.'] = pitch_pos
 
 st.subheader(f'{lg} {season}')
 

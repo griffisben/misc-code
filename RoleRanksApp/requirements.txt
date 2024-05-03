@@ -1,9 +1,1 @@
-seaborn
-pandas
-datetime
-matplotlib
 mplsoccer
-math
-statistics
-warnings
-highlight_text

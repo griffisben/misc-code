@@ -82,14 +82,14 @@ Inverted Winger,Winger,mult,either,any,5,Inverted Winger,442,RM,65,70
 Playmaking Winger,Winger,mult,either,any,5,Playmaking Winger,442,LM,65,10
 Deep-Lying Striker,CF,single,either,any,5,Deep-Lying Striker,442,LS,90,25
 Focal Point Striker,CF,single,either,any,5,Focal Point Striker,442,RS,90,55
-Shot-Stopping Distributor,GK,single,either,any,5,Shot-Stopping Distributor,4231,GK,12,40
-Attacking FB,Fullback,mult,either,RB|RWB,5,Attacking RB,4231,RB,50,70
-Ball Playing CB,CB,single,either,any,5,Ball Playing CB,4231,RCB,35,55
-Spurs LCB,CB,single,either,any,5,Wide CB,4231,LCB,35,25
-Attacking FB,Fullback,mult,either,LB|LWB,5,Attacking LB,4231,LB,50,10
-Progressive Midfielder,Midfielder no CAM,mult,either,any,5,Progressive Midfielder,4231,RCM,65,55
-Number 6,Midfielder no CAM,mult,either,any,5,Number 6,4231,LCM,65,25
-Advanced Playmaker,Midfielder no DM,mult,either,any,5,Advanced Playmaker,4231,CAM,85,40
-Playmaking Winger,Winger,mult,either,any,5,Playmaking Winger,4231,RW,85,70
-Inverted Winger,Winger,mult,either,any,5,Inverted Winger,4231,LW,85,10
-Advanced Striker,CF,single,either,any,5,Advanced Striker,4231,ST,108,40
+Shot-Stopping Distributor,GK,single,either,any,5,Shot-Stopping Distributor,4231,GK,11.5,50
+Attacking FB,Fullback,mult,either,RB|RWB,5,Attacking RB,4231,RB,40,90
+Ball Playing CB,CB,single,either,any,5,Ball Playing CB,4231,RCB,33.3,30
+Spurs LCB,CB,single,either,any,5,Wide CB,4231,LCB,33.3,70
+Attacking FB,Fullback,mult,either,LB|LWB,5,Attacking LB,4231,LB,40,10
+Progressive Midfielder,Midfielder no CAM,mult,either,any,5,Progressive Midfielder,4231,RCM,45,30
+Number 6,Midfielder no CAM,mult,either,any,5,Number 6,4231,LCM,45,70
+Advanced Playmaker,Midfielder no DM,mult,either,any,5,Advanced Playmaker,4231,CAM,60,50
+Playmaking Winger,Winger,mult,either,any,5,Playmaking Winger,4231,RW,70,90
+Inverted Winger,Winger,mult,either,any,5,Inverted Winger,4231,LW,70,10
+Advanced Striker,CF,single,either,any,5,Advanced Striker,4231,ST,88.5,50

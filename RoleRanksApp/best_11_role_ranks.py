@@ -748,5 +748,5 @@ for i in range(0,11):
                          ha='center', va='center', color='#4c94f6', size=9, zorder=3,
                           weight='bold', path_effects=path_eff)
         adj += 2
-st.image(fig)
+fig
 

@@ -11,9 +11,9 @@ sns.set_style("white")
 import warnings
 warnings.filterwarnings('ignore')
 import matplotlib
-from PIL import Image
-from highlight_text import fig_text
-import urllib.request
+# from PIL import Image
+# from highlight_text import fig_text
+# import urllib.request
 matplotlib.rcParams.update(matplotlib.rcParamsDefault)
 @st.cache_data(ttl=6*60*60)
 def read_csv(link):

@@ -60,36 +60,36 @@ Focal Point Striker,CF,single,either,any,200,Focal Point Striker,707,RS,,
 Playmaking Striker,CF,single,either,any,200,Playmaking Striker,707,LS,,
 Link-Up Striker,CF,single,either,any,200,Link-Up Striker,707,RS,,
 CM,Midfielder no CAM,mult,either,any,200,Rounded CM,707,CM,,
-Shot-Stopping Distributor,GK,single,either,any,5,Shot-Stopping Distributor,433,GK,15,40
-Ball Playing CB,CB,single,either,any,5,Ball Playing CB,433,LCB,35,25
-Spurs LCB,CB,single,either,any,5,Wide CB,433,RCB,35,55
-Inverted FB,Fullback,mult,either,any,5,Inverted FB,433,LB,40,5
-Attacking FB,Fullback,mult,either,any,5,Attacking FB,433,RB,40,75
-Progressive Midfielder,Midfielder no CAM,mult,either,any,5,Progressive Midfielder,433,RCM,60,55
-Advanced Playmaker,Midfielder no DM,mult,either,any,5,Advanced Playmaker,433,LCM,60,25
-Number 6,Midfielder no CAM,mult,either,any,5,Number 6,433,CM,55,38
-Playmaking Winger,Winger,mult,either,any,5,Playmaking Winger,433,RW,80,65
-Traditional Winger,Winger,mult,either,any,5,Traditional Winger,433,LW,80,15
-Deep-Lying Striker,CF,single,either,any,5,Deep-Lying Striker,433,ST,90,42
-Shot-Stopping Distributor,GK,single,either,any,5,Shot-Stopping Distributor,442,GK,15,40
-Ball Playing CB,CB,single,either,any,5,Ball Playing CB,442,RCB,35,55
-Spurs LCB,CB,single,either,any,5,Wide CB,442,LCB,35,25
-Attacking FB,Fullback,mult,either,LB|LWB,5,Attacking LB,442,LB,40,5
-Attacking FB,Fullback,mult,either,RB|RWB,5,Attacking RB,442,RB,40,75
-Deep-Lying Playmaker,Midfielder no CAM,mult,either,any,5,Deep-Lying Playmaker,442,RCM,57.5,50
-Number 6,Midfielder no CAM,mult,either,any,5,Number 6,442,LCM,57.5,30
-Inverted Winger,Winger,mult,either,any,5,Inverted Winger,442,RM,65,70
-Playmaking Winger,Winger,mult,either,any,5,Playmaking Winger,442,LM,65,10
-Deep-Lying Striker,CF,single,either,any,5,Deep-Lying Striker,442,LS,90,25
-Focal Point Striker,CF,single,either,any,5,Focal Point Striker,442,RS,90,55
+Shot-Stopping Distributor,GK,single,either,any,5,Shot-Stopping Distributor,433,GK,0,50
+Ball Playing CB,CB,single,either,any,5,Ball Playing CB,433,LCB,20,80
+Spurs LCB,CB,single,either,any,5,Wide CB,433,RCB,20,20
+Inverted FB,Fullback,mult,either,any,5,Inverted FB,433,LB,35,115
+Attacking FB,Fullback,mult,either,any,5,Attacking FB,433,RB,35,-15
+Progressive Midfielder,Midfielder no CAM,mult,either,any,5,Progressive Midfielder,433,RCM,65,12.5
+Advanced Playmaker,Midfielder no DM,mult,either,any,5,Advanced Playmaker,433,LCM,65,87.5
+Number 6,Midfielder no CAM,mult,either,any,5,Number 6,433,CM,45,50
+Playmaking Winger,Winger,mult,either,any,5,Playmaking Winger,433,RW,90,-15
+Traditional Winger,Winger,mult,either,any,5,Traditional Winger,433,LW,90,115
+Deep-Lying Striker,CF,single,either,any,5,Deep-Lying Striker,433,ST,95,50
+Shot-Stopping Distributor,GK,single,either,any,5,Shot-Stopping Distributor,442,GK,0,50
+Ball Playing CB,CB,single,either,any,5,Ball Playing CB,442,RCB,20,20
+Spurs LCB,CB,single,either,any,5,Wide CB,442,LCB,20,80
+Attacking FB,Fullback,mult,either,LB|LWB,5,Attacking LB,442,LB,35,115
+Attacking FB,Fullback,mult,either,RB|RWB,5,Attacking RB,442,RB,35,-15
+Deep-Lying Playmaker,Midfielder no CAM,mult,either,any,5,Deep-Lying Playmaker,442,RCM,55,20
+Number 6,Midfielder no CAM,mult,either,any,5,Number 6,442,LCM,55,80
+Inverted Winger,Winger,mult,either,any,5,Inverted Winger,442,RW,75,-15
+Playmaking Winger,Winger,mult,either,any,5,Playmaking Winger,442,LW,75,115
+Deep-Lying Striker,CF,single,either,any,5,Deep-Lying Striker,442,LS,95,20
+Focal Point Striker,CF,single,either,any,5,Focal Point Striker,442,RS,95,80
 Shot-Stopping Distributor,GK,single,either,any,5,Shot-Stopping Distributor,4231,GK,0,50
-Attacking FB,Fullback,mult,either,RB|RWB,5,Attacking RB,4231,RB,35,-20
-Ball Playing CB,CB,single,either,any,5,Ball Playing CB,4231,RCB,15,20
-Spurs LCB,CB,single,either,any,5,Wide CB,4231,LCB,15,80
-Attacking FB,Fullback,mult,either,LB|LWB,5,Attacking LB,4231,LB,35,120
+Attacking FB,Fullback,mult,either,RB|RWB,5,Attacking RB,4231,RB,35,-15
+Ball Playing CB,CB,single,either,any,5,Ball Playing CB,4231,RCB,20,20
+Spurs LCB,CB,single,either,any,5,Wide CB,4231,LCB,20,80
+Attacking FB,Fullback,mult,either,LB|LWB,5,Attacking LB,4231,LB,35,115
 Progressive Midfielder,Midfielder no CAM,mult,either,any,5,Progressive Midfielder,4231,RCM,50,25
 Number 6,Midfielder no CAM,mult,either,any,5,Number 6,4231,LCM,50,75
-Advanced Playmaker,Midfielder no DM,mult,either,any,5,Advanced Playmaker,4231,CAM,60,50
-Playmaking Winger,Winger,mult,either,any,5,Playmaking Winger,4231,RW,70,10
-Inverted Winger,Winger,mult,either,any,5,Inverted Winger,4231,LW,70,90
-Advanced Striker,CF,single,either,any,5,Advanced Striker,4231,ST,88.5,50
+Advanced Playmaker,Midfielder no DM,mult,either,any,5,Advanced Playmaker,4231,CAM,70,50
+Playmaking Winger,Winger,mult,either,any,5,Playmaking Winger,4231,RW,75,-15
+Inverted Winger,Winger,mult,either,any,5,Inverted Winger,4231,LW,75,115
+Advanced Striker,CF,single,either,any,5,Advanced Striker,4231,ST,95,50

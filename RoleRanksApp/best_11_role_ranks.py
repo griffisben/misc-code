@@ -18,6 +18,8 @@ matplotlib.rcParams.update(matplotlib.rcParamsDefault)
 @st.cache_data(ttl=6*60*60)
 def read_csv(link):
     return pd.read_csv(link)
+from mplsoccer import VerticalPitch, FontManager
+import matplotlib.patheffects as path_effects
 
 
 
@@ -686,28 +688,61 @@ show_ranks = rank_list[['Player','Team','Age','Squad Position','Player Pos.','Sc
 
 st.subheader(f'{lg} {season}')
 
-with st.expander('All Roles'):
-   show_ranks
-with st.expander(chosen_roles[0]):
-   show_ranks[show_ranks['Squad Position']==chosen_roles[0]]
-with st.expander(chosen_roles[1]):
-   show_ranks[show_ranks['Squad Position']==chosen_roles[1]]
-with st.expander(chosen_roles[2]):
-   show_ranks[show_ranks['Squad Position']==chosen_roles[2]]
-with st.expander(chosen_roles[3]):
-   show_ranks[show_ranks['Squad Position']==chosen_roles[3]]
-with st.expander(chosen_roles[4]):
-   show_ranks[show_ranks['Squad Position']==chosen_roles[4]]
-with st.expander(chosen_roles[5]):
-   show_ranks[show_ranks['Squad Position']==chosen_roles[5]]
-with st.expander(chosen_roles[6]):
-   show_ranks[show_ranks['Squad Position']==chosen_roles[6]]
-with st.expander(chosen_roles[7]):
-   show_ranks[show_ranks['Squad Position']==chosen_roles[7]]
-with st.expander(chosen_roles[8]):
-   show_ranks[show_ranks['Squad Position']==chosen_roles[8]]
-with st.expander(chosen_roles[9]):
-   show_ranks[show_ranks['Squad Position']==chosen_roles[9]]
-with st.expander(chosen_roles[10]):
-   show_ranks[show_ranks['Squad Position']==chosen_roles[10]]
+# with st.expander('All Roles'):
+#    show_ranks
+# with st.expander(chosen_roles[0]):
+#    show_ranks[show_ranks['Squad Position']==chosen_roles[0]]
+# with st.expander(chosen_roles[1]):
+#    show_ranks[show_ranks['Squad Position']==chosen_roles[1]]
+# with st.expander(chosen_roles[2]):
+#    show_ranks[show_ranks['Squad Position']==chosen_roles[2]]
+# with st.expander(chosen_roles[3]):
+#    show_ranks[show_ranks['Squad Position']==chosen_roles[3]]
+# with st.expander(chosen_roles[4]):
+#    show_ranks[show_ranks['Squad Position']==chosen_roles[4]]
+# with st.expander(chosen_roles[5]):
+#    show_ranks[show_ranks['Squad Position']==chosen_roles[5]]
+# with st.expander(chosen_roles[6]):
+#    show_ranks[show_ranks['Squad Position']==chosen_roles[6]]
+# with st.expander(chosen_roles[7]):
+#    show_ranks[show_ranks['Squad Position']==chosen_roles[7]]
+# with st.expander(chosen_roles[8]):
+#    show_ranks[show_ranks['Squad Position']==chosen_roles[8]]
+# with st.expander(chosen_roles[9]):
+#    show_ranks[show_ranks['Squad Position']==chosen_roles[9]]
+# with st.expander(chosen_roles[10]):
+#    show_ranks[show_ranks['Squad Position']==chosen_roles[10]]
+
+path_eff = [path_effects.Stroke(linewidth=0.5, foreground='#fbf9f4'), path_effects.Normal()]
+
+pitch = VerticalPitch(pitch_type='opta', pitch_color='#fbf9f4', line_color='#fbf9f4', line_zorder=1, half=False)
+fig, axs = pitch.grid(endnote_height=0.045, endnote_space=0, figheight=12,
+                      title_height=0.045, title_space=0,
+                      axis=False,
+                      grid_height=0.86)
+fig.set_facecolor('#fbf9f4')
+
+for i in range(0,11):
+    X = rank_11_base[(rank_11_base.form_pos == formation_positions[formation][i]) & (rank_11_base.formation == formation)].x.values[0]
+    Y = rank_11_base[(rank_11_base.form_pos == formation_positions[formation][i]) & (rank_11_base.formation == formation)].y.values[0]
+    
+        
+    adj = -4
+    for j in range(0,number_of_players):
+        player = show_ranks[show_ranks['Formation Pos.']==formation_positions[formation][i]].Player.iloc[j]
+        age = show_ranks[show_ranks['Formation Pos.']==formation_positions[formation][i]].Age.iloc[j]
+        pteam = show_ranks[show_ranks['Formation Pos.']==formation_positions[formation][i]].Team.iloc[j]
+        score = show_ranks[show_ranks['Formation Pos.']==formation_positions[formation][i]].Score.iloc[j]
+
+        if j == 0:
+            pos_desc = show_ranks[show_ranks['Formation Pos.']==formation_positions[formation][i]]['Squad Position'].iloc[0]
+            axs['pitch'].text(Y, X+6.25, pos_desc,
+                             ha='center', va='center', color='#4a2e19', size=11, zorder=3,
+                              weight='bold', path_effects=path_eff)
+    
+        axs['pitch'].text(Y, X-adj, f"{player} ({age}, {pteam}) {score}",
+                         ha='center', va='center', color='#4c94f6', size=9, zorder=3,
+                          weight='bold', path_effects=path_eff)
+        adj += 2
+st.image(fig)
 

@@ -692,30 +692,6 @@ show_ranks['Formation Pos.'] = pitch_pos
 
 st.subheader(f'{lg} {season}')
 
-# with st.expander('All Roles'):
-#    show_ranks
-# with st.expander(chosen_roles[0]):
-#    show_ranks[show_ranks['Squad Position']==chosen_roles[0]]
-# with st.expander(chosen_roles[1]):
-#    show_ranks[show_ranks['Squad Position']==chosen_roles[1]]
-# with st.expander(chosen_roles[2]):
-#    show_ranks[show_ranks['Squad Position']==chosen_roles[2]]
-# with st.expander(chosen_roles[3]):
-#    show_ranks[show_ranks['Squad Position']==chosen_roles[3]]
-# with st.expander(chosen_roles[4]):
-#    show_ranks[show_ranks['Squad Position']==chosen_roles[4]]
-# with st.expander(chosen_roles[5]):
-#    show_ranks[show_ranks['Squad Position']==chosen_roles[5]]
-# with st.expander(chosen_roles[6]):
-#    show_ranks[show_ranks['Squad Position']==chosen_roles[6]]
-# with st.expander(chosen_roles[7]):
-#    show_ranks[show_ranks['Squad Position']==chosen_roles[7]]
-# with st.expander(chosen_roles[8]):
-#    show_ranks[show_ranks['Squad Position']==chosen_roles[8]]
-# with st.expander(chosen_roles[9]):
-#    show_ranks[show_ranks['Squad Position']==chosen_roles[9]]
-# with st.expander(chosen_roles[10]):
-#    show_ranks[show_ranks['Squad Position']==chosen_roles[10]]
 
 path_eff = [path_effects.Stroke(linewidth=0.5, foreground='#fbf9f4'), path_effects.Normal()]
 
@@ -749,4 +725,30 @@ for i in range(0,11):
                           weight='bold', path_effects=path_eff)
         adj += 2
 fig
+
+with st.expander('All Roles'):
+   show_ranks
+with st.expander(chosen_roles[0]):
+   show_ranks[show_ranks['Squad Position']==chosen_roles[0]]
+with st.expander(chosen_roles[1]):
+   show_ranks[show_ranks['Squad Position']==chosen_roles[1]]
+with st.expander(chosen_roles[2]):
+   show_ranks[show_ranks['Squad Position']==chosen_roles[2]]
+with st.expander(chosen_roles[3]):
+   show_ranks[show_ranks['Squad Position']==chosen_roles[3]]
+with st.expander(chosen_roles[4]):
+   show_ranks[show_ranks['Squad Position']==chosen_roles[4]]
+with st.expander(chosen_roles[5]):
+   show_ranks[show_ranks['Squad Position']==chosen_roles[5]]
+with st.expander(chosen_roles[6]):
+   show_ranks[show_ranks['Squad Position']==chosen_roles[6]]
+with st.expander(chosen_roles[7]):
+   show_ranks[show_ranks['Squad Position']==chosen_roles[7]]
+with st.expander(chosen_roles[8]):
+   show_ranks[show_ranks['Squad Position']==chosen_roles[8]]
+with st.expander(chosen_roles[9]):
+   show_ranks[show_ranks['Squad Position']==chosen_roles[9]]
+with st.expander(chosen_roles[10]):
+   show_ranks[show_ranks['Squad Position']==chosen_roles[10]]
+
 

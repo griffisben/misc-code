@@ -641,7 +641,7 @@ with st.sidebar:
     lg = st.selectbox('League', (lg_lookup_ssn.League.tolist()))
     formation = st.selectbox('Fomation', (4231, 433, 442))
     mins = st.number_input('Minimum % of Season Played', 30, 75, 40)
-    ages = st.slider('Age Range', 0, 100, (0, 100))
+    ages = st.slider('Age Range', 0, 45, (0, 45))
     exp_contracts_ = st.selectbox('Only Expiring Contracts?', (['No','Yes']))
     if exp_contracts_ == 'Yes':
         exp_contracts = 'y'

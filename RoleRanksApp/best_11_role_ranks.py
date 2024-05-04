@@ -703,14 +703,14 @@ fig.set_facecolor('#fbf9f4')
 if ages[0] == 0 and ages[1] == 100:
     age_text = f'Minimum {mins}% of season played'
 elif ages[0] == 0:
-    age_text = f'Minimum {mins}% of season played | Includes U{ages[1]} players only'
+    age_text = f'Min. {mins}% of season played | U{ages[1]} players only'
 elif ages[1] == 100:
-    age_text = f'Minimum {mins}% of season played | Includes players {ages[0]} & older'
+    age_text = f'Min. {mins}% of season played | Players {ages[0]} & older'
 else:
-    age_text = f'Minimum {mins}% of season played | Includes players between {ages[0]} and {ages[1]}'
+    age_text = f'Min. {mins}% of season played | Players between {ages[0]} & {ages[1]}'
 
 if exp_contracts == 'y':
-    exp_text = f'Only players with contracts expring on or before {expiration_date} (according to Wyscout)'
+    exp_text = f'Players out of contract by {expiration_date} (per Wyscout)'
 else:
     exp_text = ''
 

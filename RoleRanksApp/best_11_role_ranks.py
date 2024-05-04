@@ -627,11 +627,8 @@ with st.sidebar:
     gender = st.selectbox('Gender', ('Men','Women'))
 if gender == 'Men':
     lg_lookup = read_csv('https://raw.githubusercontent.com/griffisben/Wyscout_Prospect_Research/main/league_info_lookup.csv')
-    df = read_csv('https://raw.githubusercontent.com/griffisben/Wyscout_Prospect_Research/main/WS_Data.csv')
 if gender == 'Women':
     lg_lookup = read_csv('https://raw.githubusercontent.com/griffisben/Wyscout_Prospect_Research/main/league_info_lookup_women.csv')
-    df = read_csv('https://raw.githubusercontent.com/griffisben/Wyscout_Prospect_Research/main/WS_Data_Women.csv')
-df = df.dropna(subset=['Position','Team within selected timeframe', 'Age']).reset_index(drop=True)
 ##########
 
 with st.sidebar:
@@ -672,6 +669,14 @@ role_position_df = pd.DataFrame()
 for i in range(0,11):
     role_position_df = pd.concat([role_position_df,role_position_lookup[(role_position_lookup.pos_role == chosen_roles[i]) & (role_position_lookup.form_pos == formation_positions[formation][i])]], ignore_index=True)
 role_position_df['formation'] = formation
+
+    
+if gender == 'Men':
+    df = pd.read_csv(f'https://raw.githubusercontent.com/griffisben/Wyscout_Prospect_Research/main/Main%20App/{full_league_name.replace(" ","%20")}.csv')
+elif gender == 'Women':
+    df = pd.read_csv(f'https://raw.githubusercontent.com/griffisben/Wyscout_Prospect_Research/main/Main%20App/Women/{full_league_name.replace(" ","%20")}.csv')
+df['League'] = full_league_name
+df = df.dropna(subset=['Position','Team within selected timeframe', 'Age']).reset_index(drop=True)
 
 
 clean_df = load_league_data(df, f"{lg} {season}")

@@ -799,14 +799,14 @@ with table_tab:
        show_ranks[show_ranks['Squad Position']==chosen_roles[10]]
 
 with notes_tab:
-    st.expander('Shot-Stopping Distributor'):
+    with st.expander('Shot-Stopping Distributor'):
         st.write('''
         50% post-shot xG +/-  \n
         20% save %  \n
         15% percentage of passes that are short  \n
         15% long pass completion %
         ''')
-    st.expander('Ball Playing CB'):
+    with st.expander('Ball Playing CB'):
         st.write('''
         20% long pass completion %  \n
         20% passes to the final third + deep completions  \n

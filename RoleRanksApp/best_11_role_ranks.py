@@ -690,7 +690,7 @@ for i in range(0,11):
     pitch_pos += [formation_positions[formation][i]]*number_of_players
 show_ranks['Formation Pos.'] = pitch_pos
 
-st.subheader(f'{lg} {season}')
+# st.subheader(f'{lg} {season}')
 
 
 path_eff = [path_effects.Stroke(linewidth=0.5, foreground='#fbf9f4'), path_effects.Normal()]
@@ -702,13 +702,37 @@ fig, axs = pitch.grid(endnote_height=0.045, endnote_space=0, figheight=12,
                       grid_height=0.86)
 fig.set_facecolor('#fbf9f4')
 
+if ages[0] == 0 and ages[1] == 100:
+    age_text = ''
+elif ages[0] == 0:
+    age_text = f'Includes U{ages[1]} players only'
+elif ages[1] == 100:
+    age_text = f'Includes players {ages[0]} & older'
+else:
+    age_text = f'Includes players between {ages[0]} and {ages[1]}'
+
+if exp_contracts == 'y':
+    exp_text = f'Only players with contracts expring on or before {expiration_date} (according to Wyscout)'
+else:
+    exp_text = ''
+
+if age_text == '' and exp_text == '':
+    sub_title_text = ''
+elif age_text == '':
+    sub_title_text = exp_text
+elif exp_text == '':
+    sub_title_text = age_text
+else:
+    sub_title_text = f"{age_text} | {exp_text}"
+
 for i in range(0,11):
     X = rank_11_base[(rank_11_base.form_pos == formation_positions[formation][i]) & (rank_11_base.formation == formation)].x.values[0]
     Y = rank_11_base[(rank_11_base.form_pos == formation_positions[formation][i]) & (rank_11_base.formation == formation)].y.values[0]
     
         
     adj = -4
-    for j in range(0,number_of_players):
+
+    for j in range(len(show_ranks[show_ranks['Formation Pos.']==formation_positions[formation][i]])):
         player = show_ranks[show_ranks['Formation Pos.']==formation_positions[formation][i]].Player.iloc[j]
         age = show_ranks[show_ranks['Formation Pos.']==formation_positions[formation][i]].Age.iloc[j]
         pteam = show_ranks[show_ranks['Formation Pos.']==formation_positions[formation][i]].Team.iloc[j]
@@ -724,31 +748,49 @@ for i in range(0,11):
                          ha='center', va='center', color='#4c94f6', size=9, zorder=3,
                           weight='bold', path_effects=path_eff)
         adj += 2
-fig
 
-with st.expander('All Roles'):
-   show_ranks
-with st.expander(chosen_roles[0]):
-   show_ranks[show_ranks['Squad Position']==chosen_roles[0]]
-with st.expander(chosen_roles[1]):
-   show_ranks[show_ranks['Squad Position']==chosen_roles[1]]
-with st.expander(chosen_roles[2]):
-   show_ranks[show_ranks['Squad Position']==chosen_roles[2]]
-with st.expander(chosen_roles[3]):
-   show_ranks[show_ranks['Squad Position']==chosen_roles[3]]
-with st.expander(chosen_roles[4]):
-   show_ranks[show_ranks['Squad Position']==chosen_roles[4]]
-with st.expander(chosen_roles[5]):
-   show_ranks[show_ranks['Squad Position']==chosen_roles[5]]
-with st.expander(chosen_roles[6]):
-   show_ranks[show_ranks['Squad Position']==chosen_roles[6]]
-with st.expander(chosen_roles[7]):
-   show_ranks[show_ranks['Squad Position']==chosen_roles[7]]
-with st.expander(chosen_roles[8]):
-   show_ranks[show_ranks['Squad Position']==chosen_roles[8]]
-with st.expander(chosen_roles[9]):
-   show_ranks[show_ranks['Squad Position']==chosen_roles[9]]
-with st.expander(chosen_roles[10]):
-   show_ranks[show_ranks['Squad Position']==chosen_roles[10]]
+axs['title'].text(0.5, 1.5, f'{season} {lg},{team_text}',
+                 ha='center',va='bottom', size=20, weight='bold', color='#4a2e19')
+axs['title'].text(0.5, 1.35, f'Data via Wyscout | {lg_lookup[lg_lookup.League==lg].Date.values[0]} | Created by Ben Griffis (@BeGriffis on Twitter)',
+                 ha='center',va='top', size=12, color='#4a2e19')
+if sub_title_text == '':
+    axs['title'].text(0.5, .95, f'Generated on best11roleranks.streamlit.app',
+                     ha='center',va='top', size=12, style='italic', color='#4a2e19')
+else:
+    axs['title'].text(0.5, .95, age_text,
+                     ha='center',va='top', size=12, color='#4a2e19')
+    axs['title'].text(0.5, .6, f'Generated on best11roleranks.streamlit.app',
+                     ha='center',va='top', size=12, style='italic', color='#4a2e19')
+
+image_tab, table_tab = st.tabs(['Image', 'Table'])
+
+with image_tab:
+    fig
+
+with table_tab:
+    with st.expander('All Roles'):
+       show_ranks
+    with st.expander(chosen_roles[0]):
+       show_ranks[show_ranks['Squad Position']==chosen_roles[0]]
+    with st.expander(chosen_roles[1]):
+       show_ranks[show_ranks['Squad Position']==chosen_roles[1]]
+    with st.expander(chosen_roles[2]):
+       show_ranks[show_ranks['Squad Position']==chosen_roles[2]]
+    with st.expander(chosen_roles[3]):
+       show_ranks[show_ranks['Squad Position']==chosen_roles[3]]
+    with st.expander(chosen_roles[4]):
+       show_ranks[show_ranks['Squad Position']==chosen_roles[4]]
+    with st.expander(chosen_roles[5]):
+       show_ranks[show_ranks['Squad Position']==chosen_roles[5]]
+    with st.expander(chosen_roles[6]):
+       show_ranks[show_ranks['Squad Position']==chosen_roles[6]]
+    with st.expander(chosen_roles[7]):
+       show_ranks[show_ranks['Squad Position']==chosen_roles[7]]
+    with st.expander(chosen_roles[8]):
+       show_ranks[show_ranks['Squad Position']==chosen_roles[8]]
+    with st.expander(chosen_roles[9]):
+       show_ranks[show_ranks['Squad Position']==chosen_roles[9]]
+    with st.expander(chosen_roles[10]):
+       show_ranks[show_ranks['Squad Position']==chosen_roles[10]]
 
 

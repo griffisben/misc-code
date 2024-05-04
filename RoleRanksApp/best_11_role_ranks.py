@@ -591,7 +591,6 @@ def make_rankings(formation, mins, data, role_position_df, leagues, exp_contract
             if exp_contracts == 'y':
                 ranks = ranks[ranks['Contract expires'].isin(exp_dates)]
             ranks = ranks[ranks['Age'].between(min_age,max_age)]
-            ranks = ranks[['Player', 'Team', 'Age', 'Player Pos.', 'Score', 'Minutes played']]
             ranks['Formation Pos.'] = formation_positions[formation][q]
             
             rank_list = pd.concat([rank_list,ranks])

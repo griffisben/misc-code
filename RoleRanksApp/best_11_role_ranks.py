@@ -591,6 +591,7 @@ def make_rankings(formation, mins, data, role_position_df, leagues, exp_contract
             if exp_contracts == 'y':
                 ranks = ranks[ranks['Contract expires'].isin(exp_dates)]
             ranks = ranks[ranks['Age'].between(min_age,max_age)]
+            ranks = ranks[['Player', 'Team', 'Age', 'Main Position', 'Score', 'Minutes played']]
             ranks['Formation Pos.'] = formation_positions[formation][q]
             
             rank_list = pd.concat([rank_list,ranks])
@@ -756,6 +757,11 @@ axs['title'].text(0.5, .95, sub_title_text,
                  ha='center',va='top', size=12, color='#4a2e19')
 axs['title'].text(0.5, .6, f'Generated on best11roleranks.streamlit.app',
                  ha='center',va='top', size=12, style='italic', color='#4a2e19')
+
+if normalize_to_100 == 'Yes':
+    axs['endnote'].text(0.5, .6, f"Scores normalized so that the top player's score is 100 and the worst score is 0",
+                     ha='center',va='top', size=10, color='#4a2e19')
+
 
 show_ranks = show_ranks[['Player','Team','Age','Squad Position','Player Pos.','Score','Role Rank']].copy()
 

@@ -129,7 +129,7 @@ def load_league_data(data, league_season):
 def make_rankings(formation, mins, data, role_position_df, leagues, exp_contracts, expiration_date,
                   min_age, max_age, num, normalize_to_100, chosen_team
                  ):
-    formation_positions = {442:['GK','RCB','LCB','RB','LB','RCM','LCM','RM','LM','RS','LS',],
+    formation_positions = {442:['GK','RCB','LCB','RB','LB','RCM','LCM','RW','LW','RS','LS',],
                           4231:['GK','RCB','LCB','RB','LB','RCM','LCM','CAM','RW','LW','ST'],
                           433:['GK','RCB','LCB','RB','LB','RCM','CM','LCM','RW','LW','ST']
                           }

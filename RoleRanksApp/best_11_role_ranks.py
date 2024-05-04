@@ -687,7 +687,7 @@ with st.sidebar:
             num = 7
         else:
             num = number_of_players
-        team_text = f' Top {num} Players Per Position'
+        team_text = f' Top {num} Players Per Role'
 
 rank_list = make_rankings(formation, mins/100, clean_df, role_position_df, [lg], exp_contracts, expiration_date,
                           min_age=ages[0], max_age=ages[1], num=number_of_players, normalize_to_100=normalize_to_100, chosen_team=chosen_team)

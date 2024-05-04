@@ -726,7 +726,7 @@ for i in range(0,11):
         
     adj = -4
 
-    show_players = len(show_ranks[show_ranks['Formation Pos.']==formation_positions[formation][i]]).head(7)
+    show_players = len(show_ranks[show_ranks['Formation Pos.']==formation_positions[formation][i]].head(7))
     for j in range(show_players):
         player = show_ranks[show_ranks['Formation Pos.']==formation_positions[formation][i]].Player.iloc[j]
         age = show_ranks[show_ranks['Formation Pos.']==formation_positions[formation][i]].Age.iloc[j]

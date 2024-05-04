@@ -690,7 +690,6 @@ for i in range(0,11):
     pitch_pos += [formation_positions[formation][i]]*number_of_players
 show_ranks['Formation Pos.'] = pitch_pos
 
-# st.subheader(f'{lg} {season}')
 
 
 path_eff = [path_effects.Stroke(linewidth=0.5, foreground='#fbf9f4'), path_effects.Normal()]
@@ -703,24 +702,20 @@ fig, axs = pitch.grid(endnote_height=0.045, endnote_space=0, figheight=12,
 fig.set_facecolor('#fbf9f4')
 
 if ages[0] == 0 and ages[1] == 100:
-    age_text = ''
+    age_text = f'Minimum {mins}% of season played'
 elif ages[0] == 0:
-    age_text = f'Includes U{ages[1]} players only'
+    age_text = f'Minimum {mins}% of season played | Includes U{ages[1]} players only'
 elif ages[1] == 100:
-    age_text = f'Includes players {ages[0]} & older'
+    age_text = f'Minimum {mins}% of season played | Includes players {ages[0]} & older'
 else:
-    age_text = f'Includes players between {ages[0]} and {ages[1]}'
+    age_text = f'Minimum {mins}% of season played | Includes players between {ages[0]} and {ages[1]}'
 
 if exp_contracts == 'y':
     exp_text = f'Only players with contracts expring on or before {expiration_date} (according to Wyscout)'
 else:
     exp_text = ''
 
-if age_text == '' and exp_text == '':
-    sub_title_text = ''
-elif age_text == '':
-    sub_title_text = exp_text
-elif exp_text == '':
+if exp_text == '':
     sub_title_text = age_text
 else:
     sub_title_text = f"{age_text} | {exp_text}"
@@ -753,14 +748,10 @@ axs['title'].text(0.5, 1.5, f'{season} {lg},{team_text}',
                  ha='center',va='bottom', size=20, weight='bold', color='#4a2e19')
 axs['title'].text(0.5, 1.35, f'Data via Wyscout | {lg_lookup[lg_lookup.League==lg].Date.values[0]} | Created by Ben Griffis (@BeGriffis on Twitter)',
                  ha='center',va='top', size=12, color='#4a2e19')
-if sub_title_text == '':
-    axs['title'].text(0.5, .95, f'Generated on best11roleranks.streamlit.app',
-                     ha='center',va='top', size=12, style='italic', color='#4a2e19')
-else:
-    axs['title'].text(0.5, .95, age_text,
-                     ha='center',va='top', size=12, color='#4a2e19')
-    axs['title'].text(0.5, .6, f'Generated on best11roleranks.streamlit.app',
-                     ha='center',va='top', size=12, style='italic', color='#4a2e19')
+axs['title'].text(0.5, .95, sub_title_text,
+                 ha='center',va='top', size=12, color='#4a2e19')
+axs['title'].text(0.5, .6, f'Generated on best11roleranks.streamlit.app',
+                 ha='center',va='top', size=12, style='italic', color='#4a2e19')
 
 image_tab, table_tab = st.tabs(['Image', 'Table'])
 

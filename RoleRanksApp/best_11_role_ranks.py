@@ -649,7 +649,7 @@ with st.sidebar:
     else:
         exp_contracts = 'n'
         expiration_date = '2024-08-01'
-    number_of_players = st.slider('Top X Players Per Role', 1, 20, 5)
+    number_of_players = st.slider('Top X Players Per Role\n(Image limited to 7, table will show all X)', 1, 20, 5)
     normalize_to_100 = st.selectbox('Normalize Scores so #1 = 100?', (['Yes','No']))
 
     with st.form('Role-Positions'):

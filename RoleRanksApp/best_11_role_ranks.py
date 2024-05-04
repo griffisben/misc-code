@@ -691,7 +691,7 @@ with st.sidebar:
 
 rank_list = make_rankings(formation, mins/100, clean_df, role_position_df, [lg], exp_contracts, expiration_date,
                           min_age=ages[0], max_age=ages[1], num=number_of_players, normalize_to_100=normalize_to_100, chosen_team=chosen_team)
-show_ranks = rank_list[['Player','Team','Age','Squad Position','Player Pos.','Score','Role Rank','Formation Pos.','Contract expires']].copy()
+show_ranks = rank_list[['Player','Team','Age','Squad Position','Player Pos.','Score','Role Rank','Formation Pos.']].copy()
 
 
 
@@ -757,7 +757,7 @@ axs['title'].text(0.5, .95, sub_title_text,
 axs['title'].text(0.5, .6, f'Generated on best11roleranks.streamlit.app',
                  ha='center',va='top', size=12, style='italic', color='#4a2e19')
 
-show_ranks = show_ranks[['Player','Team','Age','Squad Position','Player Pos.','Score','Role Rank','Contract expires']].copy()
+show_ranks = show_ranks[['Player','Team','Age','Squad Position','Player Pos.','Score','Role Rank']].copy()
 
 image_tab, table_tab = st.tabs(['Image', 'Table'])
 

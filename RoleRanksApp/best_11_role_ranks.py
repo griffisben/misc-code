@@ -767,7 +767,7 @@ else:
 
 show_ranks = show_ranks[['Player','Team','Age','Squad Position','Player Pos.','Score','Role Rank']].copy()
 
-image_tab, table_tab = st.tabs(['Image', 'Table'])
+image_tab, table_tab, notes_tab = st.tabs(['Image', 'Table', 'Role Score Calculations'])
 
 with image_tab:
     fig
@@ -797,5 +797,23 @@ with table_tab:
        show_ranks[show_ranks['Squad Position']==chosen_roles[9]]
     with st.expander(chosen_roles[10]):
        show_ranks[show_ranks['Squad Position']==chosen_roles[10]]
+
+with notes_tab:
+    st.expander('Shot-Stopping Distributor'):
+        st.write('''
+        50% post-shot xG +/-  \n
+        20% save %  \n
+        15% percentage of passes that are short  \n
+        15% long pass completion %
+        ''')
+    st.expander('Ball Playing CB'):
+        st.write('''
+        20% long pass completion %  \n
+        20% passes to the final third + deep completions  \n
+        20% progressive passes  \n
+        20% passes  \n
+        10% aerial win %  \n
+        10% defensive duel win %
+        ''')
 
 

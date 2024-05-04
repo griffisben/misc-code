@@ -758,10 +758,10 @@ axs['title'].text(0.5, .6, f'Generated on best11roleranks.streamlit.app',
                  ha='center',va='top', size=12, style='italic', color='#4a2e19')
 
 if normalize_to_100 == 'Yes':
-    axs['endnote'].text(0.5, .6, f"Scores are gnerated by weighting z-scores of various metrics important to each role-position\nScores normalized so that the top player's score is 100 and the worst score is 0",
+    axs['endnote'].text(0.5, .1, f"Scores are gnerated by weighting z-scores of various metrics important to each role-position\nScores normalized so that the top player's score is 100 and the worst score is 0",
                      ha='center',va='top', size=10, color='#4a2e19')
 else:
-    axs['endnote'].text(0.5, .6, f"Scores are gnerated by weighting z-scores of various metrics important to each role-position",
+    axs['endnote'].text(0.5, .1, f"Scores are gnerated by weighting z-scores of various metrics important to each role-position",
                      ha='center',va='top', size=10, color='#4a2e19')
 
 

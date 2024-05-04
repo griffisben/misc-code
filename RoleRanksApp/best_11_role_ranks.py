@@ -679,8 +679,10 @@ with st.sidebar:
     one_team_choice = st.selectbox('One Team Depth Chart?', (['No','Yes']))
     if one_team_choice == 'Yes':
         chosen_team = st.selectbox('League', (sorted(clean_df['Team within selected timeframe'].unique().tolist())))
+        team_text = f' {chosen_team} Depth Chart'
     else:
         chosen_team = 'N/A'
+        team_text = f' Top {number_of_players} Players Per Position'
 
 rank_list = make_rankings(formation, mins/100, clean_df, role_position_df, [lg], exp_contracts, expiration_date,
                           min_age=ages[0], max_age=ages[1], num=number_of_players, normalize_to_100=normalize_to_100, chosen_team=chosen_team)

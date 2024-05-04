@@ -670,6 +670,7 @@ for i in range(0,11):
     role_position_df = pd.concat([role_position_df,role_position_lookup[(role_position_lookup.pos_role == chosen_roles[i]) & (role_position_lookup.form_pos == formation_positions[formation][i])]], ignore_index=True)
 role_position_df['formation'] = formation
 
+full_league_name = f"{lg} {season}"
     
 if gender == 'Men':
     df = pd.read_csv(f'https://raw.githubusercontent.com/griffisben/Wyscout_Prospect_Research/main/Main%20App/{full_league_name.replace(" ","%20")}.csv')
@@ -679,7 +680,7 @@ df['League'] = full_league_name
 df = df.dropna(subset=['Position','Team within selected timeframe', 'Age']).reset_index(drop=True)
 
 
-clean_df = load_league_data(df, f"{lg} {season}")
+clean_df = load_league_data(df, full_league_name)
 
 with st.sidebar:
     one_team_choice = st.selectbox('One Team Depth Chart?', (['No','Yes']))

@@ -742,6 +742,7 @@ for i in range(0,11):
         age = show_ranks[show_ranks['Formation Pos.']==formation_positions[formation][i]].Age.iloc[j]
         pteam = show_ranks[show_ranks['Formation Pos.']==formation_positions[formation][i]].Team.iloc[j]
         score = show_ranks[show_ranks['Formation Pos.']==formation_positions[formation][i]].Score.iloc[j]
+        role_rank = int(show_ranks[show_ranks['Formation Pos.']==formation_positions[formation][i]]['Role Rank'].iloc[j])
 
         if j == 0:
             pos_desc = show_ranks[show_ranks['Formation Pos.']==formation_positions[formation][i]]['Squad Position'].iloc[0]
@@ -749,7 +750,7 @@ for i in range(0,11):
                              ha='center', va='center', color='#4a2e19', size=11, zorder=3,
                               weight='bold', path_effects=path_eff)
     
-        axs['pitch'].text(Y, X-adj, f"{player} ({age}, {pteam}) {score}",
+        axs['pitch'].text(Y, X-adj, f"{player} ({age}, {pteam}) {score}, #{role_rank}",
                          ha='center', va='center', color='#4c94f6', size=9, zorder=3,
                           weight='bold', path_effects=path_eff)
         adj += 2

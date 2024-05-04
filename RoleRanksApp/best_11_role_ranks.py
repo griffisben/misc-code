@@ -683,7 +683,11 @@ with st.sidebar:
         team_text = f' {chosen_team} Depth Chart'
     else:
         chosen_team = 'N/A'
-        team_text = f' Top {number_of_players} Players Per Position'
+        if number_of_players > 7:
+            num = 7
+        else:
+            num = number_of_players
+        team_text = f' Top {num} Players Per Position'
 
 rank_list = make_rankings(formation, mins/100, clean_df, role_position_df, [lg], exp_contracts, expiration_date,
                           min_age=ages[0], max_age=ages[1], num=number_of_players, normalize_to_100=normalize_to_100, chosen_team=chosen_team)

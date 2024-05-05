@@ -108,6 +108,7 @@ def load_league_data(data, league_season):
     df['Pct of passes being short'] = df['Short / medium passes per 90'] / df['Passes per 90'] * 100
     df['Prog passes and runs per 90'] = df['Progressive passes per 90'] + df['Progressive runs per 90']
     df['Set pieces per 90'] = df['Corners per 90'] + df['Free kicks per 90']
+    df['Pct of passes being smart'] = df['Smart passes per 90'] / df['Passes per 90'] * 100
 
     df = df.dropna(subset=['Position']).reset_index(drop=True)
 
@@ -155,7 +156,7 @@ def make_rankings(formation, mins, data, role_position_df, leagues, exp_contract
                 'Advanced Playmaker Score', 'Deep-Lying Playmaker Score', 'Playmaking Winger Score', 'Focal Point Striker Score',
                 'Link-Up Striker Score', 'Playmaking Striker Score', 'Advanced Striker Score', 'Deep-Lying Striker Score',
                 'Defensive Mid Score', 'Progressive Midfielder Score', 'Box-to-Box Score', 'Attacking FB Score', 'Second Striker Score', 'Inside Forward Score',
-               'Shot-Stopping Distributor Score', 'Spurs LCB Score', 'Number 6 Score', 'Defensive FB Score', 'KVO CAM Score', 'Inverted FB Score']
+               'Shot-Stopping Distributor Score', 'Spurs LCB Score', 'Number 6 Score', 'Defensive FB Score', 'KVO CAM Score', 'Inverted FB Score', 'Possession Enabler Score']
     full_prospect_df = pd.DataFrame(columns=all_cols)
     
     
@@ -251,7 +252,8 @@ def make_rankings(formation, mins, data, role_position_df, leagues, exp_contract
             extra20 = 'Prog passes and runs per 90'
             extra21 = 'Set pieces per 90'
             extra22 = 'Passes to penalty area per 90'
-    
+            extra23 = 'Pct of passes being smart'
+            
             # normalizing function
             def NormalizeData(data):
                 return (data - np.min(data)) / (np.max(data) - np.min(data))
@@ -325,7 +327,8 @@ def make_rankings(formation, mins, data, role_position_df, leagues, exp_contract
             dfProspect["extrapct20"] = stats.zscore(dfProspect[extra20])
             dfProspect["extrapct21"] = stats.zscore(dfProspect[extra21])
             dfProspect["extrapct22"] = stats.zscore(dfProspect[extra22])
-    
+            dfProspect["extrapct23"] = 1-stats.zscore(dfProspect[extra23]) * -1 #####
+            
             # The first line in this loop is how I get the z-scores to start at 0. I checked the distribution chart at the bottom, and it's the same shape of course
             # the second line normalizes
             for i in range(141,209):
@@ -354,6 +357,13 @@ def make_rankings(formation, mins, data, role_position_df, leagues, exp_contract
                 (.15 * dfProspect['midpct12']) +     # padj tkl+int
                 (.1 * dfProspect['defpct4']) +      # fouls
                 (.05 * dfProspect['extrapct'])   # pass cmp%
+            )
+            dfProspect['Possession Enabler Score'] = (
+                (.25 * dfProspect['extrapct15']) +   # short/medium pass %
+                (.3 * dfProspect['gkpct4']) +  # pct of passes being short/medium
+                (.1 * dfProspect['defpct4']) +  # fouls (inverse)
+                (.2 * dfProspect['extrapct23']) +     # pct of passes being smart passes (inverse)
+                (.15 * dfProspect['gkpct8'])   # passes
             )
             dfProspect['CAM Score'] = (
                 (.15 * dfProspect['extrapct4']) +   # smart passes
@@ -573,7 +583,7 @@ def make_rankings(formation, mins, data, role_position_df, leagues, exp_contract
                                 'Advanced Striker Score', 'Playmaking Winger Score', 'Box-to-Box Score', 'Playmaking Striker Score',
                                    'Attacking FB Score', 'Deep-Lying Playmaker Score', 'Second Striker Score', 'Progressive Midfielder Score',
                                'Defensive Mid Score', 'Shot-Stopping Distributor Score', 'Spurs LCB Score', 'Number 6 Score', 'Defensive FB Score',
-                               'KVO CAM Score', 'Inverted FB Score', 'Inside Forward Score']]
+                               'KVO CAM Score', 'Inverted FB Score', 'Inside Forward Score',  'Possession Enabler Score']]
             ranks = ranks.rename(columns={'Team within selected timeframe': 'Team'})
     
             if normalize_to_100 == 'Yes':

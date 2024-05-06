@@ -107,7 +107,7 @@ with graph_tab:
        subtitle=[f"Data via Opta | Data as of {update_date}"]
    ))
        .mark_line(point=True)
-       .encode(x=alt.X('Date', sort=None), y=var, tooltip=['Match','Date',var,'Possession','xGD','GD']).scale(zero=False)
+       .encode(x=alt.X('Date', sort=None), alt.Y(var).scale(zero=False), tooltip=['Match','Date',var,'Possession','xGD','GD'])
     )
 
     lg_avg_line = alt.Chart(pd.DataFrame({'y': [lg_avg_var]})).mark_rule().encode(y='y')

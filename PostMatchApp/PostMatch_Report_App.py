@@ -107,6 +107,6 @@ with graph_tab:
        .encode(x=alt.X('Date', sort=None), y=var, tooltip=['Match','Date',var,'Possession','xGD','GD'])
     )
 
-    alt.Chart().mark_rule().encode(y=alt.datum(lg_avg_var))
+    lg_avg_alt = alt.Chart().mark_rule().encode(y=alt.datum(lg_avg_var))
 
-    st.altair_chart(c, use_container_width=True)
+    st.altair_chart(c + lg_avg_alt, use_container_width=True)

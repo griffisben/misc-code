@@ -51,15 +51,26 @@ df['Match_Name'] = df['Match'] + ' ' + df['Date']
 
 with st.sidebar:
     team_list = sorted(list(set(df.Home.unique().tolist() + df.Away.unique().tolist())))
-    team = st.selectbox('Team', team_list)
+    team = st.selectbox('What team do you want reports & data for?', team_list)
 
-    match_list = df[(df.Home == team) | (df.Away == team)].copy()
-    match_choice = st.selectbox('Match', match_list.Match_Name.tolist())
+    specific = st.selectbox('Specific Match or Most Recent Matches?', ('Specific Match','Recent Matches'))
+    if specific == 'Specific Match':
+        match_list = df[(df.Home == team) | (df.Away == team)].copy()
+        match_choice = st.selectbox('Match', match_list.Match_Name.tolist())
+        render_matches = [match_choice]
+    if specific == 'Recent Matches':
+        match_list = df[(df.Home == team) | (df.Away == team)].copy()
+        num_matches = st.slider('Number of Recent Matches', min_value=1, max_value=5, value=3)
+        render_matches = match_list.head(num_matches).Match_Name.tolist()
 
-match_string = match_choice.replace(' ','%20')
-url = f"https://raw.githubusercontent.com/griffisben/misc-code/main/PostMatchApp/Image_Files/{league.replace(' ','%20')}/{match_string}.png"
-response = requests.get(url)
-game_image = Image.open(io.BytesIO(response.content))
+report_tab, data_tab, graph_tab = st.tabs(['Match Report', 'Data by Match - Table', 'Data by Match - Graph'])
+
+for i in range(len(render_matches)):
+    match_string = render_matches[i].replace(' ','%20')
+    url = f"https://raw.githubusercontent.com/griffisben/misc-code/main/PostMatchApp/Image_Files/{league.replace(' ','%20')}/{match_string}.png"
+    response = requests.get(url)
+    game_image = Image.open(io.BytesIO(response.content))
+    report_tab.image(game_image)
 
 team_data = pd.read_csv(f"https://raw.githubusercontent.com/griffisben/Post_Match_App/main/Stat_Files/{league.replace(' ','%20')}.csv")
 team_data = team_data[team_data.Team==team].reset_index(drop=True)
@@ -72,9 +83,9 @@ available_vars = ['Possession','xG','xGA','xGD','Goals','Goals Conceded','GD','G
 
 team_data[available_vars] = team_data[available_vars].astype(float)
 
-report_tab, data_tab, graph_tab = st.tabs(['Match Report', 'Data by Match - Table', 'Data by Match - Graph'])
+# report_tab, data_tab, graph_tab = st.tabs(['Match Report', 'Data by Match - Table', 'Data by Match - Graph'])
 
-report_tab.image(game_image)
+# report_tab.image(game_image)
 data_tab.write(team_data)
 with graph_tab:
     var = st.selectbox('Metric to Plot', available_vars)

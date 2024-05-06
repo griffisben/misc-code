@@ -119,4 +119,5 @@ with graph_tab:
         text="League Average"
     )
 
-    st.altair_chart((c + lg_avg_line + label), use_container_width=True)
+    chart = (c + lg_avg_line + label)
+    st.altair_chart(chart, use_container_width=True)

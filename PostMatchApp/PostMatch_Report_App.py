@@ -107,9 +107,7 @@ with graph_tab:
        .encode(x=alt.X('Date', sort=None), y=var, tooltip=['Match','Date',var,'Possession','xGD','GD'])
     )
 
-    lg_avg_line = alt.Chart().mark_rule().encode(
-        y=alt.Y(datum=lg_avg_var)
-    )
+    lg_avg_line = alt.Chart(pd.DataFrame({'y': [lg_avg_var]})).mark_rule().encode(y='y')
     
     label = lg_avg_line.mark_text(
         x="width",

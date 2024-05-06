@@ -46,7 +46,7 @@ st.title(f"{league} Post-Match Reports")
 st.subheader(f"Last Updated: {update_date}\n")
 st.subheader('All data via Opta')
 
-df = pd.read_csv(f"https://raw.githubusercontent.com/griffisben/Post_Match_App/main/League_Files/{league.replace(' ','%20')}%20Full%20Match%20List.csv")
+df = pd.read_csv(f"https://raw.githubusercontent.com/griffisben/misc-code/main/PostMatchApp/League_Files/{league.replace(' ','%20')}%20Full%20Match%20List.csv")
 df['Match_Name'] = df['Match'] + ' ' + df['Date']
 
 with st.sidebar:
@@ -72,7 +72,7 @@ for i in range(len(render_matches)):
     game_image = Image.open(io.BytesIO(response.content))
     report_tab.image(game_image)
 
-team_data = pd.read_csv(f"https://raw.githubusercontent.com/griffisben/Post_Match_App/main/Stat_Files/{league.replace(' ','%20')}.csv")
+team_data = pd.read_csv(f"https://raw.githubusercontent.com/griffisben/misc-code/main/PostMatchApp/Stat_Files/{league.replace(' ','%20')}.csv")
 team_data = team_data[team_data.Team==team].reset_index(drop=True)
 team_data['Shots per 1.0 xT'] = team_data['Shots per 1.0 xT'].astype(float)
 team_data.rename(columns={'Shots per 1.0 xT':'Shots per 1 xT'},inplace=True)

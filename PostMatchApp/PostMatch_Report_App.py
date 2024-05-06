@@ -39,7 +39,7 @@ lg_lookup = pd.read_csv("https://raw.githubusercontent.com/griffisben/misc-code/
 league_list = lg_lookup.League.tolist()
 
 with st.sidebar:
-    league = st.selectbox('What League Do You Want Reports For?', league_list)
+    league = st.selectbox('What League Do You Want Reports For?', league_list, index=league_list.index('USL Championship'))
     update_date = lg_lookup[lg_lookup.League==league].Update.values[0]
     
 st.title(f"{league} Post-Match Reports")
@@ -51,7 +51,7 @@ df['Match_Name'] = df['Match'] + ' ' + df['Date']
 
 with st.sidebar:
     team_list = sorted(list(set(df.Home.unique().tolist() + df.Away.unique().tolist())))
-    team = st.selectbox('What team do you want reports & data for?', team_list)
+    team = st.selectbox('What team do you want reports & data for?', team_list, index=team_list.index('Loudoun United'))
 
     specific = st.selectbox('Specific Match or Most Recent Matches?', ('Specific Match','Recent Matches'))
     if specific == 'Specific Match':

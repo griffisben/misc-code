@@ -98,14 +98,15 @@ data_tab.write(team_data)
 with graph_tab:
     var = st.selectbox('Metric to Plot', available_vars)
     lg_avg_var = league_data[var].mean()
-    c = alt.Chart(team_data[::-1], title=alt.Title(
+    c = (
+       alt.Chart(team_data[::-1], title=alt.Title(
        f"{team} {var}, {league}",
        subtitle=[f"Data via Opta | Data as of {update_date}"]
    ))
-    team_metrics = c.mark_line().encode(x=alt.X('Date', sort=None), y=var, tooltip=['Match','Date',var,'Possession','xGD','GD'])
+       .mark_line()
+       .encode(x=alt.X('Date', sort=None), y=var, tooltip=['Match','Date',var,'Possession','xGD','GD'])
+    )
 
-    lg_avg_alt = c.mark_rule().encode(y=alt.datum(lg_avg_var))
+    alt.Chart().mark_rule().encode(y=alt.datum(lg_avg_var))
 
-    alt_chart = c + lg_avg_alt
-
-    st.altair_chart(alt_chart, use_container_width=True)
+    st.altair_chart(c, use_container_width=True)

@@ -3,41 +3,87 @@ import streamlit as st
 from PIL import Image
 import requests
 import io
-import warnings
-warnings.filterwarnings('ignore')
+import altair as alt
 
-df = pd.read_csv('https://raw.githubusercontent.com/griffisben/misc-code/main/PostMatchApp/USL%20Championship%20Full%20Match%20List.csv')
-df['Match_Name'] = df['Match'] + ' ' + df['Date']
-team_list = sorted(list(set(df.Home.unique().tolist() + df.Away.unique().tolist())))
+#########################
+def ben_theme():
+    return {
+        'config': {
+            'background': '#fbf9f4',
+            # 'text': '#4a2e19',
+            'mark': {
+                'color': '#4c94f6',
+            },
+            'axis': {
+                'titleColor': '#4a2e19',
+                'labelColor': '#4a2e19',
+            },
+            'text': {
+                'fill': '#4a2e19'
+            },
+            'title': {
+                'color': '#4a2e19',
+                'subtitleColor': '#4a2e19'
+            }
+        }
+    }
 
+# register the custom theme under a chosen name
+alt.themes.register('ben_theme', ben_theme)
 
-st.title('Post-Match Reports, 2024 USL Championship')
+# enable the newly registered theme
+alt.themes.enable('ben_theme')
+################################
+
+lg_lookup = pd.read_csv("https://raw.githubusercontent.com/griffisben/misc-code/main/PostMatchApp/PostMatchLeagues.csv")
+league_list = sorted(lg_lookup.League.tolist())
 
 with st.sidebar:
-    # st.header('What Team Do You Want Reports For?')
-    team = st.selectbox('What Team Do You Want Reports For?', team_list, index=team_list.index('Loudoun United'))
+    league = st.selectbox('What League Do You Want Reports For?', league_list)
+    update_date = lg_lookup[lg_lookup.League==league].Update.values[0]
+    
+st.title(f"{league} Post-Match Reports")
+st.subheader(f"Last Updated: {update_date}\n")
+st.subheader('All data via Opta')
 
-    # st.header('Specific Match or Most Recent Matches?')
-    specific = st.selectbox('Specific Match or Most Recent Matches?', ('Specific Match','Recent Matches'))
-    if specific == 'Specific Match':
-        match_list = df[(df.Home == team) | (df.Away == team)].copy()
-        match_choice = st.selectbox('Match', match_list.Match_Name.tolist())
-        render_matches = [match_choice]
-    if specific == 'Recent Matches':
-        match_list = df[(df.Home == team) | (df.Away == team)].copy()
-        num_matches = st.slider('Number of Recent Matches', min_value=1, max_value=5, value=3)
-        render_matches = match_list.head(num_matches).Match_Name.tolist()
+df = pd.read_csv(f"https://raw.githubusercontent.com/griffisben/Post_Match_App/main/League_Files/{league.replace(' ','%20')}%20Full%20Match%20List.csv")
+df['Match_Name'] = df['Match'] + ' ' + df['Date']
 
-for i in range(len(render_matches)):
-    match_string = render_matches[i].replace(' ','%20')
-    try:
-        url = f"https://raw.githubusercontent.com/griffisben/misc-code/main/PostMatchApp/USLC_2024/{match_string}.png"
-        response = requests.get(url)
-        game_image = Image.open(io.BytesIO(response.content))
-    except:
-        url = f"https://raw.githubusercontent.com/griffisben/misc-code/main/PostMatchApp/USLC_2024/{match_string.replace('2024-0','').replace('2024-','')+'-2024'}.png"
-        response = requests.get(url)
-        game_image = Image.open(io.BytesIO(response.content))
-    st.image(game_image)
+with st.sidebar:
+    team_list = sorted(list(set(df.Home.unique().tolist() + df.Away.unique().tolist())))
+    team = st.selectbox('Team', team_list)
 
+    match_list = df[(df.Home == team) | (df.Away == team)].copy()
+    match_choice = st.selectbox('Match', match_list.Match_Name.tolist())
 
+match_string = match_choice.replace(' ','%20')
+url = f"https://raw.githubusercontent.com/griffisben/misc-code/main/PostMatchApp/Image_Files/{league.replace(' ','%20')}/{match_string}.png"
+response = requests.get(url)
+game_image = Image.open(io.BytesIO(response.content))
+
+team_data = pd.read_csv(f"https://raw.githubusercontent.com/griffisben/Post_Match_App/main/Stat_Files/{league.replace(' ','%20')}.csv")
+team_data = team_data[team_data.Team==team].reset_index(drop=True)
+team_data['Shots per 1.0 xT'] = team_data['Shots per 1.0 xT'].astype(float)
+team_data.rename(columns={'Shots per 1.0 xT':'Shots per 1 xT'},inplace=True)
+
+team_data['xG per 1 xT'] = team_data['xG']/team_data['xT']
+team_data['xGA per 1 xT Against'] = team_data['xGA']/team_data['xT Against']
+available_vars = ['Possession','xG','xGA','xGD','Goals','Goals Conceded','GD','GD-xGD','Shots','Shots Faced','Field Tilt','Passes in Opposition Half','Passes into Box','xT','xT Against','Shots per 1 xT','xG per 1 xT','xGA per 1 xT Against','PPDA','High Recoveries','Crosses','Corners','Fouls']
+
+team_data[available_vars] = team_data[available_vars].astype(float)
+
+report_tab, data_tab, graph_tab = st.tabs(['Match Report', 'Data by Match - Table', 'Data by Match - Graph'])
+
+report_tab.image(game_image)
+data_tab.write(team_data)
+with graph_tab:
+    var = st.selectbox('Metric to Plot', available_vars)
+    c = (
+       alt.Chart(team_data[::-1], title=alt.Title(
+       f"{team} {var}, {league}",
+       subtitle=[f"Data via Opta | Data as of {update_date}"]
+   ))
+       .mark_line()
+       .encode(x=alt.X('Date', sort=None), y=var, tooltip=['Match','Date',var,'Possession','xGD','GD'])
+    )
+    st.altair_chart(c, use_container_width=True)

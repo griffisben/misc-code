@@ -36,7 +36,7 @@ alt.themes.enable('ben_theme')
 ################################
 
 lg_lookup = pd.read_csv("https://raw.githubusercontent.com/griffisben/misc-code/main/PostMatchApp/PostMatchLeagues.csv")
-league_list = sorted(lg_lookup.League.tolist())
+league_list = lg_lookup.League.tolist()
 
 with st.sidebar:
     league = st.selectbox('What League Do You Want Reports For?', league_list)

@@ -120,7 +120,7 @@ with graph_tab:
         text="League Avg"
     )
 
-    team_avg_line = alt.Chart(pd.DataFrame().mark_rule(color='red').encode(y=team_avg_var)
+    team_avg_line = alt.Chart().mark_rule(color='red').encode(y=team_avg_var)
     
     team_avg_label = team_avg_line.mark_text(
         x="width",

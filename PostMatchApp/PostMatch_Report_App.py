@@ -96,7 +96,7 @@ league_data[available_vars] = league_data[available_vars].astype(float)
 
 data_tab.write(team_data)
 with graph_tab:
-    var = st.selectbox('Metric to Plot', available_vars)'
+    var = st.selectbox('Metric to Plot', available_vars)
     lg_avg_var = league_data[var].mean()
     c = (
        alt.Chart(team_data[::-1], title=alt.Title(

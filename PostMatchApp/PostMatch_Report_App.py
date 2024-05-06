@@ -110,7 +110,7 @@ with graph_tab:
        .encode(x=alt.X('Date', sort=None), y=alt.Y(var).scale(zero=False), tooltip=['Match','Date',var,'Possession','xGD','GD'])
     )
 
-    lg_avg_line = alt.Chart(pd.DataFrame({'y': [lg_avg_var]})).mark_rule().encode(y='y')
+    lg_avg_line = alt.Chart().mark_rule().encode(y=lg_avg_var)
     
     lg_avg_label = lg_avg_line.mark_text(
         x="width",
@@ -120,7 +120,7 @@ with graph_tab:
         text="League Avg"
     )
 
-    team_avg_line = alt.Chart(pd.DataFrame({'y': [team_avg_var]})).mark_rule(color='red').encode(y='y')
+    team_avg_line = alt.Chart(pd.DataFrame().mark_rule(color='red').encode(y=team_avg_var)
     
     team_avg_label = team_avg_line.mark_text(
         x="width",

@@ -121,7 +121,7 @@ with graph_tab:
         color='grey'
     )
 
-    team_avg_line = alt.Chart(pd.DataFrame({'y': [team_avg_var]})).mark_rule(color='skyblue').encode(y='y')
+    team_avg_line = alt.Chart(pd.DataFrame({'y': [team_avg_var]})).mark_rule(color='royalblue').encode(y='y')
     
     team_avg_label = team_avg_line.mark_text(
         x="width",
@@ -129,7 +129,7 @@ with graph_tab:
         align="right",
         baseline="bottom",
         text="Team Avg",
-        color='blue'
+        color='royalblue'
     )
 
 

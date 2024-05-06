@@ -102,8 +102,7 @@ with graph_tab:
        f"{team} {var}, {league}",
        subtitle=[f"Data via Opta | Data as of {update_date}"]
    ))
-    team_metrics = c.mark_line()
-    .encode(x=alt.X('Date', sort=None), y=var, tooltip=['Match','Date',var,'Possession','xGD','GD'])
+    team_metrics = c.mark_line().encode(x=alt.X('Date', sort=None), y=var, tooltip=['Match','Date',var,'Possession','xGD','GD'])
 
     lg_avg_alt = c.mark_rule().encode(y=alt.datum(lg_avg_var))
 

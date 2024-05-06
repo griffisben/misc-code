@@ -97,25 +97,39 @@ league_data[available_vars] = league_data[available_vars].astype(float)
 data_tab.write(team_data)
 with graph_tab:
     var = st.selectbox('Metric to Plot', available_vars)
+    
     lg_avg_var = league_data[var].mean()
+    team_avg_var = team_data[var].mean()
+    
     c = (
        alt.Chart(team_data[::-1], title=alt.Title(
        f"{team} {var}, {league}",
        subtitle=[f"Data via Opta | Data as of {update_date}"]
    ))
-       .mark_line()
+       .mark_line(point=True)
        .encode(x=alt.X('Date', sort=None), y=var, tooltip=['Match','Date',var,'Possession','xGD','GD'])
     )
 
     lg_avg_line = alt.Chart(pd.DataFrame({'y': [lg_avg_var]})).mark_rule().encode(y='y')
     
-    label = lg_avg_line.mark_text(
+    lg_avg_label = lg_avg_line.mark_text(
         x="width",
         dx=-2,
         align="right",
         baseline="bottom",
-        text="League Average"
+        text="League Avg"
     )
 
-    chart = (c + lg_avg_line + label)
+    team_avg_line = alt.Chart(pd.DataFrame({'y': [team_avg_var]})).mark_rule().encode(y='y')
+    
+    team_avg_label = team_avg_line.mark_text(
+        x="width",
+        dx=-2,
+        align="right",
+        baseline="bottom",
+        text="Team Avg"
+    )
+
+
+    chart = (c + lg_avg_line + lg_avg_label + team_avg_line + team_avg_label)
     st.altair_chart(chart, use_container_width=True)

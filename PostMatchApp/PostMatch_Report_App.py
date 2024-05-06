@@ -107,6 +107,16 @@ with graph_tab:
        .encode(x=alt.X('Date', sort=None), y=var, tooltip=['Match','Date',var,'Possession','xGD','GD'])
     )
 
-    alt.Chart().mark_rule().encode(y=alt.datum(lg_avg_var))
+    lg_avg_line = alt.Chart().mark_rule().encode(
+        y=alt.Y(datum=lg_avg_var)
+    )
+    
+    label = lg_avg_line.mark_text(
+        x="width",
+        dx=-2,
+        align="right",
+        baseline="bottom",
+        text="League Average"
+    )
 
-    st.altair_chart(c, use_container_width=True)
+    st.altair_chart((c + lg_avg_line + label), use_container_width=True)

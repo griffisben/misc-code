@@ -767,7 +767,7 @@ for i in range(0,11):
 
 axs['title'].text(0.5, 1.5, f'{season} {lg},{team_text}',
                  ha='center',va='bottom', size=20, weight='bold', color='#4a2e19')
-axs['title'].text(0.5, 1.35, f'Data via Wyscout | {lg_lookup[lg_lookup.League==lg].Date.values[0]} | Created by Ben Griffis (@BeGriffis on Twitter)',
+axs['title'].text(0.5, 1.35, f'Data via Wyscout | {lg_lookup[(lg_lookup.League==lg) & (lg_lookup.Season==season)].Date.values[0]} | Created by Ben Griffis (@BeGriffis on Twitter)',
                  ha='center',va='top', size=12, color='#4a2e19')
 axs['title'].text(0.5, .95, sub_title_text,
                  ha='center',va='top', size=12, color='#4a2e19')

@@ -1071,7 +1071,7 @@ def scout_report(data_frame, gender, league, season, xtra, template, pos, player
     ax.text(0.15, 0.8 + PAD, "80", size=10, color='#4A2E19')
     ax.text(0.15, 1 + PAD, "100", size=10, color='#4A2E19')
 
-    plt.suptitle(f'{player_full_name} ({age}, {player_pos}, {minplay} mins.), {team}\n{season} {league} Percentile Rankings{title_note}',
+    plt.suptitle(f'{player_full_name.replace("  "," ")} ({age}, {player_pos}, {minplay} mins.), {team}\n{season} {league} Percentile Rankings{title_note}',
                  fontsize=17,
                  fontfamily="DejaVu Sans",
                 color="#4A2E19", #4A2E19

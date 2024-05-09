@@ -626,6 +626,48 @@ def make_rankings(formation, mins, data, role_position_df, leagues, exp_contract
     return rank_list
 
 #######################################################################################################################################
+def rank_column(df, column_name):
+    return stats.rankdata(df[column_name], "average") / len(df[column_name])
+def rank_column_inverse(df, column_name):
+    return 1-stats.rankdata(df[column_name], "average") / len(df[column_name])
+
+def get_label_rotation(angle, offset):
+    # Rotation must be specified in degrees :(
+    rotation = np.rad2deg(angle + offset)+90
+    if angle <= np.pi/2:
+        alignment = "center"
+        rotation = rotation + 180
+    elif 4.3 < angle < np.pi*2:  # 4.71239 is 270 degrees
+        alignment = "center"
+        rotation = rotation - 180
+    else: 
+        alignment = "center"
+    return rotation, alignment
+
+
+def add_labels(angles, values, labels, offset, ax, text_colors):
+
+    # This is the space between the end of the bar and the label
+    padding = .05
+
+    # Iterate over angles, values, and labels, to add all of them.
+    for angle, value, label, text_col in zip(angles, values, labels, text_colors):
+        angle = angle
+
+        # Obtain text rotation and alignment
+        rotation, alignment = get_label_rotation(angle, offset)
+
+        # And finally add the text
+        ax.text(
+            x=angle, 
+            y=1.05,
+            s=label, 
+            ha=alignment, 
+            va="center", 
+            rotation=rotation,
+            color=text_col,
+        )
+
 def scout_report(data_frame, gender, league, season, xtra, template, pos, player_pos, mins, minplay, compares, name, ws_name, team, age, sig, extra_text):
     plt.clf()
     df = data_frame

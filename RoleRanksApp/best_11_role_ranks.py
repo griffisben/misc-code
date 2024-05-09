@@ -1343,7 +1343,7 @@ with radar_tab:
         df1['Main Position'] = df1['Main Position'].replace(position_replacements)
     
         ws_pos = ['LCMF3','RCMF3','LAMF','LW','RB','LB','LCMF','DMF','RDMF','RWF','AMF','LCB','RWB','CF','LWB','GK','LDMF','RCMF','LWF','RW','RAMF','RCB','CB','RCB3','LCB3','RB5','RWB5','LB5','LWB5']
-        poses = ['Central Midfielders','Central Midfielders','Wingers','Wingers','Fullbacks','Fullbacks','Central Midfielders','Central Midfielders no CAM','Central Midfielders no CAM','Wingers','Central Midfielders no DM','Centre-Backs','Fullbacks','Strikers','Fullbacks','Goalkeeper','Central Midfielders no CAM','Central Midfielders','Wingers','Wingers','Wingers','Centre-Backs','Centre-Backs','Centre-Backs','Centre-Backs','Fullbacks','Fullbacks','Fullbacks','Fullbacks']
+        poses = ['Midfielder','Midfielder','Winger','Winger','Fullback','Fullback','Midfielder','Midfielder no CAM','Midfielder no CAM','Winger','Midfielder no DM','CB','Fullback','CF','Fullback','GK','Midfielder no CAM','Midfielder','Winger','Winger','Winger','CB','CB','CB','CB','Fullback','Fullback','Fullback','Fullback']
         template = ['attacking','attacking','attacking','attacking','defensive','defensive','attacking','attacking','attacking','attacking','attacking','cb','defensive','attacking','defensive','gk','attacking','attacking','attacking','attacking','attacking','cb','cb','cb','cb','defensive','defensive','defensive','defensive']
         compares = ['Central Midfielders','Central Midfielders','Wingers','Wingers','Fullbacks','Fullbacks','Central Midfielders','Central & Defensive Mids','Central & Defensive Mids','Wingers','Central & Attacking Mids','Center Backs','Fullbacks','Strikers','Fullbacks','Goalkeepers','Central & Defensive Mids','Central Midfielders','Wingers','Wingers','Wingers','Center Backs','Center Backs','Center Backs','Center Backs','Fullbacks','Fullbacks','Fullbacks','Fullbacks']
     
@@ -1353,10 +1353,9 @@ with radar_tab:
         ix = ws_pos.index(gen['Main Position'].values[0])
         minplay = int(gen['Minutes played'].values[0])
 
-        radar_make_df = filter_by_position(df_basic,poses[ix])
         
         radar_img = scout_report(
-            data_frame = radar_make_df, ##
+            data_frame = df_basic, ##
             gender = gender, ##
             league = lg, ##
             season = season, ##

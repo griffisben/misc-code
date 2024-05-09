@@ -1309,7 +1309,7 @@ with table_tab:
        show_ranks[show_ranks['Squad Position']==chosen_roles[10]]
 
 with radar_tab:
-    with st.form():
+    with st.form('Player Radar Options'):
         bar_colors = st.selectbox('Bar Color Scheme', ('Metric Groups', 'Benchmarking Percentiles'))
         player = st.text_input("Player's Radar to Generate", "")
         page = st.number_input("Age of the player to generate (to guarantee the correct player)", step=1)

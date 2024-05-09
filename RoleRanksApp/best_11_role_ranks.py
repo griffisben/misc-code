@@ -22,7 +22,6 @@ from mplsoccer import VerticalPitch, FontManager
 import matplotlib.patheffects as path_effects
 
 
-
 def filter_by_position(df, position):
     fw = ["CF", "RW", "LW", "AMF"]
     if position == "Forward":
@@ -677,7 +676,6 @@ def scout_report(data_frame, gender, league, season, xtra, template, pos, player
     dfProspect = df[(df['Minutes played'] >= mins)].copy()
     dfProspect = filter_by_position(dfProspect, pos)
     raw_valsdf = dfProspect[(dfProspect['Player']==ws_name) & (dfProspect['Team within selected timeframe']==team) & (dfProspect['Age']==age)]
-    st.write(raw_valsdf)
 
     # FORWARD
     fwd1 = "Non-penalty goals per 90"
@@ -1182,10 +1180,10 @@ elif gender == 'Women':
     df = pd.read_csv(f'https://raw.githubusercontent.com/griffisben/Wyscout_Prospect_Research/main/Main%20App/Women/{full_league_name.replace(" ","%20")}.csv')
 df['League'] = full_league_name
 df = df.dropna(subset=['Position','Team within selected timeframe', 'Age']).reset_index(drop=True)
-df_basic = df.copy()
 
 
 clean_df = load_league_data(df, full_league_name)
+df_basic = clean_df.copy()
 
 with st.sidebar:
     one_team_choice = st.selectbox('One Team Depth Chart?', (['No','Yes']))

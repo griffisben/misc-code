@@ -1352,9 +1352,11 @@ with radar_tab:
         gen = df1[(df1['Player']==player) & (df1['Age']==page)]
         ix = ws_pos.index(gen['Main Position'].values[0])
         minplay = int(gen['Minutes played'].values[0])
+
+        radar_make_df = filter_by_position(df_basic,poses[ix])
         
         radar_img = scout_report(
-            data_frame = filter_by_position(df_basic,poses[ix]), ##
+            data_frame = radar_make_df, ##
             gender = gender, ##
             league = lg, ##
             season = season, ##

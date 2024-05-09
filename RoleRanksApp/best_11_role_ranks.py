@@ -1316,43 +1316,43 @@ with radar_tab:
         page = st.number_input("Age of the player to generate (to guarantee the correct player)", step=1)
         submitted = st.form_submit_button("Submit Options")
         
+        dfxxx = df_basic[df_basic['Minutes played']>=mins].copy().reset_index(drop=True)
+        dfxxx = dfxxx[dfxxx['League']==full_league_name].reset_index(drop=True)
+        df1 = dfxxx[['Player', 'Team within selected timeframe', 'Position', 'Age', 'Minutes played']]
+        df1 = df1.dropna(subset=['Position', 'Team within selected timeframe', 'Age']).reset_index(drop=True)
+        df1 = df1.dropna(subset=['Position']).reset_index(drop=True)
+        df1['Age'] = df1['Age'].astype(int)
+        df1['Main Position'] = df1['Position'].str.split().str[0].str.rstrip(',')
+        df1 = df1.dropna(subset=['Main Position']).reset_index(drop=True)
+        position_replacements = {
+            'LAMF': 'LW',
+            'RAMF': 'RW',
+            'LCB3': 'LCB',
+            'RCB3': 'RCB',
+            'LCB5': 'LCB',
+            'RCB5': 'RCB',
+            'LB5': 'LB',
+            'RB5': 'RB',
+            'RWB': 'RB',
+            'LWB': 'LB',
+            'LCM3': 'LCMF',
+            'RCM3': 'RCMF'
+        }
+    
+        df1['Main Position'] = df1['Main Position'].replace(position_replacements)
+    
+        ws_pos = ['LCMF3','RCMF3','LAMF','LW','RB','LB','LCMF','DMF','RDMF','RWF','AMF','LCB','RWB','CF','LWB','GK','LDMF','RCMF','LWF','RW','RAMF','RCB','CB','RCB3','LCB3','RB5','RWB5','LB5','LWB5']
+        poses = ['Midfielder','Midfielder','Winger','Winger','Fullback','Fullback','Midfielder','Midfielder no CAM','Midfielder no CAM','Winger','Midfielder no DM','CB','Fullback','CF','Fullback','GK','Midfielder no CAM','Midfielder','Winger','Winger','Winger','CB','CB','CB','CB','Fullback','Fullback','Fullback','Fullback']
+        template = ['attacking','attacking','attacking','attacking','defensive','defensive','attacking','attacking','attacking','attacking','attacking','cb','defensive','attacking','defensive','gk','attacking','attacking','attacking','attacking','attacking','cb','cb','cb','cb','defensive','defensive','defensive','defensive']
+        compares = ['Central Midfielders','Central Midfielders','Wingers','Wingers','Fullbacks','Fullbacks','Central Midfielders','Central & Defensive Mids','Central & Defensive Mids','Wingers','Central & Attacking Mids','Center Backs','Fullbacks','Strikers','Fullbacks','Goalkeepers','Central & Defensive Mids','Central Midfielders','Wingers','Wingers','Wingers','Center Backs','Center Backs','Center Backs','Center Backs','Fullbacks','Fullbacks','Fullbacks','Fullbacks']
+    
+        xtratext = lg_lookup[(lg_lookup.League==lg) & (lg_lookup.Season==season)].Date.values[0]
+
         try:
-            dfxxx = df_basic[df_basic['Minutes played']>=mins].copy().reset_index(drop=True)
-            dfxxx = dfxxx[dfxxx['League']==full_league_name].reset_index(drop=True)
-            df1 = dfxxx[['Player', 'Team within selected timeframe', 'Position', 'Age', 'Minutes played']]
-            df1 = df1.dropna(subset=['Position', 'Team within selected timeframe', 'Age']).reset_index(drop=True)
-            df1 = df1.dropna(subset=['Position']).reset_index(drop=True)
-            df1['Age'] = df1['Age'].astype(int)
-            df1['Main Position'] = df1['Position'].str.split().str[0].str.rstrip(',')
-            df1 = df1.dropna(subset=['Main Position']).reset_index(drop=True)
-            position_replacements = {
-                'LAMF': 'LW',
-                'RAMF': 'RW',
-                'LCB3': 'LCB',
-                'RCB3': 'RCB',
-                'LCB5': 'LCB',
-                'RCB5': 'RCB',
-                'LB5': 'LB',
-                'RB5': 'RB',
-                'RWB': 'RB',
-                'LWB': 'LB',
-                'LCM3': 'LCMF',
-                'RCM3': 'RCMF'
-            }
-        
-            df1['Main Position'] = df1['Main Position'].replace(position_replacements)
-        
-            ws_pos = ['LCMF3','RCMF3','LAMF','LW','RB','LB','LCMF','DMF','RDMF','RWF','AMF','LCB','RWB','CF','LWB','GK','LDMF','RCMF','LWF','RW','RAMF','RCB','CB','RCB3','LCB3','RB5','RWB5','LB5','LWB5']
-            poses = ['Midfielder','Midfielder','Winger','Winger','Fullback','Fullback','Midfielder','Midfielder no CAM','Midfielder no CAM','Winger','Midfielder no DM','CB','Fullback','CF','Fullback','GK','Midfielder no CAM','Midfielder','Winger','Winger','Winger','CB','CB','CB','CB','Fullback','Fullback','Fullback','Fullback']
-            template = ['attacking','attacking','attacking','attacking','defensive','defensive','attacking','attacking','attacking','attacking','attacking','cb','defensive','attacking','defensive','gk','attacking','attacking','attacking','attacking','attacking','cb','cb','cb','cb','defensive','defensive','defensive','defensive']
-            compares = ['Central Midfielders','Central Midfielders','Wingers','Wingers','Fullbacks','Fullbacks','Central Midfielders','Central & Defensive Mids','Central & Defensive Mids','Wingers','Central & Attacking Mids','Center Backs','Fullbacks','Strikers','Fullbacks','Goalkeepers','Central & Defensive Mids','Central Midfielders','Wingers','Wingers','Wingers','Center Backs','Center Backs','Center Backs','Center Backs','Fullbacks','Fullbacks','Fullbacks','Fullbacks']
-        
-            xtratext = lg_lookup[(lg_lookup.League==lg) & (lg_lookup.Season==season)].Date.values[0]
-        
             gen = df1[(df1['Player']==player) & (df1['Age']==page)]
             ix = ws_pos.index(gen['Main Position'].values[0])
             minplay = int(gen['Minutes played'].values[0])
-    
+
             
             radar_img = scout_report(
                 data_frame = df_basic, ##

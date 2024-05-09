@@ -1270,7 +1270,6 @@ with table_tab:
 with radar_tab:
     player = st.text_input("Player's Radar to Generate", "")
     page = st.number_input("Age of the player to generate (to guarantee the correct player)", step=1)
-    submitted = st.form_submit_button("Generate Radar")
 
 
     dfxxx = df_basic[df_basic['Minutes played']>=mins].copy().reset_index(drop=True)

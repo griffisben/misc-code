@@ -1,1 +1,10 @@
 mplsoccer
+seaborn
+pandas
+matplotlib
+numpy
+scipy
+statistics
+streamlit
+plotly
+highlight-text

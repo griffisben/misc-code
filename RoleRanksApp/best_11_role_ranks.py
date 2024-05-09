@@ -1343,7 +1343,7 @@ with radar_tab:
         df1['Main Position'] = df1['Main Position'].replace(position_replacements)
     
         ws_pos = ['LCMF3','RCMF3','LAMF','LW','RB','LB','LCMF','DMF','RDMF','RWF','AMF','LCB','RWB','CF','LWB','GK','LDMF','RCMF','LWF','RW','RAMF','RCB','CB','RCB3','LCB3','RB5','RWB5','LB5','LWB5']
-        poses = ['Central Midfielders (DM, CM, CAM)','Central Midfielders (DM, CM, CAM)','Wingers','Wingers','Fullbacks (FBs/WBs)','Fullbacks (FBs/WBs)','Central Midfielders (DM, CM, CAM)','Central Midfielders no CAM (DM, CM)','Central Midfielders no CAM (DM, CM)','Wingers','Central Midfielders no DM (CM, CAM)','Centre-Backs','Fullbacks (FBs/WBs)','Strikers','Fullbacks (FBs/WBs)','Goalkeeper','Central Midfielders no CAM (DM, CM)','Central Midfielders (DM, CM, CAM)','Wingers','Wingers','Wingers','Centre-Backs','Centre-Backs','Centre-Backs','Centre-Backs','Fullbacks (FBs/WBs)','Fullbacks (FBs/WBs)','Fullbacks (FBs/WBs)','Fullbacks (FBs/WBs)']
+        poses = ['Central Midfielders','Central Midfielders','Wingers','Wingers','Fullbacks','Fullbacks','Central Midfielders','Central Midfielders no CAM','Central Midfielders no CAM','Wingers','Central Midfielders no DM','Centre-Backs','Fullbacks','Strikers','Fullbacks','Goalkeeper','Central Midfielders no CAM','Central Midfielders','Wingers','Wingers','Wingers','Centre-Backs','Centre-Backs','Centre-Backs','Centre-Backs','Fullbacks','Fullbacks','Fullbacks','Fullbacks']
         template = ['attacking','attacking','attacking','attacking','defensive','defensive','attacking','attacking','attacking','attacking','attacking','cb','defensive','attacking','defensive','gk','attacking','attacking','attacking','attacking','attacking','cb','cb','cb','cb','defensive','defensive','defensive','defensive']
         compares = ['Central Midfielders','Central Midfielders','Wingers','Wingers','Fullbacks','Fullbacks','Central Midfielders','Central & Defensive Mids','Central & Defensive Mids','Wingers','Central & Attacking Mids','Center Backs','Fullbacks','Strikers','Fullbacks','Goalkeepers','Central & Defensive Mids','Central Midfielders','Wingers','Wingers','Wingers','Center Backs','Center Backs','Center Backs','Center Backs','Fullbacks','Fullbacks','Fullbacks','Fullbacks']
     
@@ -1354,7 +1354,7 @@ with radar_tab:
         minplay = int(gen['Minutes played'].values[0])
         
         radar_img = scout_report(
-            data_frame = df_basic, ##
+            data_frame = filter_by_position(df_basic,poses[ix]), ##
             gender = gender, ##
             league = lg, ##
             season = season, ##

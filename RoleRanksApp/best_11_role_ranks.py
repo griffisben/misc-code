@@ -1313,7 +1313,7 @@ with radar_tab:
         season = season, ##
         xtra = ' current',
         template = template[ix], ##
-        pos = poses[ix,
+        pos = poses[ix],
         player_pos = ws_pos[ix],
         compares = compares[ix],
         mins = mins,

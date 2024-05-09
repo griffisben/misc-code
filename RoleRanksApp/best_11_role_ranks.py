@@ -253,6 +253,7 @@ def make_rankings(formation, mins, data, role_position_df, leagues, exp_contract
             extra21 = 'Set pieces per 90'
             extra22 = 'Passes to penalty area per 90'
             extra23 = 'Pct of passes being smart'
+            extra24 = 'Short / medium passes per 90'
             
             # normalizing function
             def NormalizeData(data):
@@ -328,6 +329,8 @@ def make_rankings(formation, mins, data, role_position_df, leagues, exp_contract
             dfProspect["extrapct21"] = stats.zscore(dfProspect[extra21])
             dfProspect["extrapct22"] = stats.zscore(dfProspect[extra22])
             dfProspect["extrapct23"] = 1-stats.zscore(dfProspect[extra23]) * -1 #####
+            dfProspect["extrapct24"] = stats.zscore(dfProspect[extra24])
+
             
             # The first line in this loop is how I get the z-scores to start at 0. I checked the distribution chart at the bottom, and it's the same shape of course
             # the second line normalizes
@@ -342,9 +345,10 @@ def make_rankings(formation, mins, data, role_position_df, leagues, exp_contract
             ## And I also want to make buckets like ball winning, passing, etc and then use those instead of individual metrics
     
             dfProspect['Shot-Stopping Distributor Score'] = (
-                (.5 * dfProspect['gkpct10']) +   # psxG+-
-                (.2 * dfProspect['gkpct2']) +   # save %
-                (.15 * dfProspect['gkpct4']) +  # pct passes being short
+                (.4 * dfProspect['gkpct10']) +   # psxG+-
+                (.1 * dfProspect['gkpct2']) +   # save %
+                (.2 * dfProspect['gkpct4']) +  # pct passes being short
+                (.15 * dfProspect['gkpct4']) +  # short/medium passes
                 (.15 * dfProspect['gkpct9'])     # long pass %
             )
             dfProspect['CM Score'] = (
@@ -402,8 +406,8 @@ def make_rankings(formation, mins, data, role_position_df, leagues, exp_contract
                 (.15 * dfProspect['defpct4']) +     # fls
                 (.25 * dfProspect['extrapct20']) +   # Prog passes and runs
                 (.2 * dfProspect['gkpct8']) +   # passes
-                (.1 * dfProspect['extrapct15']) +     # short cmp %
-                (.1 * dfProspect['midpct2'])   # long pass cmp %
+                (.15 * dfProspect['extrapct15']) +     # short cmp %
+                (.05 * dfProspect['midpct2'])   # long pass cmp %
             )
             dfProspect['CB Score'] = (
                 (.1 * dfProspect['defpct2']) +   # tackles
@@ -818,19 +822,52 @@ with table_tab:
 with notes_tab:
     with st.expander('Shot-Stopping Distributor'):
         st.write('''
-        50% post-shot xG +/-  \n
-        20% save %  \n
-        15% percentage of passes that are short  \n
-        15% long pass completion %
+        A goalkeeper who is not only good at stopping shots & saving goals, but is able to play with the ball at their feet. A true modern goalkeeper.  \n
+        40% Post-shot xG +/-  \n
+        20% Short passes per 90  \n
+        15% Percentage of passes that are short  \n
+        15% Long pass completion %
+        10% Save %  \n
         ''')
     with st.expander('Ball Playing CB'):
         st.write('''
-        20% long pass completion %  \n
-        20% passes to the final third + deep completions  \n
-        20% progressive passes  \n
-        20% passes  \n
-        10% aerial win %  \n
-        10% defensive duel win %
+        A CB built for a possession system. They need to be comfortable on the ball and be able to spray long passes as well as anchor buildup phases.  \n
+        20% Long pass completion %  \n
+        20% Passes to the final third + deep completions  \n
+        20% Progressive passes  \n
+        20% Passes  \n
+        10% Aerial win %  \n
+        10% Defensive duel win %
+        ''')
+    with st.expander('Defensive CB'):
+        st.write('''
+        A CB whose primary focus is defending. The most important attribute they possess is winning their duels. The best of them don't commit fouls in dangerous areas, defeating the whole purpose of their strong defense.  \n
+        45% Defensive duel win %  \n
+        20% Fouls (reverse-coded; more = bad)  \n
+        15% Aerial win %  \n
+        10% Possession-adjusted tackles  \n
+        10% Possession-adjusted interceptions
+        ''')
+    with st.expander('Wide CB'):
+        st.write('''
+        A CB who operates more in the half-spaces further up the pitch than a classic ball-playing CB. Because of that, they need to both impact possessions as well as be defensively solid without being prone to fouling because they will be needed in transition more than other CB roles.  \n
+        25% Progressive passes & carries  \n
+        20% Passes  \n
+        20% Defensive duel win %  \n
+        15% Fouls (reverse-coded; more = bad)  \n
+        15% Short pass completion %  \n
+        5% Long pass completion %
+        ''')
+    with st.expander('Attacking FB'):
+        st.write('''
+        A FB who is able to bomb up the flanks and whose primary goal is to progress the ball into dangerous areas and pin back their opposite fullback.  \n
+        25% Passes to final third & passes completed within 20m of the goal  \n
+        20% Progressive carries  \n
+        20% Offensive duel win %  \n
+        10% Dribble win %  \n
+        10% Expected assists (xA)  \n
+        7.5% Accelerations with the ball  \n
+        7.5% Cross completion %
         ''')
 
 

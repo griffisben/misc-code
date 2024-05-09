@@ -776,6 +776,7 @@ def scout_report(data_frame, gender, league, season, xtra, template, pos, player
 
     dfRadarMF = dfProspect[(dfProspect['Player']==ws_name) & (dfProspect['Team within selected timeframe']==team) & (dfProspect['Age']==age)].reset_index(drop=True)
     dfRadarMF = dfRadarMF.fillna(0)
+    player_full_name = dfRadarMF['Full name'].values[0]
     # Define a dictionary to map old column names to new ones
     column_mapping = {
         'attacking': {
@@ -1070,7 +1071,7 @@ def scout_report(data_frame, gender, league, season, xtra, template, pos, player
     ax.text(0.15, 0.8 + PAD, "80", size=10, color='#4A2E19')
     ax.text(0.15, 1 + PAD, "100", size=10, color='#4A2E19')
 
-    plt.suptitle(f'{name} ({age}, {player_pos}, {minplay} mins.), {team}\n{season} {league} Percentile Rankings{title_note}',
+    plt.suptitle(f'{player_full_name} ({age}, {player_pos}, {minplay} mins.), {team}\n{season} {league} Percentile Rankings{title_note}',
                  fontsize=17,
                  fontfamily="DejaVu Sans",
                 color="#4A2E19", #4A2E19

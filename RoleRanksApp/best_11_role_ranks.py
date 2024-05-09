@@ -114,15 +114,19 @@ def load_league_data(data, league_season):
 
     df['Main Position'] = df['Position'].str.split().str[0].str.rstrip(',')
     df.fillna(0,inplace=True)
-    df['Minutes played'] /= 90 * max(df['Matches played'])
-    df['Main Position'] = df['Main Position'].replace('LAMF','LW')
-    df['Main Position'] = df['Main Position'].replace('RAMF','RW')
-    df['Main Position'] = df['Main Position'].replace('LCB3','LCB')
-    df['Main Position'] = df['Main Position'].replace('RCB3','RCB')
-    df['Main Position'] = df['Main Position'].replace('LCB5','LCB')
-    df['Main Position'] = df['Main Position'].replace('RCB5','RCB')
-    df['Main Position'] = df['Main Position'].replace('LB5','LB')
-    df['Main Position'] = df['Main Position'].replace('RB5','RB')
+    position_replacements = {
+        'LAMF': 'LW',
+        'RAMF': 'RW',
+        'LCB3': 'LCB',
+        'RCB3': 'RCB',
+        'LCB5': 'LCB',
+        'RCB5': 'RCB',
+        'LB5': 'LB',
+        'RB5': 'RB',
+        'RWB': 'RB',
+        'LWB': 'LB'
+    }
+    df['Main Position'] = df['Main Position'].replace(position_replacements)
 
     return df
 
@@ -622,6 +626,449 @@ def make_rankings(formation, mins, data, role_position_df, leagues, exp_contract
     return rank_list
 
 #######################################################################################################################################
+def scout_report(data_frame, gender, league, season, xtra, template, pos, player_pos, mins, minplay, compares, name, ws_name, team, age, sig, extra_text):
+    plt.clf()
+    df = data_frame
+    df = df[df['League']==full_league_name].reset_index(drop=True)
+
+    # Filter data
+    dfProspect = df[(df['Minutes played'] >= mins)].copy()
+    dfProspect = filter_by_position(dfProspect, pos)
+    raw_valsdf = dfProspect[(dfProspect['Player']==ws_name) & (dfProspect['Team within selected timeframe']==team) & (dfProspect['Age']==age)]
+
+    # FORWARD
+    fwd1 = "Non-penalty goals per 90"
+    fwd2 = "npxG per 90"
+    fwd3 = "Assists per 90"
+    fwd4 = "xA per 90"
+    fwd5 = "Successful dribbles, %"
+    fwd6 = "Goal conversion, %"
+    fwd7 = "Shot assists per 90"
+    fwd8 = "Second assists per 90"
+    fwd9 = "Progressive runs per 90"
+    fwd10 = "Progressive passes per 90"
+    fwd11 = "Touches in box per 90"
+    fwd12 = "Aerial duels won, %"
+    # MIDFIELD
+    mid1 = "Accurate short / medium passes, %"
+    mid2 = "Accurate long passes, %"
+    mid3 = "Accurate smart passes, %"
+    mid4 = "Shot assists per 90"
+    mid5 = "xA per 90"
+    mid6 = "Assists per 90"
+    mid7 = "Second assists per 90"
+    mid8 = "Third assists per 90"
+    mid9 = "Progressive passes per 90"
+    mid10 = "Progressive runs per 90"
+    mid11 = "Duels won, %"
+    mid12 = "pAdj Tkl+Int per 90"
+    # DEFENDER
+    def1 = "Successful defensive actions per 90"
+    def2 = "PAdj Sliding tackles"
+    def3 = "Defensive duels won, %"
+    def4 = "Fouls per 90" 
+    def5 = "Cards per 90"
+    def6 = "Shots blocked per 90"
+    def7 = "PAdj Interceptions"
+    def8 = "Aerial duels won, %"
+    def9 = "Accurate long passes, %"
+    def10 = "1st, 2nd, 3rd assists"
+    def11 = "Progressive passes per 90"
+    def12 = "Progressive runs per 90"
+    # GOALKEEPER
+    gk1 = "Conceded goals per 90"
+    gk2 = "Prevented goals per 90"
+    gk3 = "Shots against per 90"
+    gk4 = "Save rate, %"
+    gk5 = "Clean sheets, %"
+    gk6 = "Exits per 90"
+    gk7 = "Aerial duels per 90"
+    gk8 = "Passes per 90"
+    gk9 = "Accurate long passes, %"
+    gk10 = "Average long pass length, m"
+    # OTHERS
+    extra = "Accurate passes, %"
+    extra2 = 'Shots per 90'
+    extra3 = 'Accurate crosses, %'
+    extra4 = 'Smart passes per 90'
+    extra5 = 'xA per Shot Assist'
+    extra6 = 'Accelerations per 90'
+    extra7 = 'Aerial duels won per 90'
+    extra8 = 'Fouls suffered per 90'
+    extra9 = 'npxG per shot'
+    extra10 = 'Crosses per 90'
+
+    df_pros = dfProspect
+
+    ranked_columns = [
+        'midpct1', 'midpct2', 'midpct3', 'midpct4', 'midpct5', 'midpct6', 'midpct7',
+        'midpct8', 'midpct9', 'midpct10', 'midpct11', 'midpct12',
+        'fwdpct1', 'fwdpct2', 'fwdpct3', 'fwdpct4', 'fwdpct5', 'fwdpct6', 'fwdpct7',
+        'fwdpct8', 'fwdpct9', 'fwdpct10', 'fwdpct11', 'fwdpct12',
+        'defpct1','defpct2','defpct3','defpct6','defpct7','defpct8','defpct9','defpct10','defpct11','defpct12',
+        'extrapct','extrapct2','extrapct3','extrapct4','extrapct5','extrapct6','extrapct7','extrapct8','extrapct9','extrapct10',
+    ]
+    inverse_ranked_columns = [
+        'defpct4','defpct5'
+    ]
+    ranked_columns_r = [
+        mid1, mid2, mid3, mid4, mid5, mid6, mid7,
+        mid8, mid9, mid10, mid11, mid12,
+        fwd1, fwd2, fwd3, fwd4, fwd5, fwd6, fwd7,
+        fwd8, fwd9, fwd10, fwd11, fwd12,
+        def1,def2,def3,def6,def7,def8,def9,def10,def11,def12,
+        extra,extra2,extra3,extra4,extra5,extra6,extra7,extra8,extra9,extra10,
+    ]
+    inverse_ranked_columns_r = [
+        def4,def5
+    ]
+    
+    dfProspect[ranked_columns] = 0.0
+    dfProspect[inverse_ranked_columns] = 0.0
+
+    for column, column_r in zip(ranked_columns, ranked_columns_r):
+        dfProspect[column] = rank_column(dfProspect, column_r)
+    for column, column_r in zip(inverse_ranked_columns, inverse_ranked_columns_r):
+        dfProspect[column] = rank_column_inverse(dfProspect, column_r)
+
+    ######################################################################
+
+    dfRadarMF = dfProspect[(dfProspect['Player']==ws_name) & (dfProspect['Team within selected timeframe']==team) & (dfProspect['Age']==age)].reset_index(drop=True)
+    dfRadarMF = dfRadarMF.fillna(0)
+    # Define a dictionary to map old column names to new ones
+    column_mapping = {
+        'attacking': {
+            'midpct1': "Short & Med\nPass %",
+            'midpct2': "Long\nPass %",
+            'midpct3': "Smart\nPass %",
+            'extrapct3': 'Cross\nCompletion %',
+            'midpct4': "Shot\nAssists",
+            'midpct5': "Expected\nAssists (xA)",
+            'extrapct5': 'xA per\nShot Assist',
+            'midpct6': "Assists",
+            'midpct7': "Second\nAssists",
+            'extrapct4': 'Smart\nPasses',
+            'fwdpct2': "npxG",
+            'fwdpct1': "Non-Pen\nGoals",
+            'fwdpct6': "Goals/Shot\non Target %",
+            'extrapct9': 'npxG\nper shot',
+            'extrapct2': "Shots",
+            'fwdpct11': 'Touches in\nPen Box',
+            'fwdpct5': "Dribble\nSuccess %",
+            'extrapct6': 'Acceleration\nwith Ball',
+            'midpct10': "Prog.\nCarries",
+            'midpct9': "Prog.\nPasses",
+            'defpct1': "Defensive\nActions",
+            'midpct12': "Tackles & Int\n(pAdj)",
+            'defpct8': 'Aerial\nWin %'
+        },
+        'defensive': {
+            'defpct1': 'Defensive\nActions',
+            'defpct2': "Tackles\n(pAdj)",
+            'defpct3': "Defensive\nDuels Won %",
+            'defpct6': "Shot Blocks",
+            'defpct7': "Interceptions\n(pAdj)",
+            'extrapct7': 'Aerial Duels\nWon',
+            'defpct8': "Aerial\nWin %",
+            'defpct9': "Long\nPass %",
+            'extrapct10': 'Crosses',
+            'extrapct3': 'Cross\nCompletion %',
+            'defpct10': "Assists &\n2nd/3rd Assists",
+            'defpct11': "Prog.\nPasses",
+            'defpct12': "Prog.\nCarries",
+            'fwdpct5': "Dribble\nSucces %",
+            'extrapct6': 'Acceleration\nwith Ball',
+            'midpct5': "Expected\nAssists",
+            'defpct4': "Fouls",
+            'defpct5': "Cards",
+            'extrapct8': 'Fouls Drawn'
+        },
+        'cb': {
+            'defpct1': 'Defensive\nActions',
+            'defpct2': "Tackles\n(pAdj)",
+            'defpct3': "Defensive\nDuels Won %",
+            'defpct6': "Shot Blocks",
+            'defpct7': "Interceptions\n(pAdj)",
+            'extrapct7': 'Aerial Duels\nWon',
+            'defpct8': "Aerial\nWin %",
+            'defpct9': "Long\nPass %",
+            'defpct10': "Assists &\n2nd/3rd Assists",
+            'defpct11': "Prog.\nPasses",
+            'defpct12': "Prog.\nCarries",
+            'fwdpct5': "Dribble\nSucces %",
+            'extrapct6': 'Acceleration\nwith Ball',
+            'midpct5': "Expected\nAssists",
+            'defpct4': "Fouls",
+            'defpct5': "Cards",
+            'extrapct8': 'Fouls Drawn'
+        }
+    }
+    if template == 'attacking':
+        raw_vals = raw_valsdf[["Player",
+                           mid1, mid2, mid3, extra3,
+                           mid4,mid5,extra5, mid6, mid7,extra4,
+                               fwd2,fwd1,fwd6,extra9,extra2,fwd11,
+                           fwd5,extra6,mid10,mid9,
+                               def1,mid12,def8
+                          ]]
+    if template == 'defensive':
+        raw_vals = raw_valsdf[["Player",
+                           def1, def2, def3, def6,def7,extra7,def8,
+                           def9,extra10,extra3, def10, def11,def12,fwd5,extra6,mid5,
+                           def4,def5,extra8,
+                          ]]
+
+    if template == 'cb':
+        raw_vals = raw_valsdf[["Player",
+                           def1, def2, def3, def6,def7,extra7,def8,
+                           def9, def10, def11,def12,fwd5,extra6,mid5,
+                           def4,def5,extra8,
+                          ]]
+
+    if template in column_mapping:
+        selected_columns = column_mapping[template]
+        dfRadarMF = dfRadarMF[['Player'] + list(selected_columns.keys())]
+        dfRadarMF.rename(columns=selected_columns, inplace=True)
+#         raw_vals = raw_valsdf[['Player'] + list(selected_columns.values())]
+
+
+
+#         if template == 'gk':
+#             dfRadarMF = dfRadarMF[["Player",
+#                                    'gkpct1','gkpct2','gkpct3','gkpct4','gkpct5',
+#                                    'gkpct6','gkpct7','gkpct8','gkpct9','gkpct10'
+#                                   ]]
+#             dfRadarMF.rename(columns={'gkpct1': 'Goals\nConceded',
+#                                       'gkpct2': "Goals Prevented\nvs Expected",
+#                                       'gkpct3': "Shots Against",
+#                                       'gkpct4': "Save %",
+#                                       'gkpct5': "Clean Sheet %",
+#                                       'gkpct6': 'Att. Cross Claims\nor Punches',
+#                                       'gkpct7': "Aerial Wins",
+#                                       'gkpct8': "Passes",
+#                                       'gkpct9': 'Long Passes',
+#                                       'gkpct10': "Long\nPass %",
+#                                      }, inplace=True)
+#             print('Number of players comparing to:',len(dfProspect))
+
+    ###########################################################################
+
+    df1 = dfRadarMF.T.reset_index()
+
+    df1.columns = df1.iloc[0] 
+
+    df1 = df1[1:]
+    df1 = df1.reset_index()
+    df1 = df1.rename(columns={'Player': 'Metric',
+                        ws_name: 'Value',
+                             'index': 'Group'})
+
+    if template == 'attacking':
+        for i in range(len(df1)):
+            if df1['Group'][i] <= 4:
+                df1['Group'][i] = 'Passing'
+            elif df1['Group'][i] <= 10:
+                df1['Group'][i] = 'Creativity'
+            elif df1['Group'][i] <= 16:
+                df1['Group'][i] = 'Shooting'
+            elif df1['Group'][i] <= 20:
+                df1['Group'][i] = 'Ball Movement'
+            elif df1['Group'][i] <= 23:
+                df1['Group'][i] = 'Defense'
+
+    if template == 'defensive':
+        for i in range(len(df1)):
+            if df1['Group'][i] <= 7:
+                df1['Group'][i] = 'Defending'
+            elif df1['Group'][i] <= 16:
+                df1['Group'][i] = 'Attacking'
+            elif df1['Group'][i] <= 19:
+                df1['Group'][i] = 'Fouling'
+
+    if template == 'cb':
+        for i in range(len(df1)):
+            if df1['Group'][i] <= 7:
+                df1['Group'][i] = 'Defending'
+            elif df1['Group'][i] <= 14:
+                df1['Group'][i] = 'Attacking'
+            elif df1['Group'][i] <= 17:
+                df1['Group'][i] = 'Fouling'
+
+
+
+    #####################################################################
+
+    ### This link below is where I base a lot of my radar code off of
+    ### https://www.python-graph-gallery.com/circular-barplot-with-groups
+
+    #### I DEFINED THE LABEL AND ROTATION HERE
+
+
+    # Grab the group values
+    GROUP = df1["Group"].values
+    VALUES = df1["Value"].values
+    LABELS = df1["Metric"].values
+    OFFSET = np.pi / 2
+
+    PAD = 2
+    ANGLES_N = len(VALUES) + PAD * len(np.unique(GROUP))
+    ANGLES = np.linspace(0, 2 * np.pi, num=ANGLES_N, endpoint=False)
+    WIDTH = (2 * np.pi) / len(ANGLES)
+
+    offset = 0
+    IDXS = []
+
+    template_group_sizes = {
+        'attacking': [4, 6, 6, 4, 3],
+        'defensive': [7, 9, 3],
+        'cb': [7, 7, 3],
+        'gk': [5, 5]
+    }
+
+    GROUPS_SIZE = template_group_sizes.get(template, [])
+
+
+
+    for size in GROUPS_SIZE:
+        IDXS += list(range(offset + PAD, offset + size + PAD))
+        offset += size + PAD
+
+    fig, ax = plt.subplots(figsize=(10, 10), subplot_kw={"projection": "polar"})
+    ax.set_theta_offset(OFFSET)
+    ax.set_ylim(-.5, 1)
+    ax.set_frame_on(False)
+    ax.xaxis.grid(False)
+    ax.yaxis.grid(False)
+    ax.set_xticks([])
+    ax.set_yticks([])
+
+
+    COLORS = [f"C{i}" for i, size in enumerate(GROUPS_SIZE) for _ in range(size)]
+
+    ax.bar(
+        ANGLES[IDXS], VALUES, width=WIDTH, color=COLORS,
+        edgecolor="#4A2E19", linewidth=1
+    )
+
+    offset = 0 
+    for group, size in zip(GROUPS_SIZE, GROUPS_SIZE):
+        # Add line below bars
+        x1 = np.linspace(ANGLES[offset + PAD], ANGLES[offset + size + PAD - 1], num=50)
+        ax.plot(x1, [-.02] * 50, color="#4A2E19")
+
+
+        # Add reference lines at 20, 40, 60, and 80
+        x2 = np.linspace(ANGLES[offset], ANGLES[offset + PAD - 1], num=50)
+        ax.plot(x2, [.2] * 50, color="#bebebe", lw=0.8)
+        ax.plot(x2, [.4] * 50, color="#bebebe", lw=0.8)
+        ax.plot(x2, [.60] * 50, color="#bebebe", lw=0.8)
+        ax.plot(x2, [.80] * 50, color="#bebebe", lw=0.8)
+        ax.plot(x2, [1] * 50, color="#bebebe", lw=0.8)
+
+        offset += size + PAD
+        
+    text_cs = []
+    text_inv_cs = []
+    for i, bar in enumerate(ax.patches):
+        pc = 1 - bar.get_height()
+
+        if pc <= 0.1:
+            color = ('#01349b', '#d9e3f6')  # Elite
+        elif 0.1 < pc <= 0.35:
+            color = ('#007f35', '#d9f0e3')  # Above Avg
+        elif 0.35 < pc <= 0.66:
+            color = ('#9b6700', '#fff2d9')  # Avg
+        else:
+            color = ('#b60918', '#fddbde')  # Below Avg
+
+        if bar_colors == 'Benchmarking Percentiles':
+            bar.set_color(color[1])
+            bar.set_edgecolor(color[0])
+
+        text_cs.append(color[0])
+        text_inv_cs.append(color[1])
+        
+    callout_text = ''
+    title_note = ''
+
+    if callout == 'Per 90':
+        callout_text = "per 90'"
+        title_note = ' & Per 90 Values'
+    elif callout == 'Percentile':
+        callout_text = 'percentile'
+
+    for i, bar in enumerate(ax.patches):
+        if bar_colors == 'Metric Groups':
+            if callout == 'Per 90':
+                value_format = f'{round(raw_vals.iloc[0][i+1], 2)}'
+            else:
+                value_format = format(bar.get_height() * 100, '.0f')
+            color = 'black'
+            face = 'white'
+        elif bar_colors == 'Benchmarking Percentiles':
+            if callout == 'Per 90':
+                value_format = f'{round(raw_vals.iloc[0][i+1], 2)}'
+            else:
+                value_format = format(bar.get_height() * 100, '.0f')
+            color = text_inv_cs[i]
+            face = text_cs[i]
+
+        ax.annotate(value_format,
+                    (bar.get_x() + bar.get_width() / 2, bar.get_height() - 0.1),
+                    ha='center', va='center', size=10, xytext=(0, 8),
+                    textcoords='offset points', color=color,
+                    bbox=dict(boxstyle="round", fc=face, ec="black", lw=1))
+
+    add_labels(ANGLES[IDXS], VALUES, LABELS, OFFSET, ax, text_cs)
+
+    PAD = 0.02
+    ax.text(0.15, 0 + PAD, "0", size=10, color='#4A2E19')
+    ax.text(0.15, 0.2 + PAD, "20", size=10, color='#4A2E19')
+    ax.text(0.15, 0.4 + PAD, "40", size=10, color='#4A2E19')
+    ax.text(0.15, 0.6 + PAD, "60", size=10, color='#4A2E19')
+    ax.text(0.15, 0.8 + PAD, "80", size=10, color='#4A2E19')
+    ax.text(0.15, 1 + PAD, "100", size=10, color='#4A2E19')
+
+    plt.suptitle(f'{name} ({age}, {player_pos}, {minplay} mins.), {team}\n{season} {league} Percentile Rankings{title_note}',
+                 fontsize=17,
+                 fontfamily="DejaVu Sans",
+                color="#4A2E19", #4A2E19
+                 fontweight="bold", fontname="DejaVu Sans",
+                x=0.5,
+                y=.97)
+
+    plt.annotate(f"Bars are percentiles | Values shown are {callout_text} values\nAll values are per 90 minutes | %s\nCompared to %s %s, %i+ mins\nData: Wyscout | %s\nSample Size: %i players" %(extra_text, league, compares, mins, sig, len(dfProspect)),
+                 xy = (0, -.075), xycoords='axes fraction',
+                ha='left', va='center',
+                fontsize=9, fontfamily="DejaVu Sans",
+                color="#4A2E19", fontweight="regular", fontname="DejaVu Sans",
+                ) 
+
+    if season in ['23-24','2024']:
+        clubpath = raw_valsdf['Team logo'].values[0]
+        image = Image.open(urllib.request.urlopen(clubpath))
+        newax = fig.add_axes([.44,.43,0.15,0.15], anchor='C', zorder=1)
+        newax.imshow(image)
+        newax.axis('off')
+
+    ax.set_facecolor('#fbf9f4')
+    fig = plt.gcf()
+    fig.patch.set_facecolor('#fbf9f4')
+    fig.set_size_inches(12, (12*.9)) #length, height
+    
+    fig_text(
+        0.88, 0.055, "Created by Ben Griffis\n(@BeGriffis on Twitter)\n\n<Elite (Top 10%)>\n<Above Average (11-35%)>\n<Average (36-66%)>\n<Below Average (Bottom 35%)>", color="#4A2E19",
+        highlight_textprops=[{"color": '#01349b'},
+                             {'color' : '#007f35'},
+                             {"color" : '#9b6700'},
+                             {'color' : '#b60918'},
+                            ],
+        size=10, fig=fig, ha='right',va='center'
+    )
+
+
+
+    return fig
 #######################################################################################################################################
 formation_positions = {442:['GK','RCB','LCB','RB','LB','RCM','LCM','RW','LW','RS','LS',],
                       4231:['GK','RCB','LCB','RB','LB','RCM','LCM','CAM','RW','LW','ST'],
@@ -651,7 +1098,7 @@ with st.sidebar:
     lg_lookup_ssn = lg_lookup[lg_lookup.Season==season]
     lg = st.selectbox('League', (lg_lookup_ssn.League.tolist()))
     formation = st.selectbox('Fomation', (4231, 433, 442))
-    mins = st.number_input('Minimum % of Season Played', 30, 75, 40)
+    mins = st.number_input('Minimum Minutes Played', 300, 2000, 900)
     ages = st.slider('Age Range', 0, 45, (0, 45))
     exp_contracts_ = st.selectbox('Only Expiring Contracts?', (['No','Yes']))
     if exp_contracts_ == 'Yes':
@@ -692,6 +1139,7 @@ elif gender == 'Women':
     df = pd.read_csv(f'https://raw.githubusercontent.com/griffisben/Wyscout_Prospect_Research/main/Main%20App/Women/{full_league_name.replace(" ","%20")}.csv')
 df['League'] = full_league_name
 df = df.dropna(subset=['Position','Team within selected timeframe', 'Age']).reset_index(drop=True)
+df_basic = df.copy()
 
 
 clean_df = load_league_data(df, full_league_name)
@@ -709,7 +1157,7 @@ with st.sidebar:
             num = number_of_players
         team_text = f' Top {num} Players Per Role'
 
-rank_list = make_rankings(formation, mins/100, clean_df, role_position_df, [lg], exp_contracts, expiration_date,
+rank_list = make_rankings(formation, mins, clean_df, role_position_df, [lg], exp_contracts, expiration_date,
                           min_age=ages[0], max_age=ages[1], num=number_of_players, normalize_to_100=normalize_to_100, chosen_team=chosen_team)
 show_ranks = rank_list[['Player','Team','Age','Squad Position','Player Pos.','Score','Role Rank','Formation Pos.']].copy()
 
@@ -788,7 +1236,7 @@ else:
 
 show_ranks = show_ranks[['Player','Team','Age','Squad Position','Player Pos.','Score','Role Rank']].copy()
 
-image_tab, table_tab, notes_tab = st.tabs(['Image', 'Table', 'Role Score Calculations'])
+image_tab, table_tab, radar_tab, notes_tab = st.tabs(['Image', 'Table', 'Player Radar', 'Role Score Calculations'])
 
 with image_tab:
     fig
@@ -819,6 +1267,69 @@ with table_tab:
     with st.expander(chosen_roles[10]):
        show_ranks[show_ranks['Squad Position']==chosen_roles[10]]
 
+with radar_tab:
+
+    dfxxx = df_basic[df_basic['Minutes played']>=mins].copy().reset_index(drop=True)
+    dfxxx = dfxxx[dfxxx['League']==full_league_name].reset_index(drop=True)
+    df1 = dfxxx[['Player', 'Team within selected timeframe', 'Position', 'Age', 'Minutes played']]
+    df1 = df1.dropna(subset=['Position', 'Team within selected timeframe', 'Age']).reset_index(drop=True)
+    df1 = df1.dropna(subset=['Position']).reset_index(drop=True)
+    df1['Age'] = df1['Age'].astype(int)
+    df1['Main Position'] = df1['Position'].str.split().str[0].str.rstrip(',')
+    df1 = df1.dropna(subset=['Main Position']).reset_index(drop=True)
+    position_replacements = {
+        'LAMF': 'LW',
+        'RAMF': 'RW',
+        'LCB3': 'LCB',
+        'RCB3': 'RCB',
+        'LCB5': 'LCB',
+        'RCB5': 'RCB',
+        'LB5': 'LB',
+        'RB5': 'RB',
+        'RWB': 'RB',
+        'LWB': 'LB',
+        'LCM3': 'LCMF',
+        'RCM3': 'RCMF'
+    }
+
+    df1['Main Position'] = df1['Main Position'].replace(position_replacements)
+
+    ws_pos = ['LCMF3','RCMF3','LAMF','LW','RB','LB','LCMF','DMF','RDMF','RWF','AMF','LCB','RWB','CF','LWB','GK','LDMF','RCMF','LWF','RW','RAMF','RCB','CB','RCB3','LCB3','RB5','RWB5','LB5','LWB5']
+    poses = ['Central Midfielders (DM, CM, CAM)','Central Midfielders (DM, CM, CAM)','Wingers','Wingers','Fullbacks (FBs/WBs)','Fullbacks (FBs/WBs)','Central Midfielders (DM, CM, CAM)','Central Midfielders no CAM (DM, CM)','Central Midfielders no CAM (DM, CM)','Wingers','Central Midfielders no DM (CM, CAM)','Centre-Backs','Fullbacks (FBs/WBs)','Strikers','Fullbacks (FBs/WBs)','Goalkeeper','Central Midfielders no CAM (DM, CM)','Central Midfielders (DM, CM, CAM)','Wingers','Wingers','Wingers','Centre-Backs','Centre-Backs','Centre-Backs','Centre-Backs','Fullbacks (FBs/WBs)','Fullbacks (FBs/WBs)','Fullbacks (FBs/WBs)','Fullbacks (FBs/WBs)']
+    template = ['attacking','attacking','attacking','attacking','defensive','defensive','attacking','attacking','attacking','attacking','attacking','cb','defensive','attacking','defensive','gk','attacking','attacking','attacking','attacking','attacking','cb','cb','cb','cb','defensive','defensive','defensive','defensive']
+    compares = ['Central Midfielders','Central Midfielders','Wingers','Wingers','Fullbacks','Fullbacks','Central Midfielders','Central & Defensive Mids','Central & Defensive Mids','Wingers','Central & Attacking Mids','Center Backs','Fullbacks','Strikers','Fullbacks','Goalkeepers','Central & Defensive Mids','Central Midfielders','Wingers','Wingers','Wingers','Center Backs','Center Backs','Center Backs','Center Backs','Fullbacks','Fullbacks','Fullbacks','Fullbacks']
+
+    xtratext = lg_lookup[(lg_lookup.League==lg) & (lg_lookup.Season==season)].Date.values[0]
+
+    gen = df1[(df1['Player']==player) & (df1['Age']==page)]
+    ix = ws_pos.index(gen['Main Position'].values[0])
+    minplay = int(gen['Minutes played'].values[0])
+
+    
+    radar_img = scout_report(
+        data_frame = df_basic, ##
+        gender = gender, ##
+        league = lg, ##
+        season = season, ##
+        xtra = ' current',
+        template = template[ix], ##
+        pos = poses[ix,
+        player_pos = ws_pos[ix],
+        compares = compares[ix],
+        mins = mins,
+        minplay=minplay,
+        name = gen['Player'].values[0],
+        ws_name = gen['Player'].values[0],
+        team = gen['Team within selected timeframe'].values[0],
+        age = gen['Age'].values[0],
+        sig = 'Twitter: @BeGriffis',
+        extra_text = xtratext,
+    )
+    st.pyplot(radar_img.figure)
+
+
+
+    
 with notes_tab:
     with st.expander('Shot-Stopping Distributor'):
         st.write('''

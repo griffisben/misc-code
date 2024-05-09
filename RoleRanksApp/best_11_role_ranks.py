@@ -1347,11 +1347,10 @@ with radar_tab:
     xtratext = lg_lookup[(lg_lookup.League==lg) & (lg_lookup.Season==season)].Date.values[0]
 
     gen = df1[(df1['Player']==player) & (df1['Age']==page)]
-    st.write(gen)
-    st.write(ws_pos.index(gen['Main Position'].values[0]))
     ix = ws_pos.index(gen['Main Position'].values[0])
     minplay = int(gen['Minutes played'].values[0])
 
+    st.write(df_basic)
     
     radar_img = scout_report(
         data_frame = df_basic, ##

@@ -677,6 +677,7 @@ def scout_report(data_frame, gender, league, season, xtra, template, pos, player
     dfProspect = df[(df['Minutes played'] >= mins)].copy()
     dfProspect = filter_by_position(dfProspect, pos)
     raw_valsdf = dfProspect[(dfProspect['Player']==ws_name) & (dfProspect['Team within selected timeframe']==team) & (dfProspect['Age']==age)]
+    st.write(raw_valsdf)
 
     # FORWARD
     fwd1 = "Non-penalty goals per 90"
@@ -1349,8 +1350,6 @@ with radar_tab:
     gen = df1[(df1['Player']==player) & (df1['Age']==page)]
     ix = ws_pos.index(gen['Main Position'].values[0])
     minplay = int(gen['Minutes played'].values[0])
-
-    st.write(df_basic)
     
     radar_img = scout_report(
         data_frame = df_basic, ##

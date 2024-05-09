@@ -1121,8 +1121,30 @@ rank_11_base = read_csv('https://raw.githubusercontent.com/griffisben/misc-code/
 role_position_lookup = read_csv('https://raw.githubusercontent.com/griffisben/misc-code/main/RoleRanksApp/Role_Positions_Lookup.csv')
 
 st.title('Best XI Players')
-st.subheader("All data from Wyscout. Created by Ben Griffis (Twitter: @BeGriffis)")
-st.subheader('')
+st.subheader("All data from Wyscout. Created by Ben Griffis (@BeGriffis on Twitter)")
+st.subheader("Note: you are allowed to use any of the images you create here in your own work, but you MUST give me credit and not alter the images to remove my signature and Wyscout's name.")
+with st.expander('Instructions'):
+    st.write('''
+    This app is a tool to help you find players who might be performing well in specific roles, and then lets you generate a player's performance radar so that you can see how their data stacks up against others in their position.  \n
+    Follow these steps to generate a Best XI ranking image and player radars:  \n
+    1) Select whether you want Men's or Women's competitions  \n
+    2) Select the season your competition is in. "23-24", "22-23", etc. are leagues which follow Fifa's calendar, i.e. roughly August/September to May/June. "2024", "2023", etc are leagues running from roughly February to November. South America and East Asia are examples  \n
+    3) Select your league  \n
+    4) Select the base formation you want for the roles. There are only a few loaded, as this is not an exhaustive list and all roles can be generated in these formation. I may add more formations later  \n
+    5) Input a minimum minutes threshold. Only players who have played at least this many minutes will be included in the sample. Beware of small sample sizes/variance issues for players with less than around 720 minutes  \n
+    6) Select an age range for the Best XI roles. This can account for all ages (keep at 0-45), a minimum age (move the left-most slider to your desired minimum), a maximum age (move the right-most slider to your desired maximum), or a specific range of ages (move both sliders to your desired range, minimum & maximum)  \n
+    7) Select if you want only players with contraccts expiring on or before a specific date to be included. This feature can help you find potential free transfers. Please note that these are from Wyscout, which are pulled from Transfermarkt, and may not be totally accurate (some players also have no contract expiration date noted and are therefore not included if you slecet "Yes" for this option  \n
+    7a) Enter your desired contract expiration date if needed  \n
+    8) Select the number of players you want to see for each role. Please note that if you select more than 7, the Best XI image will only show the top 7, however the table will still show you all players  \n
+    9) Select whether you want to normalize role-ranking scores from 0 (lowest score) to 100 (top score), or if you want the raw role-ranking scores (which range from 0 to 100, with 0 meaning the player has the lowest recorded numbers in every included metric, and 100 meaning the player has recorded the highest number in every metric)  \n
+    10) Choose all of your roles by position. Once you've made any changes, click the "Update Roles" button  \n
+    11) Select whether you want to show players from all teams, or if you want to create a single team's depth chart. Please note that if you create a depth chart, the player scores are all still ranked against all players in that position in the league, not just the team  \n  \n
+    Tabs:  \n
+    1) Role Ranking Image - this tab is the default, and shows the Best XI nased on all your selected criteria  \n
+    2) Role Ranking Table - this tab allows you to view the Best XI in table format. Remember that if you selected more than a Top 7, this tab will have all players, not just the top 7 shown on the image  \n
+    3) Player Radar Generation - this tab is where you can add a player's name and age in order to create their radar. Select how you want to color the radar's bars & if you want the player's actual per 90 data to be called out on each bar or if you want the percentiles instead. Then click "Submit Options" to generate their radar  \n
+    4) Role Score Definitions & Calculations - this tab houses the definitions of roughly what each role should do (in my opinion, and it is rough), and the metrics & weights that I used to calculate each role
+    ''')
 
 
 with st.sidebar:
@@ -1142,7 +1164,7 @@ with st.sidebar:
     formation = st.selectbox('Fomation', (4231, 433, 442))
     mins = st.number_input('Minimum Minutes Played', 300, 2000, 900)
     ages = st.slider('Age Range', 0, 45, (0, 45))
-    exp_contracts_ = st.selectbox('Only Expiring Contracts?', (['No','Yes']))
+    exp_contracts_ = st.selectbox('Only Expiring Contracts?  \n(Will only show players with contracts expiring, via Wyscout)', (['No','Yes']))
     if exp_contracts_ == 'Yes':
         exp_contracts = 'y'
         expiration_date = st.date_input("Contract Expires On Or Before", datetime.date(2024, 8, 1), format='YYYY-MM-DD')

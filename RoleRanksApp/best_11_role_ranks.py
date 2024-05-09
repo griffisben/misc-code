@@ -1277,7 +1277,7 @@ else:
 
 show_ranks = show_ranks[['Player','Team','Age','Squad Position','Player Pos.','Score','Role Rank']].copy()
 
-image_tab, table_tab, radar_tab, notes_tab = st.tabs(['Image', 'Table', 'Player Radar', 'Role Score Calculations'])
+image_tab, table_tab, radar_tab, notes_tab = st.tabs(['Role Ranking Image', 'Role Ranking Table', 'Player Radar Generation', 'Role Score Definitions & Calculations'])
 
 with image_tab:
     fig

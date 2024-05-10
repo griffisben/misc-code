@@ -87,8 +87,8 @@ Attacking FB,Fullback,mult,either,RB|RWB,5,Attacking RB,4231,RB,35,-15
 Ball Playing CB,CB,single,either,any,5,Ball Playing CB,4231,RCB,20,20
 Spurs LCB,CB,single,either,any,5,Wide CB,4231,LCB,20,80
 Attacking FB,Fullback,mult,either,LB|LWB,5,Attacking LB,4231,LB,35,115
-Progressive Midfielder,Midfielder no CAM,mult,either,any,5,Progressive Midfielder,4231,RCM,50,25
-Number 6,Midfielder no CAM,mult,either,any,5,Number 6,4231,LCM,50,75
+Progressive Midfielder,Midfielder no CAM,mult,either,any,5,Progressive Midfielder,4231,RCM,50,20
+Number 6,Midfielder no CAM,mult,either,any,5,Number 6,4231,LCM,50,80
 Advanced Playmaker,Midfielder no DM,mult,either,any,5,Advanced Playmaker,4231,CAM,70,50
 Playmaking Winger,Winger,mult,either,any,5,Playmaking Winger,4231,RW,75,-15
 Inverted Winger,Winger,mult,either,any,5,Inverted Winger,4231,LW,75,115

@@ -1156,11 +1156,13 @@ if gender == 'Women':
     lg_lookup = read_csv('https://raw.githubusercontent.com/griffisben/Wyscout_Prospect_Research/main/league_info_lookup_women.csv')
 ##########
 
+legaues = lg_lookup.League.unique().tolist()
+with st.sidebar:
+    lg = st.selectbox('League', (legaues))
+
 with st.sidebar:
     st.header('Choose Basic Options')    
-    season = st.selectbox('Season', (['23-24','2024','2023','22-23','2022','21-22']))
-    lg_lookup_ssn = lg_lookup[lg_lookup.Season==season]
-    lg = st.selectbox('League', (lg_lookup_ssn.League.tolist()))
+    lg_season = st.selectbox('Season', (lg_lookup[lg_lookup.League == league].Season.unique().tolist()))
     formation = st.selectbox('Fomation', (4231, 433, 442))
     mins = st.number_input('Minimum Minutes Played', 300, 2000, 900)
     ages = st.slider('Age Range', 0, 45, (0, 45))
@@ -1198,9 +1200,9 @@ role_position_df['formation'] = formation
 full_league_name = f"{lg} {season}"
     
 if gender == 'Men':
-    df = pd.read_csv(f'https://raw.githubusercontent.com/griffisben/Wyscout_Prospect_Research/main/Main%20App/{full_league_name.replace(" ","%20")}.csv')
+    df = pd.read_csv(f'https://raw.githubusercontent.com/griffisben/Wyscout_Prospect_Research/main/Main%20App/{full_league_name.replace(" ","%20").replace("ü","u").replace("ó","o").replace("ö","o")}.csv')
 elif gender == 'Women':
-    df = pd.read_csv(f'https://raw.githubusercontent.com/griffisben/Wyscout_Prospect_Research/main/Main%20App/Women/{full_league_name.replace(" ","%20")}.csv')
+    df = pd.read_csv(f'https://raw.githubusercontent.com/griffisben/Wyscout_Prospect_Research/main/Main%20App/Women/{full_league_name.replace(" ","%20").replace("ü","u").replace("ó","o").replace("ö","o")}.csv')
 df['League'] = full_league_name
 df = df.dropna(subset=['Position','Team within selected timeframe', 'Age']).reset_index(drop=True)
 

@@ -1162,7 +1162,7 @@ with st.sidebar:
 
 with st.sidebar:
     st.header('Choose Basic Options')    
-    lg_season = st.selectbox('Season', (lg_lookup[lg_lookup.League == league].Season.unique().tolist()))
+    lg_season = st.selectbox('Season', (lg_lookup[lg_lookup.League == lg].Season.unique().tolist()))
     formation = st.selectbox('Fomation', (4231, 433, 442))
     mins = st.number_input('Minimum Minutes Played', 300, 2000, 900)
     ages = st.slider('Age Range', 0, 45, (0, 45))

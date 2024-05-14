@@ -337,7 +337,7 @@ def make_rankings(formation, mins, data, role_position_df, leagues, exp_contract
             
             # The first line in this loop is how I get the z-scores to start at 0. I checked the distribution chart at the bottom, and it's the same shape of course
             # the second line normalizes
-            for i in range(142,len(dfProspect)):
+            for i in range(dfProspect.columns.tolist().index('midpct1'),len(dfProspect.columns)):
                 dfProspect.iloc[:,i] = dfProspect.iloc[:,i] + abs(dfProspect.iloc[:,i].min())
                 dfProspect.iloc[:,i] = NormalizeData(dfProspect.iloc[:,i])
     

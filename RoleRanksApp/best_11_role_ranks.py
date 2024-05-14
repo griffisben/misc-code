@@ -1239,7 +1239,7 @@ fig, axs = pitch.grid(endnote_height=0.045, endnote_space=0, figheight=12,
 fig.set_facecolor('#fbf9f4')
 
 if ages[0] == 0 and ages[1] == 45:
-    age_text = f'Minimum {mins}% of season played'
+    age_text = f'Minimum {mins} minutes played'
 elif ages[0] == 0:
     age_text = f'Min. {mins}% of season played | U{ages[1]} players only'
 elif ages[1] == 45:

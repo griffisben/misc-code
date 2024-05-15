@@ -1117,7 +1117,7 @@ def scout_report(data_frame, gender, league, season, xtra, template, pos, player
 
     return fig
 
-def create_player_research_table(df_basic, mins, full_league_name, pos, min_age, max_age)
+def create_player_research_table(df_basic, mins, full_league_name, pos, min_age, max_age):
     dfProspect = df_basic[(df_basic['Minutes played'] >= mins) & (df_basic['League'] == full_league_name)].copy()
     dfProspect = filter_by_position(dfProspect, pos)
     

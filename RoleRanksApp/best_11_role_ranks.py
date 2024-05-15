@@ -17,6 +17,19 @@ import urllib.request
 matplotlib.rcParams.update(matplotlib.rcParamsDefault)
 @st.cache_data(ttl=6*60*60)
 
+def color_percentile(pc):
+    if pc <= 0.1:
+        color = ('#01349b', '#d9e3f6')  # Elite
+    elif 0.1 < pc <= 0.35:
+        color = ('#007f35', '#d9f0e3')  # Above Avg
+    elif 0.35 < pc <= 0.66:
+        color = ('#9b6700', '#fff2d9')  # Avg
+    else:
+        color = ('#b60918', '#fddbde')  # Below Avg
+
+    return f'background-color: {color[0]}'
+
+
 def read_csv(link):
     return pd.read_csv(link)
 def _update_slider(value):
@@ -1712,7 +1725,7 @@ with filter_table_tab:
                   (final['Cards per 90']>=cards)
                  ].reset_index(drop=True)
     
-    player_research_table
+    st.dataframe(player_research_table.style.applymap(color_percentile, subset=player_research_table.columns[6:]))
 
     
 with notes_tab:

@@ -17,12 +17,12 @@ import urllib.request
 matplotlib.rcParams.update(matplotlib.rcParamsDefault)
 @st.cache_data(ttl=6*60*60)
 
-def color_percentile(1-pc):
-    if pc <= 0.1:
+def color_percentile(pc):
+    if 1-pc <= 0.1:
         color = ('#01349b', '#d9e3f6')  # Elite
-    elif 0.1 < pc <= 0.35:
+    elif 0.1 < 1-pc <= 0.35:
         color = ('#007f35', '#d9f0e3')  # Above Avg
-    elif 0.35 < pc <= 0.66:
+    elif 0.35 < 1-pc <= 0.66:
         color = ('#9b6700', '#fff2d9')  # Avg
     else:
         color = ('#b60918', '#fddbde')  # Below Avg

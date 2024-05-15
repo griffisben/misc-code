@@ -1628,6 +1628,7 @@ with radar_tab:
 
 
 with filter_tab:
+    st.button("Reset Sliders", on_click=_update_slider, kwargs={"value": 0.0})
     with st.form('Minimum Percentile Filters'):
         submitted = st.form_submit_button("Submit Filters")
         pos_select = st.selectbox('Positions', ('Strikers', 'Strikers and Wingers', 'Forwards (AM, W, CF)',
@@ -1672,9 +1673,7 @@ with filter_tab:
         foul = st.slider('Fouls Committed per 90', 0.0, 1.0, 0.0, key='slider31')
         fouldraw = st.slider('Fouls Drawn per 90', 0.0, 1.0, 0.0, key='slider32')
         cards = st.slider('Cards per 90', 0.0, 1.0, 0.0, key='slider33')
-        
-    st.button("Reset Sliders", on_click=_update_slider, kwargs={"value": 0.0})
-    
+            
 
 with filter_table_tab:
     final = create_player_research_table(df_basic, mins, full_league_name, pos_select, ages[0], ages[1])

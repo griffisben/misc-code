@@ -1629,14 +1629,13 @@ with radar_tab:
 
 with filter_tab:
     with st.form('Minimum Percentile Filters'):
-        st.header("Position Selection")
+        submitted = st.form_submit_button("Submit Filters")
         pos_select = st.selectbox('Positions', ('Strikers', 'Strikers and Wingers', 'Forwards (AM, W, CF)',
                                 'Forwards no ST (AM, W)', 'Wingers', 'Central Midfielders (DM, CM, CAM)',
                                 'Central Midfielders no CAM (DM, CM)', 'Central Midfielders no DM (CM, CAM)', 'Fullbacks (FBs/WBs)',
                                 'Defenders (CB, FB/WB, DM)', 'Centre-Backs', 'CBs & DMs'))
 
-        st.header('Minimum Percentile Filters')
-    
+            
         if ['slider1','slider2','slider3','slider4','slider5','slider6','slider7','slider8','slider9','slider10','slider11','slider12','slider13','slider14','slider15','slider16','slider17','slider18','slider19','slider20','slider21','slider22','slider23','slider24','slider25','slider26','slider27','slider28','slider29','slider30','slider31','slider32','slider33'] not in st.session_state:
             pass
         
@@ -1674,7 +1673,6 @@ with filter_tab:
         fouldraw = st.slider('Fouls Drawn per 90', 0.0, 1.0, 0.0, key='slider32')
         cards = st.slider('Cards per 90', 0.0, 1.0, 0.0, key='slider33')
         
-        submitted = st.form_submit_button("Submit Sliders")
     st.button("Reset Sliders", on_click=_update_slider, kwargs={"value": 0.0})
     
 

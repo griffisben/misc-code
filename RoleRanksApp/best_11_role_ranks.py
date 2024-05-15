@@ -19,13 +19,13 @@ matplotlib.rcParams.update(matplotlib.rcParamsDefault)
 
 def color_percentile(pc):
     if pc <= 0.1:
-        color = ('#01349b', '#d9e3f6')  # Elite
-    elif 0.1 < pc <= 0.35:
-        color = ('#007f35', '#d9f0e3')  # Above Avg
-    elif 0.35 < pc <= 0.66:
-        color = ('#9b6700', '#fff2d9')  # Avg
-    else:
         color = ('#b60918', '#fddbde')  # Below Avg
+    elif 0.1 < pc <= 0.35:
+        color = ('#9b6700', '#fff2d9')  # Avg
+    elif 0.35 < pc <= 0.66:
+        color = ('#007f35', '#d9f0e3')  # Above Avg
+    else:
+        color = ('#01349b', '#d9e3f6')  # Elite
 
     return f'background-color: {color[1]}'
 

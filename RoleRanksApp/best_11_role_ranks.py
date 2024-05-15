@@ -82,6 +82,61 @@ def filter_by_position(df, position):
 
     else:
         return df
+def filter_by_position_long(df, position):
+    fw = ["CF", "RW", "LW", "AMF"]
+    if position == "Forwards (AM, W, CF)":
+        return df[df['Main Position'].str.contains('|'.join(fw), na=False)]
+    
+    stw = ["CF", "RW", "LW", "LAMF", "RAMF"]
+    if position == "Strikers and Wingers":
+        return df[df['Main Position'].str.contains('|'.join(stw), na=False)]
+    
+    fwns = ["RW", "LW", "AMF"]
+    if position == "Forwards no ST (AM, W)":
+        return df[df['Main Position'].str.contains('|'.join(fwns), na=False)]
+    
+    wing = ["RW", "LW", "WF", "LAMF", "RAMF"]
+    if position == "Wingers":
+        return df[df['Main Position'].str.contains('|'.join(wing), na=False)]
+
+    mids = ["DMF", "CMF", "AMF"]
+    if position == "Central Midfielders (DM, CM, CAM)":
+        return df[df['Main Position'].str.contains('|'.join(mids), na=False)]
+
+    cms = ["CMF", "AMF"]
+    if position == "Central Midfielders no DM (CM, CAM)":
+        return df[df['Main Position'].str.contains('|'.join(cms), na=False)]
+
+    dms = ["CMF", "DMF"]
+    if position == "Central Midfielders no CAM (DM, CM)":
+        return df[df['Main Position'].str.contains('|'.join(dms), na=False)]
+
+    fbs = ["LB", "RB", "WB"]
+    if position == "Fullbacks (FBs/WBs)":
+        return df[df['Main Position'].str.contains('|'.join(fbs), na=False)]
+
+    defs = ["LB", "RB", "WB", "CB", "DMF"]
+    if position == "Defenders (CB, FB/WB, DM)":
+        return df[df['Main Position'].str.contains('|'.join(defs), na=False)]
+
+    cbdm = ["CB", "DMF"]
+    if position == "CBs & DMs":
+        return df[df['Main Position'].str.contains('|'.join(cbdm), na=False)]
+
+    cf = ["CF"]
+    if position == "Strikers":
+        return df[df['Main Position'].str.contains('|'.join(cf), na=False)]
+
+    cb = ["CB"]
+    if position == "Centre-Backs":
+        return df[df['Main Position'].str.contains('|'.join(cb), na=False)]
+
+    gk = ["GK"]
+    if position == "GK":
+        return df[df['Main Position'].str.contains('|'.join(gk), na=False)]
+
+    else:
+        return df
 
 
 def contract_expirations(contract_exp_date):
@@ -1119,7 +1174,7 @@ def scout_report(data_frame, gender, league, season, xtra, template, pos, player
 
 def create_player_research_table(df_basic, mins, full_league_name, pos, min_age, max_age):
     dfProspect = df_basic[(df_basic['Minutes played'] >= mins) & (df_basic['League'] == full_league_name)].copy()
-    dfProspect = filter_by_position(dfProspect, pos)
+    dfProspect = filter_by_position_long(dfProspect, pos)
     
     ########## PROSPECT RESEARCH ##########
     #######################################
@@ -1574,6 +1629,12 @@ with radar_tab:
 
 with filter_tab:
     with st.form('Minimum Percentile Filters'):
+        st.header("Position Selection")
+        pos_select = st.selectbox('Positions', ('Strikers', 'Strikers and Wingers', 'Forwards (AM, W, CF)',
+                                'Forwards no ST (AM, W)', 'Wingers', 'Central Midfielders (DM, CM, CAM)',
+                                'Central Midfielders no CAM (DM, CM)', 'Central Midfielders no DM (CM, CAM)', 'Fullbacks (FBs/WBs)',
+                                'Defenders (CB, FB/WB, DM)', 'Centre-Backs', 'CBs & DMs'))
+
         st.header('Minimum Percentile Filters')
     
         if ['slider1','slider2','slider3','slider4','slider5','slider6','slider7','slider8','slider9','slider10','slider11','slider12','slider13','slider14','slider15','slider16','slider17','slider18','slider19','slider20','slider21','slider22','slider23','slider24','slider25','slider26','slider27','slider28','slider29','slider30','slider31','slider32','slider33'] not in st.session_state:
@@ -1618,7 +1679,7 @@ with filter_tab:
     
 
 with filter_table_tab:
-    final = create_player_research_table(df_basic, mins, full_league_name, pos, ages[0], ages[1])
+    final = create_player_research_table(df_basic, mins, full_league_name, pos_select, ages[0], ages[1])
     player_research_table = final[(final['Accurate short / medium passes, %']>=short) &
                  (final['Accurate long passes, %']>=long) &
                   (final['Smart passes per 90']>=smart) &

@@ -27,7 +27,7 @@ def color_percentile(pc):
     else:
         color = ('#b60918', '#fddbde')  # Below Avg
 
-    return f'background-color: {color[0]}'
+    return f'background-color: {color[1]}'
 
 
 def read_csv(link):

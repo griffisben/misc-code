@@ -233,5 +233,13 @@ with rank_tab:
         weight='bold',
         size=13, color='#4A2E19'
     )
+    fig.text(
+        x=0.15, y=.89,
+        s=f"Data as of {update_day}",
+        ha='left',
+        va='top',
+        weight='regular',
+        size=11, color='#4A2E19'
+    )
 
     fig

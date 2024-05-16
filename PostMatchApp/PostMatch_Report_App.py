@@ -169,7 +169,7 @@ with rank_tab:
     ax.set_xlim(0, ncols + .5)
     ax.set_ylim(0, nrows + 1.5)
     
-    positions = [0.05, 0.3]
+    positions = [0.05, 1]
     columns = indexdf_short.columns.tolist()
     
     # Add table's main text
@@ -221,7 +221,7 @@ with rank_tab:
 
     fig.text(
         x=0.15, y=.9,
-        s=f"USL Championship {rank_var} {rank_method} Rankings",
+        s=f"{rank_var} {rank_method} Rankings",
         ha='left',
         va='bottom',
         weight='bold',

@@ -63,7 +63,7 @@ with st.sidebar:
         num_matches = st.slider('Number of Recent Matches', min_value=1, max_value=5, value=3)
         render_matches = match_list.head(num_matches).Match_Name.tolist()
 
-report_tab, data_tab, graph_tab = st.tabs(['Match Report', 'Data by Match - Table', 'Data by Match - Graph'])
+report_tab, data_tab, graph_tab, rank_tab = st.tabs(['Match Report', 'Data by Match - Table', 'Data by Match - Graph', 'League Rankings'])
 
 for i in range(len(render_matches)):
     match_string = render_matches[i].replace(' ','%20')
@@ -95,6 +95,7 @@ league_data[available_vars] = league_data[available_vars].astype(float)
 
 
 data_tab.write(team_data)
+
 with graph_tab:
     var = st.selectbox('Metric to Plot', available_vars)
     
@@ -135,3 +136,22 @@ with graph_tab:
 
     chart = (c + lg_avg_line + lg_avg_label + team_avg_line + team_avg_label)
     st.altair_chart(chart, use_container_width=True)
+
+with rank_tab:
+    rank_method = st.selectbox('Metric to Plot', ['Median','Total','Average'])
+    rank_var = st.selectbox('Metric to Plot', available_vars)
+
+    if rank_method == 'Median':
+        rank_df = league_data.groupby(['Team'])[available_vars].median().reset_index()
+    if rank_method == 'Total':
+        rank_df = league_data.groupby(['Team'])[available_vars].sum().reset_index()
+    if rank_method == 'Average':
+        rank_df = league_data.groupby(['Team'])[available_vars].mean().reset_index()
+
+    if rank_var in ['xGA','Goals Conceded','Shots Faced','xT Against','xGA per 1 xT Against','PPDA','Fouls']:
+        sort_method = True
+    else:
+        sort_method = False
+
+    rank_df = rank_df.sort_values(by=[rank_var],ascending=sort_method)[['Team',rank_var]]
+    rank_df

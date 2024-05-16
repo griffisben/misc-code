@@ -4,6 +4,8 @@ from PIL import Image
 import requests
 import io
 import altair as alt
+import matplotlib.pyplot as plt
+import seaborn as sns
 
 #########################
 def ben_theme():

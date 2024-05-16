@@ -91,7 +91,13 @@ league_data['xG per 1 xT'] = league_data['xG']/league_data['xT']
 team_data['xGA per 1 xT Against'] = team_data['xGA']/team_data['xT Against']
 league_data['xGA per 1 xT Against'] = league_data['xGA']/team_data['xT Against']
 
-available_vars = ['Possession','xG','xGA','xGD','Goals','Goals Conceded','GD','GD-xGD','Shots','Shots Faced','Field Tilt','Field Tilt - Possession','Passes in Opposition Half','Passes into Box','xT','xT Against','Shots per 1 xT','xG per 1 xT','xGA per 1 xT Against','PPDA','High Recoveries','Crosses','Corners','Fouls']
+available_vars = ['Possession',
+                  # 'xG','xGA','xGD',
+                  'Goals','Goals Conceded',
+                  # 'GD','GD-xGD',
+                  'Shots','Shots Faced','Field Tilt','Field Tilt - Possession','Passes in Opposition Half','Passes into Box','xT','xT Against','Shots per 1 xT',
+                  # 'xG per 1 xT','xGA per 1 xT Against',
+                  'PPDA','High Recoveries','Crosses','Corners','Fouls']
 
 team_data[available_vars] = team_data[available_vars].astype(float)
 league_data[available_vars] = league_data[available_vars].astype(float)

@@ -226,7 +226,7 @@ with rank_tab:
     ax_height = abs(ax_point_1[1] - ax_point_2[1])
 
     fig.text(
-        x=0.14, y=.9,
+        x=0.14, y=.91,
         s=f"{rank_var} {rank_method} Rankings",
         ha='left',
         va='bottom',
@@ -234,7 +234,7 @@ with rank_tab:
         size=13, color='#4A2E19'
     )
     fig.text(
-        x=0.13, y=.89,
+        x=0.14, y=.9,
         s=f"Data as of {update_date}",
         ha='left',
         va='top',

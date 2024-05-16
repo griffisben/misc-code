@@ -138,8 +138,8 @@ with graph_tab:
     st.altair_chart(chart, use_container_width=True)
 
 with rank_tab:
-    rank_method = st.selectbox('Metric to Plot', ['Median','Total','Average'])
-    rank_var = st.selectbox('Metric to Plot', available_vars)
+    rank_method = st.selectbox('Ranking Method', ['Median','Total','Average'])
+    rank_var = st.selectbox('Metric to Rank', available_vars)
 
     if rank_method == 'Median':
         rank_df = league_data.groupby(['Team'])[available_vars].median().reset_index()

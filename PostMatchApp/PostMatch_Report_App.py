@@ -176,10 +176,10 @@ with rank_tab:
     for i in range(nrows):
         for j, column in enumerate(columns):
             if column == 'Team':
-                if j < 10:
-                    text_label = f'{j}   {indexdf_short[column].iloc[i]}'
+                if i < 10:
+                    text_label = f'{i}   {indexdf_short[column].iloc[i]}'
                 else:
-                    text_label = f'{j}  {indexdf_short[column].iloc[i]}'
+                    text_label = f'{i}  {indexdf_short[column].iloc[i]}'
             else:
                 text_label = f'{round(indexdf_short[column].iloc[i],2)}'
             if indexdf_short['Team'].iloc[i] == team:

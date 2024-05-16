@@ -140,7 +140,7 @@ with graph_tab:
     st.altair_chart(chart, use_container_width=True)
 
 with rank_tab:
-    rank_method = st.selectbox('Ranking Method', ['Median','Total','Average'])
+    rank_method = st.selectbox('Ranking Method', ['Average','Total','Median'])
     rank_var = st.selectbox('Metric to Rank', available_vars)
 
     if rank_method == 'Median':

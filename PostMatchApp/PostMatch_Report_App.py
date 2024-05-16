@@ -153,5 +153,77 @@ with rank_tab:
     else:
         sort_method = False
 
-    rank_df = rank_df.sort_values(by=[rank_var],ascending=sort_method)[['Team',rank_var]].reset_index(drop=True)
-    rank_df
+    indexdf_short = rank_df.sort_values(by=[rank_var],ascending=sort_method)[['Team',rank_var]].reset_index(drop=True)
+    
+    sns.set(rc={'axes.facecolor':'#fbf9f4', 'figure.facecolor':'#fbf9f4',
+           'ytick.labelcolor':'#4A2E19', 'xtick.labelcolor':'#4A2E19'})
+
+    fig = plt.figure(figsize=(7,8), dpi=200)
+    ax = plt.subplot()
+    
+    ncols = len(indexdf_short.columns.tolist())+1
+    nrows = indexdf_short.shape[0]
+
+    ax.set_xlim(0, ncols + .5)
+    ax.set_ylim(0, nrows + 1.5)
+    
+    positions = [0.05, 0.3]
+    columns = indexdf_short.columns.tolist()
+    
+    # Add table's main text
+    for i in range(nrows):
+        for j, column in enumerate(columns):
+            text_label = f'{indexdf_short[column].iloc[i]}'
+            if indexdf_short['Team'].iloc[i] == team:
+                t_color = 'dodgerblue'
+                weight = 'bold'
+            else:
+                t_color = '#4A2E19'
+                weight = 'regular'
+            ax.annotate(
+                xy=(positions[j], i + .5),
+                text = text_label,
+                ha='left',
+                va='center', color=t_color,
+                weight=weight
+            )
+            
+    # Add column names
+    column_names = columns
+    for index, cs in enumerate(column_names):
+            ax.annotate(
+                xy=(positions[index], nrows + .25),
+                text=column_names[index],
+                ha='left',
+                va='bottom',
+                weight='bold', color='#4A2E19'
+            )
+
+    # Add dividing lines
+    ax.plot([ax.get_xlim()[0], ax.get_xlim()[1]], [nrows, nrows], lw=1.5, color='black', marker='', zorder=4)
+    ax.plot([ax.get_xlim()[0], ax.get_xlim()[1]], [0, 0], lw=1.5, color='black', marker='', zorder=4)
+    for x in range(1, nrows):
+        ax.plot([ax.get_xlim()[0], ax.get_xlim()[1]], [x, x], lw=1.15, color='gray', ls=':', zorder=3 , marker='')
+    
+    ax.set_axis_off()
+    
+    DC_to_FC = ax.transData.transform
+    FC_to_NFC = fig.transFigure.inverted().transform
+    # -- Take data coordinates and transform them to normalized figure coordinates
+    DC_to_NFC = lambda x: FC_to_NFC(DC_to_FC(x))
+    # -- Add nation axes
+    ax_point_1 = DC_to_NFC([2.25, 0.25])
+    ax_point_2 = DC_to_NFC([2.75, 0.75])
+    ax_width = abs(ax_point_1[0] - ax_point_2[0])
+    ax_height = abs(ax_point_1[1] - ax_point_2[1])
+
+    fig.text(
+        x=0.15, y=.9,
+        s=f"USL Championship {rank_var} {rank_method} Rankings"
+        ha='left',
+        va='bottom',
+        weight='bold',
+        size=13, color='#4A2E19'
+    )
+
+    fig

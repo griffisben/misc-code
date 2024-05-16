@@ -176,7 +176,7 @@ with rank_tab:
     for i in range(nrows):
         for j, column in enumerate(columns):
             if column == 'Team':
-                if nrows-i < 9:
+                if nrows-i < 10:
                     text_label = f'{nrows-i}     {indexdf_short[column].iloc[i]}'
                 else:
                     text_label = f'{nrows-i}   {indexdf_short[column].iloc[i]}'

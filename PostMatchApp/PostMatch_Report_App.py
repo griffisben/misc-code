@@ -219,7 +219,7 @@ with rank_tab:
 
     fig.text(
         x=0.15, y=.9,
-        s=f"USL Championship {rank_var} {rank_method} Rankings"
+        s=f"USL Championship {rank_var} {rank_method} Rankings",
         ha='left',
         va='bottom',
         weight='bold',

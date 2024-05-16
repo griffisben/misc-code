@@ -155,7 +155,7 @@ with rank_tab:
     else:
         sort_method = False
 
-    indexdf_short = rank_df.sort_values(by=[rank_var],ascending=sort_method)[['Team',rank_var]].reset_index(drop=True)
+    indexdf_short = rank_df.sort_values(by=[rank_var],ascending=sort_method)[['Team',rank_var]].reset_index(drop=True)[::-1]
     
     sns.set(rc={'axes.facecolor':'#fbf9f4', 'figure.facecolor':'#fbf9f4',
            'ytick.labelcolor':'#4A2E19', 'xtick.labelcolor':'#4A2E19'})

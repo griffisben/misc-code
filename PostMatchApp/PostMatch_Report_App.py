@@ -153,5 +153,5 @@ with rank_tab:
     else:
         sort_method = False
 
-    rank_df = rank_df.sort_values(by=[rank_var],ascending=sort_method)[['Team',rank_var]]
+    rank_df = rank_df.sort_values(by=[rank_var],ascending=sort_method)[['Team',rank_var]].reset_index(drop=True)
     rank_df

@@ -235,7 +235,7 @@ with rank_tab:
     )
     fig.text(
         x=0.15, y=.89,
-        s=f"Data as of {update_day}",
+        s=f"Data as of {update_date}",
         ha='left',
         va='top',
         weight='regular',

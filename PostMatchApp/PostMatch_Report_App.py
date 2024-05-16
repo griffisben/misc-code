@@ -96,6 +96,7 @@ available_vars = ['Possession','xG','xGA','xGD','Goals','Goals Conceded','GD','G
 team_data[available_vars] = team_data[available_vars].astype(float)
 league_data[available_vars] = league_data[available_vars].astype(float)
 
+league_data_base = league_data.copy()
 
 data_tab.write(team_data)
 
@@ -141,15 +142,16 @@ with graph_tab:
     st.altair_chart(chart, use_container_width=True)
 
 with rank_tab:
+    ranking_base_df = league_data_base.copy()
     rank_method = st.selectbox('Ranking Method', ['Average','Total','Median'])
     rank_var = st.selectbox('Metric to Rank', available_vars)
 
     if rank_method == 'Median':
-        rank_df = league_data.groupby(['Team'])[available_vars].median().reset_index()
+        rank_df = ranking_base_df.groupby(['Team'])[available_vars].median().reset_index()
     if rank_method == 'Total':
-        rank_df = league_data.groupby(['Team'])[available_vars].sum().reset_index()
+        rank_df = ranking_base_df.groupby(['Team'])[available_vars].sum().reset_index()
     if rank_method == 'Average':
-        rank_df = league_data.groupby(['Team'])[available_vars].mean().reset_index()
+        rank_df = ranking_base_df.groupby(['Team'])[available_vars].mean().reset_index()
 
     if rank_var in ['xGA','Goals Conceded','Shots Faced','xT Against','xGA per 1 xT Against','PPDA','Fouls']:
         sort_method = True

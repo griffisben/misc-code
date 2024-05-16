@@ -175,7 +175,10 @@ with rank_tab:
     # Add table's main text
     for i in range(nrows):
         for j, column in enumerate(columns):
-            text_label = f'{indexdf_short[column].iloc[i]}'
+            if column == 'Team':
+                text_label = f'{indexdf_short[column].iloc[i]}'
+            else:
+                text_label = f'{round(indexdf_short[column].iloc[i],2)}'
             if indexdf_short['Team'].iloc[i] == team:
                 t_color = 'dodgerblue'
                 weight = 'bold'

@@ -191,11 +191,11 @@ with rank_tab:
                     text_label = f'{nrows-i}   {indexdf_short[column].iloc[i]}'
             else:
                 text_label = f'{round(indexdf_short[column].iloc[i],2)}'
-            if indexdf_short['Team'].iloc[i] == team:
-                t_color = 'dodgerblue'
-                weight = 'bold'
             if indexdf_short['Team'].iloc[i] == 'Loudoun United':
                 t_color = 'red'
+                weight = 'bold'
+            elif indexdf_short['Team'].iloc[i] == team:
+                t_color = 'dodgerblue'
                 weight = 'bold'
             else:
                 t_color = '#4A2E19'

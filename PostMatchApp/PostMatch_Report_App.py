@@ -194,6 +194,9 @@ with rank_tab:
             if indexdf_short['Team'].iloc[i] == team:
                 t_color = 'dodgerblue'
                 weight = 'bold'
+            if indexdf_short['Team'].iloc[i] == 'Loudoun United':
+                t_color = 'red'
+                weight = 'bold'
             else:
                 t_color = '#4A2E19'
                 weight = 'regular'

@@ -97,10 +97,10 @@ Shot-Stopping Distributor,GK,single,either,any,5,Shot-Stopping Distributor,343,G
 Spurs LCB,CB,single,either,any,5,Wide CB,343,LCB,20,115
 Ball Playing CB,CB,single,either,any,5,Ball Playing CB,343,CB,20,50
 Spurs LCB,CB,single,either,any,5,Wide CB,343,RCB,20,-15
-Inverted FB,Fullback,mult,either,any,5,Inverted FB,343,LB,45,115
-Attacking FB,Fullback,mult,either,any,5,Attacking FB,343,RB,45,-15
-Progressive Midfielder,Midfielder no CAM,mult,either,any,5,Progressive Midfielder,343,RCM,60,12.5
-Advanced Playmaker,Midfielder no DM,mult,either,any,5,Advanced Playmaker,343,LCM,60,87.5
-Playmaking Winger,Winger,mult,either,any,5,Playmaking Winger,343,RW,90,-15
-Traditional Winger,Winger,mult,either,any,5,Traditional Winger,343,LW,90,115
+Inverted FB,Fullback,mult,either,any,5,Inverted FB,343,LB,43,115
+Attacking FB,Fullback,mult,either,any,5,Attacking FB,343,RB,43,-15
+Progressive Midfielder,Midfielder no CAM,mult,either,any,5,Progressive Midfielder,343,RCM,65,12.5
+Advanced Playmaker,Midfielder no DM,mult,either,any,5,Advanced Playmaker,343,LCM,65,87.5
+Playmaking Winger,Winger,mult,either,any,5,Playmaking Winger,343,RW,85,-15
+Traditional Winger,Winger,mult,either,any,5,Traditional Winger,343,LW,85,115
 Deep-Lying Striker,CF,single,either,any,5,Deep-Lying Striker,343,ST,95,50

@@ -6,6 +6,9 @@ Spurs LCB,CB,single,either,any,5,Wide CB,LCB
 Ball Playing CB,CB,single,either,any,5,Ball Playing CB,RCB
 CB,CB,single,either,any,5,Defensive CB,RCB
 Spurs LCB,CB,single,either,any,5,Wide CB,RCB
+Ball Playing CB,CB,single,either,any,5,Ball Playing CB,CB
+CB,CB,single,either,any,5,Defensive CB,CB
+Spurs LCB,CB,single,either,any,5,Wide CB,CB
 Attacking FB,Fullback,mult,either,LB|LWB,5,Attacking LB,LB
 Inverted FB,Fullback,mult,either,LB|LWB,5,Inverted LB,LB
 Inverted FB,Fullback,mult,either,LB|LWB,5,Defensive LB,LB

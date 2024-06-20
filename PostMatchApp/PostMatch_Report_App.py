@@ -113,10 +113,10 @@ with graph_tab:
     team_avg_var = team_data[var].mean()
     
     c = (
-       alt.Chart(team_data[::-1], title=alt.Title(
-       f"{team} {var}, {league}",
-       subtitle=[f"Data via Opta | Data as of {update_date}"]
-   ))
+       alt.Chart(team_data[::-1],
+                 title=f"{team} {var}, {league}",
+                 subtitle=[f"Data via Opta | Data as of {update_date}"]
+   )
        .mark_line(point=True)
        .encode(x=alt.X('Date', sort=None), y=alt.Y(var).scale(zero=False), tooltip=['Match','Date',var,'Possession','xGD','GD'])
     )

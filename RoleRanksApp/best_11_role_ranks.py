@@ -15,7 +15,7 @@ from PIL import Image
 from highlight_text import fig_text
 import urllib.request
 matplotlib.rcParams.update(matplotlib.rcParamsDefault)
-@st.cache_data(ttl=6*60*60)
+@st.cache_data(ttl=60*15)
 
 def color_percentile(pc):
     if 1-pc <= 0.1:
@@ -1524,12 +1524,12 @@ for i in range(0,11):
 
 axs['title'].text(0.5, 1.5, f'{season} {lg},{team_text}',
                  ha='center',va='bottom', size=20, weight='bold', color='#4a2e19')
-axs['title'].text(0.5, 1.35, f'Data via Wyscout | {lg_lookup[(lg_lookup.League==lg) & (lg_lookup.Season==season)].Date.values[0]} | Created by Ben Griffis',
+axs['title'].text(0.5, 1.35, f'Data via Wyscout | {lg_lookup[(lg_lookup.League==lg) & (lg_lookup.Season==season)].Date.values[0]} | Created by Ben Griffis (@BeGriffis on Twitter)',
                  ha='center',va='top', size=12, color='#4a2e19')
 axs['title'].text(0.5, .95, sub_title_text,
                  ha='center',va='top', size=12, color='#4a2e19')
-#axs['title'].text(0.5, .6, f'Generated on best11roleranks.streamlit.app',
-#                 ha='center',va='top', size=12, style='italic', color='#4a2e19')
+axs['title'].text(0.5, .6, f'Generated on best11roleranks.streamlit.app',
+                 ha='center',va='top', size=12, style='italic', color='#4a2e19')
 
 if normalize_to_100 == 'Yes':
     axs['endnote'].text(0.5, -.3, f"Scores are gnerated by weighting z-scores of various metrics important to each role-position\nScores normalized so that the top player's score is 100 and the worst score is 0",

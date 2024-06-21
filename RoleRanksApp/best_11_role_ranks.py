@@ -1780,15 +1780,6 @@ with notes_tab:
         7.5% Accelerations with the ball  \n
         7.5% Cross completion %
         ''')
-    with st.expander('Defensive FB'):
-        st.write('''
-        A FB who is mainly tasked with defending. Their primary goal is to lock down their flank, rather than get forward to impact near the box or cross.  \n
-        45% Defensive duel win %  \n
-        20% Fouls (reverse-coded; more = bad)  \n
-        15% Aerial win %  \n
-        10% Possession-adjusted tackles  \n
-        10% Possession-adjusted interceptions
-        ''')
     with st.expander('Inverted FB'):
         st.write('''
         A FB who is able to invert into midfield & impact the game from central areas. They are tasked with enabling possession but given their position, still have to be strong defensively like a DM.  \n
@@ -1798,3 +1789,40 @@ with notes_tab:
         15% Percentage of passes that are short  \n
         10% Defensive duel win %
         ''')
+    with st.expander('Defensive FB'):
+        st.write('''
+        A FB who is mainly tasked with defending. Their primary goal is to lock down their flank, rather than get forward to impact near the box or cross.  \n
+        45% Defensive duel win %  \n
+        20% Fouls (reverse-coded; more = bad)  \n
+        15% Aerial win %  \n
+        10% Possession-adjusted tackles  \n
+        10% Possession-adjusted interceptions
+        ''')
+    with st.expander('Possession Enabler'):
+        st.write('''
+        A DM or CM who is tasked primarily with retaining & recycling possession. These players will be extremely tidy on the ball and relish passing laterally to facilitate their team's possessions. Risky forward/long balls may be a part of this player's arsenal but will be played sparingly.  \n
+        30% Percentage of passes that are short  \n
+        25% Short pass completion %  \n
+        20% Percentage of passes that are not 'smart' (Wyscout defines as risky passes looking to open attacking opportunities)  \n
+        15% Passes attempted  \n
+        10% Fouls (reverse-coded; more = bad)
+        ''')
+    with st.expander('Defensive Mid'):
+        st.write('''
+        A DM or CM who is very defensively-minded and able to be a rock in front of their CBs. They are tasked with winning the ball back cleanly, both on the ground and in the air, and are often able to use their size advantage over opposing CMs & CAMs to do so. What they do after winning the ball back (safe pass, splitting vertical, big carry etc) is not important for this model.  \n
+        45% Defensive duel win %  \n
+        20% Fouls (reverse-coded; more = bad)  \n
+        15% Aerial win %  \n
+        10% Possession-adjusted tackles  \n
+        10% Possession-adjusted interceptions
+        ''')
+    with st.expander('Number 6'):
+        st.write('''
+        A DM or CM who can not only regain possession, but retain possession with ease. They are not the creative spark of the team, but typically the strong single-pivot in a 3-player midfield. This role is somewhat of a cross between the Defensive Mid and the Possession Enabler. They typically stamp their mark on a high % of their team's possessions as well.  \n
+        30% Defensive duel win %  \n
+        25% Short pass completion %  \n
+        20% Percentage of passes that are short  \n
+        15% Attacking duel win % (includes dribbles, ball shields when being pressed, etc.)  \n
+        10% Fouls (reverse-coded; more = bad)
+        ''')
+

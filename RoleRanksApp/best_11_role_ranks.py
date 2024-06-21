@@ -1780,5 +1780,21 @@ with notes_tab:
         7.5% Accelerations with the ball  \n
         7.5% Cross completion %
         ''')
-
-
+    with st.expander('Defensive FB'):
+        st.write('''
+        A FB who is mainly tasked with defending. Their primary goal is to lock down their flank, rather than get forward to impact near the box or cross.  \n
+        45% Defensive duel win %  \n
+        20% Fouls (reverse-coded; more = bad)  \n
+        15% Aerial win %  \n
+        10% Possession-adjusted tackles  \n
+        10% Possession-adjusted interceptions
+        ''')
+    with st.expander('Inverted FB'):
+        st.write('''
+        A FB who is able to invert into midfield & impact the game from central areas. They are tasked with enabling possession but given their position, still have to be strong defensively like a DM.  \n
+        35% Passes attempted  \n
+        20% Progressive passes  \n
+        20% Possession-adjusted tackles+interceptions  \n
+        15% Percentage of passes that are short  \n
+        10% Defensive duel win %
+        ''')

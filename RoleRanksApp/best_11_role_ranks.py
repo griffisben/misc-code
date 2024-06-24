@@ -1470,8 +1470,10 @@ show_ranks = rank_list[['Player','Team','Age','Squad Position','Player Pos.','Sc
 
 path_eff = [path_effects.Stroke(linewidth=0.5, foreground='#fbf9f4'), path_effects.Normal()]
 
-def make_fig(ages,exp_contracts,rank_11_base,show_ranks,season,lg,normalize_to_100,team_text):
+show_ranks2 = show_ranks.copy()
+def make_fig(ages,exp_contracts,rank_11_base,show_ranks2,season,lg,normalize_to_100,team_text):
     plt.clf()
+    show_ranks = show_ranks2
     pitch = VerticalPitch(pitch_type='opta', pitch_color='#fbf9f4', line_color='#fbf9f4', line_zorder=1, half=False)
     fig, axs = pitch.grid(endnote_height=0.045, endnote_space=0, figheight=12,
                           title_height=0.045, title_space=0,

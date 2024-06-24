@@ -1548,7 +1548,8 @@ show_ranks = show_ranks[['Player','Team','Age','Squad Position','Player Pos.','S
 image_tab, table_tab, radar_tab, filter_tab, filter_table_tab, notes_tab = st.tabs(['Role Ranking Image', 'Role Ranking Table', 'Player Radar Generation', 'Player Search, Filters', 'Player Search, Results', 'Role Score Definitions & Calculations'])
 
 with image_tab:
-    st.image(make_fig(ages,exp_contracts,rank_11_base,show_ranks2,season,lg,normalize_to_100,team_text))
+    fig = make_fig(ages,exp_contracts,rank_11_base,show_ranks2,season,lg,normalize_to_100,team_text)
+    fig
 
 with table_tab:
     with st.expander('All Roles'):

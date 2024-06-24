@@ -1470,81 +1470,83 @@ show_ranks = rank_list[['Player','Team','Age','Squad Position','Player Pos.','Sc
 
 path_eff = [path_effects.Stroke(linewidth=0.5, foreground='#fbf9f4'), path_effects.Normal()]
 
-pitch = VerticalPitch(pitch_type='opta', pitch_color='#fbf9f4', line_color='#fbf9f4', line_zorder=1, half=False)
-fig, axs = pitch.grid(endnote_height=0.045, endnote_space=0, figheight=12,
-                      title_height=0.045, title_space=0,
-                      axis=False,
-                      grid_height=0.86)
-fig.set_facecolor('#fbf9f4')
-
-if ages[0] == 0 and ages[1] == 45:
-    age_text = f'Minimum {mins} minutes played'
-elif ages[0] == 0:
-    age_text = f'Min. {mins}% of season played | U{ages[1]} players only'
-elif ages[1] == 45:
-    age_text = f'Min. {mins}% of season played | Players {ages[0]} & older'
-else:
-    age_text = f'Min. {mins}% of season played | Players between {ages[0]} & {ages[1]}'
-
-if exp_contracts == 'y':
-    exp_text = f'Players out of contract by {expiration_date} (per Wyscout)'
-else:
-    exp_text = ''
-
-if exp_text == '':
-    sub_title_text = age_text
-else:
-    sub_title_text = f"{age_text} | {exp_text}"
-
-for i in range(0,11):
-    X = rank_11_base[(rank_11_base.form_pos == formation_positions[formation][i]) & (rank_11_base.formation == formation)].x.values[0]
-    Y = rank_11_base[(rank_11_base.form_pos == formation_positions[formation][i]) & (rank_11_base.formation == formation)].y.values[0]
+def make_fig(ages,exp_contracts,rank_11_base,show_ranks,season,lg,normalize_to_100,team_text):
+    plt.clf()
+    pitch = VerticalPitch(pitch_type='opta', pitch_color='#fbf9f4', line_color='#fbf9f4', line_zorder=1, half=False)
+    fig, axs = pitch.grid(endnote_height=0.045, endnote_space=0, figheight=12,
+                          title_height=0.045, title_space=0,
+                          axis=False,
+                          grid_height=0.86)
+    fig.set_facecolor('#fbf9f4')
+    
+    if ages[0] == 0 and ages[1] == 45:
+        age_text = f'Minimum {mins} minutes played'
+    elif ages[0] == 0:
+        age_text = f'Min. {mins}% of season played | U{ages[1]} players only'
+    elif ages[1] == 45:
+        age_text = f'Min. {mins}% of season played | Players {ages[0]} & older'
+    else:
+        age_text = f'Min. {mins}% of season played | Players between {ages[0]} & {ages[1]}'
+    
+    if exp_contracts == 'y':
+        exp_text = f'Players out of contract by {expiration_date} (per Wyscout)'
+    else:
+        exp_text = ''
+    
+    if exp_text == '':
+        sub_title_text = age_text
+    else:
+        sub_title_text = f"{age_text} | {exp_text}"
+    
+    for i in range(0,11):
+        X = rank_11_base[(rank_11_base.form_pos == formation_positions[formation][i]) & (rank_11_base.formation == formation)].x.values[0]
+        Y = rank_11_base[(rank_11_base.form_pos == formation_positions[formation][i]) & (rank_11_base.formation == formation)].y.values[0]
     
         
-    adj = -4
-
-    show_players = len(show_ranks[show_ranks['Formation Pos.']==formation_positions[formation][i]].head(7))
-    for j in range(show_players):
-        player = show_ranks[show_ranks['Formation Pos.']==formation_positions[formation][i]].Player.iloc[j]
-        age = show_ranks[show_ranks['Formation Pos.']==formation_positions[formation][i]].Age.iloc[j]
-        pteam = show_ranks[show_ranks['Formation Pos.']==formation_positions[formation][i]].Team.iloc[j]
-        score = show_ranks[show_ranks['Formation Pos.']==formation_positions[formation][i]].Score.iloc[j]
-        role_rank = int(show_ranks[show_ranks['Formation Pos.']==formation_positions[formation][i]]['Role Rank'].iloc[j])
-
-        if j == 0:
-            pos_desc = show_ranks[show_ranks['Formation Pos.']==formation_positions[formation][i]]['Squad Position'].iloc[0]
-            axs['pitch'].text(Y, X+6.25, pos_desc,
-                             ha='center', va='center', color='#4a2e19', size=11, zorder=3,
-                              weight='bold', path_effects=path_eff)
+        adj = -4
     
-        axs['pitch'].text(Y, X-adj, f"{player} ({age}, {pteam}) {score}, #{role_rank}",
-                         ha='center', va='center', color='#4c94f6', size=9, zorder=3,
-                          weight='bold', path_effects=path_eff)
-        adj += 2
+        show_players = len(show_ranks[show_ranks['Formation Pos.']==formation_positions[formation][i]].head(7))
+        for j in range(show_players):
+            player = show_ranks[show_ranks['Formation Pos.']==formation_positions[formation][i]].Player.iloc[j]
+            age = show_ranks[show_ranks['Formation Pos.']==formation_positions[formation][i]].Age.iloc[j]
+            pteam = show_ranks[show_ranks['Formation Pos.']==formation_positions[formation][i]].Team.iloc[j]
+            score = show_ranks[show_ranks['Formation Pos.']==formation_positions[formation][i]].Score.iloc[j]
+            role_rank = int(show_ranks[show_ranks['Formation Pos.']==formation_positions[formation][i]]['Role Rank'].iloc[j])
+    
+            if j == 0:
+                pos_desc = show_ranks[show_ranks['Formation Pos.']==formation_positions[formation][i]]['Squad Position'].iloc[0]
+                axs['pitch'].text(Y, X+6.25, pos_desc,
+                                 ha='center', va='center', color='#4a2e19', size=11, zorder=3,
+                                  weight='bold', path_effects=path_eff)
+        
+            axs['pitch'].text(Y, X-adj, f"{player} ({age}, {pteam}) {score}, #{role_rank}",
+                             ha='center', va='center', color='#4c94f6', size=9, zorder=3,
+                              weight='bold', path_effects=path_eff)
+            adj += 2
+    
+    axs['title'].text(0.5, 1.5, f'{season} {lg},{team_text}',
+                     ha='center',va='bottom', size=20, weight='bold', color='#4a2e19')
+    axs['title'].text(0.5, 1.35, f'Data via Wyscout | {lg_lookup[(lg_lookup.League==lg) & (lg_lookup.Season==season)].Date.values[0]} | Created by Ben Griffis (@BeGriffis on Twitter)',
+                     ha='center',va='top', size=12, color='#4a2e19')
+    axs['title'].text(0.5, .95, sub_title_text,
+                     ha='center',va='top', size=12, color='#4a2e19')
+    axs['title'].text(0.5, .6, f'Generated on best11roleranks.streamlit.app',
+                     ha='center',va='top', size=12, style='italic', color='#4a2e19')
 
-axs['title'].text(0.5, 1.5, f'{season} {lg},{team_text}',
-                 ha='center',va='bottom', size=20, weight='bold', color='#4a2e19')
-axs['title'].text(0.5, 1.35, f'Data via Wyscout | {lg_lookup[(lg_lookup.League==lg) & (lg_lookup.Season==season)].Date.values[0]} | Created by Ben Griffis (@BeGriffis on Twitter)',
-                 ha='center',va='top', size=12, color='#4a2e19')
-axs['title'].text(0.5, .95, sub_title_text,
-                 ha='center',va='top', size=12, color='#4a2e19')
-axs['title'].text(0.5, .6, f'Generated on best11roleranks.streamlit.app',
-                 ha='center',va='top', size=12, style='italic', color='#4a2e19')
-
-if normalize_to_100 == 'Yes':
-    axs['endnote'].text(0.5, -.3, f"Scores are gnerated by weighting z-scores of various metrics important to each role-position\nScores normalized so that the top player's score is 100 and the worst score is 0",
-                     ha='center',va='top', size=10, color='#4a2e19')
-else:
-    axs['endnote'].text(0.5, -.3, f"Scores are gnerated by weighting z-scores of various metrics important to each role-position",
-                     ha='center',va='top', size=10, color='#4a2e19')
-
+    if normalize_to_100 == 'Yes':
+        axs['endnote'].text(0.5, -.3, f"Scores are gnerated by weighting z-scores of various metrics important to each role-position\nScores normalized so that the top player's score is 100 and the worst score is 0",
+                         ha='center',va='top', size=10, color='#4a2e19')
+    else:
+        axs['endnote'].text(0.5, -.3, f"Scores are gnerated by weighting z-scores of various metrics important to each role-position",
+                         ha='center',va='top', size=10, color='#4a2e19')
+    return fig
 
 show_ranks = show_ranks[['Player','Team','Age','Squad Position','Player Pos.','Score','Role Rank']].copy()
 
 image_tab, table_tab, radar_tab, filter_tab, filter_table_tab, notes_tab = st.tabs(['Role Ranking Image', 'Role Ranking Table', 'Player Radar Generation', 'Player Search, Filters', 'Player Search, Results', 'Role Score Definitions & Calculations'])
 
 with image_tab:
-    fig
+    make_fig(ages,exp_contracts,rank_11_base,show_ranks,season,lg,normalize_to_100,team_text)
 
 with table_tab:
     with st.expander('All Roles'):

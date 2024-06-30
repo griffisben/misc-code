@@ -167,6 +167,7 @@ def load_league_data(data, league_season):
     df = data
     df = df[df['League']==league_season].reset_index(drop=True)
 
+    df['Lateral passes per 90'] = df['Passes per 90'] - df['Vertical passes per 90'] - df['Back passes per 90']
     df['pAdj Tkl+Int per 90'] = df['PAdj Sliding tackles'] + df['PAdj Interceptions']
     df['1st, 2nd, 3rd assists'] = df['Assists per 90'] + df['Second assists per 90'] + df['Third assists per 90']
     df['xA per Shot Assist'] = df['xA per 90'] / df['Shot assists per 90']

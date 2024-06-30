@@ -181,6 +181,8 @@ def load_league_data(data, league_season):
     df['Prog passes and runs per 90'] = df['Progressive passes per 90'] + df['Progressive runs per 90']
     df['Set pieces per 90'] = df['Corners per 90'] + df['Free kicks per 90']
     df['Pct of passes being smart'] = df['Smart passes per 90'] / df['Passes per 90'] * 100
+    df['Pct of passes being lateral'] = df['Lateral passes per 90'] / df['Passes per 90'] * 100
+    df['Goals pervented %'] = (df['xG against per 90'] - df['Conceded goals per 90']) / df['xG against per 90'] * 100
 
     df = df.dropna(subset=['Position']).reset_index(drop=True)
 
@@ -296,16 +298,19 @@ def make_rankings(formation, mins, data, role_position_df, leagues, exp_contract
             def11 = "Progressive passes per 90"
             def12 = "Progressive runs per 90"
             #GOALKEEPER
-            gk1 = "Conceded goals per 90" #yes
-            gk2 = "Save rate, %" #yes
+            gk1 = "Conceded goals per 90" #a2
+            gk2 = "Save rate, %" #a3
             gk3 = "Dribbles per 90"
-            gk4 = "Pct of passes being short" #yes
+            gk4 = "Pct of passes being short" #b3
             gk5 = "Clean sheets, %"
-            gk6 = "Exits per 90"
+            gk6 = "Exits per 90" #a5
             gk7 = "Aerial duels per 90"
-            gk8 = "Passes per 90" #############
-            gk9 = "Accurate long passes, %" #yes
-            gk10 = "Prevented goals per 90" #yes
+            gk8 = "Passes per 90" #b2
+            gk9 = "Accurate long passes, %" #b5
+            gk10 = "Prevented goals per 90" #a4
+            gk11 = 'Shots against per 90' #a1
+            gk12 = 'Pct of passes being lateral' #b4
+            gk13 = 'Received passes per 90' #b1
             #EXTRA
             extra = "Accurate passes, %"
             extra2 = 'Shots per 90'
@@ -324,7 +329,7 @@ def make_rankings(formation, mins, data, role_position_df, leagues, exp_contract
             extra15 = 'Accurate short / medium passes, %'
             extra16 = 'Passes per 90'
             extra17 = 'Aerial duels per 90'
-            extra18 = 'Received passes per 90'
+            extra18 = 'Received passes per 90' #b1
             extra19 = 'Passes to final third per 90'
             extra20 = 'Prog passes and runs per 90'
             extra21 = 'Set pieces per 90'
@@ -383,6 +388,9 @@ def make_rankings(formation, mins, data, role_position_df, leagues, exp_contract
             dfProspect["gkpct8"] = stats.zscore(dfProspect[gk8])
             dfProspect["gkpct9"] = stats.zscore(dfProspect[gk9])
             dfProspect["gkpct10"] = stats.zscore(dfProspect[gk10])
+            dfProspect["gkpct11"] = stats.zscore(dfProspect[gk11])
+            dfProspect["gkpct12"] = stats.zscore(dfProspect[gk12])
+            dfProspect["gkpct13"] = stats.zscore(dfProspect[gk13])
             dfProspect["extrapct"] = stats.zscore(dfProspect[extra])
             dfProspect["extrapct2"] = stats.zscore(dfProspect[extra2])
             dfProspect["extrapct3"] = stats.zscore(dfProspect[extra3])
@@ -407,7 +415,6 @@ def make_rankings(formation, mins, data, role_position_df, leagues, exp_contract
             dfProspect["extrapct22"] = stats.zscore(dfProspect[extra22])
             dfProspect["extrapct23"] = 1-stats.zscore(dfProspect[extra23]) * -1 #####
             dfProspect["extrapct24"] = stats.zscore(dfProspect[extra24])
-
             
             # The first line in this loop is how I get the z-scores to start at 0. I checked the distribution chart at the bottom, and it's the same shape of course
             # the second line normalizes
@@ -791,16 +798,20 @@ def scout_report(data_frame, gender, league, season, xtra, template, pos, player
     def11 = "Progressive passes per 90"
     def12 = "Progressive runs per 90"
     # GOALKEEPER
-    gk1 = "Conceded goals per 90"
-    gk2 = "Prevented goals per 90"
-    gk3 = "Shots against per 90"
-    gk4 = "Save rate, %"
+    gk1 = "Conceded goals per 90" #a2
+    gk2 = "Prevented goals per 90" #a4
+    gk3 = "Shots against per 90" #a1
+    gk4 = "Save rate, %" #a3
     gk5 = "Clean sheets, %"
-    gk6 = "Exits per 90"
+    gk6 = "Exits per 90" #a5
     gk7 = "Aerial duels per 90"
-    gk8 = "Passes per 90"
-    gk9 = "Accurate long passes, %"
+    gk8 = "Passes per 90" #b2
+    gk9 = "Accurate long passes, %" #b5
     gk10 = "Average long pass length, m"
+    gk11 = 'Pct of passes being short' #b3
+    gk12 = "Pct of passes being lateral" #b4
+    gk13 = "Received passes per 90" #b1
+    gk14 = "Goals prevented %" #a4
     # OTHERS
     extra = "Accurate passes, %"
     extra2 = 'Shots per 90'
@@ -820,22 +831,25 @@ def scout_report(data_frame, gender, league, season, xtra, template, pos, player
         'midpct8', 'midpct9', 'midpct10', 'midpct11', 'midpct12',
         'fwdpct1', 'fwdpct2', 'fwdpct3', 'fwdpct4', 'fwdpct5', 'fwdpct6', 'fwdpct7',
         'fwdpct8', 'fwdpct9', 'fwdpct10', 'fwdpct11', 'fwdpct12',
+        'gkpct2', 'gkpct4', 'gkpct5', 'gkpct6', 'gkpct7',
+        'gkpct8', 'gkpct9', 'gkpct10', 'gkpct11', 'gkpct12', 'gkpct13', 'gkpct14',
         'defpct1','defpct2','defpct3','defpct6','defpct7','defpct8','defpct9','defpct10','defpct11','defpct12',
         'extrapct','extrapct2','extrapct3','extrapct4','extrapct5','extrapct6','extrapct7','extrapct8','extrapct9','extrapct10',
     ]
     inverse_ranked_columns = [
-        'defpct4','defpct5'
+        'defpct4','defpct5','gkpct1','gkpct3'
     ]
     ranked_columns_r = [
         mid1, mid2, mid3, mid4, mid5, mid6, mid7,
         mid8, mid9, mid10, mid11, mid12,
         fwd1, fwd2, fwd3, fwd4, fwd5, fwd6, fwd7,
         fwd8, fwd9, fwd10, fwd11, fwd12,
+        gk2, gk4, gk5, gk6, gk7, gk8, gk9, gk10, gk11, gk12, gk13, gk14
         def1,def2,def3,def6,def7,def8,def9,def10,def11,def12,
         extra,extra2,extra3,extra4,extra5,extra6,extra7,extra8,extra9,extra10,
     ]
     inverse_ranked_columns_r = [
-        def4,def5
+        def4,def5,gk1,gk3
     ]
     
     dfProspect[ranked_columns] = 0.0
@@ -917,7 +931,21 @@ def scout_report(data_frame, gender, league, season, xtra, template, pos, player
             'defpct4': "Fouls",
             'defpct5': "Cards",
             'extrapct8': 'Fouls Drawn'
+        },
+        'gk': {
+            'gkpct3': 'Shots\nAgainst',
+            'gkpct1': "Goals\nConceded",
+            'gkpct4': "Save %",
+            'gkpct14': "Goals\nPrevented %",
+            'gkpct2': 'Prevented\nGoals',
+            'gkpct6': "Coming Off\nLine",
+            'gkpct13': 'Received\nPasses',
+            'gkpct8': "Passes",
+            'gkpct11': "% of Passes\nBeing Short",
+            'gkpct12': "% of Passes\nBeing Lateral",
+            'gkpct9': "Long Pass\nCmp %",
         }
+
     }
     if template == 'attacking':
         raw_vals = raw_valsdf[["Player",
@@ -940,6 +968,11 @@ def scout_report(data_frame, gender, league, season, xtra, template, pos, player
                            def9, def10, def11,def12,fwd5,extra6,mid5,
                            def4,def5,extra8,
                           ]]
+    if template == 'gk':
+        raw_vals = raw_valsdf[["Player",
+                           gk3, gk1, gk4, gk14, gk2, gk6,
+                           gk13, gk8, gk11, gk12, gk9
+                          ]]
 
     if template in column_mapping:
         selected_columns = column_mapping[template]
@@ -948,24 +981,6 @@ def scout_report(data_frame, gender, league, season, xtra, template, pos, player
 #         raw_vals = raw_valsdf[['Player'] + list(selected_columns.values())]
 
 
-
-#         if template == 'gk':
-#             dfRadarMF = dfRadarMF[["Player",
-#                                    'gkpct1','gkpct2','gkpct3','gkpct4','gkpct5',
-#                                    'gkpct6','gkpct7','gkpct8','gkpct9','gkpct10'
-#                                   ]]
-#             dfRadarMF.rename(columns={'gkpct1': 'Goals\nConceded',
-#                                       'gkpct2': "Goals Prevented\nvs Expected",
-#                                       'gkpct3': "Shots Against",
-#                                       'gkpct4': "Save %",
-#                                       'gkpct5': "Clean Sheet %",
-#                                       'gkpct6': 'Att. Cross Claims\nor Punches',
-#                                       'gkpct7': "Aerial Wins",
-#                                       'gkpct8': "Passes",
-#                                       'gkpct9': 'Long Passes',
-#                                       'gkpct10': "Long\nPass %",
-#                                      }, inplace=True)
-#             print('Number of players comparing to:',len(dfProspect))
 
     ###########################################################################
 
@@ -1009,6 +1024,13 @@ def scout_report(data_frame, gender, league, season, xtra, template, pos, player
                 df1['Group'][i] = 'Attacking'
             elif df1['Group'][i] <= 17:
                 df1['Group'][i] = 'Fouling'
+                
+    if template == 'gk':
+        for i in range(len(df1)):
+            if df1['Group'][i] <= 6:
+                df1['Group'][i] = 'Defending'
+            elif df1['Group'][i] <= 11:
+                df1['Group'][i] = 'Attacking'
 
 
 
@@ -1038,7 +1060,7 @@ def scout_report(data_frame, gender, league, season, xtra, template, pos, player
         'attacking': [4, 6, 6, 4, 3],
         'defensive': [7, 9, 3],
         'cb': [7, 7, 3],
-        'gk': [5, 5]
+        'gk': [6, 5]
     }
 
     GROUPS_SIZE = template_group_sizes.get(template, [])
@@ -1232,17 +1254,20 @@ def create_player_research_table(df_basic, mins, full_league_name, pos, min_age,
     def10 = "1st, 2nd, 3rd assists"
     def11 = "Progressive passes per 90"
     def12 = "Progressive runs per 90"
-    # #GOALKEEPER
-    # gk1 = "Conceded goals per 90"
-    # gk2 = "Prevented goals per 90"
-    # gk3 = "Shots against per 90"
-    # gk4 = "Save rate, %"
-    # gk5 = "Clean sheets, %"
-    # gk6 = "Exits per 90"
-    # gk7 = "Aerial duels per 90"
-    # gk8 = "Passes per 90"
-    # gk9 = "Accurate long passes, %"
-    # gk10 = "Average long pass length, m"
+    #GOALKEEPER
+    gk1 = "Conceded goals per 90" #a2
+    gk2 = "Save rate, %" #a3
+    gk3 = "Dribbles per 90"
+    gk4 = "Pct of passes being short" #b3
+    gk5 = "Clean sheets, %"
+    gk6 = "Exits per 90" #a5
+    gk7 = "Aerial duels per 90"
+    gk8 = "Passes per 90" #b2
+    gk9 = "Accurate long passes, %" #b5
+    gk10 = "Prevented goals per 90" #a4
+    gk11 = 'Shots against per 90' #a1
+    gk12 = 'Pct of passes being lateral' #b4
+    gk13 = 'Received passes per 90' #b1
     #EXTRA
     extra = "Accurate passes, %"
     extra2 = 'Shots per 90'
@@ -1260,22 +1285,25 @@ def create_player_research_table(df_basic, mins, full_league_name, pos, min_age,
         'midpct8', 'midpct9', 'midpct10', 'midpct11', 'midpct12',
         'fwdpct1', 'fwdpct2', 'fwdpct3', 'fwdpct4', 'fwdpct5', 'fwdpct6', 'fwdpct7',
         'fwdpct8', 'fwdpct9', 'fwdpct10', 'fwdpct11', 'fwdpct12',
+        'gkpct2', 'gkpct4', 'gkpct5', 'gkpct6', 'gkpct7',
+        'gkpct8', 'gkpct9', 'gkpct10', 'gkpct11', 'gkpct12', 'gkpct13', 'gkpct14',
         'defpct1','defpct2','defpct3','defpct6','defpct7','defpct8','defpct9','defpct10','defpct11','defpct12',
         'extrapct','extrapct2','extrapct3','extrapct4','extrapct5','extrapct6','extrapct7','extrapct8','extrapct9','extrapct10',
     ]
     inverse_ranked_columns = [
-        'defpct4','defpct5'
+        'defpct4','defpct5','gkpct1','gkpct3'
     ]
     ranked_columns_r = [
         mid1, mid2, mid3, mid4, mid5, mid6, mid7,
         mid8, mid9, mid10, mid11, mid12,
         fwd1, fwd2, fwd3, fwd4, fwd5, fwd6, fwd7,
         fwd8, fwd9, fwd10, fwd11, fwd12,
+        gk2, gk4, gk5, gk6, gk7, gk8, gk9, gk10, gk11, gk12, gk13, gk14
         def1,def2,def3,def6,def7,def8,def9,def10,def11,def12,
         extra,extra2,extra3,extra4,extra5,extra6,extra7,extra8,extra9,extra10,
     ]
     inverse_ranked_columns_r = [
-        def4,def5
+        def4,def5,gk1,gk3
     ]
     
     dfProspect[ranked_columns] = 0.0
@@ -1289,7 +1317,7 @@ def create_player_research_table(df_basic, mins, full_league_name, pos, min_age,
     
     final = dfProspect[['Player','Age','League','Position','Team within selected timeframe','Birth country',
     'fwdpct1','fwdpct2','fwdpct5','fwdpct6','fwdpct11','midpct1','midpct3','midpct4','midpct5','midpct6','midpct7','midpct8','midpct9','midpct10','midpct11','midpct12','defpct1','defpct2','defpct3','defpct4','defpct5','defpct6','defpct7','defpct8','defpct9','defpct10',
-    #                     'gkpct1','gkpct2','gkpct3','gkpct4','gkpct5','gkpct6','gkpct7','gkpct8','gkpct10',
+                        'gkpct1','gkpct2','gkpct3','gkpct4','gkpct6','gkpct8','gkpct9', 'gkpct11', 'gkpct12', 'gkpct13', 'gkpct14',
                         'extrapct','extrapct2','extrapct3','extrapct4','extrapct5','extrapct6','extrapct7','extrapct8','extrapct9','extrapct10',
     ]]
     
@@ -1319,15 +1347,17 @@ def create_player_research_table(df_basic, mins, full_league_name, pos, min_age,
     'defpct8': "Aerial duels won, %",
     'defpct9': "Accurate long passes, %",
     'defpct10': "1st, 2nd, 3rd assists",
-    # 'gkpct1': "Conceded goals per 90",
-    # 'gkpct2': "Prevented goals per 90",
-    # 'gkpct3': "Shots against per 90",
-    # 'gkpct4': "Save rate, %",
-    # 'gkpct5': "Clean sheets, %",
-    # 'gkpct6': "Exits per 90",
-    # 'gkpct7': "Aerial duels per 90",
-    # 'gkpct8': "Passes per 90",
-    # 'gkpct10': "Average long pass length, m",
+    'gkpct3': 'Shots\nAgainst',
+    'gkpct1': "Goals\nConceded",
+    'gkpct4': "Save %",
+    'gkpct14': "Goals\nPrevented %",
+    'gkpct2': 'Prevented\nGoals',
+    'gkpct6': "Coming Off\nLine",
+    'gkpct13': 'Received\nPasses',
+    'gkpct8': "Passes",
+    'gkpct11': "% of Passes\nBeing Short",
+    'gkpct12': "% of Passes\nBeing Lateral",
+    'gkpct9': "Long Pass\nCmp %",
     'extrapct': "Accurate passes, %",
     'extrapct2': "Shots per 90",
     'extrapct3': "Accurate crosses, %",

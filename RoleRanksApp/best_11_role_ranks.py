@@ -183,7 +183,7 @@ def load_league_data(data, league_season):
     df['Set pieces per 90'] = df['Corners per 90'] + df['Free kicks per 90']
     df['Pct of passes being smart'] = df['Smart passes per 90'] / df['Passes per 90'] * 100
     df['Pct of passes being lateral'] = df['Lateral passes per 90'] / df['Passes per 90'] * 100
-    df['Goals pervented %'] = (df['xG against per 90'] - df['Conceded goals per 90']) / df['xG against per 90'] * 100
+    df['Goals prevented %'] = (df['xG against per 90'] - df['Conceded goals per 90']) / df['xG against per 90'] * 100
 
     df = df.dropna(subset=['Position']).reset_index(drop=True)
 

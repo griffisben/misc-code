@@ -312,6 +312,7 @@ def make_rankings(formation, mins, data, role_position_df, leagues, exp_contract
             gk11 = 'Shots against per 90' #a1
             gk12 = 'Pct of passes being lateral' #b4
             gk13 = 'Received passes per 90' #b1
+            gk14 = "Goals prevented %" #a4
             #EXTRA
             extra = "Accurate passes, %"
             extra2 = 'Shots per 90'
@@ -392,6 +393,7 @@ def make_rankings(formation, mins, data, role_position_df, leagues, exp_contract
             dfProspect["gkpct11"] = stats.zscore(dfProspect[gk11])
             dfProspect["gkpct12"] = stats.zscore(dfProspect[gk12])
             dfProspect["gkpct13"] = stats.zscore(dfProspect[gk13])
+            dfProspect["gkpct14"] = stats.zscore(dfProspect[gk14])
             dfProspect["extrapct"] = stats.zscore(dfProspect[extra])
             dfProspect["extrapct2"] = stats.zscore(dfProspect[extra2])
             dfProspect["extrapct3"] = stats.zscore(dfProspect[extra3])

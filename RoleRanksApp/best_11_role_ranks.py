@@ -145,7 +145,7 @@ def filter_by_position_long(df, position):
         return df[df['Main Position'].str.contains('|'.join(cb), na=False)]
 
     gk = ["GK"]
-    if position == "GK":
+    if position == "Goalkeepers":
         return df[df['Main Position'].str.contains('|'.join(gk), na=False)]
 
     else:
@@ -1182,7 +1182,7 @@ def scout_report(data_frame, gender, league, season, xtra, template, pos, player
                 color="#4A2E19", fontweight="regular", fontname="DejaVu Sans",
                 ) 
 
-    if season in ['23-24','2024']:
+    if season in ['23-24','2024','2023','24-25']:
         clubpath = raw_valsdf['Team logo'].values[0]
         image = Image.open(urllib.request.urlopen(clubpath))
         newax = fig.add_axes([.44,.43,0.15,0.15], anchor='C', zorder=1)
@@ -1674,7 +1674,7 @@ with radar_tab:
             )
             st.pyplot(radar_img.figure)
         except:
-            st.text("Please enter a valid name & age.  \nPlease check spelling as well.  \nIf you entered a GK, I'm sorry but I have not built GK radars yet... my apologies!")
+            st.text("Please enter a valid name & age.  \nPlease check spelling as well.")
 
 
 with filter_tab:
@@ -1684,7 +1684,7 @@ with filter_tab:
         pos_select = st.selectbox('Positions', ('Strikers', 'Strikers and Wingers', 'Forwards (AM, W, CF)',
                                 'Forwards no ST (AM, W)', 'Wingers', 'Central Midfielders (DM, CM, CAM)',
                                 'Central Midfielders no CAM (DM, CM)', 'Central Midfielders no DM (CM, CAM)', 'Fullbacks (FBs/WBs)',
-                                'Defenders (CB, FB/WB, DM)', 'Centre-Backs', 'CBs & DMs'))
+                                'Defenders (CB, FB/WB, DM)', 'Centre-Backs', 'CBs & DMs','Goalkeepers'))
 
             
         if ['slider1','slider2','slider3','slider4','slider5','slider6','slider7','slider8','slider9','slider10','slider11','slider12','slider13','slider14','slider15','slider16','slider17','slider18','slider19','slider20','slider21','slider22','slider23','slider24','slider25','slider26','slider27','slider28','slider29','slider30','slider31','slider32','slider33'] not in st.session_state:

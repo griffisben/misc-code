@@ -1298,7 +1298,7 @@ def create_player_research_table(df_basic, mins, full_league_name, pos, min_age,
         mid8, mid9, mid10, mid11, mid12,
         fwd1, fwd2, fwd3, fwd4, fwd5, fwd6, fwd7,
         fwd8, fwd9, fwd10, fwd11, fwd12,
-        gk2, gk4, gk5, gk6, gk7, gk8, gk9, gk10, gk11, gk12, gk13, gk14
+        gk2, gk4, gk5, gk6, gk7, gk8, gk9, gk10, gk11, gk12, gk13, gk14,
         def1,def2,def3,def6,def7,def8,def9,def10,def11,def12,
         extra,extra2,extra3,extra4,extra5,extra6,extra7,extra8,extra9,extra10,
     ]

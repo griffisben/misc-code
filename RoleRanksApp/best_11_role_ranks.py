@@ -1271,6 +1271,7 @@ def create_player_research_table(df_basic, mins, full_league_name, pos, min_age,
     gk11 = 'Shots against per 90' #a1
     gk12 = 'Pct of passes being lateral' #b4
     gk13 = 'Received passes per 90' #b1
+    gk14 = 'Goals prevented %' #b1
     #EXTRA
     extra = "Accurate passes, %"
     extra2 = 'Shots per 90'

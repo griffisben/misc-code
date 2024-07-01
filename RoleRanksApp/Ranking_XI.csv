@@ -109,3 +109,14 @@ Advanced Playmaker,Midfielder no DM,mult,either,any,5,Advanced Playmaker,343,LCM
 Playmaking Winger,Winger,mult,either,any,5,Playmaking Winger,343,RW,85,-15
 Traditional Winger,Winger,mult,either,any,5,Traditional Winger,343,LW,85,115
 Deep-Lying Striker,CF,single,either,any,5,Deep-Lying Striker,343,ST,95,50
+Shot-Stopping Distributor,GK,single,either,any,5,Shot-Stopping Distributor,4222,GK,0,50
+Ball Playing CB,CB,single,either,any,5,Ball Playing CB,4222,RCB,20,20
+Spurs LCB,CB,single,either,any,5,Wide CB,4222,LCB,20,80
+Attacking FB,Fullback,mult,either,LB|LWB,5,Attacking LB,4222,LB,35,115
+Attacking FB,Fullback,mult,either,RB|RWB,5,Attacking RB,4222,RB,35,-15
+Deep-Lying Playmaker,Midfielder no CAM,mult,either,any,5,Deep-Lying Playmaker,4222,RCM,55,20
+Number 6,Midfielder no CAM,mult,either,any,5,Number 6,4222,LCM,55,80
+Inverted Winger,Winger,mult,either,any,5,Inverted Winger,4222,RAM,75,10
+Playmaking Winger,Winger,mult,either,any,5,Playmaking Winger,4222,LAM,75,90
+Deep-Lying Striker,CF,single,either,any,5,Deep-Lying Striker,4222,LS,95,20
+Focal Point Striker,CF,single,either,any,5,Focal Point Striker,4222,RS,95,80

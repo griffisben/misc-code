@@ -43,6 +43,14 @@ Advanced Playmaker,Midfielder no DM,mult,either,any,5,Advanced Playmaker,CAM
 CAM,Midfielder no DM,mult,either,any,5,Classic CAM,CAM
 Wide CAM,Midfielder no DM,mult,either,any,5,Wide CAM,CAM
 Second Striker,Midfielder no DM,mult,either,any,5,Second Striker,CAM
+Advanced Playmaker,Midfielder no DM,mult,either,any,5,Advanced Playmaker,RAM
+CAM,Midfielder no DM,mult,either,any,5,Classic CAM,RAM
+Wide CAM,Midfielder no DM,mult,either,any,5,Wide CAM,RAM
+Second Striker,Midfielder no DM,mult,either,any,5,Second Striker,RAM
+Advanced Playmaker,Midfielder no DM,mult,either,any,5,Advanced Playmaker,LAM
+CAM,Midfielder no DM,mult,either,any,5,Classic CAM,LAM
+Wide CAM,Midfielder no DM,mult,either,any,5,Wide CAM,LAM
+Second Striker,Midfielder no DM,mult,either,any,5,Second Striker,LAM
 Playmaking Winger,Winger,mult,either,any,5,Playmaking Winger,LW
 Inverted Winger,Winger,mult,either,any,5,Inverted Winger,LW
 Traditional Winger,Winger,mult,either,any,5,Traditional Winger,LW

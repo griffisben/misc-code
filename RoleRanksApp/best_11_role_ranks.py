@@ -461,7 +461,9 @@ def make_rankings(formation, mins, data, role_position_df, leagues, exp_contract
                 (.15 * dfProspect['extrapct4']) +   # smart passes
                 (.2 * dfProspect['midpct4']) +  # shot assist
                 (.15 * dfProspect['extrapct10']) +  # key passes
-                (.15 * dfProspect['fwdpct1']) +     # np Goals
+                (.1 * dfProspect['fwdpct2']) +     # npxg
+                (.05 * dfProspect['fwdpct1']) +  # np G
+                (.1 * dfProspect['fwdpct4']) +     # xA
                 (.1 * dfProspect['fwdpct5']) +       # dribble %
                 (.15 * dfProspect['extrapct12'])    # offesnsive duel %
             )
@@ -1903,5 +1905,37 @@ with notes_tab:
         10% Passes into the final third  \n
         10% Possession-adjusted tackles+interceptions  \n
         10% Minutes played
+        ''')
+    with st.expander('Advanced Playmaker'):
+        st.write('''
+        The team's most advanced playmaker, a player who is creative enough to supply their teammates with lots of quality chances. They consistently create good opportunities for others, and while they may create for themselves, this is not the most important part of their role.  \n
+        25% Key passes  \n
+        25% Shot assists  \n
+        20% Passes into the final third + deep completions (within 20m of goal)  \n
+        15% Smart passes  \n
+        15% Expected assists (xA)
+        ''')
+    with st.expander('Classic CAM'):
+        st.write('''
+        A player who operates high up the field, impacting both creation and shooting. Similar to the advanced playmaker, they will be able to provide for their teammates, although this is not their sole role, as they also have to be able to create opportunities to shoot themselves.  \n
+        20% Shot assists  \n
+        15% Key passes  \n
+        15% Smart passes  \n
+        15% Attacking duel win % (includes dribbles, ball shields when being pressed, etc.)  \n
+        10% Dribble win %  \n
+        10% Expected assists (xA)  \n
+        10% Non-penalty expected goals (npxG)  \n
+        5% Non-penalty goals (npG)
+        ''')
+    with st.expander('Wide CAM'):
+        st.write('''
+        An attacking midfielder who loves to drift wide, operating heavily in half-spaces and on the flanks interplaying with wingers & FBs. They will thus be tasked with creation from wide areas, so will need to be able to cross as well as carry into the box looking for cutbacks or drawing defenders to open up space for wingers.  \n
+        20% Shot assists  \n
+        15% Expected assists (xA)  \n
+        15% Dribble win %  \n
+        15% Cross completion %  \n
+        15% Deep completed crosses  \n
+        10% Accelerations with the ball  \n
+        5% Touches in the box
         ''')
 

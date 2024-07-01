@@ -1701,7 +1701,7 @@ with table_tab:
        show_ranks[show_ranks['Squad Position']==chosen_roles[10]]
 
 with radar_tab:
-    with st.form('Player Radar Options'):
+    with st.form('Custom Radar Option'):
         custom_radar_yn = st.selectbox('Pre-Made Radar, or Custom Radar?', ('Pre-Made', 'Custom'))
         if custom_radar_yn == 'Custom':
             custom_radar_q = 'y'

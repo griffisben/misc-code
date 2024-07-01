@@ -1607,11 +1607,11 @@ def make_fig(ages,exp_contracts,rank_11_base,show_ranks2,season,lg,normalize_to_
     if ages[0] == 0 and ages[1] == 45:
         age_text = f'Minimum {mins} minutes played'
     elif ages[0] == 0:
-        age_text = f'Min. {mins}% of season played | U{ages[1]} players only'
+        age_text = f'Min. {mins} minutes played | U{ages[1]} players only'
     elif ages[1] == 45:
-        age_text = f'Min. {mins}% of season played | Players {ages[0]} & older'
+        age_text = f'Min. {mins} minutes played | Players {ages[0]} & older'
     else:
-        age_text = f'Min. {mins}% of season played | Players between {ages[0]} & {ages[1]}'
+        age_text = f'Min. {mins} minutes played | Players between {ages[0]} & {ages[1]}'
     
     if exp_contracts == 'y':
         exp_text = f'Players out of contract by {expiration_date} (per Wyscout)'

@@ -764,7 +764,7 @@ def add_labels(angles, values, labels, offset, ax, text_colors):
             color=text_col,
         )
 
-def scout_report(data_frame, gender, league, season, xtra, template, pos, player_pos, mins, minplay, compares, name, ws_name, team, age, sig, extra_text, custom_radar):
+def scout_report(data_frame, gender, league, season, xtra, template, pos, player_pos, mins, minplay, compares, name, ws_name, team, age, sig, extra_text, custom_radar, metric_selections=None):
     plt.clf()
     df = data_frame
     df = df[df['League']==full_league_name].reset_index(drop=True)
@@ -996,85 +996,60 @@ def scout_report(data_frame, gender, league, season, xtra, template, pos, player
             dfRadarMF = dfRadarMF[['Player'] + list(selected_columns.keys())]
             dfRadarMF.rename(columns=selected_columns, inplace=True)
     if custom_radar == 'y':
-        column_mapping = {
-            'custom': {
-                'midpct1': "Short & Med\nPass %",
-                'midpct2': "Long\nPass %",
-                'midpct3': "Smart\nPass %",
-                'extrapct3': 'Cross\nCompletion %',
-                'midpct4': "Shot\nAssists",
-                'midpct5': "Expected\nAssists (xA)",
-                'extrapct5': 'xA per\nShot Assist',
-                'midpct6': "Assists",
-                'midpct7': "Second\nAssists",
-                'extrapct4': 'Smart\nPasses',
-                'fwdpct2': "npxG",
-                'fwdpct1': "Non-Pen\nGoals",
-                'fwdpct6': "Goals/Shot\non Target %",
-                'extrapct9': 'npxG\nper shot',
-                'extrapct2': "Shots",
-                'fwdpct11': 'Touches in\nPen Box',
-                'fwdpct5': "Dribble\nSuccess %",
-                'extrapct6': 'Acceleration\nwith Ball',
-                'midpct10': "Prog.\nCarries",
-                'midpct9': "Prog.\nPasses",
-                'defpct1': "Defensive\nActions",
-                'midpct12': "Tackles & Int\n(pAdj)",
-                'defpct8': 'Aerial\nWin %',
-                'defpct1': 'Defensive\nActions',
-                'defpct2': "Tackles\n(pAdj)",
-                'defpct3': "Defensive\nDuels Won %",
-                'defpct6': "Shot Blocks",
-                'defpct7': "Interceptions\n(pAdj)",
-                'extrapct7': 'Aerial Duels\nWon',
-                'defpct8': "Aerial\nWin %",
-                'defpct9': "Long\nPass %",
-                'extrapct10': 'Crosses',
-                'extrapct3': 'Cross\nCompletion %',
-                'defpct10': "Assists &\n2nd/3rd Assists",
-                'defpct11': "Prog.\nPasses",
-                'defpct12': "Prog.\nCarries",
-                'fwdpct5': "Dribble\nSucces %",
-                'extrapct6': 'Acceleration\nwith Ball',
-                'midpct5': "Expected\nAssists",
-                'defpct4': "Fouls",
-                'defpct5': "Cards",
-                'extrapct8': 'Fouls Drawn',
-                'defpct1': 'Defensive\nActions',
-                'defpct2': "Tackles\n(pAdj)",
-                'defpct3': "Defensive\nDuels Won %",
-                'defpct6': "Shot Blocks",
-                'defpct7': "Interceptions\n(pAdj)",
-                'extrapct7': 'Aerial Duels\nWon',
-                'defpct8': "Aerial\nWin %",
-                'defpct9': "Long\nPass %",
-                'defpct10': "Assists &\n2nd/3rd Assists",
-                'defpct11': "Prog.\nPasses",
-                'defpct12': "Prog.\nCarries",
-                'fwdpct5': "Dribble\nSucces %",
-                'extrapct6': 'Acceleration\nwith Ball',
-                'midpct5': "Expected\nAssists",
-                'defpct4': "Fouls",
-                'defpct5': "Cards",
-                'extrapct8': 'Fouls Drawn',
-                'gkpct3': 'Shots\nAgainst',
-                'gkpct1': "Goals\nConceded",
-                'gkpct4': "Save %",
-                'gkpct14': "Goals\nPrevented %",
-                'gkpct2': 'Prevented\nGoals',
-                'gkpct6': "Coming Off\nLine",
-                'gkpct13': 'Received\nPasses',
-                'gkpct8': "Passes",
-                'gkpct11': "% of Passes\nBeing Short",
-                'gkpct12': "% of Passes\nBeing Lateral",
-                'gkpct9': "Long Pass\nCmp %"
-            }
-        }
-        # raw_vals = raw_valsdf[["Player",selected_raw_metrics]
+        all_possible_vars = ['Received passes per 90','Passes per 90','Pct of passes being short','Pct of passes being lateral','Accurate passes, %','Accurate short / medium passes, %','Accurate long passes, %','Crosses per 90','Accurate crosses, %','Smart passes per 90','Shot assists per 90','xA per 90','xA per Shot Assist','Assists per 90','Second assists per 90','Third assists per 90','1st, 2nd, 3rd assists','Progressive passes per 90','Progressive runs per 90','Shots per 90','npxG per 90','Non-penalty goals per 90','npxG per shot','Goal conversion, %','Successful dribbles, %','Accelerations per 90','Touches in box per 90','Fouls suffered per 90','Successful defensive actions per 90','Duels won, %','Defensive duels won, %','pAdj Tkl+Int per 90','PAdj Sliding tackles','PAdj Interceptions','Shots blocked per 90','Aerial duels per 90','Aerial duels won, %','Aerial duels won per 90','Fouls per 90 ','Shots against per 90','Conceded goals per 90','Save rate, %','Prevented goals per 90','Goals prevented %','Clean sheets, %','Exits per 90','Average long pass length, m']
+        names = ['Received\nPasses','Passes','% of Passes\nBeing Short','% of Passes\nBeing Lateral','Pass\nCmp %','Short & Med\nPass %','Long\nPass %','Crosses','Cross\nCompletion %','Smart\nPasses','Shot\nAssists','Expected\nAssists (xA)','xA per\nShot Assist','Assists','Second\nAssists','Third\nAssists','Assists &\n2nd/3rd Assists','Prog.\nPasses','Prog.\nCarries','Shots','npxG','Non-Pen\nGoals','npxG\nper shot','Goals/Shot\non Target %','Dribble\nSuccess %','Acceleration\nwith Ball','Touches in\nPen Box','Fouls Drawn','Defensive\nActions','Duel Win%','Defensive\nDuels Won %','Tackles & Int\n(pAdj)','Tackles\n(pAdj)','Interceptions\n(pAdj)','Shot Blocks','Aerial\Duels','Aerial\nWin %','Aerial Duels\nWon','Fouls','Shots\nAgainst','Goals\nConceded','Save %','Prevented\nGoals','Goals\nPrevented %','Clean\nSheets %','Coming Off\nLine','Long Pass\nLength (m)']
+        base_var_names = ['gkpct13','gkpct8','gkpct11','gkpct12','extrapct','midpct1','midpct2','extrapct10','extrapct3','extrpct4','midpct4','midpct5','extrapct5','midpct6','midpct7','midpct8','defpct10','midpct9','midpct10','extrapct2','fwdpct2','fwdpct1','extrapct9','fwdpct6','fwdpct5','extrapct6','fwdpct11','extrapct8','defpct1','midpct11','defpct3','midpct12','defpct2','defpct7','defpct6','gkpct7','defpct8','extrapct7','defpct4','gkpct3','gkpct1','gkpct4','gkpct2','gkpct14','gkpct5','gkpct6','gkpct10']
+        ix_selected = []
+        for i, l in enumerate(all_possible_vars):
+            if l in metric_selections:
+                ix_selected+=[i]
+        metric_rename = []
+        for ix in ix_selected:
+            metric_rename+=names[ix]
+        base_vars = []
+        for ix in ix_selected:
+            base_vars+=base_var_names[ix]
+        column_mapping = dict(zip(base_vars, metric_rename))
         
-        # selected_columns = column_mapping[template]
-        # dfRadarMF = dfRadarMF[['Player'] + list(selected_columns.keys())]
-        # dfRadarMF.rename(columns=selected_columns, inplace=True)
+        raw_vals = raw_valsdf[["Player",metric_selections]
+        
+        selected_columns = column_mapping
+        dfRadarMF = dfRadarMF[['Player'] + list(selected_columns.keys())]
+        dfRadarMF.rename(columns=selected_columns, inplace=True)
+
+        v_passing = ['Received passes per 90','Passes per 90','Pct of passes being short','Pct of passes being lateral','Accurate passes, %','Accurate short / medium passes, %','Accurate long passes, %','Crosses per 90','Accurate crosses, %']
+        v_playmaking = ['Smart passes per 90','Shot assists per 90','xA per 90','xA per Shot Assist','Assists per 90','Second assists per 90','Third assists per 90','1st, 2nd, 3rd assists','Progressive passes per 90','Progressive runs per 90']
+        v_shooting = ['Shots per 90','npxG per 90','Non-penalty goals per 90','npxG per shot','Goal conversion, %']
+        v_attacking = ['Successful dribbles, %','Accelerations per 90','Touches in box per 90','Fouls suffered per 90']
+        v_defending = ['Successful defensive actions per 90','Duels won, %','Defensive duels won, %','pAdj Tkl+Int per 90','PAdj Sliding tackles','PAdj Interceptions','Shots blocked per 90','Aerial duels per 90','Aerial duels won, %','Aerial duels won per 90','Fouls per 90 ']
+        v_goalkeeping = ['Shots against per 90','Conceded goals per 90','Save rate, %','Prevented goals per 90','Goals prevented %','Clean sheets, %','Exits per 90','Average long pass length, m']
+        
+        passing_l = 0
+        playmaking_l = 0
+        shooting_l = 0
+        attacking_l = 0
+        defending_l = 0
+        goalkeeping_l = 0
+
+        for i, l in enumerate(v_passing):
+            if l in metric_selections:
+                passing_l+=1
+        for i, l in enumerate(v_playmaking):
+            if l in metric_selections:
+                playmaking_l+=1
+        for i, l in enumerate(v_shooting):
+            if l in metric_selections:
+                shooting_l+=1
+        for i, l in enumerate(v_attacking):
+            if l in metric_selections:
+                attacking_l+=1
+        for i, l in enumerate(v_defending):
+            if l in metric_selections:
+                defending_l+=1
+        for i, l in enumerate(v_goalkeeping):
+            if l in metric_selections:
+                goalkeeping_l+=1
+        
     ###########################################################################
 
     df1 = dfRadarMF.T.reset_index()
@@ -1087,43 +1062,58 @@ def scout_report(data_frame, gender, league, season, xtra, template, pos, player
                         ws_name: 'Value',
                              'index': 'Group'})
 
-    if template == 'attacking':
+    if custom_radar == 'y':
         for i in range(len(df1)):
-            if df1['Group'][i] <= 4:
+            if df1['Group'][i] <= passing_l:
                 df1['Group'][i] = 'Passing'
-            elif df1['Group'][i] <= 10:
-                df1['Group'][i] = 'Creativity'
-            elif df1['Group'][i] <= 16:
+            elif df1['Group'][i] <= passing_l+playmaking_l:
+                df1['Group'][i] = 'Playmaking'
+            elif df1['Group'][i] <= passing_l+playmaking_l+shooting_l:
                 df1['Group'][i] = 'Shooting'
-            elif df1['Group'][i] <= 20:
-                df1['Group'][i] = 'Ball Movement'
-            elif df1['Group'][i] <= 23:
-                df1['Group'][i] = 'Defense'
-
-    if template == 'defensive':
-        for i in range(len(df1)):
-            if df1['Group'][i] <= 7:
-                df1['Group'][i] = 'Defending'
-            elif df1['Group'][i] <= 16:
+            elif df1['Group'][i] <= passing_l+playmaking_l+shooting_l+attacking_l:
                 df1['Group'][i] = 'Attacking'
-            elif df1['Group'][i] <= 19:
-                df1['Group'][i] = 'Fouling'
-
-    if template == 'cb':
-        for i in range(len(df1)):
-            if df1['Group'][i] <= 7:
+            elif df1['Group'][i] <= passing_l+playmaking_l+shooting_l+attacking_l+defending_l:
                 df1['Group'][i] = 'Defending'
-            elif df1['Group'][i] <= 14:
-                df1['Group'][i] = 'Attacking'
-            elif df1['Group'][i] <= 17:
-                df1['Group'][i] = 'Fouling'
-                
-    if template == 'gk':
-        for i in range(len(df1)):
-            if df1['Group'][i] <= 6:
-                df1['Group'][i] = 'Defending'
-            elif df1['Group'][i] <= 11:
-                df1['Group'][i] = 'Attacking'
+            elif df1['Group'][i] <= passing_l+playmaking_l+shooting_l+attacking_l+defending_l+goalkeeping_l:
+                df1['Group'][i] = 'Goalkeeping'
+    if custom_radar == 'n':
+        if template == 'attacking':
+            for i in range(len(df1)):
+                if df1['Group'][i] <= 4:
+                    df1['Group'][i] = 'Passing'
+                elif df1['Group'][i] <= 10:
+                    df1['Group'][i] = 'Creativity'
+                elif df1['Group'][i] <= 16:
+                    df1['Group'][i] = 'Shooting'
+                elif df1['Group'][i] <= 20:
+                    df1['Group'][i] = 'Ball Movement'
+                elif df1['Group'][i] <= 23:
+                    df1['Group'][i] = 'Defense'
+    
+        if template == 'defensive':
+            for i in range(len(df1)):
+                if df1['Group'][i] <= 7:
+                    df1['Group'][i] = 'Defending'
+                elif df1['Group'][i] <= 16:
+                    df1['Group'][i] = 'Attacking'
+                elif df1['Group'][i] <= 19:
+                    df1['Group'][i] = 'Fouling'
+    
+        if template == 'cb':
+            for i in range(len(df1)):
+                if df1['Group'][i] <= 7:
+                    df1['Group'][i] = 'Defending'
+                elif df1['Group'][i] <= 14:
+                    df1['Group'][i] = 'Attacking'
+                elif df1['Group'][i] <= 17:
+                    df1['Group'][i] = 'Fouling'
+                    
+        if template == 'gk':
+            for i in range(len(df1)):
+                if df1['Group'][i] <= 6:
+                    df1['Group'][i] = 'Defending'
+                elif df1['Group'][i] <= 11:
+                    df1['Group'][i] = 'Attacking'
 
 
 
@@ -1149,12 +1139,19 @@ def scout_report(data_frame, gender, league, season, xtra, template, pos, player
     offset = 0
     IDXS = []
 
-    template_group_sizes = {
-        'attacking': [4, 6, 6, 4, 3],
-        'defensive': [7, 9, 3],
-        'cb': [7, 7, 3],
-        'gk': [6, 5]
-    }
+    if custom_radar == 'n':
+        template_group_sizes = {
+            'attacking': [4, 6, 6, 4, 3],
+            'defensive': [7, 9, 3],
+            'cb': [7, 7, 3],
+            'gk': [6, 5]
+        }
+    if custom_radar == 'y':
+        len_list = [passing_l,playmaking_l,shooting_l,attacking_l,defending_l,goalkeeping_l]
+        len_list = [i for i in len_list if i != 0]
+        template_group_sizes = {
+            'custom': len_list,
+        }
 
     GROUPS_SIZE = template_group_sizes.get(template, [])
 
@@ -1706,7 +1703,8 @@ with radar_tab:
     with st.form('Player Radar Options'):
         custom_radar_yn = st.selectbox('Pre-Made Radar, or Custom Radar?', ('Pre-Made', 'Custom'))
         if custom_radar_yn == 'Custom':
-            metric_selections = st.multiselect("Select the metrics you want on the radar", ['Received passes per 90','Passes per 90','Pct of passes being short','Pct of passes being lateral','Accurate passes, %','Accurate short / medium passes, %','Accurate long passes, %','Crosses per 90','Accurate crosses, %','Smart passes per 90','Shot assists per 90','xA per 90','xA per Shot Assist','Assists per 90','Second assists per 90','Third assists per 90','1st, 2nd, 3rd assists','Progressive passes per 90','Progressive runs per 90','Shots per 90','npxG per 90','Non-penalty goals per 90','npxG per shot','Goal conversion, %','Successful dribbles, %','Accelerations per 90','Touches in box per 90','Fouls suffered per 90','Successful defensive actions per 90','Duels won, %','Defensive duels won, %','pAdj Tkl+Int per 90','PAdj Sliding tackles','PAdj Interceptions','Shots blocked per 90','Aerial duels per 90','Aerial duels won, %','Aerial duels won per 90','Fouls per 90 ','Shots against per 90','Conceded goals per 90','Save rate, %','Prevented goals per 90','Goals prevented %','Clean sheets, %','Exits per 90','Average long pass length, m'])
+            custom_radar = 'y'
+            metric_selections = st.multiselect("Select the metrics you want on the radar", ['Received passes per 90','Passes per 90','Pct of passes being short','Pct of passes being lateral','Accurate passes, %','Accurate short / medium passes, %','Accurate long passes, %','Crosses per 90','Accurate crosses, %','Smart passes per 90','Shot assists per 90','xA per 90','xA per Shot Assist','Assists per 90','Second assists per 90','Third assists per 90','1st, 2nd, 3rd assists','Progressive passes per 90','Progressive runs per 90','Shots per 90','npxG per 90','Non-penalty goals per 90','npxG per shot','Goal conversion, %','Successful dribbles, %','Accelerations per 90','Touches in box per 90','Fouls suffered per 90','Successful defensive actions per 90','Duels won, %','Defensive duels won, %','pAdj Tkl+Int per 90','PAdj Sliding tackles','PAdj Interceptions','Shots blocked per 90','Aerial duels per 90','Aerial duels won, %','Aerial duels won per 90','Fouls per 90 ','Shots against per 90','Conceded goals per 90','Save rate, %','Prevented goals per 90','Goals prevented %','Clean sheets, %','Exits per 90','Average long pass length, m'], ['Received passes per 90','Passes per 90','Pct of passes being short','Pct of passes being lateral','Accurate passes, %','Accurate short / medium passes, %','Accurate long passes, %','Crosses per 90','Accurate crosses, %','Smart passes per 90','Shot assists per 90','xA per 90','xA per Shot Assist'])
         else:
             custom_radar = 'n'
         submitted = st.form_submit_button("Submit Options")
@@ -1754,27 +1752,49 @@ with radar_tab:
             ix = ws_pos.index(gen['Main Position'].values[0])
             minplay = int(gen['Minutes played'].values[0])
 
-            
-            radar_img = scout_report(
-                data_frame = df_basic, ##
-                gender = gender, ##
-                league = lg, ##
-                season = season, ##
-                xtra = ' current',
-                template = template[ix], ##
-                pos = poses[ix],
-                player_pos = ws_pos[ix],
-                compares = compares[ix],
-                mins = mins,
-                minplay=minplay,
-                name = gen['Player'].values[0],
-                ws_name = gen['Player'].values[0],
-                team = gen['Team within selected timeframe'].values[0],
-                age = gen['Age'].values[0],
-                sig = 'Twitter: @BeGriffis',
-                extra_text = xtratext,
-                custom_radar=custom_radar,
-            )
+            if custom_radar == 'n':
+                radar_img = scout_report(
+                    data_frame = df_basic, ##
+                    gender = gender, ##
+                    league = lg, ##
+                    season = season, ##
+                    xtra = ' current',
+                    template = template[ix], ##
+                    pos = poses[ix],
+                    player_pos = ws_pos[ix],
+                    compares = compares[ix],
+                    mins = mins,
+                    minplay=minplay,
+                    name = gen['Player'].values[0],
+                    ws_name = gen['Player'].values[0],
+                    team = gen['Team within selected timeframe'].values[0],
+                    age = gen['Age'].values[0],
+                    sig = 'Twitter: @BeGriffis',
+                    extra_text = xtratext,
+                    custom_radar=custom_radar,
+                )
+            if custom_radar == 'y':
+                radar_img = scout_report(
+                    data_frame = df_basic, ##
+                    gender = gender, ##
+                    league = lg, ##
+                    season = season, ##
+                    xtra = ' current',
+                    template = 'custom',
+                    pos = poses[ix],
+                    player_pos = ws_pos[ix],
+                    compares = compares[ix],
+                    mins = mins,
+                    minplay=minplay,
+                    name = gen['Player'].values[0],
+                    ws_name = gen['Player'].values[0],
+                    team = gen['Team within selected timeframe'].values[0],
+                    age = gen['Age'].values[0],
+                    sig = 'Twitter: @BeGriffis',
+                    extra_text = xtratext,
+                    custom_radar=custom_radar,
+                    metric_selections=metric_selections
+                )
             st.pyplot(radar_img.figure)
         except:
             st.text("Please enter a valid name & age.  \nPlease check spelling as well.")

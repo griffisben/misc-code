@@ -764,7 +764,7 @@ def add_labels(angles, values, labels, offset, ax, text_colors):
             color=text_col,
         )
 
-def scout_report(data_frame, gender, league, season, xtra, template, pos, player_pos, mins, minplay, compares, name, ws_name, team, age, sig, extra_text):
+def scout_report(data_frame, gender, league, season, xtra, template, pos, player_pos, mins, minplay, compares, name, ws_name, team, age, sig, extra_text, custom_radar):
     plt.clf()
     df = data_frame
     df = df[df['League']==full_league_name].reset_index(drop=True)
@@ -882,122 +882,199 @@ def scout_report(data_frame, gender, league, season, xtra, template, pos, player
     dfRadarMF = dfRadarMF.fillna(0)
     player_full_name = dfRadarMF['Full name'].values[0]
     # Define a dictionary to map old column names to new ones
-    column_mapping = {
-        'attacking': {
-            'midpct1': "Short & Med\nPass %",
-            'midpct2': "Long\nPass %",
-            'midpct3': "Smart\nPass %",
-            'extrapct3': 'Cross\nCompletion %',
-            'midpct4': "Shot\nAssists",
-            'midpct5': "Expected\nAssists (xA)",
-            'extrapct5': 'xA per\nShot Assist',
-            'midpct6': "Assists",
-            'midpct7': "Second\nAssists",
-            'extrapct4': 'Smart\nPasses',
-            'fwdpct2': "npxG",
-            'fwdpct1': "Non-Pen\nGoals",
-            'fwdpct6': "Goals/Shot\non Target %",
-            'extrapct9': 'npxG\nper shot',
-            'extrapct2': "Shots",
-            'fwdpct11': 'Touches in\nPen Box',
-            'fwdpct5': "Dribble\nSuccess %",
-            'extrapct6': 'Acceleration\nwith Ball',
-            'midpct10': "Prog.\nCarries",
-            'midpct9': "Prog.\nPasses",
-            'defpct1': "Defensive\nActions",
-            'midpct12': "Tackles & Int\n(pAdj)",
-            'defpct8': 'Aerial\nWin %'
-        },
-        'defensive': {
-            'defpct1': 'Defensive\nActions',
-            'defpct2': "Tackles\n(pAdj)",
-            'defpct3': "Defensive\nDuels Won %",
-            'defpct6': "Shot Blocks",
-            'defpct7': "Interceptions\n(pAdj)",
-            'extrapct7': 'Aerial Duels\nWon',
-            'defpct8': "Aerial\nWin %",
-            'defpct9': "Long\nPass %",
-            'extrapct10': 'Crosses',
-            'extrapct3': 'Cross\nCompletion %',
-            'defpct10': "Assists &\n2nd/3rd Assists",
-            'defpct11': "Prog.\nPasses",
-            'defpct12': "Prog.\nCarries",
-            'fwdpct5': "Dribble\nSucces %",
-            'extrapct6': 'Acceleration\nwith Ball',
-            'midpct5': "Expected\nAssists",
-            'defpct4': "Fouls",
-            'defpct5': "Cards",
-            'extrapct8': 'Fouls Drawn'
-        },
-        'cb': {
-            'defpct1': 'Defensive\nActions',
-            'defpct2': "Tackles\n(pAdj)",
-            'defpct3': "Defensive\nDuels Won %",
-            'defpct6': "Shot Blocks",
-            'defpct7': "Interceptions\n(pAdj)",
-            'extrapct7': 'Aerial Duels\nWon',
-            'defpct8': "Aerial\nWin %",
-            'defpct9': "Long\nPass %",
-            'defpct10': "Assists &\n2nd/3rd Assists",
-            'defpct11': "Prog.\nPasses",
-            'defpct12': "Prog.\nCarries",
-            'fwdpct5': "Dribble\nSucces %",
-            'extrapct6': 'Acceleration\nwith Ball',
-            'midpct5': "Expected\nAssists",
-            'defpct4': "Fouls",
-            'defpct5': "Cards",
-            'extrapct8': 'Fouls Drawn'
-        },
-        'gk': {
-            'gkpct3': 'Shots\nAgainst',
-            'gkpct1': "Goals\nConceded",
-            'gkpct4': "Save %",
-            'gkpct14': "Goals\nPrevented %",
-            'gkpct2': 'Prevented\nGoals',
-            'gkpct6': "Coming Off\nLine",
-            'gkpct13': 'Received\nPasses',
-            'gkpct8': "Passes",
-            'gkpct11': "% of Passes\nBeing Short",
-            'gkpct12': "% of Passes\nBeing Lateral",
-            'gkpct9': "Long Pass\nCmp %",
+    if custom_radar == 'n':
+        column_mapping = {
+            'attacking': {
+                'midpct1': "Short & Med\nPass %",
+                'midpct2': "Long\nPass %",
+                'midpct3': "Smart\nPass %",
+                'extrapct3': 'Cross\nCompletion %',
+                'midpct4': "Shot\nAssists",
+                'midpct5': "Expected\nAssists (xA)",
+                'extrapct5': 'xA per\nShot Assist',
+                'midpct6': "Assists",
+                'midpct7': "Second\nAssists",
+                'extrapct4': 'Smart\nPasses',
+                'fwdpct2': "npxG",
+                'fwdpct1': "Non-Pen\nGoals",
+                'fwdpct6': "Goals/Shot\non Target %",
+                'extrapct9': 'npxG\nper shot',
+                'extrapct2': "Shots",
+                'fwdpct11': 'Touches in\nPen Box',
+                'fwdpct5': "Dribble\nSuccess %",
+                'extrapct6': 'Acceleration\nwith Ball',
+                'midpct10': "Prog.\nCarries",
+                'midpct9': "Prog.\nPasses",
+                'defpct1': "Defensive\nActions",
+                'midpct12': "Tackles & Int\n(pAdj)",
+                'defpct8': 'Aerial\nWin %'
+            },
+            'defensive': {
+                'defpct1': 'Defensive\nActions',
+                'defpct2': "Tackles\n(pAdj)",
+                'defpct3': "Defensive\nDuels Won %",
+                'defpct6': "Shot Blocks",
+                'defpct7': "Interceptions\n(pAdj)",
+                'extrapct7': 'Aerial Duels\nWon',
+                'defpct8': "Aerial\nWin %",
+                'defpct9': "Long\nPass %",
+                'extrapct10': 'Crosses',
+                'extrapct3': 'Cross\nCompletion %',
+                'defpct10': "Assists &\n2nd/3rd Assists",
+                'defpct11': "Prog.\nPasses",
+                'defpct12': "Prog.\nCarries",
+                'fwdpct5': "Dribble\nSucces %",
+                'extrapct6': 'Acceleration\nwith Ball',
+                'midpct5': "Expected\nAssists",
+                'defpct4': "Fouls",
+                'defpct5': "Cards",
+                'extrapct8': 'Fouls Drawn'
+            },
+            'cb': {
+                'defpct1': 'Defensive\nActions',
+                'defpct2': "Tackles\n(pAdj)",
+                'defpct3': "Defensive\nDuels Won %",
+                'defpct6': "Shot Blocks",
+                'defpct7': "Interceptions\n(pAdj)",
+                'extrapct7': 'Aerial Duels\nWon',
+                'defpct8': "Aerial\nWin %",
+                'defpct9': "Long\nPass %",
+                'defpct10': "Assists &\n2nd/3rd Assists",
+                'defpct11': "Prog.\nPasses",
+                'defpct12': "Prog.\nCarries",
+                'fwdpct5': "Dribble\nSucces %",
+                'extrapct6': 'Acceleration\nwith Ball',
+                'midpct5': "Expected\nAssists",
+                'defpct4': "Fouls",
+                'defpct5': "Cards",
+                'extrapct8': 'Fouls Drawn'
+            },
+            'gk': {
+                'gkpct3': 'Shots\nAgainst',
+                'gkpct1': "Goals\nConceded",
+                'gkpct4': "Save %",
+                'gkpct14': "Goals\nPrevented %",
+                'gkpct2': 'Prevented\nGoals',
+                'gkpct6': "Coming Off\nLine",
+                'gkpct13': 'Received\nPasses',
+                'gkpct8': "Passes",
+                'gkpct11': "% of Passes\nBeing Short",
+                'gkpct12': "% of Passes\nBeing Lateral",
+                'gkpct9': "Long Pass\nCmp %",
+            }
+    
         }
-
-    }
-    if template == 'attacking':
-        raw_vals = raw_valsdf[["Player",
-                           mid1, mid2, mid3, extra3,
-                           mid4,mid5,extra5, mid6, mid7,extra4,
-                               fwd2,fwd1,fwd6,extra9,extra2,fwd11,
-                           fwd5,extra6,mid10,mid9,
-                               def1,mid12,def8
-                          ]]
-    if template == 'defensive':
-        raw_vals = raw_valsdf[["Player",
-                           def1, def2, def3, def6,def7,extra7,def8,
-                           def9,extra10,extra3, def10, def11,def12,fwd5,extra6,mid5,
-                           def4,def5,extra8,
-                          ]]
-
-    if template == 'cb':
-        raw_vals = raw_valsdf[["Player",
-                           def1, def2, def3, def6,def7,extra7,def8,
-                           def9, def10, def11,def12,fwd5,extra6,mid5,
-                           def4,def5,extra8,
-                          ]]
-    if template == 'gk':
-        raw_vals = raw_valsdf[["Player",
-                           gk3, gk1, gk4, gk14, gk2, gk6,
-                           gk13, gk8, gk11, gk12, gk9
-                          ]]
-
-    if template in column_mapping:
-        selected_columns = column_mapping[template]
-        dfRadarMF = dfRadarMF[['Player'] + list(selected_columns.keys())]
-        dfRadarMF.rename(columns=selected_columns, inplace=True)
-#         raw_vals = raw_valsdf[['Player'] + list(selected_columns.values())]
-
-
-
+        if template == 'attacking':
+            raw_vals = raw_valsdf[["Player",
+                               mid1, mid2, mid3, extra3,
+                               mid4,mid5,extra5, mid6, mid7,extra4,
+                                   fwd2,fwd1,fwd6,extra9,extra2,fwd11,
+                               fwd5,extra6,mid10,mid9,
+                                   def1,mid12,def8
+                              ]]
+        if template == 'defensive':
+            raw_vals = raw_valsdf[["Player",
+                               def1, def2, def3, def6,def7,extra7,def8,
+                               def9,extra10,extra3, def10, def11,def12,fwd5,extra6,mid5,
+                               def4,def5,extra8,
+                              ]]
+    
+        if template == 'cb':
+            raw_vals = raw_valsdf[["Player",
+                               def1, def2, def3, def6,def7,extra7,def8,
+                               def9, def10, def11,def12,fwd5,extra6,mid5,
+                               def4,def5,extra8,
+                              ]]
+        if template == 'gk':
+            raw_vals = raw_valsdf[["Player",
+                               gk3, gk1, gk4, gk14, gk2, gk6,
+                               gk13, gk8, gk11, gk12, gk9
+                              ]]
+    
+        if template in column_mapping:
+            selected_columns = column_mapping[template]
+            dfRadarMF = dfRadarMF[['Player'] + list(selected_columns.keys())]
+            dfRadarMF.rename(columns=selected_columns, inplace=True)
+    if custom_radar == 'y':
+        column_mapping = {
+            'custom': {
+                'midpct1': "Short & Med\nPass %",
+                'midpct2': "Long\nPass %",
+                'midpct3': "Smart\nPass %",
+                'extrapct3': 'Cross\nCompletion %',
+                'midpct4': "Shot\nAssists",
+                'midpct5': "Expected\nAssists (xA)",
+                'extrapct5': 'xA per\nShot Assist',
+                'midpct6': "Assists",
+                'midpct7': "Second\nAssists",
+                'extrapct4': 'Smart\nPasses',
+                'fwdpct2': "npxG",
+                'fwdpct1': "Non-Pen\nGoals",
+                'fwdpct6': "Goals/Shot\non Target %",
+                'extrapct9': 'npxG\nper shot',
+                'extrapct2': "Shots",
+                'fwdpct11': 'Touches in\nPen Box',
+                'fwdpct5': "Dribble\nSuccess %",
+                'extrapct6': 'Acceleration\nwith Ball',
+                'midpct10': "Prog.\nCarries",
+                'midpct9': "Prog.\nPasses",
+                'defpct1': "Defensive\nActions",
+                'midpct12': "Tackles & Int\n(pAdj)",
+                'defpct8': 'Aerial\nWin %',
+                'defpct1': 'Defensive\nActions',
+                'defpct2': "Tackles\n(pAdj)",
+                'defpct3': "Defensive\nDuels Won %",
+                'defpct6': "Shot Blocks",
+                'defpct7': "Interceptions\n(pAdj)",
+                'extrapct7': 'Aerial Duels\nWon',
+                'defpct8': "Aerial\nWin %",
+                'defpct9': "Long\nPass %",
+                'extrapct10': 'Crosses',
+                'extrapct3': 'Cross\nCompletion %',
+                'defpct10': "Assists &\n2nd/3rd Assists",
+                'defpct11': "Prog.\nPasses",
+                'defpct12': "Prog.\nCarries",
+                'fwdpct5': "Dribble\nSucces %",
+                'extrapct6': 'Acceleration\nwith Ball',
+                'midpct5': "Expected\nAssists",
+                'defpct4': "Fouls",
+                'defpct5': "Cards",
+                'extrapct8': 'Fouls Drawn',
+                'defpct1': 'Defensive\nActions',
+                'defpct2': "Tackles\n(pAdj)",
+                'defpct3': "Defensive\nDuels Won %",
+                'defpct6': "Shot Blocks",
+                'defpct7': "Interceptions\n(pAdj)",
+                'extrapct7': 'Aerial Duels\nWon',
+                'defpct8': "Aerial\nWin %",
+                'defpct9': "Long\nPass %",
+                'defpct10': "Assists &\n2nd/3rd Assists",
+                'defpct11': "Prog.\nPasses",
+                'defpct12': "Prog.\nCarries",
+                'fwdpct5': "Dribble\nSucces %",
+                'extrapct6': 'Acceleration\nwith Ball',
+                'midpct5': "Expected\nAssists",
+                'defpct4': "Fouls",
+                'defpct5': "Cards",
+                'extrapct8': 'Fouls Drawn',
+                'gkpct3': 'Shots\nAgainst',
+                'gkpct1': "Goals\nConceded",
+                'gkpct4': "Save %",
+                'gkpct14': "Goals\nPrevented %",
+                'gkpct2': 'Prevented\nGoals',
+                'gkpct6': "Coming Off\nLine",
+                'gkpct13': 'Received\nPasses',
+                'gkpct8': "Passes",
+                'gkpct11': "% of Passes\nBeing Short",
+                'gkpct12': "% of Passes\nBeing Lateral",
+                'gkpct9': "Long Pass\nCmp %"
+            }
+        }
+        # raw_vals = raw_valsdf[["Player",selected_raw_metrics]
+        
+        # selected_columns = column_mapping[template]
+        # dfRadarMF = dfRadarMF[['Player'] + list(selected_columns.keys())]
+        # dfRadarMF.rename(columns=selected_columns, inplace=True)
     ###########################################################################
 
     df1 = dfRadarMF.T.reset_index()
@@ -1627,6 +1704,11 @@ with table_tab:
 
 with radar_tab:
     with st.form('Player Radar Options'):
+        custom_radar_yn = st.selectbox('Pre-Made Radar, or Custom Radar?', ('Pre-Made', 'Custom'))
+        if custom_radar_yn == 'Custom':
+            metric_selections = st.multiselect("Select the metrics you want on the radar", ['Received passes per 90','Passes per 90','Pct of passes being short','Pct of passes being lateral','Accurate passes, %','Accurate short / medium passes, %','Accurate long passes, %','Crosses per 90','Accurate crosses, %','Smart passes per 90','Shot assists per 90','xA per 90','xA per Shot Assist','Assists per 90','Second assists per 90','Third assists per 90','1st, 2nd, 3rd assists','Progressive passes per 90','Progressive runs per 90','Shots per 90','npxG per 90','Non-penalty goals per 90','npxG per shot','Goal conversion, %','Successful dribbles, %','Accelerations per 90','Touches in box per 90','Fouls suffered per 90','Successful defensive actions per 90','Duels won, %','Defensive duels won, %','pAdj Tkl+Int per 90','PAdj Sliding tackles','PAdj Interceptions','Shots blocked per 90','Aerial duels per 90','Aerial duels won, %','Aerial duels won per 90','Fouls per 90 ','Shots against per 90','Conceded goals per 90','Save rate, %','Prevented goals per 90','Goals prevented %','Clean sheets, %','Exits per 90','Average long pass length, m'])
+        else:
+            custom_radar = 'n'
         bar_colors = st.selectbox('Bar Color Scheme', ('Benchmarking Percentiles', 'Metric Groups'))
         callout = st.selectbox('Data Labels on Bars', ('Per 90', 'Percentile'))
         player = st.text_input("Player's Radar to Generate", "")
@@ -1689,6 +1771,7 @@ with radar_tab:
                 age = gen['Age'].values[0],
                 sig = 'Twitter: @BeGriffis',
                 extra_text = xtratext,
+                custom_radar=custom_radar,
             )
             st.pyplot(radar_img.figure)
         except:

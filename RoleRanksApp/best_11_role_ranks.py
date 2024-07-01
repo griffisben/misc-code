@@ -1704,10 +1704,10 @@ with radar_tab:
     with st.form('Player Radar Options'):
         custom_radar_yn = st.selectbox('Pre-Made Radar, or Custom Radar?', ('Pre-Made', 'Custom'))
         if custom_radar_yn == 'Custom':
-            custom_radar = 'y'
+            custom_radar_q = 'y'
             metric_selections = st.multiselect("Select the metrics you want on the radar", ['Received passes per 90','Passes per 90','Pct of passes being short','Pct of passes being lateral','Accurate passes, %','Accurate short / medium passes, %','Accurate long passes, %','Crosses per 90','Accurate crosses, %','Smart passes per 90','Shot assists per 90','xA per 90','xA per Shot Assist','Assists per 90','Second assists per 90','Third assists per 90','1st, 2nd, 3rd assists','Progressive passes per 90','Progressive runs per 90','Shots per 90','npxG per 90','Non-penalty goals per 90','npxG per shot','Goal conversion, %','Successful dribbles, %','Accelerations per 90','Touches in box per 90','Fouls suffered per 90','Successful defensive actions per 90','Duels won, %','Defensive duels won, %','pAdj Tkl+Int per 90','PAdj Sliding tackles','PAdj Interceptions','Shots blocked per 90','Aerial duels per 90','Aerial duels won, %','Aerial duels won per 90','Fouls per 90 ','Shots against per 90','Conceded goals per 90','Save rate, %','Prevented goals per 90','Goals prevented %','Clean sheets, %','Exits per 90','Average long pass length, m'], ['Received passes per 90','Passes per 90','Pct of passes being short','Pct of passes being lateral','Accurate passes, %','Accurate short / medium passes, %','Accurate long passes, %','Crosses per 90','Accurate crosses, %','Smart passes per 90','Shot assists per 90','xA per 90','xA per Shot Assist'])
         else:
-            custom_radar = 'n'
+            custom_radar_q = 'n'
         submitted = st.form_submit_button("Submit Options")
     with st.form('Player Radar Options'):
         bar_colors = st.selectbox('Bar Color Scheme', ('Benchmarking Percentiles', 'Metric Groups'))
@@ -1753,7 +1753,7 @@ with radar_tab:
             ix = ws_pos.index(gen['Main Position'].values[0])
             minplay = int(gen['Minutes played'].values[0])
 
-            if custom_radar == 'n':
+            if custom_radar_q == 'n':
                 radar_img = scout_report(
                     data_frame = df_basic, ##
                     gender = gender, ##
@@ -1772,9 +1772,9 @@ with radar_tab:
                     age = gen['Age'].values[0],
                     sig = 'Twitter: @BeGriffis',
                     extra_text = xtratext,
-                    custom_radar=custom_radar,
+                    custom_radar='y',
                 )
-            if custom_radar == 'y':
+            if custom_radar_q == 'y':
                 radar_img = scout_report(
                     data_frame = df_basic, ##
                     gender = gender, ##
@@ -1793,7 +1793,7 @@ with radar_tab:
                     age = gen['Age'].values[0],
                     sig = 'Twitter: @BeGriffis',
                     extra_text = xtratext,
-                    custom_radar=custom_radar,
+                    custom_radar='n',
                     metric_selections=metric_selections
                 )
             st.pyplot(radar_img.figure)

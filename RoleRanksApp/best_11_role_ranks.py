@@ -1399,7 +1399,8 @@ def create_player_research_table(df_basic, mins, full_league_name, pos, min_age,
 formation_positions = {442:['GK','RCB','LCB','RB','LB','RCM','LCM','RW','LW','RS','LS',],
                       4231:['GK','RCB','LCB','RB','LB','RCM','LCM','CAM','RW','LW','ST'],
                       433:['GK','RCB','LCB','RB','LB','RCM','CM','LCM','RW','LW','ST'],
-                      343:['GK','RCB','CB','LCB','RB','LB','RCM','LCM','RW','LW','ST']
+                      343:['GK','RCB','CB','LCB','RB','LB','RCM','LCM','RW','LW','ST'],
+                       4222:['GK','RCB','LCB','RB','LB','RCM','LCM','RAM','LAM','RS','LS',],
                       }
 
 rank_11_base = read_csv('https://raw.githubusercontent.com/griffisben/misc-code/main/RoleRanksApp/Ranking_XI.csv')
@@ -1448,7 +1449,7 @@ with st.sidebar:
 with st.sidebar:
     st.header('Choose Basic Options')    
     season = st.selectbox('Season', (lg_lookup[lg_lookup.League == lg].Season.unique().tolist()))
-    formation = st.selectbox('Fomation', (4231, 433, 442, 343))
+    formation = st.selectbox('Fomation', (4231, 433, 442, 343, 4222))
     mins = st.number_input('Minimum Minutes Played', 300, 2000, 900)
     ages = st.slider('Age Range', 0, 45, (0, 45))
     exp_contracts_ = st.selectbox('Only Expiring Contracts?  \n(Will only show players with contracts expiring, via Wyscout)', (['No','Yes']))

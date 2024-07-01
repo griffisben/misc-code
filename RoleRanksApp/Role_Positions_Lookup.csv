@@ -37,8 +37,11 @@ Defensive Mid,Midfielder no CAM,mult,either,any,5,Defensive Mid,RCM
 Number 6,Midfielder no CAM,mult,either,any,5,Number 6,RCM
 Deep-Lying Playmaker,Midfielder no CAM,mult,either,any,5,Deep-Lying Playmaker,RCM
 Progressive Midfielder,Midfielder no CAM,mult,either,any,5,Progressive Midfielder,RCM
+Box-to-Box,Midfielder no CAM,mult,either,any,5,Box-to-Box Midfielder,RCM
 Advanced Playmaker,Midfielder no DM,mult,either,any,5,Advanced Playmaker,RCM
 Advanced Playmaker,Midfielder no DM,mult,either,any,5,Advanced Playmaker,CAM
+CAM,Midfielder no DM,mult,either,any,5,Classic CAM,CAM
+Wide CAM,Midfielder no DM,mult,either,any,5,Wide CAM,CAM
 Second Striker,Midfielder no DM,mult,either,any,5,Second Striker,CAM
 Playmaking Winger,Winger,mult,either,any,5,Playmaking Winger,LW
 Inverted Winger,Winger,mult,either,any,5,Inverted Winger,LW

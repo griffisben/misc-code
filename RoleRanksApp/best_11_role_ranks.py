@@ -236,7 +236,8 @@ def make_rankings(formation, mins, data, role_position_df, leagues, exp_contract
                 'Advanced Playmaker Score', 'Deep-Lying Playmaker Score', 'Playmaking Winger Score', 'Focal Point Striker Score',
                 'Link-Up Striker Score', 'Playmaking Striker Score', 'Advanced Striker Score', 'Deep-Lying Striker Score',
                 'Defensive Mid Score', 'Progressive Midfielder Score', 'Box-to-Box Score', 'Attacking FB Score', 'Second Striker Score', 'Inside Forward Score',
-               'Shot-Stopping Distributor Score', 'Spurs LCB Score', 'Number 6 Score', 'Defensive FB Score', 'KVO CAM Score', 'Inverted FB Score', 'Possession Enabler Score']
+               'Shot-Stopping Distributor Score', 'Spurs LCB Score', 'Number 6 Score', 'Defensive FB Score', 'KVO CAM Score',
+                'Inverted FB Score', 'Possession Enabler Score','Wide CAM Score']
     full_prospect_df = pd.DataFrame(columns=all_cols)
     
     
@@ -540,8 +541,8 @@ def make_rankings(formation, mins, data, role_position_df, leagues, exp_contract
             )
             dfProspect['Deep-Lying Playmaker Score'] = (
                 (.1 * dfProspect['defpct3']) +   # def duel win %
-                (.15 * dfProspect['extrapct10']) +   # key passes
-                (.1 * dfProspect['midpct4']) +     # shot assists
+                (.1 * dfProspect['extrapct10']) +   # key passes
+                (.15 * dfProspect['midpct4']) +     # shot assists
                 (.25 * dfProspect['defpct11']) +     # prog passes
                 (.25 * dfProspect['extrapct13']) +     # passes to final third + deep completions
                 (.15 * dfProspect['defpct10'])   # 1/2/3 assists
@@ -661,6 +662,15 @@ def make_rankings(formation, mins, data, role_position_df, leagues, exp_contract
                 (.125 * dfProspect['extrapct22']) +  # passes to box
                 (.1 * dfProspect['defpct12'])     # prog runs
             )
+            dfProspect['Wide CAM Score'] = (
+                (.1 * dfProspect['extrapct6']) +   # accelerations
+                (.2 * dfProspect['midpct4']) +  # shot assist
+                (.15 * dfProspect['fwdpct4']) +     # xA
+                (.15 * dfProspect['fwdpct5']) +      # dribble %
+                (.1 * dfProspect['extrapct11']) +   # deep completed cross
+                (.05 * dfProspect['fwdpct11']) +     # pen area touches
+                (.15 * dfProspect['extrapct3'])     # cross cmp %
+            )
             
             if foot != 'either':
                 dfProspect = dfProspect[dfProspect['Foot']==foot]
@@ -674,7 +684,7 @@ def make_rankings(formation, mins, data, role_position_df, leagues, exp_contract
                                 'Advanced Striker Score', 'Playmaking Winger Score', 'Box-to-Box Score', 'Playmaking Striker Score',
                                    'Attacking FB Score', 'Deep-Lying Playmaker Score', 'Second Striker Score', 'Progressive Midfielder Score',
                                'Defensive Mid Score', 'Shot-Stopping Distributor Score', 'Spurs LCB Score', 'Number 6 Score', 'Defensive FB Score',
-                               'KVO CAM Score', 'Inverted FB Score', 'Inside Forward Score',  'Possession Enabler Score']]
+                               'KVO CAM Score', 'Inverted FB Score', 'Inside Forward Score',  'Possession Enabler Score','Wide CAM Score']]
             ranks = ranks.rename(columns={'Team within selected timeframe': 'Team'})
     
             if normalize_to_100 == 'Yes':
@@ -1863,5 +1873,35 @@ with notes_tab:
         20% Percentage of passes that are short  \n
         15% Attacking duel win % (includes dribbles, ball shields when being pressed, etc.)  \n
         10% Fouls (reverse-coded; more = bad)
+        ''')
+    with st.expander('Deep-Lying Playmaker'):
+        st.write('''
+        A player who is vital in a team's creation from deep positions. They will be involved in creative passing as well as progressing play into more dangerous areas into the feet of more advanced players, instead of heavily involved in the final ball. Because they sit in deep positions, they have to be somewhat capable in defense, even if their main duties are in possession instead of out of possession.  \n
+        25% Passes into the final third + deep completions (within 20m of goal)  \n
+        25% Progressive passes  \n
+        15% Shot assists  \n
+        15% Assists + 2nd + 3rd assists  \n
+        10% Key passes  \n
+        10% Defensive duel win %
+        ''')
+    with st.expander('Progressive Midfielder'):
+        st.write('''
+        A midfielder whose main focus is simply moving the play up the pitch. They will progress and break lines with passes and carries, helping to shift from buildup to attacking phases. They are a key cog in their team's play, and should see a high number of touches because of that.  \n
+        22.5% Progressive carries  \n
+        22.5% Progressive passes  \n
+        20% Passes into the final third  \n
+        15% Received passes  \n
+        10% Attacking duel win % (includes dribbles, ball shields when being pressed, etc.)  \n
+        10% Accelerations with the ball
+        ''')
+    with st.expander('Box-to-Box Midfielder'):
+        st.write('''
+        Similar to the Progressive Midfielder in that they help progress play, the box-to-box midfielder is normally one of the best players on the pitch at winning duels... whether that's beating their man while carrying or shielding the ball near the attacking box, or winning the ball back near their own box, they are capable of impacting play at both boxes. They normally have plenty of stamina, and we can use minutes played as a simple proxy for that.  \n
+        25% Progressive carries  \n
+        22.5% Attacking duel win % (includes dribbles, ball shields when being pressed, etc.)  \n
+        22.5% Defensive duel win %  \n
+        10% Passes into the final third  \n
+        10% Possession-adjusted tackles+interceptions  \n
+        10% Minutes played
         ''')
 

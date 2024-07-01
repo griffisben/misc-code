@@ -1005,10 +1005,10 @@ def scout_report(data_frame, gender, league, season, xtra, template, pos, player
                 ix_selected+=[i]
         metric_rename = []
         for ix in ix_selected:
-            metric_rename+=names[ix]
+            metric_rename+=[names[ix]]
         base_vars = []
         for ix in ix_selected:
-            base_vars+=base_var_names[ix]
+            base_vars+=[base_var_names[ix]]
         column_mapping = dict(zip(base_vars, metric_rename))
 
         use_these_cols = ["Player"]+metric_selections

@@ -213,6 +213,7 @@ def make_rankings(formation, mins, data, role_position_df, leagues, exp_contract
                             4231:['GK','RCB','LCB','RB','LB','RCM','LCM','CAM','RW','LW','ST'],
                             433:['GK','RCB','LCB','RB','LB','RCM','CM','LCM','RW','LW','ST'],
                             343:['GK','RCB','CB','LCB','RB','LB','RCM','LCM','RW','LW','ST'],
+                           4222:['GK','RCB','LCB','RB','LB','RCM','LCM','RAM','LAM','RS','LS',],
                           }
     df = data
     

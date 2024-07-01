@@ -1010,8 +1010,9 @@ def scout_report(data_frame, gender, league, season, xtra, template, pos, player
         for ix in ix_selected:
             base_vars+=base_var_names[ix]
         column_mapping = dict(zip(base_vars, metric_rename))
-        
-        raw_vals = raw_valsdf[["Player",metric_selections]
+
+        use_these_cols = ["Player"]+metric_selections
+        raw_vals = raw_valsdf[use_these_cols]
         
         selected_columns = column_mapping
         dfRadarMF = dfRadarMF[['Player'] + list(selected_columns.keys())]

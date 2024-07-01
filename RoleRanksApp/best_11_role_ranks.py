@@ -1772,7 +1772,7 @@ with radar_tab:
                     age = gen['Age'].values[0],
                     sig = 'Twitter: @BeGriffis',
                     extra_text = xtratext,
-                    custom_radar='y',
+                    custom_radar='n',
                 )
             if custom_radar_q == 'y':
                 radar_img = scout_report(
@@ -1793,7 +1793,7 @@ with radar_tab:
                     age = gen['Age'].values[0],
                     sig = 'Twitter: @BeGriffis',
                     extra_text = xtratext,
-                    custom_radar='n',
+                    custom_radar='y',
                     metric_selections=metric_selections
                 )
             st.pyplot(radar_img.figure)

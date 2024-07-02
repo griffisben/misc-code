@@ -1932,9 +1932,9 @@ with scatter_tab:
                                 'Central Midfielders no CAM (DM, CM)', 'Central Midfielders no DM (CM, CAM)', 'Fullbacks (FBs/WBs)',
                                 'Defenders (CB, FB/WB, DM)', 'Centre-Backs', 'CBs & DMs', 'Goalkeepers'))
         
-        xx = st.selectbox('X-Axis Variable', ['Age']+(scatter_df.columns[18:len(scatter_df.columns)].tolist()))
-        yy = st.selectbox('Y-Axis Variable', ['Age']+(scatter_df.columns[18:len(scatter_df.columns)].tolist()))
-        cc = st.selectbox('Point Color Variable', ['Age']+(scatter_df.columns[18:len(scatter_df.columns)].tolist()))
+        xx = st.selectbox('X-Axis Variable', ['Age']+(scatter_df.columns[18:len(scatter_df.columns)-1].tolist()))
+        yy = st.selectbox('Y-Axis Variable', ['Age']+(scatter_df.columns[18:len(scatter_df.columns)-1].tolist()))
+        cc = st.selectbox('Point Color Variable', ['Age']+(scatter_df.columns[18:len(scatter_df.columns)-1].tolist()))
         cscale = st.selectbox('Point Colorscale', colorscales, index=78)
 
         dfProspect_scatter = scatter_df[(scatter_df['Minutes played'] >= mins) & (scatter_df['League'] == full_league_name)].copy()
@@ -1956,11 +1956,11 @@ with scatter_tab:
     if ages[0] == 0 and ages[1] == 45:
         age_text_scatter = f''
     elif ages[0] == 0:
-        age_text_scatter = f'U{ages[1]} players only'
+        age_text_scatter = f'U{ages[1]} players only, '
     elif ages[1] == 45:
-        age_text_scatter = f'Players {ages[0]} & older'
+        age_text_scatter = f'Players {ages[0]} & older, '
     else:
-        age_text_scatter = f'Players between {ages[0]} & {ages[1]}'
+        age_text_scatter = f'Players between {ages[0]} & {ages[1]}, '
 
     fig_scatter = px.scatter(
         dfProspect_scatter,
@@ -1971,7 +1971,7 @@ with scatter_tab:
         text = 'Player',
         hover_data=['Team', 'Age', 'Position', 'Minutes played'],
         hover_name = 'Player',
-        title = '%s %s, %s & %s <br><sup>%s, %s min. %i minutes played | %s</sup><br><sup>Created by @BeGriffis, made on best-11-scouting.streamlit.app</sup>' %(season,lg,xx,yy,age_text_scatter,pos_select_scatter,mins,update_date),
+        title = '%s %s, %s & %s <br><sup>%s%s min. %i minutes played | %s</sup><br><sup>Created by @BeGriffis, made on best-11-scouting.streamlit.app</sup>' %(season,lg,xx,yy,age_text_scatter,pos_select_scatter,mins,update_date),
         width=900,
         height=700)
     fig_scatter.update_traces(textposition='top right', marker=dict(size=10, line=dict(width=1, color='black')))

@@ -1804,12 +1804,14 @@ with all_player_list_tab:
     if chosen_team == 'N/A':
         player_list_df = clean_df.copy()
         player_list_df = player_list_df.sort_values(by=['Player']).reset_index(drop=True)
-        player_list_df[['Full name','Player','Team within selected timeframe','Age','Position','Minutes played','On loan','Passport country']].rename(columns={'Player':'Radar Name','Team within selected timeframe':'Team','Position':'Positions'})
+        player_list_df = player_list_df[['Full name','Player','Team within selected timeframe','Age','Position','Minutes played','On loan','Passport country']].rename(columns={'Player':'Radar Name','Team within selected timeframe':'Team','Position':'Positions'})
+        player_list_df
     if chosen_team != 'N/A':
         player_list_df = clean_df.copy()
         player_list_df = player_list_df[player_list_df['Team within selected timeframe']==chosen_team].sort_values(by=['Player']).reset_index(drop=True)
-        player_list_df[['Full name','Player','Team within selected timeframe','Age','Position','Minutes played','On loan','Passport country']].rename(columns={'Player':'Radar Name','Team within selected timeframe':'Team','Position':'Positions'})
-
+        player_list_df = player_list_df[['Full name','Player','Team within selected timeframe','Age','Position','Minutes played','On loan','Passport country']].rename(columns={'Player':'Radar Name','Team within selected timeframe':'Team','Position':'Positions'})
+        player_list_df
+        
 with filter_tab:
     st.button("Reset Sliders", on_click=_update_slider, kwargs={"value": 0.0})
     with st.form('Minimum Percentile Filters'):

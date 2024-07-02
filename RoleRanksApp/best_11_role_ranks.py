@@ -15,10 +15,10 @@ from PIL import Image
 from highlight_text import fig_text
 import urllib.request
 matplotlib.rcParams.update(matplotlib.rcParamsDefault)
-@st.cache_data(ttl=60*15)
 import plotly.express as px
 import plotly.figure_factory as ff
 from plotly.graph_objects import Layout
+@st.cache_data(ttl=60*15)
 def click_button():
     st.session_state.clicked = True
 def reset_click_button():

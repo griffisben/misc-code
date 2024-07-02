@@ -1668,7 +1668,7 @@ def make_fig(ages,exp_contracts,rank_11_base,show_ranks2,season,lg,normalize_to_
 
 show_ranks = show_ranks[['Player','Team','Age','Squad Position','Player Pos.','Score','Role Rank']].copy()
 
-image_tab, table_tab, radar_tab, filter_tab, filter_table_tab, notes_tab = st.tabs(['Role Ranking Image', 'Role Ranking Table', 'Player Radar Generation', 'Player Search, Filters', 'Player Search, Results', 'Role Score Definitions & Calculations'])
+image_tab, table_tab, radar_tab, all_player_list_tab, filter_tab, filter_table_tab, notes_tab = st.tabs(['Role Ranking Image', 'Role Ranking Table', 'Player Radar Generation', 'Player List', 'Player Search, Filters', 'Player Search, Results', 'Role Score Definitions & Calculations'])
 
 with image_tab:
     fig = make_fig(ages,exp_contracts,rank_11_base,show_ranks2,season,lg,normalize_to_100,team_text)
@@ -1800,6 +1800,15 @@ with radar_tab:
         except:
             st.text("Please enter a valid name & age.  \nPlease check spelling as well.  \nIf you're  using a custom radar, try Running again.")
 
+with all_player_list_tab:
+    if chosen_team == 'N/A':
+        player_list_df = clean_df.copy()
+        player_list_df = player_list_df.sort_values(by=['Player']).reset_index(drop=True)
+        player_list_df[['Full name','Player','Team within selected timeframe','Age','Position','Minutes played','On loan','Passport country']].rename(columns={'Player':'Radar Name','Team within selected timeframe':'Team','Position':'Positions'})
+    if chosen_team != 'N/A':
+        player_list_df = clean_df.copy()
+        player_list_df = player_list_df[player_list_df['Team within selected timeframe']==chosen_team].sort_values(by=['Player']).reset_index(drop=True)
+        player_list_df[['Full name','Player','Team within selected timeframe','Age','Position','Minutes played','On loan','Passport country']].rename(columns={'Player':'Radar Name','Team within selected timeframe':'Team','Position':'Positions'})
 
 with filter_tab:
     st.button("Reset Sliders", on_click=_update_slider, kwargs={"value": 0.0})

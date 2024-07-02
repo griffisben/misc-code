@@ -1971,7 +1971,7 @@ with scatter_tab:
         text = 'Player',
         hover_data=['Team', 'Age', 'Position', 'Minutes played'],
         hover_name = 'Player',
-        title = '%s %s, %s & %s <br><sup>%s%s | Minimum %i minutes played | %s | Code by @BeGriffis</sup>' %(season,lg,xx,yy,age_text_scatter,pos_select_scatter,mins,update_date),
+        title = '%s %s, %s & %s <br><sup>%s, %s min. %i minutes played | %s<br>Created by @BeGriffis, made on best-11-scouting.streamlit.app</sup>' %(season,lg,xx,yy,age_text_scatter,pos_select_scatter,mins,update_date),
         width=900,
         height=700)
     fig_scatter.update_traces(textposition='top right', marker=dict(size=10, line=dict(width=1, color='black')))

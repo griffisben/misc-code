@@ -16,6 +16,19 @@ from highlight_text import fig_text
 import urllib.request
 matplotlib.rcParams.update(matplotlib.rcParamsDefault)
 @st.cache_data(ttl=60*15)
+def click_button():
+    st.session_state.clicked = True
+def reset_click_button():
+    st.session_state.clicked = False
+def click_button2():
+    st.session_state.clicked = True
+def reset_click_button2():
+    st.session_state.clicked = False
+matplotlib.rcParams.update(matplotlib.rcParamsDefault)
+colorscales = px.colors.named_colorscales()
+colorscales2 = [f"{cc}_r" for cc in colorscales]
+colorscales += colorscales2
+
 
 def color_percentile(pc):
     if 1-pc <= 0.1:
@@ -1672,7 +1685,7 @@ def make_fig(ages,exp_contracts,rank_11_base,show_ranks2,season,lg,normalize_to_
 
 show_ranks = show_ranks[['Player','Team','Age','Squad Position','Player Pos.','Score','Role Rank']].copy()
 
-image_tab, table_tab, radar_tab, all_player_list_tab, filter_tab, filter_table_tab, notes_tab = st.tabs(['Role Ranking Image', 'Role Ranking Table', 'Player Radar Generation', 'Player List', 'Player Search, Filters', 'Player Search, Results', 'Role Score Definitions & Calculations'])
+image_tab, table_tab, radar_tab, all_player_list_tab, filter_tab, filter_table_tab, scatter_tab, notes_tab = st.tabs(['Role Ranking Image', 'Role Ranking Table', 'Player Radar Generation', 'Player List', 'Player Search, Filters', 'Player Search, Results', 'Scatter Plots', 'Role Score Definitions & Calculations'])
 
 with image_tab:
     fig = make_fig(ages,exp_contracts,rank_11_base,show_ranks2,season,lg,normalize_to_100,team_text)
@@ -1903,7 +1916,57 @@ with filter_table_tab:
     
     st.dataframe(player_research_table.style.applymap(color_percentile, subset=player_research_table.columns[6:]))
 
+with scatter_tab:
+    scatter_df = clean_df.copy()
+
+    with st.form("Scatter Options"):
+        submitted = st.form_submit_button("Submit Options")
+
+        pos_select_scatter = st.selectbox('Positions', ('Strikers', 'Strikers and Wingers', 'Forwards (AM, W, CF)',
+                                'Forwards no ST (AM, W)', 'Wingers', 'Central Midfielders (DM, CM, CAM)',
+                                'Central Midfielders no CAM (DM, CM)', 'Central Midfielders no DM (CM, CAM)', 'Fullbacks (FBs/WBs)',
+                                'Defenders (CB, FB/WB, DM)', 'Centre-Backs', 'CBs & DMs', 'Goalkeepers'))
+        
+        xx = st.selectbox('X-Axis Variable', ['Age']+(df.columns[18:len(df.columns)].tolist()))
+        yy = st.selectbox('Y-Axis Variable', ['Age']+(df.columns[18:len(df.columns)].tolist()))
+        cc = st.selectbox('Point Color Variable', ['Age']+(df.columns[18:len(df.columns)].tolist()))
+        cscale = st.selectbox('Point Colorscale', colorscales, index=78)
+
+        scatter_df = filter_by_position(scatter_df, pos_select_scatter)
+        
+    flipX = xx
+    flipY = yy
     
+    if 'clicked' not in st.session_state:
+        st.session_state.clicked = False
+    st.button('Swap X & Y Axes', on_click=click_button)
+    if st.session_state.clicked:
+        xx = flipY
+        yy = flipX
+    if 'clicked' not in st.session_state:
+        st.session_state.clicked = False
+    st.button('Swap X & Y Axes Back', on_click=reset_click_button)
+
+    fig = px.scatter(
+        dfProspect,
+        x = xx,
+        y = yy,
+        color = cc,
+        color_continuous_scale = cscale,
+        text = 'Player',
+        hover_data=['Team', 'Age', 'Position', 'Minutes played'],
+        hover_name = 'Player',
+        title = '%s %s, %s & %s <br><sup>%s%s | Minimum %i minutes played | %s | Code by @BeGriffis</sup>' %(ssn,league,xx,yy,age_text,pos,mins,date),
+        width=900,
+        height=700)
+    fig.update_traces(textposition='top right', marker=dict(size=10, line=dict(width=1, color='black')))
+    
+    fig.add_hline(y=dfProspect[yy].median(), name='Median', line_width=0.5)
+    fig.add_vline(x=dfProspect[xx].median(), name='Median', line_width=0.5)
+    
+    st.plotly_chart(fig, theme=None, use_container_width=False)
+
+
 with notes_tab:
     with st.expander('Shot-Stopping Distributor'):
         st.write('''

@@ -1953,6 +1953,15 @@ with scatter_tab:
         st.session_state.clicked = False
     st.button('Swap X & Y Axes Back', on_click=reset_click_button)
 
+    if ages[0] == 0 and ages[1] == 45:
+        age_text_scatter = f''
+    elif ages[0] == 0:
+        age_text_scatter = f'U{ages[1]} players only'
+    elif ages[1] == 45:
+        age_text_scatter = f'Players {ages[0]} & older'
+    else:
+        age_text_scatter = f'Players between {ages[0]} & {ages[1]}'
+
     fig_scatter = px.scatter(
         dfProspect_scatter,
         x = xx,
@@ -1962,7 +1971,7 @@ with scatter_tab:
         text = 'Player',
         hover_data=['Team', 'Age', 'Position', 'Minutes played'],
         hover_name = 'Player',
-        title = '%s %s, %s & %s <br><sup>%s%s | Minimum %i minutes played | %s | Code by @BeGriffis</sup>' %(season,lg,xx,yy,age_text,pos_select_scatter,mins,update_date),
+        title = '%s %s, %s & %s <br><sup>%s%s | Minimum %i minutes played | %s | Code by @BeGriffis</sup>' %(season,lg,xx,yy,age_text_scatter,pos_select_scatter,mins,update_date),
         width=900,
         height=700)
     fig_scatter.update_traces(textposition='top right', marker=dict(size=10, line=dict(width=1, color='black')))

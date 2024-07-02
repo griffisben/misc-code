@@ -478,9 +478,9 @@ def make_rankings(formation, mins, data, role_position_df, leagues, exp_contract
             )
             dfProspect['Inverted Winger Score'] = (
                 (.1 * dfProspect['midpct4']) +  # shot assist
-                (.075 * dfProspect['extrapct10']) +  # key passes
-                (.2 * dfProspect['fwdpct2']) +     # npxG
-                (.125 * dfProspect['fwdpct5']) +      # dribble %
+                (.1 * dfProspect['extrapct11']) +   # deep completed cross
+                (.15 * dfProspect['fwdpct2']) +     # npxG
+                (.15 * dfProspect['fwdpct5']) +      # dribble %
                 (.25 * dfProspect['extrapct2']) +    # shots
                 (.15 * dfProspect['fwdpct11'])     # pen area touches
             )
@@ -615,8 +615,8 @@ def make_rankings(formation, mins, data, role_position_df, leagues, exp_contract
                 (.15 * dfProspect['extrapct18']) +   # received passes
                 (.2 * dfProspect['fwdpct1']) +  # np G
                 (.2 * dfProspect['fwdpct2']) +     # npxG
-                (.2 * dfProspect['extrapct10']) +   # key passes
-                (.15 * dfProspect['defpct10']) +     # 1+2+3 assists
+                (.2 * dfProspect['midpct4']) +   # shot assists
+                (.1 * dfProspect['defpct10']) +     # 1+2+3 assists
                 (.15 * dfProspect['defpct12'])     # prog runs
             )
             dfProspect['Progressive Midfielder Score'] = (
@@ -2045,5 +2045,108 @@ with notes_tab:
         15% Deep completed crosses  \n
         10% Accelerations with the ball  \n
         5% Touches in the box
+        ''')
+    with st.expander('Second Striker'):
+        st.write('''
+        An attacking midfielder who is one of the main scoring threats on their team. They can make late runs into the box as well as sit in the box, using movement to create space for a shot. They should be a little creative, but their main role is scoring.  \n
+        20% non-penalty xG (npxG)  \n
+        20% Touches in the box  \n
+        15% Non-penalty goals  \n
+        15% Expected assists (xA)  \n
+        10% Goal conversion %  \n
+        10% Dribble win %  \n
+        10% Progressive carries
+        ''')
+    with st.expander('Playmaking Winger'):
+        st.write('''
+        A player who is vital in a team's creation from deep positions. They will be involved in creative passing as well as progressing play into more dangerous areas into the feet of more advanced players, instead of heavily involved in the final ball. Because they sit in deep positions, they have to be somewhat capable in defense, even if their main duties are in possession instead of out of possession.  \n
+        20% Key passes  \n
+        20% Shot assists  \n
+        20% Passes into the final third + deep completions (within 20m of goal)  \n
+        15% Progressive passes  \n
+        15% Smart passes  \n
+        10% Assists + 2nd + 3rd assists
+        ''')
+    with st.expander('Inverted Winger'):
+        st.write('''
+        A winger who like to cut inside and impact play closer to the the box, if not inside of it. They are still expected to create for teammates, but will try to create for themselves just as frequently. They are a threat to score off the wing.  \n
+        25% Shots  \n
+        15% non-penalty xG (npxG)  \n
+        15% Touches in the box  \n
+        15% Dribble win %  \n
+        10% Shot assists  \n
+        10% Deep completed crosses (within 20m of goal)
+        ''')
+    with st.expander('Traditional Winger'):
+        st.write('''
+        A classic wide player who relishes sprinting up the flank, beating players on the dribble, and sending in a cross. These players can cause havoc with their pace/acceleration, dribbling, and crossing.  \n
+        20% Shot assists  \n
+        17.5% Dribble win %  \n
+        17.5% Deep completed crosses (within 20m of goal)  \n
+        15% Accelerations with the ball  \n
+        10% Expected assists (xA)  \n
+        10% Cross completion %
+        ''')
+    with st.expander('Inside Forward'):
+        st.write('''
+        Almost acting as a wide striker, these players are wingers who cut inside similarly to inverted wingers but with a much greater emphasis on getting into the box and scoring. These players should be clinical first and foremost.  \n
+        20% Touches in the penalty box  \n
+        20% Non-penalty expected goals (npxG)  \n
+        15% Non-penalty goals  \n
+        15% Expected assists (xA)  \n
+        10% Goal conversion %  \n
+        10% Dribble win %  \n
+        10% Progressive carries
+        ''')
+    with st.expander('Advanced Striker'):
+        st.write('''
+        This striker should be the main scoring threat in the team. They operate in the box, but are also able to carry the ball themselves in behind the defense. Most of their game revolves arund shooting & scoring, but given where they operate & their role, the best of them will be able to draw defenders onto them in order to create space for teammates, allowing them to generate a few assists on top of their goal tally.  \n
+        20% Touches in the penalty box  \n
+        20% Non-penalty expected goals (npxG)  \n
+        15% Non-penalty goals  \n
+        15% Expected assists (xA)  \n
+        10% Goal conversion %  \n
+        10% Dribble win %  \n
+        10% Progressive carries
+        ''')
+    with st.expander('Deep-Lying Striker'):
+        st.write('''
+        A striker who can score, but usually site a bit deeper than other strikers so that they can carry into space. They are also involved in linking up play to others running behind them into space created by dropping off the back line, possibly drawing a CB with them. Given their deeper starting location, they are usually a little more involved in their team's play, receiving more passes than other strikers.  \n
+        20% Non-penalty expected goals (npxG)  \n
+        20% Non-penalty goals  \n
+        20% Shot assists  \n
+        15% Received passes  \n
+        15% Progressive carries  \n
+        10% Assists + 2nd & 3rd assists
+        ''')
+    with st.expander('Target Man'):
+        st.write('''
+        A striker who is the focal point for long balls & crosses, they are able to win balls in the air and shoot. While some may have other elements to their game, this specific role revolves around winning aerials, shooting, and scoring, all within the box.  \n
+        30% Touches in the penalty box  \n
+        22.5% Aerial Win %  \n
+        22.5% Non-penalty expected goals (npxG)  \n
+        20% Shot on target %  \n
+        5% Non-penalty goals
+        ''')
+    with st.expander('Playmaking Striker'):
+        st.write('''
+        A striker who is a key playmaker for their team. This is close to a false 9. This type of striker will be able to drop deep or sit deep, occupying attacking midfield zones & helping to progress play and create dangerous chances for their teammates. Usually, this type of striker pairs well with wingers who like to cut in, allowing them to receive passes from the strier, in the areas where the striker has just created space. There's not shooting metrics involved in this role, as this is purely a playmaking role, focusing on creating for others.  \n
+        20% Shot assists  \n
+        20% Key passes  \n
+        20% Passes into the final third + deep completions  \n
+        15% Expected assists (xA)  \n
+        15% Progressive passes  \n
+        10% Smart passes
+        ''')
+    with st.expander('Link-Up Striker'):
+        st.write('''
+        A striker that is an important cog to their team to progress possession through, but instead of the striker making progressive actions, they are the ones receiving them. They will then lay passes off to teammates, but will also get into the box again to be a scoring threat.  \n
+        25% Short pass completion %  \n
+        25% Received passes  \n
+        10% Shot assists  \n
+        10% Key passes  \n
+        10% Non-penalty expected goals (npxG)  \n
+        10% Non-penalty goals  \n
+        10% Attacking duel win % (includes dribbles, ball shields when being pressed, etc.)
         ''')
 

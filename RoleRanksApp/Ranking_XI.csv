@@ -26,7 +26,7 @@ Inverted Winger,Winger,mult,either,any,200,Inverted Winger,111,LW,,
 Winger,Winger,mult,either,any,200,Traditional Winger,111,LW,,
 Advanced Striker,CF,single,either,any,200,Advanced Striker,111,ST,,
 Deep-Lying Striker,CF,single,either,any,200,Deep-Lying Striker,111,LS,,
-Focal Point Striker,CF,single,either,any,200,Focal Point Striker,111,RS,,
+Focal Point Striker,CF,single,either,any,200,Target Man,111,RS,,
 Playmaking Striker,CF,single,either,any,200,Playmaking Striker,111,LS,,
 Link-Up Striker,CF,single,either,any,200,Link-Up Striker,111,RS,,
 KVO CAM,Midfielder no CAM,mult,either,any,200,Nanan Houssou,8,CAM,,
@@ -61,7 +61,7 @@ Inverted Winger,Winger,mult,either,any,200,Inverted Winger,707,LW,,
 Traditional Winger,Winger,mult,either,any,200,Traditional Winger,707,LW,,
 Advanced Striker,CF,single,either,any,200,Advanced Striker,707,ST,,
 Deep-Lying Striker,CF,single,either,any,200,Deep-Lying Striker,707,LS,,
-Focal Point Striker,CF,single,either,any,200,Focal Point Striker,707,RS,,
+Focal Point Striker,CF,single,either,any,200,Target Man,707,RS,,
 Playmaking Striker,CF,single,either,any,200,Playmaking Striker,707,LS,,
 Link-Up Striker,CF,single,either,any,200,Link-Up Striker,707,RS,,
 CM,Midfielder no CAM,mult,either,any,200,Rounded CM,707,CM,,
@@ -86,7 +86,7 @@ Number 6,Midfielder no CAM,mult,either,any,5,Number 6,442,LCM,55,80
 Inverted Winger,Winger,mult,either,any,5,Inverted Winger,442,RW,75,-15
 Playmaking Winger,Winger,mult,either,any,5,Playmaking Winger,442,LW,75,115
 Deep-Lying Striker,CF,single,either,any,5,Deep-Lying Striker,442,LS,95,20
-Focal Point Striker,CF,single,either,any,5,Focal Point Striker,442,RS,95,80
+Focal Point Striker,CF,single,either,any,5,Target Man,442,RS,95,80
 Shot-Stopping Distributor,GK,single,either,any,5,Shot-Stopping Distributor,4231,GK,0,50
 Attacking FB,Fullback,mult,either,RB|RWB,5,Attacking RB,4231,RB,35,-15
 Ball Playing CB,CB,single,either,any,5,Ball Playing CB,4231,RCB,20,20
@@ -119,4 +119,4 @@ Number 6,Midfielder no CAM,mult,either,any,5,Number 6,4222,LCM,55,80
 Inverted Winger,Winger,mult,either,any,5,Inverted Winger,4222,RAM,75,10
 Playmaking Winger,Winger,mult,either,any,5,Playmaking Winger,4222,LAM,75,90
 Deep-Lying Striker,CF,single,either,any,5,Deep-Lying Striker,4222,LS,95,20
-Focal Point Striker,CF,single,either,any,5,Focal Point Striker,4222,RS,95,80
+Focal Point Striker,CF,single,either,any,5,Target Man,4222,RS,95,80

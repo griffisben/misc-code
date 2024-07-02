@@ -1580,6 +1580,8 @@ for i in range(0,11):
 role_position_df['formation'] = formation
 
 full_league_name = f"{lg} {season}"
+update_date = lg_lookup[(lg_lookup.League==lg) & (lg_lookup.Season==season)].Date.values[0]
+
     
 if gender == 'Men':
     df = pd.read_csv(f'https://raw.githubusercontent.com/griffisben/Wyscout_Prospect_Research/main/Main%20App/{full_league_name.replace(" ","%20").replace("ü","u").replace("ó","o").replace("ö","o")}.csv')
@@ -1960,7 +1962,7 @@ with scatter_tab:
         text = 'Player',
         hover_data=['Team', 'Age', 'Position', 'Minutes played'],
         hover_name = 'Player',
-        title = '%s %s, %s & %s <br><sup>%s%s | Minimum %i minutes played | %s | Code by @BeGriffis</sup>' %(season,league,xx,yy,age_text,pos_select_scatter,mins,date),
+        title = '%s %s, %s & %s <br><sup>%s%s | Minimum %i minutes played | %s | Code by @BeGriffis</sup>' %(season,lg,xx,yy,age_text,pos_select_scatter,mins,update_date),
         width=900,
         height=700)
     fig_scatter.update_traces(textposition='top right', marker=dict(size=10, line=dict(width=1, color='black')))

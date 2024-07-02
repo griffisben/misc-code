@@ -1938,7 +1938,7 @@ with scatter_tab:
         cscale = st.selectbox('Point Colorscale', colorscales, index=78)
 
         dfProspect_scatter = scatter_df[(scatter_df['Minutes played'] >= mins) & (scatter_df['League'] == full_league_name)].copy()
-        dfProspect_scatter = filter_by_position(dfProspect_scatter, pos_select_scatter)
+        dfProspect_scatter = filter_by_position_long(dfProspect_scatter, pos_select_scatter)
         
     flipX = xx
     flipY = yy

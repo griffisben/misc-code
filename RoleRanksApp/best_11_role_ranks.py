@@ -1927,12 +1927,13 @@ with scatter_tab:
                                 'Central Midfielders no CAM (DM, CM)', 'Central Midfielders no DM (CM, CAM)', 'Fullbacks (FBs/WBs)',
                                 'Defenders (CB, FB/WB, DM)', 'Centre-Backs', 'CBs & DMs', 'Goalkeepers'))
         
-        xx = st.selectbox('X-Axis Variable', ['Age']+(df.columns[18:len(df.columns)].tolist()))
-        yy = st.selectbox('Y-Axis Variable', ['Age']+(df.columns[18:len(df.columns)].tolist()))
-        cc = st.selectbox('Point Color Variable', ['Age']+(df.columns[18:len(df.columns)].tolist()))
+        xx = st.selectbox('X-Axis Variable', ['Age']+(scatter_df.columns[18:len(scatter_df.columns)].tolist()))
+        yy = st.selectbox('Y-Axis Variable', ['Age']+(scatter_df.columns[18:len(scatter_df.columns)].tolist()))
+        cc = st.selectbox('Point Color Variable', ['Age']+(scatter_df.columns[18:len(scatter_df.columns)].tolist()))
         cscale = st.selectbox('Point Colorscale', colorscales, index=78)
 
-        scatter_df = filter_by_position(scatter_df, pos_select_scatter)
+        dfProspect_scatter = scatter_df[(scatter_df['Minutes played'] >= mins) & (scatter_df['League'] == full_league_name)].copy()
+        dfProspect_scatter = filter_by_position(dfProspect_scatter, pos_select_scatter)
         
     flipX = xx
     flipY = yy
@@ -1947,8 +1948,8 @@ with scatter_tab:
         st.session_state.clicked = False
     st.button('Swap X & Y Axes Back', on_click=reset_click_button)
 
-    fig = px.scatter(
-        dfProspect,
+    fig_scatter = px.scatter(
+        dfProspect_scatter,
         x = xx,
         y = yy,
         color = cc,
@@ -1956,15 +1957,15 @@ with scatter_tab:
         text = 'Player',
         hover_data=['Team', 'Age', 'Position', 'Minutes played'],
         hover_name = 'Player',
-        title = '%s %s, %s & %s <br><sup>%s%s | Minimum %i minutes played | %s | Code by @BeGriffis</sup>' %(ssn,league,xx,yy,age_text,pos,mins,date),
+        title = '%s %s, %s & %s <br><sup>%s%s | Minimum %i minutes played | %s | Code by @BeGriffis</sup>' %(ssn,league,xx,yy,age_text,pos_select_scatter,mins,date),
         width=900,
         height=700)
-    fig.update_traces(textposition='top right', marker=dict(size=10, line=dict(width=1, color='black')))
+    fig_scatter.update_traces(textposition='top right', marker=dict(size=10, line=dict(width=1, color='black')))
     
-    fig.add_hline(y=dfProspect[yy].median(), name='Median', line_width=0.5)
-    fig.add_vline(x=dfProspect[xx].median(), name='Median', line_width=0.5)
+    fig_scatter.add_hline(y=dfProspect_scatter[yy].median(), name='Median', line_width=0.5)
+    fig_scatter.add_vline(x=dfProspect_scatter[xx].median(), name='Median', line_width=0.5)
     
-    st.plotly_chart(fig, theme=None, use_container_width=False)
+    st.plotly_chart(fig_scatter, theme=None, use_container_width=False)
 
 
 with notes_tab:

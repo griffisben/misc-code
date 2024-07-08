@@ -1621,7 +1621,7 @@ show_ranks = rank_list[['Player','Team','Age','Squad Position','Player Pos.','Sc
 path_eff = [path_effects.Stroke(linewidth=0.5, foreground='#fbf9f4'), path_effects.Normal()]
 
 show_ranks2 = show_ranks.copy()
-def make_fig(ages,exp_contracts,rank_11_base,show_ranks2,season,lg,normalize_to_100,team_text):
+def make_fig(ages,exp_contracts,rank_11_base,show_ranks2,season,lg,normalize_to_100,team_text,chosen_nations):
     plt.clf()
     show_ranks = show_ranks2
     pitch = VerticalPitch(pitch_type='opta', pitch_color='#fbf9f4', line_color='#fbf9f4', line_zorder=1, half=False)
@@ -1649,6 +1649,11 @@ def make_fig(ages,exp_contracts,rank_11_base,show_ranks2,season,lg,normalize_to_
         sub_title_text = age_text
     else:
         sub_title_text = f"{age_text} | {exp_text}"
+
+    if chosen_nations != "":
+        nation_text = f"Only nationalities: {chosen_nations.replace('|',', ')}\n"
+    else:
+        nation_text = ""
     
     for i in range(0,11):
         X = rank_11_base[(rank_11_base.form_pos == formation_positions[formation][i]) & (rank_11_base.formation == formation)].x.values[0]
@@ -1680,7 +1685,7 @@ def make_fig(ages,exp_contracts,rank_11_base,show_ranks2,season,lg,normalize_to_
                      ha='center',va='bottom', size=20, weight='bold', color='#4a2e19')
     axs['title'].text(0.5, 1.35, f'Data via Wyscout | {lg_lookup[(lg_lookup.League==lg) & (lg_lookup.Season==season)].Date.values[0]} | Created by Ben Griffis (@BeGriffis on Twitter)',
                      ha='center',va='top', size=12, color='#4a2e19')
-    axs['title'].text(0.5, .95, sub_title_text,
+    axs['title'].text(0.5, .95, f"{nation_text}{sub_title_text}",
                      ha='center',va='top', size=12, color='#4a2e19')
     axs['title'].text(0.5, .6, f'Generated on best11roleranks.streamlit.app',
                      ha='center',va='top', size=12, style='italic', color='#4a2e19')
@@ -1698,7 +1703,7 @@ show_ranks = show_ranks[['Player','Team','Age','Squad Position','Player Pos.','S
 image_tab, table_tab, radar_tab, all_player_list_tab, filter_tab, filter_table_tab, scatter_tab, notes_tab = st.tabs(['Role Ranking Image', 'Role Ranking Table', 'Player Radar Generation', 'Player List', 'Player Search, Filters', 'Player Search, Results', 'Scatter Plots', 'Role Score Definitions & Calculations'])
 
 with image_tab:
-    fig = make_fig(ages,exp_contracts,rank_11_base,show_ranks2,season,lg,normalize_to_100,team_text)
+    fig = make_fig(ages,exp_contracts,rank_11_base,show_ranks2,season,lg,normalize_to_100,team_text,chosen_nations)
     fig
 
 with table_tab:

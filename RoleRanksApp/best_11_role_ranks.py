@@ -1691,7 +1691,7 @@ def make_fig(ages,exp_contracts,rank_11_base,show_ranks2,season,lg,normalize_to_
         axs['title'].text(0.5, .6, f'Generated on best11roleranks.streamlit.app',
                          ha='center',va='top', size=12, style='italic', color='#4a2e19')
     else:
-        axs['title'].text(0.5, .4, f'Generated on best11roleranks.streamlit.app',
+        axs['title'].text(0.5, .3, f'Generated on best11roleranks.streamlit.app',
                          ha='center',va='top', size=12, style='italic', color='#4a2e19')
 
     if normalize_to_100 == 'Yes':

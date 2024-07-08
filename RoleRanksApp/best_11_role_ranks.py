@@ -732,6 +732,7 @@ def make_rankings(formation, mins, data, role_position_df, leagues, exp_contract
     if chosen_team != 'N/A':
         rank_list = rank_list[rank_list['Team']==chosen_team].reset_index(drop=True)
     if nationality_chosen != "":
+        rank_list['Passport country'] = rank_list['Passport country'].fillna("")
         st.write(nationality_chosen)
         rank_list = rank_list[rank_list['Passport country'].str.contains(nationality_chosen)].reset_index(drop=True)
     

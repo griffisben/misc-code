@@ -1687,18 +1687,12 @@ def make_fig(ages,exp_contracts,rank_11_base,show_ranks2,season,lg,normalize_to_
                      ha='center',va='top', size=12, color='#4a2e19')
     axs['title'].text(0.5, .95, f"{nation_text}{sub_title_text}",
                      ha='center',va='top', size=12, color='#4a2e19')
-    if nation_text == "":
-        axs['title'].text(0.5, .6, f'Generated on best11roleranks.streamlit.app',
-                         ha='center',va='top', size=12, style='italic', color='#4a2e19')
-    else:
-        axs['title'].text(0.5, .3, f'Generated on best11roleranks.streamlit.app',
-                         ha='center',va='top', size=12, style='italic', color='#4a2e19')
 
     if normalize_to_100 == 'Yes':
-        axs['endnote'].text(0.5, -.3, f"Scores are gnerated by weighting z-scores of various metrics important to each role-position\nScores normalized so that the top player's score is 100 and the worst score is 0",
+        axs['endnote'].text(0.5, -.3, f"Scores are gnerated by weighting z-scores of various metrics important to each role-position\nScores normalized so that the top player's score is 100 and the worst score is 0\nGenerated on best11roleranks.streamlit.app",
                          ha='center',va='top', size=10, color='#4a2e19')
     else:
-        axs['endnote'].text(0.5, -.3, f"Scores are gnerated by weighting z-scores of various metrics important to each role-position",
+        axs['endnote'].text(0.5, -.3, f"Scores are gnerated by weighting z-scores of various metrics important to each role-position\nGenerated on best11roleranks.streamlit.app",
                          ha='center',va='top', size=10, color='#4a2e19')
     return fig
 

@@ -714,7 +714,7 @@ def make_rankings(formation, mins, data, role_position_df, leagues, exp_contract
             ranks['Score'] = round(ranks['%s Score' %pos_]*100,1)
             ranks.sort_values(by=['Score', 'Age'], ascending=[False,True], inplace=True)
             ranks = ranks.reset_index(drop=True)
-            ranks = ranks[['Player', 'Team', 'Age', 'Main Position', 'Score', 'Minutes played','Contract expires']]
+            ranks = ranks[['Player', 'Team', 'Age', 'Main Position', 'Score', 'Minutes played','Contract expires','Passport country']]
             ranks = ranks.rename(columns={'Main Position': 'Player Pos.'})
             ranks.index = ranks.index+1
             ranks['Squad Position'] = rank_11.pos_role[q]

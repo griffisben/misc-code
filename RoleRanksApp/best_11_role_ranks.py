@@ -1340,7 +1340,7 @@ def scout_report(data_frame, gender, league, season, xtra, template, pos, player
                 y=.97)
 
     plt.annotate(f"Bars are percentiles | Values shown are {callout_text} values\nAll values are per 90 minutes | %s\nCompared to %s %s, %i+ mins\nData: Wyscout | %s\nSample Size: %i players\nBlack dot line = metric mean\nColored dot line = +/- 0.5 std. deviations" %(extra_text, league, compares, mins, sig, len(dfProspect)),
-                 xy = (0, -.0775), xycoords='axes fraction',
+                 xy = (0, -.09), xycoords='axes fraction',
                 ha='left', va='center',
                 fontsize=9, fontfamily="DejaVu Sans",
                 color="#4A2E19", fontweight="regular", fontname="DejaVu Sans",

@@ -760,15 +760,37 @@ def get_label_rotation(angle, offset):
     return rotation, alignment
 
 
-def add_labels(angles, values, labels, offset, ax, text_colors):
+# def add_labels(angles, values, labels, offset, ax, text_colors):
+
+#     # This is the space between the end of the bar and the label
+#     padding = .05
+
+#     # Iterate over angles, values, and labels, to add all of them.
+#     for angle, value, label, text_col in zip(angles, values, labels, text_colors):
+#         angle = angle
+
+#         # Obtain text rotation and alignment
+#         rotation, alignment = get_label_rotation(angle, offset)
+
+#         # And finally add the text
+#         ax.text(
+#             x=angle, 
+#             y=1.05,
+#             s=label, 
+#             ha=alignment, 
+#             va="center", 
+#             rotation=rotation,
+#             color=text_col,
+#         )
+def add_labels(angles, values, labels, offset, ax, text_colors, raw_vals_full):
 
     # This is the space between the end of the bar and the label
     padding = .05
 
     # Iterate over angles, values, and labels, to add all of them.
-    for angle, value, label, text_col in zip(angles, values, labels, text_colors):
+    for i, (angle, value, label, text_col) in enumerate(zip(angles, values, labels, text_colors)):
         angle = angle
-
+        
         # Obtain text rotation and alignment
         rotation, alignment = get_label_rotation(angle, offset)
 
@@ -782,6 +804,17 @@ def add_labels(angles, values, labels, offset, ax, text_colors):
             rotation=rotation,
             color=text_col,
         )
+        
+        data_to_use = raw_vals_full.iloc[:,i+1].tolist()
+        mean_val = np.mean(data_to_use)
+        std_dev = 0.5*np.std(data_to_use)
+        mean_percentile = stats.percentileofscore(data_to_use, mean_val)
+        std_dev_up_percentile = stats.percentileofscore(data_to_use, mean_val+std_dev)
+        std_dev_down_percentile = stats.percentileofscore(data_to_use, mean_val-std_dev)
+        
+        ax.hlines(mean_percentile/100, angle - 0.055, angle + 0.055, colors='black', linestyles='dotted', linewidth=2, alpha=0.8, zorder=3)
+        ax.hlines(std_dev_up_percentile/100, angle - 0.055, angle + 0.055, colors=text_col, linestyles='dotted', linewidth=2, alpha=0.8, zorder=3)
+        ax.hlines(std_dev_down_percentile/100, angle - 0.055, angle + 0.055, colors=text_col, linestyles='dotted', linewidth=2, alpha=0.8, zorder=3)
 
 def scout_report(data_frame, gender, league, season, xtra, template, pos, player_pos, mins, minplay, compares, name, ws_name, team, age, sig, extra_text, custom_radar, metric_selections=None):
     plt.clf()
@@ -792,7 +825,8 @@ def scout_report(data_frame, gender, league, season, xtra, template, pos, player
     dfProspect = df[(df['Minutes played'] >= mins)].copy()
     dfProspect = filter_by_position(dfProspect, pos)
     raw_valsdf = dfProspect[(dfProspect['Player']==ws_name) & (dfProspect['Team within selected timeframe']==team) & (dfProspect['Age']==age)]
-
+    raw_valsdf_full = dfProspect.copy()
+    
     # FORWARD
     fwd1 = "Non-penalty goals per 90"
     fwd2 = "npxG per 90"
@@ -991,15 +1025,31 @@ def scout_report(data_frame, gender, league, season, xtra, template, pos, player
                                fwd5,extra6,mid10,mid9,
                                    def1,mid12,def8
                               ]]
+            raw_vals_full = raw_valsdf_full[["Player",
+                               mid1, mid2, mid3, extra3,
+                               mid4,mid5,extra5, mid6, mid7,extra4,
+                                   fwd2,fwd1,fwd6,extra9,extra2,fwd11,
+                               fwd5,extra6,mid10,mid9,
+                                   def1,mid12,def8
+                              ]]
         if template == 'defensive':
             raw_vals = raw_valsdf[["Player",
                                def1, def2, def3, def6,def7,extra7,def8,
                                def9,extra10,extra3, def10, def11,def12,fwd5,extra6,mid5,
                                def4,def5,extra8,
                               ]]
-    
+            raw_vals_full = raw_valsdf_full[["Player",
+                               def1, def2, def3, def6,def7,extra7,def8,
+                               def9,extra10,extra3, def10, def11,def12,fwd5,extra6,mid5,
+                               def4,def5,extra8,
+                              ]]
         if template == 'cb':
             raw_vals = raw_valsdf[["Player",
+                               def1, def2, def3, def6,def7,extra7,def8,
+                               def9, def10, def11,def12,fwd5,extra6,mid5,
+                               def4,def5,extra8,
+                              ]]
+            raw_vals_full = raw_valsdf_full[["Player",
                                def1, def2, def3, def6,def7,extra7,def8,
                                def9, def10, def11,def12,fwd5,extra6,mid5,
                                def4,def5,extra8,
@@ -1009,7 +1059,10 @@ def scout_report(data_frame, gender, league, season, xtra, template, pos, player
                                gk3, gk1, gk4, gk14, gk2, gk6,
                                gk13, gk8, gk11, gk12, gk9
                               ]]
-    
+            raw_vals_full = raw_valsdf_full[["Player",
+                               gk3, gk1, gk4, gk14, gk2, gk6,
+                               gk13, gk8, gk11, gk12, gk9
+                              ]]
         if template in column_mapping:
             selected_columns = column_mapping[template]
             dfRadarMF = dfRadarMF[['Player'] + list(selected_columns.keys())]
@@ -1032,6 +1085,7 @@ def scout_report(data_frame, gender, league, season, xtra, template, pos, player
 
         use_these_cols = ["Player"]+metric_selections
         raw_vals = raw_valsdf[use_these_cols]
+        raw_vals_full = raw_valsdf_full[use_these_cols]
         
         selected_columns = column_mapping
         dfRadarMF = dfRadarMF[['Player'] + list(selected_columns.keys())]
@@ -1264,10 +1318,10 @@ def scout_report(data_frame, gender, league, season, xtra, template, pos, player
         ax.annotate(value_format,
                     (bar.get_x() + bar.get_width() / 2, bar.get_height() - 0.1),
                     ha='center', va='center', size=10, xytext=(0, 8),
-                    textcoords='offset points', color=color,
+                    textcoords='offset points', color=color, zorder=4,
                     bbox=dict(boxstyle="round", fc=face, ec="black", lw=1))
 
-    add_labels(ANGLES[IDXS], VALUES, LABELS, OFFSET, ax, text_cs)
+    add_labels(ANGLES[IDXS], VALUES, LABELS, OFFSET, ax, text_cs, raw_vals_full)
 
     PAD = 0.02
     ax.text(0.15, 0 + PAD, "0", size=10, color='#4A2E19')
@@ -1285,8 +1339,8 @@ def scout_report(data_frame, gender, league, season, xtra, template, pos, player
                 x=0.5,
                 y=.97)
 
-    plt.annotate(f"Bars are percentiles | Values shown are {callout_text} values\nAll values are per 90 minutes | %s\nCompared to %s %s, %i+ mins\nData: Wyscout | %s\nSample Size: %i players" %(extra_text, league, compares, mins, sig, len(dfProspect)),
-                 xy = (0, -.075), xycoords='axes fraction',
+    plt.annotate(f"Bars are percentiles | Values shown are {callout_text} values\nAll values are per 90 minutes | %s\nCompared to %s %s, %i+ mins\nData: Wyscout | %s\nSample Size: %i players\nBlack dot line = metric mean\nColored dot line = +/- 0.5 std. deviations" %(extra_text, league, compares, mins, sig, len(dfProspect)),
+                 xy = (0, -.0775), xycoords='axes fraction',
                 ha='left', va='center',
                 fontsize=9, fontfamily="DejaVu Sans",
                 color="#4A2E19", fontweight="regular", fontname="DejaVu Sans",

@@ -760,29 +760,29 @@ def get_label_rotation(angle, offset):
     return rotation, alignment
 
 
-# def add_labels(angles, values, labels, offset, ax, text_colors):
+def add_labels(angles, values, labels, offset, ax, text_colors):
 
-#     # This is the space between the end of the bar and the label
-#     padding = .05
+    # This is the space between the end of the bar and the label
+    padding = .05
 
-#     # Iterate over angles, values, and labels, to add all of them.
-#     for angle, value, label, text_col in zip(angles, values, labels, text_colors):
-#         angle = angle
+    # Iterate over angles, values, and labels, to add all of them.
+    for angle, value, label, text_col in zip(angles, values, labels, text_colors):
+        angle = angle
 
-#         # Obtain text rotation and alignment
-#         rotation, alignment = get_label_rotation(angle, offset)
+        # Obtain text rotation and alignment
+        rotation, alignment = get_label_rotation(angle, offset)
 
-#         # And finally add the text
-#         ax.text(
-#             x=angle, 
-#             y=1.05,
-#             s=label, 
-#             ha=alignment, 
-#             va="center", 
-#             rotation=rotation,
-#             color=text_col,
-#         )
-def add_labels(angles, values, labels, offset, ax, text_colors, raw_vals_full):
+        # And finally add the text
+        ax.text(
+            x=angle, 
+            y=1.05,
+            s=label, 
+            ha=alignment, 
+            va="center", 
+            rotation=rotation,
+            color=text_col,
+        )
+def add_labels_dist(angles, values, labels, offset, ax, text_colors, raw_vals_full):
 
     # This is the space between the end of the bar and the label
     padding = .05
@@ -816,7 +816,7 @@ def add_labels(angles, values, labels, offset, ax, text_colors, raw_vals_full):
         ax.hlines(std_dev_up_percentile/100, angle - 0.055, angle + 0.055, colors=text_col, linestyles='dotted', linewidth=2, alpha=0.8, zorder=3)
         ax.hlines(std_dev_down_percentile/100, angle - 0.055, angle + 0.055, colors=text_col, linestyles='dotted', linewidth=2, alpha=0.8, zorder=3)
 
-def scout_report(data_frame, gender, league, season, xtra, template, pos, player_pos, mins, minplay, compares, name, ws_name, team, age, sig, extra_text, custom_radar, metric_selections=None):
+def scout_report(data_frame, gender, league, season, xtra, template, pos, player_pos, mins, minplay, compares, name, ws_name, team, age, sig, extra_text, custom_radar, dist_labels, metric_selections=None):
     plt.clf()
     df = data_frame
     df = df[df['League']==full_league_name].reset_index(drop=True)
@@ -1321,7 +1321,10 @@ def scout_report(data_frame, gender, league, season, xtra, template, pos, player
                     textcoords='offset points', color=color, zorder=4,
                     bbox=dict(boxstyle="round", fc=face, ec="black", lw=1))
 
-    add_labels(ANGLES[IDXS], VALUES, LABELS, OFFSET, ax, text_cs, raw_vals_full)
+    if dist_labels == 'Yes':
+        add_labels_dist(ANGLES[IDXS], VALUES, LABELS, OFFSET, ax, text_cs, raw_vals_full)
+    if dist_labels == 'No':
+        add_labels(ANGLES[IDXS], VALUES, LABELS, OFFSET, ax, text_cs)
 
     PAD = 0.02
     ax.text(0.15, 0 + PAD, "0", size=10, color='#4A2E19')
@@ -1796,6 +1799,7 @@ with radar_tab:
     with st.form('Player Radar Options'):
         bar_colors = st.selectbox('Bar Color Scheme', ('Benchmarking Percentiles', 'Metric Groups'))
         callout = st.selectbox('Data Labels on Bars', ('Per 90', 'Percentile'))
+        dist_labels = st.selectbox('Distribution Label Lines on Bars?' ('Yes', 'No'))
         player = st.text_input("Player's Radar to Generate", "")
         page = st.number_input("Age of the player to generate (to guarantee the correct player)", step=1)
         submitted = st.form_submit_button("Submit Options")
@@ -1857,6 +1861,7 @@ with radar_tab:
                     sig = 'Twitter: @BeGriffis',
                     extra_text = xtratext,
                     custom_radar='n',
+                    dist_labels=dist_labels,
                 )
             if custom_radar_q == 'y':
                 radar_img = scout_report(
@@ -1878,7 +1883,8 @@ with radar_tab:
                     sig = 'Twitter: @BeGriffis',
                     extra_text = xtratext,
                     custom_radar='y',
-                    metric_selections=metric_selections
+                    metric_selections=metric_selections,
+                    dist_labels=dist_labels,
                 )
             st.pyplot(radar_img.figure)
         except:

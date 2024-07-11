@@ -1799,7 +1799,7 @@ with radar_tab:
     with st.form('Player Radar Options'):
         bar_colors = st.selectbox('Bar Color Scheme', ('Benchmarking Percentiles', 'Metric Groups'))
         callout = st.selectbox('Data Labels on Bars', ('Per 90', 'Percentile'))
-        dist_labels = st.selectbox('Distribution Label Lines on Bars?' ('Yes', 'No'))
+        dist_labels = st.selectbox('Distribution Label Lines on Bars?', ('Yes', 'No'))
         player = st.text_input("Player's Radar to Generate", "")
         page = st.number_input("Age of the player to generate (to guarantee the correct player)", step=1)
         submitted = st.form_submit_button("Submit Options")

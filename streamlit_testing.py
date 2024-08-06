@@ -1,11 +1,3 @@
 import streamlit as st
 
-tab1, tab2 = st.tabs(['Tab 1', 'Tab 2'])
-
-with tab1:
-    with st.sidebar:
-        one_team_choice = st.selectbox('One Team Depth Chart?', (['No','Yes']))
-
-with tab2:
-    with st.sidebar:
-        ages = st.slider('Age Range', 0, 45, (0, 45))
+st.video("https://1726397843.rsc.cdn77.org/live/a8d4dff0-d37a-4f9b-b3a6-a583fb80d31c/video_2.m3u8", format='video/m3u8')

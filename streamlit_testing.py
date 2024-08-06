@@ -1,3 +1,3 @@
 import streamlit as st
 
-st.video("https://highlights.eliteserien.no/embed/playlist/ayb5zvjeok338")
+st.video("https://www.youtube.com/watch?v=A1W3qYAy5G4")

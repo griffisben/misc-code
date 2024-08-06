@@ -1,3 +1,3 @@
 import streamlit as st
 
-st.video("https://www.youtube.com/live/A1W3qYAy5G4?si=umqM-JyWASOMePpa")
+st.video("https://youtu.be/yHFw7TrMJYI?si=8oo2DGsZzL1ExO0H")

@@ -114,7 +114,7 @@ available_vars = ['Possession',
                   'Shots','Shots Faced','Field Tilt','Field Tilt - Possession','Avg Pass Height','Passes in Opposition Half','Passes into Box','xT','xT Against','xT Difference','Shots per 1 xT','Shots Faced per 1 xT Against',
                   # 'xG per 1 xT','xGA per 1 xT Against',
                   'PPDA','High Recoveries','High Recoveries Against','Crosses','Corners','Fouls',
-                 'On-Ball Pressure','On-Ball Pressure Share','Off-Ball Pressure','Off-Ball Pressure Share','Game Control','Game Control Share',
+                 'Throw-Ins into the Box','On-Ball Pressure','On-Ball Pressure Share','Off-Ball Pressure','Off-Ball Pressure Share','Game Control','Game Control Share',
                  ]
 
 team_data[available_vars] = team_data[available_vars].astype(float)

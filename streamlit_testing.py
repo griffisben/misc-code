@@ -1,3 +1,3 @@
 import streamlit as st
 
-st.video("https://ekstraklasa.tv/en/watch/cracovia-widzew-lodz-3-kolejka")
+st.video("https://highlights.eliteserien.no/embed/playlist/ayb5zvjeok338")

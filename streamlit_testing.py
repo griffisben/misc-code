@@ -53,9 +53,9 @@ def ben_theme():
         'config': {
             'background': '#fbf9f4',
             # 'text': '#4a2e19',
-            'mark': {
-                'color': focal_color,
-            },
+            # 'mark': {
+            #     'color': focal_color,
+            # },
             'axis': {
                 'titleColor': '#4a2e19',
                 'labelColor': '#4a2e19',

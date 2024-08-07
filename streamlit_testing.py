@@ -199,7 +199,7 @@ with graph_tab:
             .encode(
                 x=alt.X('Date', sort=None),
                 y=alt.Y(var, scale=alt.Scale(zero=False)), 
-                color=alt.condition(alt.datum[var] >= 0, alt.value(focal_color), alt.value(f"#{complementaryColor(focal_color)}")),
+                color=alt.condition(alt.datum[var] >= 0, alt.value(focal_color), alt.value(highlight_color)),
                 tooltip=['Match', 'Date', var, 'Possession','Field Tilt']
             )
         )

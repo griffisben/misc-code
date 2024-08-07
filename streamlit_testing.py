@@ -45,7 +45,8 @@ with st.sidebar:
         num_matches = st.slider('Number of Recent Matches', min_value=1, max_value=5, value=3)
         render_matches = match_list.head(num_matches).Match_Name.tolist()
 
-    focal_color = st.color_picker("Pick a color to highlight the team on League Ranking tab", "#2590ff")
+    focal_color = st.color_picker("Pick a color to highlight the team on League Ranking tab", "#4c94f6")
+    highlight_color = st.color_picker("Pick a color to highlight the team on League Ranking tab", "#ee5454")
 
 #########################
 def ben_theme():
@@ -157,7 +158,7 @@ with graph_tab:
             )
         )
     
-        lg_avg_line = alt.Chart(pd.DataFrame({'y': [lg_avg_var]})).mark_rule(color='grey').encode(y='y')
+        lg_avg_line = alt.Chart(pd.DataFrame({'y': [lg_avg_var]})).mark_rule(color=highlight_color).encode(y='y')
         
         lg_avg_label = lg_avg_line.mark_text(
             x="width",
@@ -165,7 +166,7 @@ with graph_tab:
             align="right",
             baseline="bottom",
             text="League Avg",
-            color='grey'
+            color=highlight_color
         )
     
         team_avg_line = alt.Chart(pd.DataFrame({'y': [team_avg_var]})).mark_rule(color=focal_color).encode(y='y')
@@ -203,7 +204,7 @@ with graph_tab:
             )
         )
 
-        lg_avg_line = alt.Chart(pd.DataFrame({'y': [lg_avg_var]})).mark_rule(color=f"#{complementaryColor(focal_color)}").encode(y='y')
+        lg_avg_line = alt.Chart(pd.DataFrame({'y': [lg_avg_var]})).mark_rule(color=highlight_color).encode(y='y')
         
         lg_avg_label = lg_avg_line.mark_text(
             x="width",
@@ -211,10 +212,10 @@ with graph_tab:
             align="right",
             baseline="bottom",
             text="League Avg",
-            color=f"#{complementaryColor(focal_color)}"
+            color=highlight_color
         )
     
-        team_avg_line = alt.Chart(pd.DataFrame({'y': [team_avg_var]})).mark_rule(color=focal_color).encode(y='y')
+        team_avg_line = alt.Chart(pd.DataFrame({'y': [team_avg_var]})).mark_rule(color=highlight_color).encode(y='y')
         
         team_avg_label = team_avg_line.mark_text(
             x="width",
@@ -222,7 +223,7 @@ with graph_tab:
             align="right",
             baseline="bottom",
             text="Team Avg",
-            color=focal_color
+            color=highlight_color
         )
     
     

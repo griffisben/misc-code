@@ -46,7 +46,6 @@ with st.sidebar:
         render_matches = match_list.head(num_matches).Match_Name.tolist()
 
     focal_color = st.color_picker("Pick a color to highlight the team on League Ranking tab", "#4c94f6")
-    highlight_color = st.color_picker("Pick a color to highlight the team on League Ranking tab", "#f6ba00")
 
 #########################
 def ben_theme():
@@ -150,7 +149,7 @@ with graph_tab:
                     "subtitle": [f"Data via Opta as of {update_date} | Created: Ben Griffis (@BeGriffis) via football-match-reports.streamlit.app"]
                 }
             )
-            .mark_line(point=True, color=focal_color)
+            .mark_line(point=True, color='#4c94f6')
             .encode(
                 x=alt.X('Date', sort=None),
                 y=alt.Y(var, scale=alt.Scale(zero=False)),
@@ -158,7 +157,7 @@ with graph_tab:
             )
         )
     
-        lg_avg_line = alt.Chart(pd.DataFrame({'y': [lg_avg_var]})).mark_rule(color=highlight_color).encode(y='y')
+        lg_avg_line = alt.Chart(pd.DataFrame({'y': [lg_avg_var]})).mark_rule(color='#ee5454').encode(y='y')
         
         lg_avg_label = lg_avg_line.mark_text(
             x="width",
@@ -166,10 +165,10 @@ with graph_tab:
             align="right",
             baseline="bottom",
             text="League Avg",
-            color=highlight_color
+            color='#ee5454'
         )
     
-        team_avg_line = alt.Chart(pd.DataFrame({'y': [team_avg_var]})).mark_rule(color=focal_color).encode(y='y')
+        team_avg_line = alt.Chart(pd.DataFrame({'y': [team_avg_var]})).mark_rule(color='#f6ba00').encode(y='y')
         
         team_avg_label = team_avg_line.mark_text(
             x="width",
@@ -177,7 +176,7 @@ with graph_tab:
             align="right",
             baseline="bottom",
             text="Team Avg",
-            color=focal_color
+            color='#f6ba00'
         )
     
     
@@ -199,12 +198,12 @@ with graph_tab:
             .encode(
                 x=alt.X('Date', sort=None),
                 y=alt.Y(var, scale=alt.Scale(zero=False)), 
-                color=alt.condition(alt.datum[var] >= 0, alt.value(focal_color), alt.value(highlight_color)),
+                color=alt.condition(alt.datum[var] >= 0, alt.value('#4c94f6'), alt.value('#162c49')),
                 tooltip=['Match', 'Date', var, 'Possession','Field Tilt']
             )
         )
 
-        lg_avg_line = alt.Chart(pd.DataFrame({'y': [lg_avg_var]})).mark_rule(color=highlight_color).encode(y='y')
+        lg_avg_line = alt.Chart(pd.DataFrame({'y': [lg_avg_var]})).mark_rule(color='#ee5454').encode(y='y')
         
         lg_avg_label = lg_avg_line.mark_text(
             x="width",
@@ -212,10 +211,10 @@ with graph_tab:
             align="right",
             baseline="bottom",
             text="League Avg",
-            color=highlight_color
+            color='#ee5454'
         )
     
-        team_avg_line = alt.Chart(pd.DataFrame({'y': [team_avg_var]})).mark_rule(color=highlight_color).encode(y='y')
+        team_avg_line = alt.Chart(pd.DataFrame({'y': [team_avg_var]})).mark_rule(color='#f6ba00').encode(y='y')
         
         team_avg_label = team_avg_line.mark_text(
             x="width",
@@ -223,7 +222,7 @@ with graph_tab:
             align="right",
             baseline="bottom",
             text="Team Avg",
-            color=highlight_color
+            color='#f6ba00'
         )
     
     

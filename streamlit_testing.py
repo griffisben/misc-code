@@ -203,7 +203,7 @@ with graph_tab:
             )
         )
 
-        lg_avg_line = alt.Chart(pd.DataFrame({'y': [lg_avg_var]})).mark_rule(color='grey').encode(y='y')
+        lg_avg_line = alt.Chart(pd.DataFrame({'y': [lg_avg_var]})).mark_rule(color=f"#{complementaryColor(focal_color)}").encode(y='y')
         
         lg_avg_label = lg_avg_line.mark_text(
             x="width",
@@ -211,7 +211,7 @@ with graph_tab:
             align="right",
             baseline="bottom",
             text="League Avg",
-            color='grey'
+            color=f"#{complementaryColor(focal_color)}"
         )
     
         team_avg_line = alt.Chart(pd.DataFrame({'y': [team_avg_var]})).mark_rule(color=focal_color).encode(y='y')

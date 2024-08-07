@@ -46,7 +46,7 @@ with st.sidebar:
         render_matches = match_list.head(num_matches).Match_Name.tolist()
 
     focal_color = st.color_picker("Pick a color to highlight the team on League Ranking tab", "#4c94f6")
-    highlight_color = st.color_picker("Pick a color to highlight the team on League Ranking tab", "#ee5454")
+    highlight_color = st.color_picker("Pick a color to highlight the team on League Ranking tab", "#f6ba00")
 
 #########################
 def ben_theme():

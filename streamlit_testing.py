@@ -135,9 +135,10 @@ league_data_base = league_data.copy()
 data_tab.write(team_data)
 
 with graph_tab:
+    plot_type = st.radio("Line or Bar plot?", ['📈 Line', '📊 Bar'])
     var = st.selectbox('Metric to Plot', available_vars)
 
-    if var != 'xT Difference':
+    if plot_type == '📈 Line':
         lg_avg_var = league_data[var].mean()
         team_avg_var = team_data[var].mean()
         
@@ -182,7 +183,10 @@ with graph_tab:
         chart = (c + lg_avg_line + lg_avg_label + team_avg_line + team_avg_label)
         st.altair_chart(chart, use_container_width=True)
 
-    else:
+    if plot_type == '📊 Bar':
+        lg_avg_var = league_data[var].mean()
+        team_avg_var = team_data[var].mean()
+
         c = (alt.Chart(
                 team_data[::-1],
                 title={
@@ -199,7 +203,30 @@ with graph_tab:
             )
         )
 
-        chart = (c)
+        lg_avg_line = alt.Chart(pd.DataFrame({'y': [lg_avg_var]})).mark_rule(color='grey').encode(y='y')
+        
+        lg_avg_label = lg_avg_line.mark_text(
+            x="width",
+            dx=-2,
+            align="right",
+            baseline="bottom",
+            text="League Avg",
+            color='grey'
+        )
+    
+        team_avg_line = alt.Chart(pd.DataFrame({'y': [team_avg_var]})).mark_rule(color=focal_color).encode(y='y')
+        
+        team_avg_label = team_avg_line.mark_text(
+            x="width",
+            dx=-2,
+            align="right",
+            baseline="bottom",
+            text="Team Avg",
+            color=focal_color
+        )
+    
+    
+        chart = (c + lg_avg_line + lg_avg_label + team_avg_line + team_avg_label)
         st.altair_chart(chart, use_container_width=True)
 
 

@@ -76,13 +76,20 @@ for i in range(len(render_matches)):
 
 team_data = pd.read_csv(f"https://raw.githubusercontent.com/griffisben/misc-code/main/PostMatchApp/Stat_Files/{league.replace(' ','%20')}.csv")
 team_data['Field Tilt - Possession'] = team_data['Field Tilt'] - team_data['Possession']
+team_data['xT Difference'] = team_data['xT'] - team_data['xT Against']
+
 league_data = team_data.copy().reset_index(drop=True)
 team_data = team_data[team_data.Team==team].reset_index(drop=True)
+
 team_data['Shots per 1.0 xT'] = team_data['Shots per 1.0 xT'].astype(float)
 team_data.rename(columns={'Shots per 1.0 xT':'Shots per 1 xT'},inplace=True)
+team_data['Shots Faced per 1.0 xT Against'] = team_data['Shots Faced per 1.0 xT Against'].astype(float)
+team_data.rename(columns={'Shots Faced per 1.0 xT Against':'Shots Faced per 1 xT Against'},inplace=True)
 
 league_data['Shots per 1.0 xT'] = league_data['Shots per 1.0 xT'].astype(float)
 league_data.rename(columns={'Shots per 1.0 xT':'Shots per 1 xT'},inplace=True)
+league_data['Shots Faced per 1.0 xT Against'] = league_data['Shots Faced per 1.0 xT Against'].astype(float)
+league_data.rename(columns={'Shots Faced per 1.0 xT Against':'Shots Faced per 1 xT Against'},inplace=True)
 
 
 team_data['xG per 1 xT'] = team_data['xG']/team_data['xT']

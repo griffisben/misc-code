@@ -135,7 +135,7 @@ with graph_tab:
                 team_data[::-1],
                 title={
                     "text": [f"{team} {var}, {league}"],
-                    "subtitle": [f"Data via Opta as of {update_date} | Created: Ben Griffis (@BeGriffis) via football-match-reports.streamlit.app"]
+                    "subtitle": [f"Data via Opta as of {update_date}"]
                 }
             )
             .mark_line(point=True, color='#4c94f6')
@@ -180,7 +180,7 @@ with graph_tab:
                 team_data[::-1],
                 title={
                     "text": [f"{team} {var}, {league}"],
-                    "subtitle": [f"Data via Opta as of {update_date} | Created: Ben Griffis (@BeGriffis) via football-match-reports.streamlit.app"]
+                    "subtitle": [f"Data via Opta as of {update_date}"]
                 }
             )
             .mark_bar()

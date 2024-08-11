@@ -91,6 +91,14 @@ league_data.rename(columns={'Shots per 1.0 xT':'Shots per 1 xT'},inplace=True)
 league_data['Shots Faced per 1.0 xT Against'] = league_data['Shots Faced per 1.0 xT Against'].astype(float)
 league_data.rename(columns={'Shots Faced per 1.0 xT Against':'Shots Faced per 1 xT Against'},inplace=True)
 
+league_data['xG'].astype(float)
+team_data['xG'].astype(float)
+league_data['xGA'].astype(float)
+team_data['xGA'].astype(float)
+team_data['xT'].astype(float)
+league_data['xT'].astype(float)
+team_data['xT Against'].astype(float)
+league_data['xT Against'].astype(float)
 
 team_data['xG per 1 xT'] = team_data['xG']/team_data['xT']
 league_data['xG per 1 xT'] = league_data['xG']/league_data['xT']

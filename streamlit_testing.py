@@ -154,6 +154,7 @@ def fotmob_table(lg, date):
     )
 
     return fig
+    del fig
 
 
 

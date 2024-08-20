@@ -8,5 +8,5 @@ streamlit
 plotly
 highlight-text
 datetime
-bs4
+beautifulsoup4
 time

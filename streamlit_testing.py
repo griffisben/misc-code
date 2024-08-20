@@ -196,7 +196,7 @@ with st.sidebar:
 
     focal_color = st.color_picker("Pick a color to highlight the team on League Ranking tab", "#4c94f6")
 
-    fotmob_table(league, update_date)
+    st.image(fotmob_table(league, update_date))
 
 #########################
 def ben_theme():

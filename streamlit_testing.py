@@ -9,6 +9,7 @@ import seaborn as sns
 from bs4 import BeautifulSoup
 import time
 import urllib.request
+plt.ioff()
 
 lg_id_dict = {
     'Allsvenskan':67

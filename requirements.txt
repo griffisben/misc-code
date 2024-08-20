@@ -8,3 +8,5 @@ streamlit
 plotly
 highlight-text
 datetime
+bs4
+time

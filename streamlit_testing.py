@@ -180,7 +180,7 @@ with st.expander('Disclaimer & Info'):
 df = pd.read_csv(f"https://raw.githubusercontent.com/griffisben/Post_Match_App/main/League_Files/{league.replace(' ','%20')}%20Full%20Match%20List.csv")
 df['Match_Name'] = df['Match'] + ' ' + df['Date']
 
-table_indexdf, table_logos, get_fotmob_table_data(league)
+table_indexdf, table_logos = get_fotmob_table_data(league)
 fotmob_table = create_fotmob_table_img(league, update_date, table_indexdf, table_logos)
 with st.sidebar:
     team_list = sorted(list(set(df.Home.unique().tolist() + df.Away.unique().tolist())))

@@ -11,7 +11,7 @@ import urllib.request
 @st.cache_data(ttl=60*15)
 
 
-def ax_logo(link, ax):
+def ax_logo(_link, _ax):
     club_icon = Image.open(urllib.request.urlopen(link))
     ax.imshow(club_icon)
     ax.axis('off')
@@ -182,7 +182,6 @@ df['Match_Name'] = df['Match'] + ' ' + df['Date']
 
 table_indexdf, table_logos = get_fotmob_table_data(league)
 fotmob_table = create_fotmob_table_img(league, update_date, table_indexdf, table_logos)
-st.write(table_logos)
 with st.sidebar:
     team_list = sorted(list(set(df.Home.unique().tolist() + df.Away.unique().tolist())))
     team = st.selectbox('What team do you want reports & data for?', team_list)

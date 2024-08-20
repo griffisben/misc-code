@@ -508,15 +508,15 @@ with xg_tab:
                              "subtitle": [f"Data via Opta as of {update_date} | Created: Ben Griffis (@BeGriffis) via football-match-reports.streamlit.app"]
                          }
                         ).mark_circle(size=30, color='silver').encode(
-        x='xG',
-        y='xGA',
+        x='xG:Q',
+        y='xGA:Q',
         # color='Result',
         tooltip=['Team','Match','Date','xGD','Possession','Field Tilt']
     ).interactive()
 
     team_chart_xg = alt.Chart(team_data).mark_circle(size=90,).encode(
-        x='xG',
-        y='xGA',
+        x='xG:Q',
+        y='xGA:Q',
         color='Result',
         tooltip=['Match','Date','xGD','Possession','Field Tilt']
     ).interactive()

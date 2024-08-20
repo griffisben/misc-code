@@ -11,12 +11,6 @@ import urllib.request
 @st.cache_data(ttl=60*15)
 
 
-def ax_logo(link, _ax):
-    club_icon = Image.open(urllib.request.urlopen(link))
-    ax.imshow(club_icon)
-    ax.axis('off')
-    return ax
-
 def get_fotmob_table_data(lg):
     img_base = "https://images.fotmob.com/image_resources/logo/teamlogo"
     #######################################################
@@ -126,6 +120,12 @@ def create_fotmob_table_img(lg, date, indexdf, logos):
     ax_point_2 = DC_to_NFC([2.75, 0.75])
     ax_width = abs(ax_point_1[0] - ax_point_2[0])
     ax_height = abs(ax_point_1[1] - ax_point_2[1])
+    def ax_logo(link, ax):
+        club_icon = Image.open(urllib.request.urlopen(link))
+        ax.imshow(club_icon)
+        ax.axis('off')
+        return ax
+
     for x in range(0, nrows):
         ax_coords = DC_to_NFC([0, x + .25])
         ax = fig.add_axes(

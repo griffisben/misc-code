@@ -7,9 +7,8 @@ import altair as alt
 import matplotlib.pyplot as plt
 import seaborn as sns
 from bs4 import BeautifulSoup
-import time
 import urllib.request
-# plt.ioff()
+@st.cache_data(ttl=60*15)
 
 
 def ax_logo(link, ax):
@@ -17,10 +16,9 @@ def ax_logo(link, ax):
     ax.imshow(club_icon)
     ax.axis('off')
     return ax
-    
-def fotmob_table(lg, date):
-    plt.clf()
-    img_base = "https://images.fotmob.com/image_resources/logo/teamlogo"
+
+def get_fotmob_table_data(lg):
+        img_base = "https://images.fotmob.com/image_resources/logo/teamlogo"
     #######################################################
     
     url = f"https://www.fotmob.com/api/tltable?leagueId={lg_id_dict[lg]}"
@@ -69,7 +67,11 @@ def fotmob_table(lg, date):
     tables.rename(columns={'Pos':' '},inplace=True)
     
     indexdf = tables[::-1].copy()
-    
+
+    return indexdf, logos
+
+def create_fotmob_table_img(lg, date, indexdf, logos):
+    plt.clf()
     sns.set(rc={'axes.facecolor':'#fbf9f4', 'figure.facecolor':'#fbf9f4',
                'ytick.labelcolor':'#4A2E19', 'xtick.labelcolor':'#4A2E19'})
     
@@ -178,7 +180,8 @@ with st.expander('Disclaimer & Info'):
 df = pd.read_csv(f"https://raw.githubusercontent.com/griffisben/Post_Match_App/main/League_Files/{league.replace(' ','%20')}%20Full%20Match%20List.csv")
 df['Match_Name'] = df['Match'] + ' ' + df['Date']
 
-fotmob_table = fotmob_table(league, update_date)
+table_indexdf, table_logos, get_fotmob_table_data(league)
+fotmob_table = create_fotmob_table_img(league, update_date, table_indexdf, table_logos)
 with st.sidebar:
     team_list = sorted(list(set(df.Home.unique().tolist() + df.Away.unique().tolist())))
     team = st.selectbox('What team do you want reports & data for?', team_list)

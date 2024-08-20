@@ -8,6 +8,7 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 from bs4 import BeautifulSoup
 import time
+import urllib.request
 
 lg_id_dict = {
     'Allsvenskan':67

@@ -8,9 +8,9 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 from bs4 import BeautifulSoup
 import urllib.request
-@st.cache_data(ttl=60*15)
-import altair as alt
 import numpy as np
+
+@st.cache_data(ttl=60*15)
 
 def get_fotmob_table_data(lg):
     img_base = "https://images.fotmob.com/image_resources/logo/teamlogo"

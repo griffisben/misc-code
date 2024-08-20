@@ -230,7 +230,7 @@ alt.themes.register('ben_theme', ben_theme)
 alt.themes.enable('ben_theme')
 ################################
 
-report_tab, data_tab, graph_tab, rank_tab = st.tabs(['Match Report', 'Data by Match - Table', 'Data by Match - Graph', 'League Rankings'])
+report_tab, data_tab, graph_tab, rank_tab xg_tab = st.tabs(['Match Report', 'Data by Match - Table', 'Data by Match - Graph', 'League Rankings', 'xG & xGA By Match'])
 
 for i in range(len(render_matches)):
     try:
@@ -499,6 +499,30 @@ with rank_tab:
     )
 
     fig
+
+with xg_tab:
+    lg_chart = alt.Chart(league_data,
+                         title={
+                             "text": [f"{team} xG & xGA By Match, {league}"],
+                             "subtitle": [f"Data via Opta as of {update_date} | Created: Ben Griffis (@BeGriffis) via football-match-reports.streamlit.app"]
+                         }
+                        ).mark_circle(size=30, color='silver').encode(
+        x='xG',
+        y='xGA',
+        # color='Result',
+        tooltip=['Team','Match','Date','xGD','Possession','Field Tilt']
+    ).interactive()
+
+    team_chart = alt.Chart(team_data).mark_circle(size=90,).encode(
+        x='xG',
+        y='xGA',
+        color='Result',
+        tooltip=['Match','Date','xGD','Possession','Field Tilt']
+    ).interactive()
+
+    chart = (lg_chart + team_chart)
+
+    st.altair_chart(chart, use_container_width=True)
 
 with st.expander("Game Control, On-Ball Pressure, & Off-Ball Pressure Explainer"):
     st.write('''

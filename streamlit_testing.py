@@ -9,7 +9,7 @@ import seaborn as sns
 from bs4 import BeautifulSoup
 import urllib.request
 @st.cache_data(ttl=60*15)
-
+import altair as alt
 
 def get_fotmob_table_data(lg):
     img_base = "https://images.fotmob.com/image_resources/logo/teamlogo"

@@ -18,7 +18,7 @@ def ax_logo(link, ax):
     return ax
 
 def get_fotmob_table_data(lg):
-        img_base = "https://images.fotmob.com/image_resources/logo/teamlogo"
+    img_base = "https://images.fotmob.com/image_resources/logo/teamlogo"
     #######################################################
     
     url = f"https://www.fotmob.com/api/tltable?leagueId={lg_id_dict[lg]}"

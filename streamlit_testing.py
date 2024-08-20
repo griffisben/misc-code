@@ -9,12 +9,7 @@ import seaborn as sns
 from bs4 import BeautifulSoup
 import time
 import urllib.request
-plt.ioff()
-
-lg_id_dict = {
-    'Allsvenskan':67
-}
-
+# plt.ioff()
 
 
 def ax_logo(link, ax):
@@ -163,6 +158,9 @@ def fotmob_table(lg, date):
 nbi_links = pd.read_csv("https://raw.githubusercontent.com/griffisben/Post_Match_App/main/NBI_Match_Links.csv")
 lg_lookup = pd.read_csv("https://raw.githubusercontent.com/griffisben/Post_Match_App/main/PostMatchLeagues.csv")
 league_list = lg_lookup.League.tolist()
+lg_lookup = pd.read_csv("https://raw.githubusercontent.com/griffisben/Post_Match_App/main/PostMatchLeagues.csv")
+lg_id_dict = {lg_lookup.League[i]: lg_lookup.FotMob[i] for i in range(len(lg_lookup))}
+
 
 with st.sidebar:
     lgg = st.selectbox('What League Do You Want Reports For?', league_list)

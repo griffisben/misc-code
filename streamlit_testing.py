@@ -501,7 +501,7 @@ with rank_tab:
     fig
 
 with xg_tab:
-    lg_chart = alt.Chart(league_data,
+    lg_chart_xg = alt.Chart(league_data,
                          title={
                              "text": [f"{team} xG & xGA By Match, {league}"],
                              "subtitle": [f"Data via Opta as of {update_date} | Created: Ben Griffis (@BeGriffis) via football-match-reports.streamlit.app"]
@@ -513,16 +513,16 @@ with xg_tab:
         tooltip=['Team','Match','Date','xGD','Possession','Field Tilt']
     ).interactive()
 
-    team_chart = alt.Chart(team_data).mark_circle(size=90,).encode(
+    team_chart_xg = alt.Chart(team_data).mark_circle(size=90,).encode(
         x='xG',
         y='xGA',
         color='Result',
         tooltip=['Match','Date','xGD','Possession','Field Tilt']
     ).interactive()
 
-    chart = (lg_chart + team_chart)
+    chart_xg = (lg_chart + team_chart)
 
-    st.altair_chart(chart, use_container_width=True)
+    st.altair_chart(chart_xg, use_container_width=True)
 
 with st.expander("Game Control, On-Ball Pressure, & Off-Ball Pressure Explainer"):
     st.write('''

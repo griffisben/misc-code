@@ -119,7 +119,7 @@ team_data['xG per 1 xT'] = team_data['xG']/team_data['xT']
 league_data['xG per 1 xT'] = league_data['xG']/league_data['xT']
 
 team_data['xGA per 1 xT Against'] = team_data['xGA']/team_data['xT Against']
-league_data['xGA per 1 xT Against'] = league_data['xGA']/team_data['xT Against']
+league_data['xGA per 1 xT Against'] = league_data['xGA']/league_data['xT Against']
 
 available_vars = ['Possession',
                   'xG','xGA','xGD',
@@ -136,7 +136,7 @@ league_data[available_vars] = league_data[available_vars].astype(float)
 
 league_data_base = league_data.copy()
 
-data_tab.write(league_data_base)
+data_tab.write(team_data)
 
 with graph_tab:
     plot_type = st.radio("Line or Bar plot?", ['📈 Line', '📊 Bar'])

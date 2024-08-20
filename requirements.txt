@@ -9,4 +9,3 @@ plotly
 highlight-text
 datetime
 beautifulsoup4==4.12.2
-time

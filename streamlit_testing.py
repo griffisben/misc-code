@@ -10,6 +10,7 @@ from bs4 import BeautifulSoup
 import urllib.request
 @st.cache_data(ttl=60*15)
 import altair as alt
+import numpy as np
 
 def get_fotmob_table_data(lg):
     img_base = "https://images.fotmob.com/image_resources/logo/teamlogo"
@@ -289,6 +290,20 @@ available_vars = ['Possession',
 team_data[available_vars] = team_data[available_vars].astype(float)
 league_data[available_vars] = league_data[available_vars].astype(float)
 
+## Add results for xG graph
+conditions_team = [
+    team_data['Goals'] > team_data['Goals Conceded'],
+    team_data['Goals'] < team_data['Goals Conceded']]
+choices_team = ['W', 'L']
+team_data['Result'] = np.select(conditions_team, choices_team, default='D')
+
+conditions_league = [
+    league_data['Goals'] > league_data['Goals Conceded'],
+    league_data['Goals'] < league_data['Goals Conceded']]
+choices_league = ['W', 'L']
+league_data['Result'] = np.select(conditions_league, choices_league, default='D')
+##
+
 league_data_base = league_data.copy()
 
 data_tab.write(team_data)
@@ -502,26 +517,40 @@ with rank_tab:
     fig
 
 with xg_tab:
-    lg_chart_xg = alt.Chart(league_data,
-                         title={
-                             "text": [f"{team} xG & xGA By Match, {league}"],
-                             "subtitle": [f"Data via Opta as of {update_date} | Created: Ben Griffis (@BeGriffis) via football-match-reports.streamlit.app"]
-                         }
-                        ).mark_circle(size=30, color='silver').encode(
-        x='xG:Q',
-        y='xGA:Q',
+    lg_chart_xg = alt.Chart(league_data,  title=alt.Title(
+       f"{team} xG & xGA by Match, {league}",
+       subtitle=[f"Data via Opta | Created by Ben Griffis (@BeGriffis) | Data as of {update_date}",f"Small grey points are all matches in the league. Large Colored points are {team}'s matches","Generated on: football-match-reports.streamlit.app"],
+    )).mark_circle(size=30, color='silver').encode(
+        x='xG',
+        y='xGA',
         # color='Result',
-        tooltip=['Team','Match','Date','xGD','Possession','Field Tilt']
-    ).interactive()
-
-    team_chart_xg = alt.Chart(team_data).mark_circle(size=90,).encode(
-        x='xG:Q',
-        y='xGA:Q',
-        color='Result',
-        tooltip=['Match','Date','xGD','Possession','Field Tilt']
-    ).interactive()
-
-    chart_xg = (lg_chart_xg + team_chart_xg)
+        tooltip=['Team','Match','Date','xG','xGA','xGD','Possession','Field Tilt']
+    ).properties(height=500).interactive()
+    
+    domain = ['W','D','L']
+    range_ = ['blue','black','darkorange']
+    team_chart_xg = alt.Chart(team_data,  title=alt.Title(
+       f"{team} xG & xGA by Match, {league}",
+       subtitle=[f"Data via Opta | Created by Ben Griffis (@BeGriffis) | Data as of {update_date}",f"Small grey points are all matches in the league. Large Colored points are {team}'s matches","Generated on: football-match-reports.streamlit.app"],
+    )).mark_circle(size=90).encode(
+        x='xG',
+        y='xGA',
+        color=alt.Color('Result').scale(domain=domain, range=range_),
+        tooltip=['Team','Match','Date','xG','xGA','xGD','Possession','Field Tilt']
+    ).properties(height=500).interactive()
+    
+    line = pd.DataFrame({
+        'xG': [0, max(league_data.xG)],
+        'xGA': [0, max(league_data.xGA)],
+    })
+    
+    line_plot_xg = alt.Chart(line).mark_line(color='grey', size=1).encode(
+        x= 'xG',
+        y= 'xGA'
+    )
+    
+    
+    chart_xg = (lg_chart_xg + team_chart_xg + line_plot_xg)
 
     st.altair_chart(chart_xg, use_container_width=True)
 

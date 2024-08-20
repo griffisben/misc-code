@@ -237,7 +237,8 @@ for i in range(len(render_matches)):
         match_string = render_matches[i].replace(' ','%20')
         if league == 'NB I':
             nbi_game_link = nbi_links[nbi_links.MatchName==render_matches[i]]['URL'].values[0]
-            st.write(f'Link to Full Match Video (some games may not have been shown on M4Sport and therefore are not available):  \n  \n{render_matches[i][:-11]} -> {nbi_game_link}')
+            with report_tab:
+                st.write(f'Link to Full Match Video (some games may not have been shown on M4Sport and therefore are not available):  \n  \n{render_matches[i][:-11]} -> {nbi_game_link}')
         url = f"https://raw.githubusercontent.com/griffisben/Post_Match_App/main/Image_Files/{league.replace(' ','%20')}/{match_string}.png"
         response = requests.get(url)
         game_image = Image.open(io.BytesIO(response.content))
@@ -520,7 +521,7 @@ with xg_tab:
         tooltip=['Match','Date','xGD','Possession','Field Tilt']
     ).interactive()
 
-    chart_xg = (lg_chart + team_chart)
+    chart_xg = (lg_chart_xg + team_chart_xg)
 
     st.altair_chart(chart_xg, use_container_width=True)
 

@@ -11,7 +11,7 @@ import urllib.request
 @st.cache_data(ttl=60*15)
 
 
-def ax_logo(_link, _ax):
+def ax_logo(link, _ax):
     club_icon = Image.open(urllib.request.urlopen(link))
     ax.imshow(club_icon)
     ax.axis('off')

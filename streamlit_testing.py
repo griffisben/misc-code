@@ -28,7 +28,6 @@ def fotmob_table(lg, date):
     soup = BeautifulSoup(page.content, "html.parser")
     json_data = pd.read_json(soup.getText())
     
-    json_data['data'][0]['table']['all']
     table = json_data['data'].apply(lambda x: x['table']).apply(lambda x: x['all'])
     df = pd.json_normalize(table)
     df = df.T

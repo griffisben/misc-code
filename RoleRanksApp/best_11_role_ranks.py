@@ -18,10 +18,8 @@ matplotlib.rcParams.update(matplotlib.rcParamsDefault)
 import plotly.express as px
 import plotly.figure_factory as ff
 from plotly.graph_objects import Layout
-from mplsoccer import VerticalPitch, FontManager
-import matplotlib.patheffects as path_effects
-
 @st.cache_data(ttl=60*15)
+
 matplotlib.rcParams.update(matplotlib.rcParamsDefault)
 colorscales = px.colors.named_colorscales()
 colorscales2 = [f"{cc}_r" for cc in colorscales]
@@ -46,6 +44,9 @@ def read_csv(link):
 def _update_slider(value):
     for i in range(1, 34):
         st.session_state[f"slider{i}"] = value
+
+from mplsoccer import VerticalPitch, FontManager
+import matplotlib.patheffects as path_effects
 
 
 def filter_by_position(df, position):

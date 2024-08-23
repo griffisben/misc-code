@@ -14,7 +14,7 @@ import matplotlib
 from PIL import Image
 from highlight_text import fig_text
 import urllib.request
-matplotlib.rcParams.update(matplotlib.rcParamsDefault)
+# matplotlib.rcParams.update(matplotlib.rcParamsDefault)
 import plotly.express as px
 import plotly.figure_factory as ff
 from plotly.graph_objects import Layout

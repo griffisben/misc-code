@@ -18,13 +18,14 @@ matplotlib.rcParams.update(matplotlib.rcParamsDefault)
 import plotly.express as px
 import plotly.figure_factory as ff
 from plotly.graph_objects import Layout
-@st.cache_data(ttl=60*15)
+
 
 # matplotlib.rcParams.update(matplotlib.rcParamsDefault)
 colorscales = px.colors.named_colorscales()
 colorscales2 = [f"{cc}_r" for cc in colorscales]
 colorscales += colorscales2
 
+@st.cache_data(ttl=60*15)
 
 def color_percentile(pc):
     if 1-pc <= 0.1:

@@ -18,15 +18,10 @@ matplotlib.rcParams.update(matplotlib.rcParamsDefault)
 import plotly.express as px
 import plotly.figure_factory as ff
 from plotly.graph_objects import Layout
+from mplsoccer import VerticalPitch, FontManager
+import matplotlib.patheffects as path_effects
+
 @st.cache_data(ttl=60*15)
-def click_button():
-    st.session_state.clicked = True
-def reset_click_button():
-    st.session_state.clicked = False
-def click_button2():
-    st.session_state.clicked = True
-def reset_click_button2():
-    st.session_state.clicked = False
 matplotlib.rcParams.update(matplotlib.rcParamsDefault)
 colorscales = px.colors.named_colorscales()
 colorscales2 = [f"{cc}_r" for cc in colorscales]
@@ -51,9 +46,6 @@ def read_csv(link):
 def _update_slider(value):
     for i in range(1, 34):
         st.session_state[f"slider{i}"] = value
-
-from mplsoccer import VerticalPitch, FontManager
-import matplotlib.patheffects as path_effects
 
 
 def filter_by_position(df, position):
@@ -2012,19 +2004,6 @@ with scatter_tab:
         dfProspect_scatter = scatter_df[(scatter_df['Minutes played'] >= mins) & (scatter_df['League'] == full_league_name)].copy()
         dfProspect_scatter = filter_by_position_long(dfProspect_scatter, pos_select_scatter)
         
-    flipX = xx
-    flipY = yy
-    
-    if 'clicked' not in st.session_state:
-        st.session_state.clicked = False
-    st.button('Swap X & Y Axes', on_click=click_button)
-    if st.session_state.clicked:
-        xx = flipY
-        yy = flipX
-    if 'clicked' not in st.session_state:
-        st.session_state.clicked = False
-    st.button('Swap X & Y Axes Back', on_click=reset_click_button)
-
     if ages[0] == 0 and ages[1] == 45:
         age_text_scatter = f''
     elif ages[0] == 0:

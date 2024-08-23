@@ -8,3 +8,4 @@ statistics
 streamlit
 plotly
 highlight-text
+st-paywall

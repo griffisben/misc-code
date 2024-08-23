@@ -19,11 +19,13 @@ import plotly.express as px
 import plotly.figure_factory as ff
 from plotly.graph_objects import Layout
 
-
-# matplotlib.rcParams.update(matplotlib.rcParamsDefault)
 colorscales = px.colors.named_colorscales()
 colorscales2 = [f"{cc}_r" for cc in colorscales]
 colorscales += colorscales2
+
+from st_paywall import add_auth
+add_auth(required=True)
+
 
 @st.cache_data(ttl=60*15)
 

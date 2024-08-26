@@ -38,8 +38,8 @@ def get_fotmob_table_data(lg):
     df_all['real_position'] = df_all['idx']
     df_all.sort_values(by=['real_position'],ascending=True,inplace=True)
     df_all.reset_index(drop=True,inplace=True)
-    df_all['Goals per match'] = df_all['goals']/df_all['played']
-    df_all['Goals against per match'] = df_all['conceded_goals']/df_all['played']
+    df_all['Goals per match'] = [df_all['goals'][i]/df_all['played'][i] if df_all.played[i]>0 else 0 for i in range(len(df_all))]
+    df_all['Goals against per match'] = [df_all['conceded_goals'][i]/df_all['played'][i] if df_all.played[i]>0 else 0 for i in range(len(df_all))]
     
     tables = df_all[['real_position','name','played','wins','draws','losses','pts','goals','conceded_goals','goalConDiff','logo']].rename(columns={
         'pts':'Pts',
@@ -181,8 +181,6 @@ with st.expander('Disclaimer & Info'):
 df = pd.read_csv(f"https://raw.githubusercontent.com/griffisben/Post_Match_App/main/League_Files/{league.replace(' ','%20')}%20Full%20Match%20List.csv")
 df['Match_Name'] = df['Match'] + ' ' + df['Date']
 
-table_indexdf, table_logos = get_fotmob_table_data(league)
-fotmob_table = create_fotmob_table_img(league, update_date, table_indexdf, table_logos)
 with st.sidebar:
     team_list = sorted(list(set(df.Home.unique().tolist() + df.Away.unique().tolist())))
     team = st.selectbox('What team do you want reports & data for?', team_list)
@@ -199,7 +197,12 @@ with st.sidebar:
 
     focal_color = st.color_picker("Pick a color to highlight the team on League Ranking tab", "#4c94f6")
 
-    fotmob_table
+with st.sidebar:
+    with st.form('FotMob Table'):
+        submitted = st.form_submit_button("Re-Generate Table")
+        table_indexdf, table_logos = get_fotmob_table_data(lgg)
+        fotmob_table = create_fotmob_table_img(lgg, update_date, table_indexdf, table_logos)
+        fotmob_table
 
 #########################
 def ben_theme():
@@ -517,36 +520,42 @@ with rank_tab:
     fig
 
 with xg_tab:
+    scatter_select = st.radio("Expected Goals (xG) or Expected Threat (xT)?", ['⚽ xG', '⚡ xT'])
+    
+    if scatter_select == '⚽ xG':
+        xvar, yvar, diffvar = 'xG', 'xGA', 'xGD'
+    elif scatter_select == '⚡ xT':
+        xvar, yvar, diffvar = 'xT', 'xT Against', 'xT Difference'
+    
     lg_chart_xg = alt.Chart(league_data,  title=alt.Title(
-       f"{team} xG & xGA by Match, {league}",
+       f"{team} {xvar} & {yvar} by Match, {league}",
        subtitle=[f"Data via Opta | Created by Ben Griffis (@BeGriffis) | Data as of {update_date}",f"Small grey points are all matches in the league. Large Colored points are {team}'s matches","Generated on: football-match-reports.streamlit.app"],
     )).mark_circle(size=30, color='silver').encode(
-        x='xG',
-        y='xGA',
-        # color='Result',
-        tooltip=['Team','Match','Date','xG','xGA','xGD','Possession','Field Tilt']
+        x=xvar,
+        y=yvar,
+        tooltip=['Team','Match','Date',xvar,yvar,diffvar,'Possession','Field Tilt']
     ).properties(height=500).interactive()
     
     domain = ['W','D','L']
     range_ = ['blue','black','darkorange']
     team_chart_xg = alt.Chart(team_data,  title=alt.Title(
-       f"{team} xG & xGA by Match, {league}",
+       f"{team} {xvar} & {yvar} by Match, {league}",
        subtitle=[f"Data via Opta | Created by Ben Griffis (@BeGriffis) | Data as of {update_date}",f"Small grey points are all matches in the league. Large Colored points are {team}'s matches","Generated on: football-match-reports.streamlit.app"],
     )).mark_circle(size=90).encode(
-        x='xG',
-        y='xGA',
+        x=xvar,
+        y=yvar,
         color=alt.Color('Result').scale(domain=domain, range=range_),
-        tooltip=['Team','Match','Date','xG','xGA','xGD','Possession','Field Tilt']
+        tooltip=['Team','Match','Date',xvar,yvar,diffvar,'Possession','Field Tilt']
     ).properties(height=500).interactive()
     
     line = pd.DataFrame({
-        'xG': [0, max(league_data.xG)],
-        'xGA': [0, max(league_data.xGA)],
+        xvar: [0, max(league_data[xvar])],
+        yvar: [0, max(league_data[yvar])],
     })
     
     line_plot_xg = alt.Chart(line).mark_line(color='grey', size=1).encode(
-        x= 'xG',
-        y= 'xGA'
+        x=xvar,
+        y=yvar
     )
     
     

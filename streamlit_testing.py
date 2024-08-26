@@ -201,7 +201,7 @@ with st.sidebar:
     with st.form('FotMob Table'):
         submitted = st.form_submit_button("Re-Generate Table")
         table_indexdf, table_logos = get_fotmob_table_data(lgg)
-        st.table(table_indexdf)
+        st.table(table_indexdf[::-1].reset_index(drop=True).rename(columns={'':'Pos.'}))
         # fotmob_table = create_fotmob_table_img(lgg, update_date, table_indexdf, table_logos)
         # fotmob_table
 

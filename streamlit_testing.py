@@ -144,7 +144,7 @@ def create_fotmob_table_img(lg, date, indexdf, logos):
     )
     fig.text(
         x=0.15, y=.9,
-        s=f'{date} | Table code by @sonofacorner\nTable is from FotMob | football-match-reports.streamlit.app',
+        s=f'Table code by @sonofacorner\nTable is from FotMob | football-match-reports.streamlit.app',
         ha='left',
         va='top',
         weight='regular',
@@ -201,8 +201,9 @@ with st.sidebar:
     with st.form('FotMob Table'):
         submitted = st.form_submit_button("Re-Generate Table")
         table_indexdf, table_logos = get_fotmob_table_data(lgg)
-        fotmob_table = create_fotmob_table_img(lgg, update_date, table_indexdf, table_logos)
-        fotmob_table
+        st.table(table_indexdf)
+        # fotmob_table = create_fotmob_table_img(lgg, update_date, table_indexdf, table_logos)
+        # fotmob_table
 
 #########################
 def ben_theme():

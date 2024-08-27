@@ -379,7 +379,7 @@ with graph_tab:
             )
         )
 
-        if var != 'xT Difference':
+        if var not in ['xT Difference','GD-xGD','Pts-xPts']:
             lg_avg_line = alt.Chart(pd.DataFrame({'y': [lg_avg_var]})).mark_rule(color='#ee5454').encode(y='y')
             
             lg_avg_label = lg_avg_line.mark_text(
@@ -390,7 +390,7 @@ with graph_tab:
                 text="League Avg",
                 color='#ee5454'
             )
-        if var == 'xT Difference':
+        if var in ['xT Difference','GD-xGD','Pts-xPts']:
             lg_avg_line = alt.Chart(pd.DataFrame({'y': [0]})).mark_rule(color='k').encode(y='y')
     
         team_avg_line = alt.Chart(pd.DataFrame({'y': [team_avg_var]})).mark_rule(color='#f6ba00').encode(y='y')
@@ -405,9 +405,9 @@ with graph_tab:
         )
     
 
-        if var != 'xT Difference':
+        if var not in ['xT Difference','GD-xGD','Pts-xPts']:
             chart = (c + lg_avg_line + lg_avg_label + team_avg_line + team_avg_label)
-        if var == 'xT Difference':
+        if var in ['xT Difference','GD-xGD','Pts-xPts']:
             chart = (c + lg_avg_line + team_avg_line + team_avg_label)
         st.altair_chart(chart, use_container_width=True)
 

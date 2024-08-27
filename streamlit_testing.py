@@ -10,6 +10,8 @@ from bs4 import BeautifulSoup
 import urllib.request
 import numpy as np
 
+cxG = 1.53570624482222
+
 @st.cache_data(ttl=60*15)
 
 def get_fotmob_table_data(lg):

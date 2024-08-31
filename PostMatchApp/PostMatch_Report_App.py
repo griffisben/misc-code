@@ -177,7 +177,7 @@ st.subheader('All data via Opta')
 df = pd.read_csv(f"https://raw.githubusercontent.com/griffisben/misc-code/main/PostMatchApp/League_Files/{league.replace(' ','%20')}%20Full%20Match%20List.csv")
 df['Match_Name'] = df['Match'] + ' ' + df['Date']
 
-table_indexdf, table_logos = get_fotmob_table_data(lgg)
+# table_indexdf, table_logos = get_fotmob_table_data(lgg)
 # fotmob_table = create_fotmob_table_img(lgg, update_date, table_indexdf, table_logos)
 
 with st.sidebar:

@@ -196,7 +196,7 @@ with st.sidebar:
 
     focal_color = st.color_picker("Pick a color to highlight the team on League Ranking tab", "#ff0000")
     st.write(f"{lgg} Table (via FotMob)")
-    st.table(table_indexdf[::-1].reset_index(drop=True).rename(columns={' ':'Pos.'}))
+    # st.table(table_indexdf[::-1].reset_index(drop=True).rename(columns={' ':'Pos.'}))
     # fotmob_table
 
 #########################

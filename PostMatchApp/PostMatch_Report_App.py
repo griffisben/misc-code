@@ -286,6 +286,9 @@ league_data['xGA per 1 xT Against'] = league_data['xGA']/league_data['xT Against
 
 available_vars = ['Possession',
                   'xG','xGA','xGD',
+                  'Open Play xG','Open Play xGA','Open Play xGD',
+                  'Set Piece xG','Set Piece xGA','Set Piece xGD',
+                  'npxG','npxGA','npxGD',
                   'GD','GD-xGD',
                   'xPts','Pts-xPts',
                   'Goals','Goals Conceded',
@@ -371,7 +374,7 @@ with graph_tab:
             )
         )
 
-        if var not in ['xT Difference','GD-xGD','Pts-xPts']:
+        if var not in ['xT Difference','GD-xGD','Pts-xPts','npxGD','Open Play xGD','Set Piece xGD']:
             lg_avg_line = alt.Chart(pd.DataFrame({'y': [lg_avg_var]})).mark_rule(color='#ee5454').encode(y='y')
             
             lg_avg_label = lg_avg_line.mark_text(
@@ -382,7 +385,7 @@ with graph_tab:
                 text="League Avg",
                 color='#ee5454'
             )
-        if var in ['xT Difference','GD-xGD','Pts-xPts']:
+        if var in ['xT Difference','GD-xGD','Pts-xPts','npxGD','Open Play xGD','Set Piece xGD']:
             lg_avg_line = alt.Chart(pd.DataFrame({'y': [0]})).mark_rule(color='k').encode(y='y')
     
         team_avg_line = alt.Chart(pd.DataFrame({'y': [team_avg_var]})).mark_rule(color='#f6ba00').encode(y='y')
@@ -397,9 +400,9 @@ with graph_tab:
         )
     
 
-        if var not in ['xT Difference','GD-xGD','Pts-xPts']:
+        if var not in ['xT Difference','GD-xGD','Pts-xPts','npxGD','Open Play xGD','Set Piece xGD']:
             chart = (c + lg_avg_line + lg_avg_label + team_avg_line + team_avg_label)
-        if var in ['xT Difference','GD-xGD','Pts-xPts']:
+        if var in ['xT Difference','GD-xGD','Pts-xPts','npxGD','Open Play xGD','Set Piece xGD']:
             chart = (c + lg_avg_line + team_avg_line + team_avg_label)
         st.altair_chart(chart, use_container_width=True)
 
@@ -416,7 +419,7 @@ with rank_tab:
     if rank_method == 'Average':
         rank_df = ranking_base_df.groupby(['Team'])[available_vars].mean().reset_index()
 
-    if rank_var in ['xGA','Goals Conceded','Shots Faced','xT Against','xGA per 1 xT Against','PPDA','Fouls','High Recoveries Against', 'Shots Faced per 1 xT Against']:
+    if rank_var in ['xGA','Set Piece xGA','Open Play xGA','npxGA','Goals Conceded','Shots Faced','xT Against','xGA per 1 xT Against','PPDA','Fouls','High Recoveries Against', 'Shots Faced per 1 xT Against']:
         sort_method = True
     else:
         sort_method = False

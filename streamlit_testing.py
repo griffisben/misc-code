@@ -1803,7 +1803,7 @@ with scatter_tab:
         xx = st.selectbox('X-Axis Variable', ['Age']+(scatter_df.columns[18:len(scatter_df.columns)-1].tolist()))
         yy = st.selectbox('Y-Axis Variable', ['Age']+(scatter_df.columns[18:len(scatter_df.columns)-1].tolist()))
         cc = st.selectbox('Point Color Variable', ['Age']+(scatter_df.columns[18:len(scatter_df.columns)-1].tolist()))
-        cscale = st.selectbox('Point Colorscale', colorscales, index=78)
+        cscale = st.selectbox('Point Colorscale', colorscales, index=colorscales.index("rdylgn_r"))
 
         dfProspect_scatter = scatter_df[(scatter_df['Minutes played'] >= mins) & (scatter_df['League'] == full_league_name)].copy()
         dfProspect_scatter = filter_by_position_long(dfProspect_scatter, pos_select_scatter)

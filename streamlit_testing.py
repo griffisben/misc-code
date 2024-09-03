@@ -1608,7 +1608,7 @@ with st.sidebar:
         st.header('Choose Basic Options')    
         season = st.selectbox('Season', (sorted(lg_lookup[lg_lookup.League == lg].Season.unique().tolist(),reverse=True)))
         mins = st.number_input('Minimum Minutes Played', 300, 2000, 900)
-        ages = st.slider('Age Range', 0, 45, (0, 45))
+        ages = st.slider('Age Range (only for filter tab, not radar)', 0, 45, (0, 45))
         submitted = st.form_submit_button("Submit Options")
 
 

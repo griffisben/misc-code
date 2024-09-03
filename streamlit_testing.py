@@ -1179,7 +1179,7 @@ with filter_tab:
                                 'Defenders (CB, FB/WB, DM)', 'Centre-Backs', 'CBs & DMs','Goalkeepers'))
         ages = st.slider('Age Range (only for filter tab, not radar)', 0, 45, (0, 45))
             
-        if ['slider1','slider2','slider3','slider4','slider5','slider6','slider7','slider8','slider9','slider10','slider11','slider12','slider13','slider14','slider15','slider16','slider17','slider18','slider19','slider20','slider21','slider22','slider23','slider24','slider25','slider26','slider27','slider28','slider29','slider30','slider31','slider32','slider33'] not in st.session_state:
+        if ['slider1','slider2','slider3','slider4','slider5','slider6','slider7','slider8','slider9','slider10','slider11','slider12','slider13','slider14','slider15','slider16','slider17','slider18','slider19','slider20','slider21','slider22','slider23','slider24','slider25','slider26','slider27','slider28','slider29','slider30','slider31','slider32','slider33','slider34','slider35','slider36','slider37','slider38','slider39'] not in st.session_state:
             pass
         
         short = st.slider('Short & Medium Pass Cmp %', 0.0, 1.0, 0.0, key='slider1')
@@ -1215,7 +1215,14 @@ with filter_tab:
         foul = st.slider('Fouls Committed per 90', 0.0, 1.0, 0.0, key='slider31')
         fouldraw = st.slider('Fouls Drawn per 90', 0.0, 1.0, 0.0, key='slider32')
         cards = st.slider('Cards per 90', 0.0, 1.0, 0.0, key='slider33')
-            
+        concede = st.slider('Conceded goals per 90', 0.0, 1.0, 0.0, key='slider34')
+        saverate = st.slider('Save rate, %', 0.0, 1.0, 0.0, key='slider35')
+        exits = st.slider('Exits per 90', 0.0, 1.0, 0.0, key='slider36')
+        psxg = st.slider('Prevented goals per 90', 0.0, 1.0, 0.0, key='slider37')
+        gppct = st.slider('Goals prevented %', 0.0, 1.0, 0.0, key='slider38')
+        shotsfaced = st.slider('Shots against per 90', 0.0, 1.0, 0.0, key='slider39')
+
+
 
 with filter_table_tab:
     final = create_player_research_table(df_basic, mins, full_league_name, pos_select, ages[0], ages[1])
@@ -1251,7 +1258,13 @@ with filter_table_tab:
                   (final['Shots blocked per 90']>=shotblock) &
                   (final['Fouls per 90']>=foul) &
                   (final['Fouls suffered per 90']>=fouldraw) &
-                  (final['Cards per 90']>=cards)
+                  (final['Cards per 90']>=cards) &
+                  (final['Conceded goals per 90']>=concede) &
+                (final['Save rate, %']>=saverate) &
+                (final['Exits per 90']>=exits) &
+                (final['Prevented goals per 90']>=psxg) &
+                (final['Goals prevented %']>=gppct) &
+                (final['Shots against per 90']>=shotsfaced)
                  ].reset_index(drop=True)
     
     st.dataframe(player_research_table.style.applymap(color_percentile, subset=player_research_table.columns[6:]))

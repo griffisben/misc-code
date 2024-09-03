@@ -1626,8 +1626,6 @@ clean_df = load_league_data(df, full_league_name)
 df_basic = clean_df.copy()
 
 
-path_eff = [path_effects.Stroke(linewidth=0.5, foreground='#fbf9f4'), path_effects.Normal()]
-
 radar_tab, filter_tab, filter_table_tab, scatter_tab = st.tabs(['Player Radar Generation', 'Player Search, Filters', 'Player Search, Results', 'Scatter Plots'])
 
 

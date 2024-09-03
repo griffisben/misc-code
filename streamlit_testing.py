@@ -1335,6 +1335,7 @@ with st.expander('Metric Glossary'):
     Progressive Carry = A continuous ball control by one player attempting to draw the team significantly closer to the opponent goal. (see Wyscout's glossary for more info)  \n
     Progressive Pass = A forward pass that attempts to advance a team significantly closer to the opponent’s goal.  \n
     Defensive Duel = When a player attempts to dispossess an opposition player to stop an attack progressing.  \n
+    Goals Prevented % = A percentage of goals prevented or conceded above/below an average keeper. A player with 30% goals prevented can be said to have saved 30% more goals than the average keeper. Calculated as (xGoT - Goals) / xGoT... metric from Alberto Lauce (@Lauce44) 
     ''')
 
 

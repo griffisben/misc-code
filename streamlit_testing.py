@@ -1556,34 +1556,22 @@ formation_positions = {442:['GK','RCB','LCB','RB','LB','RCM','LCM','RW','LW','RS
 rank_11_base = read_csv('https://raw.githubusercontent.com/griffisben/misc-code/main/RoleRanksApp/Ranking_XI.csv')
 role_position_lookup = read_csv('https://raw.githubusercontent.com/griffisben/misc-code/main/RoleRanksApp/Role_Positions_Lookup.csv')
 
-st.title('Best XI Players')
 st.subheader("All data from Wyscout. Created by Ben Griffis (@BeGriffis on Twitter)")
-st.subheader("Note: you are allowed to use any of the images you create here in your own work, but you MUST give me credit and not alter the images to remove my signature and Wyscout's name.")
-with st.expander('Instructions'):
+st.subheader("Note: you are allowed to use any of the images you create here in your own work, may not alter the images.")
+with st.expander('App Details & Instructions'):
     st.write('''
-    This app is a tool to help you find players who might be performing well in specific roles, and then lets you generate a player's performance radar so that you can see how their data stacks up against others in their position.  \n
-    Follow these steps to generate a Best XI ranking image and player radars:  \n
-    1) Select whether you want Men's or Women's competitions  \n
-    2) Select the season your competition is in. "23-24", "22-23", etc. are leagues which follow Fifa's calendar, i.e. roughly August/September to May/June. "2024", "2023", etc are leagues running from roughly February to November. South America and East Asia are examples  \n
-    3) Select your league  \n
-    4) Select the base formation you want for the roles. There are only a few loaded, as this is not an exhaustive list and all roles can be generated in these formation. I may add more formations later  \n
-    5) Input a minimum minutes threshold. Only players who have played at least this many minutes will be included in the sample. Beware of small sample sizes/variance issues for players with less than around 720 minutes  \n
-    6) Select an age range for the Best XI roles. This can account for all ages (keep at 0-45), a minimum age (move the left-most slider to your desired minimum), a maximum age (move the right-most slider to your desired maximum), or a specific range of ages (move both sliders to your desired range, minimum & maximum)  \n
-    7) Select if you want only players with contraccts expiring on or before a specific date to be included. This feature can help you find potential free transfers. Please note that these are from Wyscout, which are pulled from Transfermarkt, and may not be totally accurate (some players also have no contract expiration date noted and are therefore not included if you slecet "Yes" for this option  \n
-    7a) Enter your desired contract expiration date if needed  \n
-    8) Select the number of players you want to see for each role. Please note that if you select more than 7, the Best XI image will only show the top 7, however the table will still show you all players  \n
-    9) Select whether you want to normalize role-ranking scores from 0 (lowest score) to 100 (top score), or if you want the raw role-ranking scores (which range from 0 to 100, with 0 meaning the player has the lowest recorded numbers in every included metric, and 100 meaning the player has recorded the highest number in every metric)  \n
-    10) Choose all of your roles by position. Once you've made any changes, click the "Update Roles" button  \n
-    11) Select whether you want to show players from all teams, or if you want to create a single team's depth chart. Please note that if you create a depth chart, the player scores are all still ranked against all players in that position in the league, not just the team  \n  \n
-    Tabs:  \n
-    1) Role Ranking Image - this tab is the default, and shows the Best XI nased on all your selected criteria  \n
-    2) Role Ranking Table - this tab allows you to view the Best XI in table format. Remember that if you selected more than a Top 7, this tab will have all players, not just the top 7 shown on the image  \n
-    3) Player Radar Generation - this tab is where you can add a player's name and age in order to create their radar. Select how you want to color the radar's bars & if you want the player's actual per 90 data to be called out on each bar or if you want the percentiles instead. Then click "Submit Options" to generate their radar  \n
-    Pre-Made vs Custom Radar - the default setting here is the pre-made radar, which is a general template based on a player's position (attacking, defensive, CB, GK). However, you can also select your own metrics to include in the radar instead! First, select "Custom", and then click Submit. Then you can choose what metrics you want to include in your custom radar. Click submit again to generate the radar with your selected metrics. Every once in a while, Streamlit will whack out and if there's no image generating, make sure to check your player name & age again, sometimes the age changes randomly, sometimes the name disappears. When in doubt, clikc "Run" at the top or "Submit Options".  \n
-    4) Player List - this is a simple list of players & basic info like age, minutes, and positions that you can use for the Radar generation.  \n
-    5) Player Search, Filters - this tab allows you to define a position group that you want to find players for, and then set minimum percentile filters that players must meet in order to be shown in a table. This way, you can find players meeting specific requirements, instead of just relying on the role-scores to find players for you.  \n
-    6) Player Search, Results - this tab shows a table of players who meet your filterin criteria set in the Player Search, Filters tab. Please note that the League, Season, Minutes Played, and Age Range filters on the sidebar will pass to this table as well.  \n
-    7) Role Score Definitions & Calculations - this tab houses the definitions of roughly what each role should do (in my opinion, and it is rough), and the metrics & weights that I used to calculate each role
+    This app helps you find players that meet specific criteria.
+    First, choose a league, minimum minutes threshold, and age range.
+    These will determine the sample size of players that percentile ratings will generate for. Note that the .
+    Then, use the metric filters on the sidebar to pass minimum percentile ranking thresholds.
+    Players not meeting all of these criteria will be filtered out.
+    Finally, you can type or copy+paste any of the player names into the textbox below to generate their radar chart.  \n  \n
+    1) Choose your gender, league, positions, and minimum minutes from the filters on the left  \n
+    2) Set the max age of the players to be displayed in the table (this will not impact the sample)  \n
+    3) Choose the data labels son the bars, as well as the bar colors  \n
+    4) You can choose to add any percentile filters for metrics, and this will update the table (again, not the sample)  \n
+    5) To create a radar, enter the exact name & age in the text boxes below  \n
+    NOTE: the player you want a radar for doesn't need to be in the table (as in, maybe they don't hit the metric filters you've set or are above the age limit), but they do need to meet the sample criteria of gender, league, position, and minimum minutes played.
     ''')
 
 
@@ -1608,7 +1596,6 @@ with st.sidebar:
         st.header('Choose Basic Options')    
         season = st.selectbox('Season', (sorted(lg_lookup[lg_lookup.League == lg].Season.unique().tolist(),reverse=True)))
         mins = st.number_input('Minimum Minutes Played', 300, 2000, 900)
-        ages = st.slider('Age Range (only for filter tab, not radar)', 0, 45, (0, 45))
         submitted = st.form_submit_button("Submit Options")
 
 
@@ -1711,7 +1698,7 @@ with filter_tab:
                                 'Forwards no ST (AM, W)', 'Wingers', 'Central Midfielders (DM, CM, CAM)',
                                 'Central Midfielders no CAM (DM, CM)', 'Central Midfielders no DM (CM, CAM)', 'Fullbacks (FBs/WBs)',
                                 'Defenders (CB, FB/WB, DM)', 'Centre-Backs', 'CBs & DMs','Goalkeepers'))
-
+        ages = st.slider('Age Range (only for filter tab, not radar)', 0, 45, (0, 45))
             
         if ['slider1','slider2','slider3','slider4','slider5','slider6','slider7','slider8','slider9','slider10','slider11','slider12','slider13','slider14','slider15','slider16','slider17','slider18','slider19','slider20','slider21','slider22','slider23','slider24','slider25','slider26','slider27','slider28','slider29','slider30','slider31','slider32','slider33'] not in st.session_state:
             pass

@@ -12,7 +12,6 @@ import warnings
 warnings.filterwarnings('ignore')
 import matplotlib
 from PIL import Image
-from highlight_text import fig_text
 import urllib.request
 matplotlib.rcParams.update(matplotlib.rcParamsDefault)
 import plotly.express as px
@@ -47,10 +46,6 @@ def read_csv(link):
 def _update_slider(value):
     for i in range(1, 34):
         st.session_state[f"slider{i}"] = value
-
-from mplsoccer import VerticalPitch, FontManager
-import matplotlib.patheffects as path_effects
-
 
 def filter_by_position(df, position):
     fw = ["CF", "RW", "LW", "AMF"]

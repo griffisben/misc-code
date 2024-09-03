@@ -1699,6 +1699,7 @@ with radar_tab:
             logo_dict=logo_dict,
         )
         st.pyplot(radar_img.figure)
+        st.write(gen)
         # except:
         #     st.text("Please enter a valid name & age.  \nPlease check spelling as well.")
         

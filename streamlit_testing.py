@@ -1,630 +1,1846 @@
-import pandas as pd
-import streamlit as st
-from PIL import Image
-import requests
-import io
-import altair as alt
-import matplotlib.pyplot as plt
 import seaborn as sns
-from bs4 import BeautifulSoup
-import urllib.request
+import pandas as pd
+import datetime
+import matplotlib.pyplot as plt
 import numpy as np
-from io import StringIO
+from scipy import stats
+from statistics import mean
+from math import pi
+import streamlit as st
+sns.set_style("white")
+import warnings
+warnings.filterwarnings('ignore')
+import matplotlib
+from PIL import Image
+from highlight_text import fig_text
+import urllib.request
+matplotlib.rcParams.update(matplotlib.rcParamsDefault)
+import plotly.express as px
+import plotly.figure_factory as ff
+from plotly.graph_objects import Layout
 
-cxG = 1.53570624482222
+colorscales = px.colors.named_colorscales()
+colorscales2 = [f"{cc}_r" for cc in colorscales]
+colorscales += colorscales2
+
+#from st_paywall import add_auth
+#add_auth(required=True)
+
 
 @st.cache_data(ttl=60*15)
 
-def get_fotmob_table_data(lg):
-    img_base = "https://images.fotmob.com/image_resources/logo/teamlogo"
-    #######################################################
-    
-    url = f"https://www.fotmob.com/api/tltable?leagueId={lg_id_dict[lg]}"
-    page = requests.get(url)
-    soup = BeautifulSoup(page.content, "html.parser")
-    json_data = pd.read_json(StringIO(soup.getText()))
-    
-    table = json_data['data'].apply(lambda x: x['table']).apply(lambda x: x['all'])
-    df = pd.json_normalize(table)
-    df = df.T
-    
-    df_all = pd.DataFrame()
-    for i in range(len(df)):
-        for j in range(len(df.columns)):
-            row = pd.DataFrame(pd.Series(df.iloc[i,j])).T
-            df_all = pd.concat([df_all,row])
-    df_all.reset_index(drop=True,inplace=True)
-    
-    df_all['logo'] = [f"{img_base}/{df_all['id'][i]}.png" for i in range(len(df_all))]
-    df_all['goals'] = [int(df_all['scoresStr'][i].split("-")[0]) for i in range(len(df_all))]
-    df_all['conceded_goals'] = [int(df_all['scoresStr'][i].split("-")[1]) for i in range(len(df_all))]
-    df_all['real_position'] = df_all['idx']
-    df_all.sort_values(by=['real_position'],ascending=True,inplace=True)
-    df_all.reset_index(drop=True,inplace=True)
-    df_all['Goals per match'] = [df_all['goals'][i]/df_all['played'][i] if df_all.played[i]>0 else 0 for i in range(len(df_all))]
-    df_all['Goals against per match'] = [df_all['conceded_goals'][i]/df_all['played'][i] if df_all.played[i]>0 else 0 for i in range(len(df_all))]
-    
-    tables = df_all[['real_position','name','played','wins','draws','losses','pts','goals','conceded_goals','goalConDiff','logo']].rename(columns={
-        'pts':'Pts',
-        'name':'Team',
-        'real_position':'Pos',
-        'xg':'xG',
-        'xgConceded':'xGA',
-        'goals':'GF',
-        'conceded_goals':'GA',
-        'played':'M',
-        'wins':'W',
-        'draws':'D',
-        'losses':'L',
-        'goalConDiff':'GD'
-    })
-    tables[['Pts','GF','GA','Pos','M']] = tables[['Pts','GF','GA','Pos','M']].astype(int)
-    logos = tables.logo.tolist()[::-1]
-    tables = tables.iloc[:,:-1]
-    
-    tables.rename(columns={'Pos':' '},inplace=True)
-    
-    indexdf = tables[::-1].copy()
+def color_percentile(pc):
+    if 1-pc <= 0.1:
+        color = ('#01349b', '#d9e3f6')  # Elite
+    elif 0.1 < 1-pc <= 0.35:
+        color = ('#007f35', '#d9f0e3')  # Above Avg
+    elif 0.35 < 1-pc <= 0.66:
+        color = ('#9b6700', '#fff2d9')  # Avg
+    else:
+        color = ('#b60918', '#fddbde')  # Below Avg
 
-    return indexdf, logos
+    return f'background-color: {color[1]}'
 
-def create_fotmob_table_img(lg, date, indexdf, logos):
-    plt.clf()
-    sns.set(rc={'axes.facecolor':'#fbf9f4', 'figure.facecolor':'#fbf9f4',
-               'ytick.labelcolor':'#4A2E19', 'xtick.labelcolor':'#4A2E19'})
+
+def read_csv(link):
+    return pd.read_csv(link)
+def _update_slider(value):
+    for i in range(1, 34):
+        st.session_state[f"slider{i}"] = value
+
+from mplsoccer import VerticalPitch, FontManager
+import matplotlib.patheffects as path_effects
+
+
+def filter_by_position(df, position):
+    fw = ["CF", "RW", "LW", "AMF"]
+    if position == "Forward":
+        return df[df['Main Position'].str.contains('|'.join(fw), na=False)]
+    
+    stw = ["CF", "RW", "LW", "LAMF", "RAMF"]
+    if position == "Strikers and Wingers":
+        return df[df['Main Position'].str.contains('|'.join(stw), na=False)]
+    
+    fwns = ["RW", "LW", "AMF"]
+    if position == "Forwards no ST":
+        return df[df['Main Position'].str.contains('|'.join(fwns), na=False)]
+    
+    wing = ["RW", "LW", "WF", "LAMF", "RAMF"]
+    if position == "Winger":
+        return df[df['Main Position'].str.contains('|'.join(wing), na=False)]
+
+    mids = ["DMF", "CMF", "AMF"]
+    if position == "Midfielder":
+        return df[df['Main Position'].str.contains('|'.join(mids), na=False)]
+
+    cms = ["CMF", "AMF"]
+    if position == "Midfielder no DM":
+        return df[df['Main Position'].str.contains('|'.join(cms), na=False)]
+
+    dms = ["CMF", "DMF"]
+    if position == "Midfielder no CAM":
+        return df[df['Main Position'].str.contains('|'.join(dms), na=False)]
+
+    fbs = ["LB", "RB", "WB"]
+    if position == "Fullback":
+        return df[df['Main Position'].str.contains('|'.join(fbs), na=False)]
+
+    defs = ["LB", "RB", "WB", "CB", "DMF"]
+    if position == "Defenders":
+        return df[df['Main Position'].str.contains('|'.join(defs), na=False)]
+
+    cbdm = ["CB", "DMF"]
+    if position == "CBs & DMs":
+        return df[df['Main Position'].str.contains('|'.join(cbdm), na=False)]
+
+    cf = ["CF"]
+    if position == "CF":
+        return df[df['Main Position'].str.contains('|'.join(cf), na=False)]
+
+    cb = ["CB"]
+    if position == "CB":
+        return df[df['Main Position'].str.contains('|'.join(cb), na=False)]
+
+    gk = ["GK"]
+    if position == "GK":
+        return df[df['Main Position'].str.contains('|'.join(gk), na=False)]
+
+    else:
+        return df
+def filter_by_position_long(df, position):
+    fw = ["CF", "RW", "LW", "AMF"]
+    if position == "Forwards (AM, W, CF)":
+        return df[df['Main Position'].str.contains('|'.join(fw), na=False)]
+    
+    stw = ["CF", "RW", "LW", "LAMF", "RAMF"]
+    if position == "Strikers and Wingers":
+        return df[df['Main Position'].str.contains('|'.join(stw), na=False)]
+    
+    fwns = ["RW", "LW", "AMF"]
+    if position == "Forwards no ST (AM, W)":
+        return df[df['Main Position'].str.contains('|'.join(fwns), na=False)]
+    
+    wing = ["RW", "LW", "WF", "LAMF", "RAMF"]
+    if position == "Wingers":
+        return df[df['Main Position'].str.contains('|'.join(wing), na=False)]
+
+    mids = ["DMF", "CMF", "AMF"]
+    if position == "Central Midfielders (DM, CM, CAM)":
+        return df[df['Main Position'].str.contains('|'.join(mids), na=False)]
+
+    cms = ["CMF", "AMF"]
+    if position == "Central Midfielders no DM (CM, CAM)":
+        return df[df['Main Position'].str.contains('|'.join(cms), na=False)]
+
+    dms = ["CMF", "DMF"]
+    if position == "Central Midfielders no CAM (DM, CM)":
+        return df[df['Main Position'].str.contains('|'.join(dms), na=False)]
+
+    fbs = ["LB", "RB", "WB"]
+    if position == "Fullbacks (FBs/WBs)":
+        return df[df['Main Position'].str.contains('|'.join(fbs), na=False)]
+
+    defs = ["LB", "RB", "WB", "CB", "DMF"]
+    if position == "Defenders (CB, FB/WB, DM)":
+        return df[df['Main Position'].str.contains('|'.join(defs), na=False)]
+
+    cbdm = ["CB", "DMF"]
+    if position == "CBs & DMs":
+        return df[df['Main Position'].str.contains('|'.join(cbdm), na=False)]
+
+    cf = ["CF"]
+    if position == "Strikers":
+        return df[df['Main Position'].str.contains('|'.join(cf), na=False)]
+
+    cb = ["CB"]
+    if position == "Centre-Backs":
+        return df[df['Main Position'].str.contains('|'.join(cb), na=False)]
+
+    gk = ["GK"]
+    if position == "Goalkeepers":
+        return df[df['Main Position'].str.contains('|'.join(gk), na=False)]
+
+    else:
+        return df
+
+
+def contract_expirations(contract_exp_date):
+    expirations = df['Contract expires'].unique()
+    expirations[expirations == 0] = np.nan
+    
+    expirations = pd.DataFrame({'Expiration':pd.to_datetime(expirations)}).sort_values(by=['Expiration']).reset_index(drop=True)
+    exp_datetime = expirations[expirations.Expiration <= pd.to_datetime([contract_exp_date])[0]].Expiration
+    exp_dates = []
+    for i in range(len(exp_datetime)):
+        exp_dates+=[exp_datetime[i].strftime('%Y-%m-%d')]
+    return exp_dates
+
+def load_league_data(data, league_season):
+    df = data
+    df = df[df['League']==league_season].reset_index(drop=True)
+
+    df['Lateral passes per 90'] = df['Passes per 90'] - df['Vertical passes per 90'] - df['Back passes per 90']
+    df['pAdj Tkl+Int per 90'] = df['PAdj Sliding tackles'] + df['PAdj Interceptions']
+    df['1st, 2nd, 3rd assists'] = df['Assists per 90'] + df['Second assists per 90'] + df['Third assists per 90']
+    df['xA per Shot Assist'] = df['xA per 90'] / df['Shot assists per 90']
+    df['Aerial duels won per 90'] = df['Aerial duels per 90'] * (df['Aerial duels won, %']/100)
+    df['Cards per 90'] = df['Yellow cards per 90'] + df['Red cards per 90']
+    df['Clean sheets, %'] = df['Clean sheets'] / df['Matches played']
+    df['npxG'] = df['xG'] - (.76 * df['Penalties taken'])
+    df['npxG per 90'] = df['npxG'] / (df['Minutes played'] / 90)
+    df['npxG per shot'] = df['npxG'] / (df['Shots'] - df['Penalties taken'])
+    df['Passes to final third & deep completions'] = df['Passes to final third per 90'] + df['Deep completions per 90']
+    df['Pct of passes being short'] = df['Short / medium passes per 90'] / df['Passes per 90'] * 100
+    df['Prog passes and runs per 90'] = df['Progressive passes per 90'] + df['Progressive runs per 90']
+    df['Set pieces per 90'] = df['Corners per 90'] + df['Free kicks per 90']
+    df['Pct of passes being smart'] = df['Smart passes per 90'] / df['Passes per 90'] * 100
+    df['Pct of passes being lateral'] = df['Lateral passes per 90'] / df['Passes per 90'] * 100
+    df['Goals prevented %'] = (df['xG against per 90'] - df['Conceded goals per 90']) / df['xG against per 90'] * 100
+
+    df = df.dropna(subset=['Position']).reset_index(drop=True)
+
+    df['Main Position'] = df['Position'].str.split().str[0].str.rstrip(',')
+    df.fillna(0,inplace=True)
+    position_replacements = {
+        'LAMF': 'LW',
+        'RAMF': 'RW',
+        'LCB3': 'LCB',
+        'RCB3': 'RCB',
+        'LCB5': 'LCB',
+        'RCB5': 'RCB',
+        'LB5': 'LB',
+        'RB5': 'RB',
+        'RWB': 'RB',
+        'LWB': 'LB'
+    }
+    df['Main Position'] = df['Main Position'].replace(position_replacements)
+
+    return df
+
+
+def make_rankings(formation, mins, data, role_position_df, leagues, exp_contracts, expiration_date,
+                  min_age, max_age, num, normalize_to_100, chosen_team, nationality_chosen
+                 ):
+    formation_positions = {442:['GK','RCB','LCB','RB','LB','RCM','LCM','RW','LW','RS','LS',],
+                            4231:['GK','RCB','LCB','RB','LB','RCM','LCM','CAM','RW','LW','ST'],
+                            433:['GK','RCB','LCB','RB','LB','RCM','CM','LCM','RW','LW','ST'],
+                            343:['GK','RCB','CB','LCB','RB','LB','RCM','LCM','RW','LW','ST'],
+                           4222:['GK','RCB','LCB','RB','LB','RCM','LCM','RAM','LAM','RS','LS',],
+                          }
+    df = data
+    
+    ###
+    expirations = df['Contract expires'].unique()
+    expirations[expirations == 0] = np.nan
+    
+    expirations = pd.DataFrame({'Expiration':pd.to_datetime(expirations)}).sort_values(by=['Expiration']).reset_index(drop=True)
+    exp_datetime = expirations[expirations.Expiration <= pd.to_datetime([expiration_date])[0]].Expiration
+    exp_dates = []
+    for i in range(len(exp_datetime)):
+        exp_dates+=[exp_datetime[i].strftime('%Y-%m-%d')]
+    ###
+    
+    cols = ['Player', 'Team', 'Age', 'Pos.', 'Score',
+           'Minutes played', 'Contract expires', 'Squad Position','Passport country']
+    rank_list = pd.DataFrame(columns=cols)
+    
+    all_cols = ['Player', 'Team', 'Team within selected timeframe', 'Position', 'Age', 'Market value', 'Contract expires', 'Passport country', 'Matches played', 'Minutes played', 'Goals', 'xG', 'Assists', 'xA', 'Duels per 90', 'Duels won, %', 'Birth country', 'Passport country', 'Foot', 'Height', 'Weight', 'On loan', 'Successful defensive actions per 90', 'Defensive duels per 90', 'Defensive duels won, %', 'Aerial duels per 90', 'Aerial duels won, %', 'Sliding tackles per 90', 'PAdj Sliding tackles', 'Shots blocked per 90', 'Interceptions per 90', 'PAdj Interceptions', 'Fouls per 90', 'Yellow cards', 'Yellow cards per 90', 'Red cards', 'Red cards per 90', 'Successful attacking actions per 90', 'Goals per 90', 'Non-penalty goals', 'Non-penalty goals per 90', 'xG per 90', 'Head goals', 'Head goals per 90', 'Shots', 'Shots per 90', 'Shots on target, %', 'Goal conversion, %', 'Assists per 90', 'Crosses per 90', 'Accurate crosses, %', 'Crosses from left flank per 90', 'Accurate crosses from left flank, %', 'Crosses from right flank per 90', 'Accurate crosses from right flank, %', 'Crosses to goalie box per 90', 'Dribbles per 90', 'Successful dribbles, %', 'Offensive duels per 90', 'Offensive duels won, %', 'Touches in box per 90', 'Progressive runs per 90', 'Accelerations per 90', 'Received passes per 90', 'Received long passes per 90', 'Fouls suffered per 90', 'Passes per 90', 'Accurate passes, %', 'Forward passes per 90', 'Accurate forward passes, %', 'Back passes per 90', 'Accurate back passes, %', 'Lateral passes per 90', 'Accurate lateral passes, %', 'Short / medium passes per 90', 'Accurate short / medium passes, %', 'Long passes per 90', 'Accurate long passes, %', 'Average pass length, m', 'Average long pass length, m', 'xA per 90', 'Shot assists per 90', 'Second assists per 90', 'Third assists per 90', 'Smart passes per 90', 'Accurate smart passes, %', 'Key passes per 90', 'Passes to final third per 90', 'Accurate passes to final third, %', 'Passes to penalty area per 90', 'Accurate passes to penalty area, %', 'Through passes per 90', 'Accurate through passes, %', 'Deep completions per 90', 'Deep completed crosses per 90', 'Progressive passes per 90', 'Accurate progressive passes, %', 'Conceded goals', 'Conceded goals per 90', 'Shots against', 'Shots against per 90', 'Clean sheets', 'Save rate, %', 'xG against', 'xG against per 90', 'Prevented goals', 'Prevented goals per 90', 'Back passes received as GK per 90', 'Exits per 90', 'Aerial duels per 90.1', 'Free kicks per 90', 'Direct free kicks per 90', 'Direct free kicks on target, %', 'Corners per 90', 'Penalties taken', 'Penalty conversion, %', 'League', 'pAdj Tkl+Int per 90', '1st, 2nd, 3rd assists', 'xA per Shot Assist', 'Aerial duels won per 90', 'Cards per 90', 'Clean sheets, %', 'npxG', 'npxG per 90', 'npxG per shot', 'Passes to final third & deep completions', 'Head goals as pct of all goals', 'Prog passes and runs per 90', 'Main Position', 'midpct1', 'midpct2', 'midpct3', 'midpct4', 'midpct5', 'midpct6', 'midpct7', 'midpct8', 'midpct9', 'midpct10', 'midpct11', 'midpct12', 'fwdpct1', 'fwdpct2', 'fwdpct3', 'fwdpct4', 'fwdpct5', 'fwdpct6', 'fwdpct7', 'fwdpct8', 'fwdpct9', 'fwdpct10', 'fwdpct11', 'fwdpct12', 'defpct1', 'defpct2', 'defpct3', 'defpct4', 'defpct5', 'defpct6', 'defpct7', 'defpct8', 'defpct9', 'defpct10', 'defpct11', 'defpct12', 'gkpct1', 'gkpct2', 'gkpct3', 'gkpct4', 'gkpct5', 'gkpct6', 'gkpct7', 'gkpct8', 'gkpct9', 'gkpct10', 'extrapct', 'extrapct2', 'extrapct3', 'extrapct4', 'extrapct5', 'extrapct6', 'extrapct7', 'extrapct8', 'extrapct9', 'extrapct10', 'extrapct11', 'extrapct12', 'extrapct13', 'extrapct14', 'extrapct15', 'extrapct16', 'extrapct17', 'extrapct18', 'extrapct19', 'extrapct20',
+                'CM Score', 'CAM Score', 'Traditional Winger Score', 'Inverted Winger Score', 'Ball Playing CB Score', 'CB Score',
+                'Advanced Playmaker Score', 'Deep-Lying Playmaker Score', 'Playmaking Winger Score', 'Focal Point Striker Score',
+                'Link-Up Striker Score', 'Playmaking Striker Score', 'Advanced Striker Score', 'Deep-Lying Striker Score',
+                'Defensive Mid Score', 'Progressive Midfielder Score', 'Box-to-Box Score', 'Attacking FB Score', 'Second Striker Score', 'Inside Forward Score',
+               'Shot-Stopping Distributor Score', 'Spurs LCB Score', 'Number 6 Score', 'Defensive FB Score', 'KVO CAM Score',
+                'Inverted FB Score', 'Possession Enabler Score','Wide CAM Score']
+    full_prospect_df = pd.DataFrame(columns=all_cols)
     
     
-    fig = plt.figure(figsize=(5,6), dpi=200)
-    ax = plt.subplot()
+    rank_11 = role_position_df[role_position_df['formation']==formation].copy().reset_index(drop=True)
     
-    ncols = len(indexdf.columns.tolist())+1
-    nrows = indexdf.shape[0]
+    for q in range(len(rank_11)):
+        pos_ = rank_11.pos_[q]
+        pos = rank_11.pos[q]
+        pos_buckets = rank_11.pos_bucket[q]
+        foot = rank_11.foot[q]
+        main_pos = rank_11.main_position[q]
+        
+        
+        for z in range(len(leagues)):
+            dfProspect = df[(df['Minutes played']>=mins)].copy()
+            dfProspect = filter_by_position(dfProspect, pos)
+            dfProspect = dfProspect.reset_index(drop=True)
     
-    ax.set_xlim(0, ncols + .5)
-    ax.set_ylim(0, nrows + 1.5)
+            #############################################################################
+            #############################################################################
+            ## Variables I'll z-score. ignore the variable names lol, those have been copy/pasted for months now and are poorly named
     
-    positions = [0.75, 1.2, 5, 5.75, 6.5, 7.25, 8, 8.75, 9.5, 10.25]
-    columns = indexdf.columns.tolist()
+            # FORWARD
+            fwd1 = "Non-penalty goals per 90"
+            fwd2 = "npxG per 90"
+            fwd3 = "Assists per 90"
+            fwd4 = "xA per 90"
+            fwd5 = "Successful dribbles, %"
+            fwd6 = "Goal conversion, %"
+            fwd7 = "Shot assists per 90"
+            fwd8 = "Second assists per 90"
+            fwd9 = "Progressive runs per 90"
+            fwd10 = "Progressive passes per 90"
+            fwd11 = "Touches in box per 90"
+            fwd12 = "Aerial duels won, %"
+            # MIDFIELD
+            mid1 = "Accurate short / medium passes, %"
+            mid2 = "Accurate long passes, %"
+            mid3 = "Accurate smart passes, %"
+            mid4 = "Shot assists per 90"
+            mid5 = "xA per 90"
+            mid6 = "Assists per 90"
+            mid7 = "Second assists per 90"
+            mid8 = "Third assists per 90"
+            mid9 = "Progressive passes per 90"
+            mid10 = "Progressive runs per 90"
+            mid11 = "Duels won, %"
+            mid12 = "pAdj Tkl+Int per 90"
+            #DEFENDER
+            def1 = "Defensive duels per 90"
+            def2 = "PAdj Sliding tackles"
+            def3 = "Defensive duels won, %"
+            def4 = "Fouls per 90" ##########
+            def5 = "Cards per 90"
+            def6 = "Shots blocked per 90"
+            def7 = "PAdj Interceptions"
+            def8 = "Aerial duels won, %"
+            def9 = "Accurate long passes, %"
+            def10 = "1st, 2nd, 3rd assists"
+            def11 = "Progressive passes per 90"
+            def12 = "Progressive runs per 90"
+            #GOALKEEPER
+            gk1 = "Conceded goals per 90" #a2
+            gk2 = "Save rate, %" #a3
+            gk3 = "Dribbles per 90"
+            gk4 = "Pct of passes being short" #b3
+            gk5 = "Clean sheets, %"
+            gk6 = "Exits per 90" #a5
+            gk7 = "Aerial duels per 90"
+            gk8 = "Passes per 90" #b2
+            gk9 = "Accurate long passes, %" #b5
+            gk10 = "Prevented goals per 90" #a4
+            gk11 = 'Shots against per 90' #a1
+            gk12 = 'Pct of passes being lateral' #b4
+            gk13 = 'Received passes per 90' #b1
+            gk14 = "Goals prevented %" #a4
+            #EXTRA
+            extra = "Accurate passes, %"
+            extra2 = 'Shots per 90'
+            extra3 = 'Accurate crosses, %'
+            extra4 = 'Smart passes per 90'
+            extra5 = 'xA per Shot Assist'
+            extra6 = 'Accelerations per 90'
+            extra7 = 'Aerial duels won per 90'
+            extra8 = 'Fouls suffered per 90'
+            extra9 = 'npxG per shot'
+            extra10 = 'Key passes per 90'
+            extra11 = 'Deep completed crosses per 90'
+            extra12 = 'Offensive duels won, %'
+            extra13 = 'Passes to final third per 90'
+            extra14 = 'Shots on target, %'
+            extra15 = 'Accurate short / medium passes, %'
+            extra16 = 'Passes per 90'
+            extra17 = 'Aerial duels per 90'
+            extra18 = 'Received passes per 90' #b1
+            extra19 = 'Passes to final third per 90'
+            extra20 = 'Prog passes and runs per 90'
+            extra21 = 'Set pieces per 90'
+            extra22 = 'Passes to penalty area per 90'
+            extra23 = 'Pct of passes being smart'
+            extra24 = 'Short / medium passes per 90'
+            
+            # normalizing function
+            def NormalizeData(data):
+                return (data - np.min(data)) / (np.max(data) - np.min(data))
     
-    for i in range(nrows):
-        for j, column in enumerate(columns):
-            text_label = f'{indexdf[column].iloc[i]}'
-            weight = 'regular'
-            ax.annotate(
-                xy=(positions[j], i + .5),
-                text = text_label.replace(' U18',''),
-                ha='left',
-                va='center', color='#4A2E19',
-                weight=weight,
-                size=7.5
+            # all the z-score creations. I could turn this into a loop but haven't yet
+            dfProspect["midpct1"] = stats.zscore(dfProspect[mid1])
+            dfProspect["midpct2"] = stats.zscore(dfProspect[mid2])
+            dfProspect["midpct3"] = stats.zscore(dfProspect[mid3])
+            dfProspect["midpct4"] = stats.zscore(dfProspect[mid4])
+            dfProspect["midpct5"] = stats.zscore(dfProspect[mid5])
+            dfProspect["midpct6"] = stats.zscore(dfProspect[mid6])
+            dfProspect["midpct7"] = stats.zscore(dfProspect[mid7])
+            dfProspect["midpct8"] = stats.zscore(dfProspect[mid8])
+            dfProspect["midpct9"] = stats.zscore(dfProspect[mid9])
+            dfProspect["midpct10"] = stats.zscore(dfProspect[mid10])
+            dfProspect["midpct11"] = stats.zscore(dfProspect[mid11])
+            dfProspect["midpct12"] = stats.zscore(dfProspect[mid12])
+            dfProspect["fwdpct1"] = stats.zscore(dfProspect[fwd1])
+            dfProspect["fwdpct2"] = stats.zscore(dfProspect[fwd2])
+            dfProspect["fwdpct3"] = stats.zscore(dfProspect[fwd3])
+            dfProspect["fwdpct4"] = stats.zscore(dfProspect[fwd4])
+            dfProspect["fwdpct5"] = stats.zscore(dfProspect[fwd5])
+            dfProspect["fwdpct6"] = stats.zscore(dfProspect[fwd6])
+            dfProspect["fwdpct7"] = stats.zscore(dfProspect[fwd7])
+            dfProspect["fwdpct8"] = stats.zscore(dfProspect[fwd8])
+            dfProspect["fwdpct9"] = stats.zscore(dfProspect[fwd9])
+            dfProspect["fwdpct10"] = stats.zscore(dfProspect[fwd10])
+            dfProspect["fwdpct11"] = stats.zscore(dfProspect[fwd11])
+            dfProspect["fwdpct12"] = stats.zscore(dfProspect[fwd12])
+            dfProspect["defpct1"] = stats.zscore(dfProspect[def1])
+            dfProspect["defpct2"] = stats.zscore(dfProspect[def2])
+            dfProspect["defpct3"] = stats.zscore(dfProspect[def3])
+            dfProspect["defpct4"] = stats.zscore(dfProspect[def4]) * -1 ######
+            dfProspect["defpct5"] = stats.zscore(dfProspect[def5]) * -1 ########
+            dfProspect["defpct6"] = stats.zscore(dfProspect[def6])
+            dfProspect["defpct7"] = stats.zscore(dfProspect[def7])
+            dfProspect["defpct8"] = stats.zscore(dfProspect[def8])
+            dfProspect["defpct9"] = stats.zscore(dfProspect[def9])
+            dfProspect["defpct10"] = stats.zscore(dfProspect[def10])
+            dfProspect["defpct11"] = stats.zscore(dfProspect[def11])
+            dfProspect["defpct12"] = stats.zscore(dfProspect[def12])
+            dfProspect["gkpct1"] = 1-stats.zscore(dfProspect[gk1]) * -1 #####
+            dfProspect["gkpct2"] = stats.zscore(dfProspect[gk2])
+            dfProspect["gkpct3"] = stats.zscore(dfProspect[gk3])
+            dfProspect["gkpct4"] = stats.zscore(dfProspect[gk4])
+            dfProspect["gkpct5"] = stats.zscore(dfProspect[gk5])
+            dfProspect["gkpct6"] = stats.zscore(dfProspect[gk6])
+            dfProspect["gkpct7"] = stats.zscore(dfProspect[gk7])
+            dfProspect["gkpct8"] = stats.zscore(dfProspect[gk8])
+            dfProspect["gkpct9"] = stats.zscore(dfProspect[gk9])
+            dfProspect["gkpct10"] = stats.zscore(dfProspect[gk10])
+            dfProspect["gkpct11"] = stats.zscore(dfProspect[gk11])
+            dfProspect["gkpct12"] = stats.zscore(dfProspect[gk12])
+            dfProspect["gkpct13"] = stats.zscore(dfProspect[gk13])
+            dfProspect["gkpct14"] = stats.zscore(dfProspect[gk14])
+            dfProspect["extrapct"] = stats.zscore(dfProspect[extra])
+            dfProspect["extrapct2"] = stats.zscore(dfProspect[extra2])
+            dfProspect["extrapct3"] = stats.zscore(dfProspect[extra3])
+            dfProspect["extrapct4"] = stats.zscore(dfProspect[extra4])
+            dfProspect["extrapct5"] = stats.zscore(dfProspect[extra5])
+            dfProspect["extrapct6"] = stats.zscore(dfProspect[extra6])
+            dfProspect["extrapct7"] = stats.zscore(dfProspect[extra7])
+            dfProspect["extrapct8"] = stats.zscore(dfProspect[extra8])
+            dfProspect["extrapct9"] = stats.zscore(dfProspect[extra9])
+            dfProspect["extrapct10"] = stats.zscore(dfProspect[extra10])
+            dfProspect["extrapct11"] = stats.zscore(dfProspect[extra11])
+            dfProspect["extrapct12"] = stats.zscore(dfProspect[extra12])
+            dfProspect["extrapct13"] = stats.zscore(dfProspect[extra13])
+            dfProspect["extrapct14"] = stats.zscore(dfProspect[extra14])
+            dfProspect["extrapct15"] = stats.zscore(dfProspect[extra15])
+            dfProspect["extrapct16"] = stats.zscore(dfProspect[extra16])
+            dfProspect["extrapct17"] = stats.zscore(dfProspect[extra17])
+            dfProspect["extrapct18"] = stats.zscore(dfProspect[extra18])
+            dfProspect["extrapct19"] = stats.zscore(dfProspect[extra19])
+            dfProspect["extrapct20"] = stats.zscore(dfProspect[extra20])
+            dfProspect["extrapct21"] = stats.zscore(dfProspect[extra21])
+            dfProspect["extrapct22"] = stats.zscore(dfProspect[extra22])
+            dfProspect["extrapct23"] = 1-stats.zscore(dfProspect[extra23]) * -1 #####
+            dfProspect["extrapct24"] = stats.zscore(dfProspect[extra24])
+            
+            # The first line in this loop is how I get the z-scores to start at 0. I checked the distribution chart at the bottom, and it's the same shape of course
+            # the second line normalizes
+            for i in range(dfProspect.columns.tolist().index('midpct1'),len(dfProspect.columns)):
+                dfProspect.iloc[:,i] = dfProspect.iloc[:,i] + abs(dfProspect.iloc[:,i].min())
+                dfProspect.iloc[:,i] = NormalizeData(dfProspect.iloc[:,i])
+    
+    
+            #############################################################################
+            #############################################################################
+            ## Section with all the scores. Of course, very much a fluid thing now as I play around and calibrate
+            ## And I also want to make buckets like ball winning, passing, etc and then use those instead of individual metrics
+    
+            dfProspect['Shot-Stopping Distributor Score'] = (
+                (.4 * dfProspect['gkpct10']) +   # psxG+-
+                (.1 * dfProspect['gkpct2']) +   # save %
+                (.2 * dfProspect['gkpct4']) +  # pct passes being short
+                (.15 * dfProspect['gkpct4']) +  # short/medium passes
+                (.15 * dfProspect['gkpct9'])     # long pass %
             )
-    
-    column_names = columns
-    for index, c in enumerate(column_names):
-            ax.annotate(
-                xy=(positions[index], nrows + .25),
-                text=column_names[index],
-                ha='left',
-                va='bottom',
-                weight='bold', color='#4A2E19',
-                size=7.5
+            dfProspect['CM Score'] = (
+                (.1 * dfProspect['extrapct4']) +   # smart passes
+                (.1 * dfProspect['midpct4']) +  # shot assist
+                (.125 * dfProspect['defpct10']) +   # 1/2/3 assists
+                (.05 * dfProspect['extrapct10']) +  # key passes
+                (.075 * dfProspect['fwdpct1']) +     # np Goals
+                (.15 * dfProspect['defpct3']) +     # def duels won %
+                (.15 * dfProspect['midpct12']) +     # padj tkl+int
+                (.1 * dfProspect['defpct4']) +      # fouls
+                (.05 * dfProspect['extrapct'])   # pass cmp%
             )
+            dfProspect['Possession Enabler Score'] = (
+                (.25 * dfProspect['extrapct15']) +   # short/medium pass %
+                (.3 * dfProspect['gkpct4']) +  # pct of passes being short/medium
+                (.1 * dfProspect['defpct4']) +  # fouls (inverse)
+                (.2 * dfProspect['extrapct23']) +     # pct of passes being smart passes (inverse)
+                (.15 * dfProspect['gkpct8'])   # passes
+            )
+            dfProspect['CAM Score'] = (
+                (.15 * dfProspect['extrapct4']) +   # smart passes
+                (.2 * dfProspect['midpct4']) +  # shot assist
+                (.15 * dfProspect['extrapct10']) +  # key passes
+                (.1 * dfProspect['fwdpct2']) +     # npxg
+                (.05 * dfProspect['fwdpct1']) +  # np G
+                (.1 * dfProspect['fwdpct4']) +     # xA
+                (.1 * dfProspect['fwdpct5']) +       # dribble %
+                (.15 * dfProspect['extrapct12'])    # offesnsive duel %
+            )
+            dfProspect['Traditional Winger Score'] = (
+                (.15 * dfProspect['extrapct6']) +   # accelerations
+                (.2 * dfProspect['midpct4']) +  # shot assist
+                (.1 * dfProspect['fwdpct4']) +     # xA
+                (.175 * dfProspect['fwdpct5']) +      # dribble %
+                (.175 * dfProspect['extrapct11']) +   # deep completed cross
+                (.1 * dfProspect['extrapct3'])     # cross cmp %
+            )
+            dfProspect['Inverted Winger Score'] = (
+                (.1 * dfProspect['midpct4']) +  # shot assist
+                (.1 * dfProspect['extrapct11']) +   # deep completed cross
+                (.15 * dfProspect['fwdpct2']) +     # npxG
+                (.15 * dfProspect['fwdpct5']) +      # dribble %
+                (.25 * dfProspect['extrapct2']) +    # shots
+                (.15 * dfProspect['fwdpct11'])     # pen area touches
+            )
+            dfProspect['Ball Playing CB Score'] = (
+                (.1 * dfProspect['defpct3']) +   # def duel win %
+                (.1 * dfProspect['defpct8']) +     # aerial win %
+                (.2 * dfProspect['gkpct8']) +   # passes
+                (.2 * dfProspect['defpct11']) +     # prog passes
+                (.2 * dfProspect['extrapct13']) +     # passes to final third + deep completions
+                (.2 * dfProspect['midpct2'])   # long pass cmp %
+            )
+            dfProspect['Spurs LCB Score'] = (
+                (.2 * dfProspect['defpct3']) +   # def duel win %
+                (.15 * dfProspect['defpct4']) +     # fls
+                (.25 * dfProspect['extrapct20']) +   # Prog passes and runs
+                (.2 * dfProspect['gkpct8']) +   # passes
+                (.15 * dfProspect['extrapct15']) +     # short cmp %
+                (.05 * dfProspect['midpct2'])   # long pass cmp %
+            )
+            dfProspect['CB Score'] = (
+                (.1 * dfProspect['defpct2']) +   # tackles
+                (.1 * dfProspect['defpct7']) +  # interceptions
+                (.15 * dfProspect['defpct8']) +   # aerial win %
+                (.45 * dfProspect['defpct3']) +  # def duel win %
+                (.2 * dfProspect['defpct4'])       # fouls
+            )
+            dfProspect['Defensive FB Score'] = (
+                (.1 * dfProspect['defpct2']) +   # tackles
+                (.1 * dfProspect['defpct7']) +  # interceptions
+                (.15 * dfProspect['extrapct3']) +   # aerial win %
+                (.45 * dfProspect['defpct3']) +  # def duel win %
+                (.2 * dfProspect['defpct4'])       # fouls
+            )
+            dfProspect['Inverted FB Score'] = (
+                (.1 * dfProspect['defpct3']) +   # def duel win %
+                (.35 * dfProspect['gkpct8']) +   # passes
+                (.2 * dfProspect['defpct11']) +     # prog passes
+                (.2 * dfProspect['midpct12']) +     # padj tkl+interceptions
+                (.15 * dfProspect['gkpct4'])   # Pct of passes being short
+            )
+            dfProspect['Defensive Mid Score'] = (
+                (.1 * dfProspect['defpct2']) +   # tackles
+                (.1 * dfProspect['defpct7']) +  # interceptions
+                (.15 * dfProspect['defpct8']) +   # aerial win %
+                (.45 * dfProspect['defpct3']) +  # def duel win %
+                (.2 * dfProspect['defpct4'])       # fouls
+            )
+            dfProspect['Number 6 Score'] = (
+                (.3 * dfProspect['defpct3']) +   # def duel win %
+                (.1 * dfProspect['defpct4']) +     # fls
+                (.2 * dfProspect['gkpct4']) +   # Pct of passes being short
+                (.25 * dfProspect['extrapct15']) +     # short cmp %
+                (.15 * dfProspect['extrapct12'])   # off duel win %
+            )
+            dfProspect['Advanced Playmaker Score'] = (
+                (.15 * dfProspect['extrapct4']) +   # smart passes
+                (.25 * dfProspect['extrapct10']) +   # key passes
+                (.25 * dfProspect['midpct4']) +     # shot assists
+                (.2 * dfProspect['extrapct13']) +     # passes to final third + deep completions
+                (.15 * dfProspect['fwdpct4'])   # xA
+            )
+            dfProspect['Deep-Lying Playmaker Score'] = (
+                (.1 * dfProspect['defpct3']) +   # def duel win %
+                (.1 * dfProspect['extrapct10']) +   # key passes
+                (.15 * dfProspect['midpct4']) +     # shot assists
+                (.25 * dfProspect['defpct11']) +     # prog passes
+                (.25 * dfProspect['extrapct13']) +     # passes to final third + deep completions
+                (.15 * dfProspect['defpct10'])   # 1/2/3 assists
+            )
+            dfProspect['Playmaking Winger Score'] = (
+                (.15 * dfProspect['extrapct4']) +   # smart passes
+                (.2 * dfProspect['extrapct10']) +   # key passes
+                (.2 * dfProspect['midpct4']) +     # shot assists
+                (.15 * dfProspect['defpct11']) +     # prog passes
+                (.2 * dfProspect['extrapct13']) +     # passes to final third + deep completions
+                (.1 * dfProspect['defpct10'])   # 1/2/3 assists
+            )
+            dfProspect['Focal Point Striker Score'] = (
+                (.225 * dfProspect['defpct8']) +   # aerial win%
+                (.05 * dfProspect['fwdpct1']) +  # np G
+                (.225 * dfProspect['fwdpct2']) +     # npxG
+                (.2 * dfProspect['extrapct14']) +    # SoT %
+                (.3 * dfProspect['fwdpct11'])     # pen area touches
+            )
+            dfProspect['Link-Up Striker Score'] = (
+                (.25 * dfProspect['extrapct15']) +   # short/med pass cmp %
+                (.1 * dfProspect['midpct4']) +  # shot assist
+                (.1 * dfProspect['extrapct10']) +  # key passes
+                (.1 * dfProspect['fwdpct1']) +     # np Goals
+                (.1 * dfProspect['fwdpct2']) +     # npxG
+                (.1 * dfProspect['extrapct12']) +   # offesnsive duel %
+                (.25 * dfProspect['extrapct18'])    # received passes
+            )
+            dfProspect['BFC Striker Score'] = (
+                (.15 * dfProspect['extrapct15']) +   # short/med pass cmp %
+                (.1 * dfProspect['midpct4']) +  # shot assist
+                (.05 * dfProspect['extrapct10']) +  # key passes
+                (.1 * dfProspect['fwdpct2']) +     # npxG
+                (.2 * dfProspect['fwdpct6']) +    # Goal Conversion %
+                (.1 * dfProspect['extrapct18']) +   # received passes
+                (.15 * dfProspect['extrapct12']) +   # offesnsive duel %
+                (.15 * dfProspect['midpct12']) +     # padj tkl+interceptions
+                (.1 * dfProspect['defpct12'])      # prog runs
+            )
+            dfProspect['Playmaking Striker Score'] = (
+                (.1 * dfProspect['extrapct4']) +   # smart passes
+                (.2 * dfProspect['extrapct10']) +   # key passes
+                (.2 * dfProspect['midpct4']) +     # shot assists
+                (.15 * dfProspect['defpct11']) +     # prog passes
+                (.2 * dfProspect['extrapct13']) +     # passes to final third + deep completions
+                (.15 * dfProspect['fwdpct4'])   # xA
+            )
+            dfProspect['Advanced Striker Score'] = (
+                (.1 * dfProspect['fwdpct5']) +   # dribble %
+                (.15 * dfProspect['fwdpct1']) +  # np G
+                (.2 * dfProspect['fwdpct2']) +     # npxG
+                (.1 * dfProspect['fwdpct6']) +    # Goal Conversion %
+                (.2 * dfProspect['fwdpct11']) +     # pen area touches
+                (.15 * dfProspect['fwdpct4']) +  # xA
+                (.1 * dfProspect['defpct12'])     # prog runs
+            )
+            dfProspect['Inside Forward Score'] = (
+                (.1 * dfProspect['fwdpct5']) +   # dribble %
+                (.15 * dfProspect['fwdpct1']) +  # np G
+                (.2 * dfProspect['fwdpct2']) +     # npxG
+                (.1 * dfProspect['fwdpct6']) +    # Goal Conversion %
+                (.2 * dfProspect['fwdpct11']) +     # pen area touches
+                (.15 * dfProspect['fwdpct4']) +  # xA
+                (.1 * dfProspect['defpct12'])     # prog runs
+            )
+            dfProspect['Deep-Lying Striker Score'] = (
+                (.15 * dfProspect['extrapct18']) +   # received passes
+                (.2 * dfProspect['fwdpct1']) +  # np G
+                (.2 * dfProspect['fwdpct2']) +     # npxG
+                (.2 * dfProspect['midpct4']) +   # shot assists
+                (.1 * dfProspect['defpct10']) +     # 1+2+3 assists
+                (.15 * dfProspect['defpct12'])     # prog runs
+            )
+            dfProspect['Progressive Midfielder Score'] = (
+                (.15 * dfProspect['extrapct18']) +   # received passes
+                (.2 * dfProspect['extrapct19']) +     # passes to final third
+                (.225 * dfProspect['defpct11']) +     # prog passes
+                (.1 * dfProspect['extrapct12']) +  # off duel win %
+                (.1 * dfProspect['extrapct6']) +   # accelerations
+                (.225 * dfProspect['defpct12'])     # prog runs
+            )
+            dfProspect['Box-to-Box Score'] = (
+                (.1 * dfProspect['midpct12']) +   # pAdj Tkl+Int
+                (.225 * dfProspect['defpct3']) +   # def duel win %
+                (.225 * dfProspect['extrapct12']) +  # off duel win %
+                (.1 * dfProspect['extrapct19']) +     # passes to final third
+                (.1 * dfProspect['extrapct19']) +     # minutes
+                (.25 * dfProspect['defpct12'])   # prog runs
+            )
+            dfProspect['Attacking FB Score'] = (
+                (.075 * dfProspect['extrapct6']) +   # accelerations
+                (.1 * dfProspect['fwdpct4']) +     # xA
+                (.2 * dfProspect['extrapct12']) +      # off duel win %
+                (.25 * dfProspect['extrapct13']) +     # passes to final third + deep completions
+                (.075 * dfProspect['extrapct3']) +     # cross cmp %
+                (.2 * dfProspect['defpct12']) +     # prog runs
+                (.1 * dfProspect['fwdpct5'])    # dribble %
+            )
+            dfProspect['Second Striker Score'] = (
+                (.1 * dfProspect['fwdpct5']) +   # dribble %
+                (.15 * dfProspect['fwdpct1']) +  # np G
+                (.2 * dfProspect['fwdpct2']) +     # npxG
+                (.1 * dfProspect['fwdpct6']) +    # Goal Conversion %
+                (.2 * dfProspect['fwdpct11']) +     # pen area touches
+                (.15 * dfProspect['fwdpct4']) +  # xA
+                (.1 * dfProspect['defpct12'])     # prog runs
+            )
+            dfProspect['KVO CAM Score'] = (
+                (.1 * dfProspect['fwdpct5']) +   # dribble %
+                (.05 * dfProspect['defpct1']) +  # defensive duels
+                (.05 * dfProspect['extrapct21']) +     # set pieces
+                (.125 * dfProspect['extrapct4']) +   # smart passes
+                (.1 * dfProspect['extrapct10']) +   # key passes
+                (.15 * dfProspect['midpct4']) +     # shot assists
+                (.1 * dfProspect['defpct11']) +     # prog passes
+                (.1 * dfProspect['fwdpct4']) +  # xA
+                (.125 * dfProspect['extrapct22']) +  # passes to box
+                (.1 * dfProspect['defpct12'])     # prog runs
+            )
+            dfProspect['Wide CAM Score'] = (
+                (.1 * dfProspect['extrapct6']) +   # accelerations
+                (.2 * dfProspect['midpct4']) +  # shot assist
+                (.15 * dfProspect['fwdpct4']) +     # xA
+                (.15 * dfProspect['fwdpct5']) +      # dribble %
+                (.1 * dfProspect['extrapct11']) +   # deep completed cross
+                (.05 * dfProspect['fwdpct11']) +     # pen area touches
+                (.15 * dfProspect['extrapct3'])     # cross cmp %
+            )
+            
+            if foot != 'either':
+                dfProspect = dfProspect[dfProspect['Foot']==foot]
+            if main_pos != 'any':
+                dfProspect = dfProspect[dfProspect['Main Position'].str.contains(main_pos)]
     
-    ax.plot([ax.get_xlim()[0], ax.get_xlim()[1]], [nrows, nrows], lw=1.5, color='black', marker='', zorder=4)
-    ax.plot([ax.get_xlim()[0], ax.get_xlim()[1]], [0, 0], lw=1.5, color='black', marker='', zorder=4)
-    for x in range(1, nrows):
-        ax.plot([ax.get_xlim()[0], ax.get_xlim()[1]], [x, x], lw=.5, color='gray', ls=':', zorder=3 , marker='')
     
-    ax.set_axis_off()
+            ranks = dfProspect[["Player", "Main Position", "Team within selected timeframe", "Age", 'Contract expires', 'Minutes played','Passport country',
+                                "CM Score", 'CAM Score', 'Traditional Winger Score', 'Inverted Winger Score', 'Ball Playing CB Score',
+                                'CB Score', 'Advanced Playmaker Score', 'Focal Point Striker Score', 'Link-Up Striker Score', 'Deep-Lying Striker Score',
+                                'Advanced Striker Score', 'Playmaking Winger Score', 'Box-to-Box Score', 'Playmaking Striker Score',
+                                   'Attacking FB Score', 'Deep-Lying Playmaker Score', 'Second Striker Score', 'Progressive Midfielder Score',
+                               'Defensive Mid Score', 'Shot-Stopping Distributor Score', 'Spurs LCB Score', 'Number 6 Score', 'Defensive FB Score',
+                               'KVO CAM Score', 'Inverted FB Score', 'Inside Forward Score',  'Possession Enabler Score','Wide CAM Score']]
+            ranks = ranks.rename(columns={'Team within selected timeframe': 'Team'})
     
-    DC_to_FC = ax.transData.transform
-    FC_to_NFC = fig.transFigure.inverted().transform
-    DC_to_NFC = lambda x: FC_to_NFC(DC_to_FC(x))
-    ax_point_1 = DC_to_NFC([2.25, 0.25])
-    ax_point_2 = DC_to_NFC([2.75, 0.75])
-    ax_width = abs(ax_point_1[0] - ax_point_2[0])
-    ax_height = abs(ax_point_1[1] - ax_point_2[1])
-    def ax_logo(link, ax):
-        club_icon = Image.open(urllib.request.urlopen(link))
-        ax.imshow(club_icon)
-        ax.axis('off')
-        return ax
+            if normalize_to_100 == 'Yes':
+                for i in range(7,len(ranks.columns)):
+                    ranks.iloc[:,i] = NormalizeData(ranks.iloc[:,i])
+    
+            # make the table
+            ranks['Score'] = round(ranks['%s Score' %pos_]*100,1)
+            ranks.sort_values(by=['Score', 'Age'], ascending=[False,True], inplace=True)
+            ranks = ranks.reset_index(drop=True)
+            ranks = ranks[['Player', 'Team', 'Age', 'Main Position', 'Score', 'Minutes played','Contract expires','Passport country']]
+            ranks = ranks.rename(columns={'Main Position': 'Player Pos.'})
+            ranks.index = ranks.index+1
+            ranks['Squad Position'] = rank_11.pos_role[q]
+            if exp_contracts == 'y':
+                ranks = ranks[ranks['Contract expires'].isin(exp_dates)]
+            ranks = ranks[ranks['Age'].between(min_age,max_age)]
+            ranks['Formation Pos.'] = formation_positions[formation][q]
+            
+            rank_list = pd.concat([rank_list,ranks])
+    
+    rank_list.Age = rank_list.Age.astype(int)
+    rank_list = rank_list.reset_index().rename(columns={'index':'Role Rank'})
+    
+    rank_list_final = pd.DataFrame(columns=rank_list.columns)
+    if chosen_team != 'N/A':
+        rank_list = rank_list[rank_list['Team']==chosen_team].reset_index(drop=True)
+    if nationality_chosen != "":
+        rank_list['Passport country'] = rank_list['Passport country'].fillna("")
+        rank_list = rank_list[rank_list['Passport country'].str.contains(nationality_chosen)].reset_index(drop=True)
+    
+    for q in range(len(rank_11)):
+        rank_list_final = pd.concat([rank_list_final,rank_list[rank_list['Squad Position']==rank_11.pos_role[q]].sort_values(by=['Score','Age'],ascending=[False,True]).head(num)])
+    rank_list = rank_list_final.copy()
+    return rank_list
 
-    for x in range(0, nrows):
-        ax_coords = DC_to_NFC([0, x + .25])
-        ax = fig.add_axes(
-            [ax_coords[0], ax_coords[1], ax_width, ax_height]
+#######################################################################################################################################
+def rank_column(df, column_name):
+    return stats.rankdata(df[column_name], "average") / len(df[column_name])
+def rank_column_inverse(df, column_name):
+    return 1-stats.rankdata(df[column_name], "average") / len(df[column_name])
+
+def get_label_rotation(angle, offset):
+    # Rotation must be specified in degrees :(
+    rotation = np.rad2deg(angle + offset)+90
+    if angle <= np.pi/2:
+        alignment = "center"
+        rotation = rotation + 180
+    elif 4.3 < angle < np.pi*2:  # 4.71239 is 270 degrees
+        alignment = "center"
+        rotation = rotation - 180
+    else: 
+        alignment = "center"
+    return rotation, alignment
+
+
+def add_labels(angles, values, labels, offset, ax, text_colors):
+
+    # This is the space between the end of the bar and the label
+    padding = .05
+
+    # Iterate over angles, values, and labels, to add all of them.
+    for angle, value, label, text_col in zip(angles, values, labels, text_colors):
+        angle = angle
+
+        # Obtain text rotation and alignment
+        rotation, alignment = get_label_rotation(angle, offset)
+
+        # And finally add the text
+        ax.text(
+            x=angle, 
+            y=1.05,
+            s=label, 
+            ha=alignment, 
+            va="center", 
+            rotation=rotation,
+            color=text_col,
         )
-        ax_logo(logos[x], ax)
+def add_labels_dist(angles, values, labels, offset, ax, text_colors, raw_vals_full):
+
+    # This is the space between the end of the bar and the label
+    padding = .05
+
+    # Iterate over angles, values, and labels, to add all of them.
+    for i, (angle, value, label, text_col) in enumerate(zip(angles, values, labels, text_colors)):
+        angle = angle
+        
+        # Obtain text rotation and alignment
+        rotation, alignment = get_label_rotation(angle, offset)
+
+        # And finally add the text
+        ax.text(
+            x=angle, 
+            y=1.05,
+            s=label, 
+            ha=alignment, 
+            va="center", 
+            rotation=rotation,
+            color=text_col,
+        )
+        
+        data_to_use = raw_vals_full.iloc[:,i+1].tolist()
+        mean_val = np.mean(data_to_use)
+        std_dev = 0.5*np.std(data_to_use)
+        mean_percentile = stats.percentileofscore(data_to_use, mean_val)
+        std_dev_up_percentile = stats.percentileofscore(data_to_use, mean_val+std_dev)
+        std_dev_down_percentile = stats.percentileofscore(data_to_use, mean_val-std_dev)
+        
+        ax.hlines(mean_percentile/100, angle - 0.055, angle + 0.055, colors='black', linestyles='dotted', linewidth=2, alpha=0.8, zorder=3)
+        ax.hlines(std_dev_up_percentile/100, angle - 0.055, angle + 0.055, colors=text_col, linestyles='dotted', linewidth=2, alpha=0.8, zorder=3)
+        ax.hlines(std_dev_down_percentile/100, angle - 0.055, angle + 0.055, colors=text_col, linestyles='dotted', linewidth=2, alpha=0.8, zorder=3)
+
+def scout_report(data_frame, gender, league, season, xtra, template, pos, player_pos, mins, minplay, compares, name, ws_name, team, age, sig, extra_text, custom_radar, dist_labels, logo_dict, metric_selections=None):
+    plt.clf()
+    df = data_frame
+    df = df[df['League']==full_league_name].reset_index(drop=True)
+
+    # Filter data
+    dfProspect = df[(df['Minutes played'] >= mins)].copy()
+    dfProspect = filter_by_position(dfProspect, pos)
+    raw_valsdf = dfProspect[(dfProspect['Player']==ws_name) & (dfProspect['Team within selected timeframe']==team) & (dfProspect['Age']==age)]
+    raw_valsdf_full = dfProspect.copy()
     
-    fig.text(
-        x=0.15, y=.91,
-        s=f'{lg} Table',
-        ha='left',
-        va='bottom',
-        weight='bold',
-        size=11, color='#4A2E19'
+    # FORWARD
+    fwd1 = "Non-penalty goals per 90"
+    fwd2 = "npxG per 90"
+    fwd3 = "Assists per 90"
+    fwd4 = "xA per 90"
+    fwd5 = "Successful dribbles, %"
+    fwd6 = "Goal conversion, %"
+    fwd7 = "Shot assists per 90"
+    fwd8 = "Second assists per 90"
+    fwd9 = "Progressive runs per 90"
+    fwd10 = "Progressive passes per 90"
+    fwd11 = "Touches in box per 90"
+    fwd12 = "Aerial duels won, %"
+    # MIDFIELD
+    mid1 = "Accurate short / medium passes, %"
+    mid2 = "Accurate long passes, %"
+    mid3 = "Accurate smart passes, %"
+    mid4 = "Shot assists per 90"
+    mid5 = "xA per 90"
+    mid6 = "Assists per 90"
+    mid7 = "Second assists per 90"
+    mid8 = "Third assists per 90"
+    mid9 = "Progressive passes per 90"
+    mid10 = "Progressive runs per 90"
+    mid11 = "Duels won, %"
+    mid12 = "pAdj Tkl+Int per 90"
+    # DEFENDER
+    def1 = "Successful defensive actions per 90"
+    def2 = "PAdj Sliding tackles"
+    def3 = "Defensive duels won, %"
+    def4 = "Fouls per 90" 
+    def5 = "Cards per 90"
+    def6 = "Shots blocked per 90"
+    def7 = "PAdj Interceptions"
+    def8 = "Aerial duels won, %"
+    def9 = "Accurate long passes, %"
+    def10 = "1st, 2nd, 3rd assists"
+    def11 = "Progressive passes per 90"
+    def12 = "Progressive runs per 90"
+    # GOALKEEPER
+    gk1 = "Conceded goals per 90" #a2
+    gk2 = "Prevented goals per 90" #a4
+    gk3 = "Shots against per 90" #a1
+    gk4 = "Save rate, %" #a3
+    gk5 = "Clean sheets, %"
+    gk6 = "Exits per 90" #a5
+    gk7 = "Aerial duels per 90"
+    gk8 = "Passes per 90" #b2
+    gk9 = "Accurate long passes, %" #b5
+    gk10 = "Average long pass length, m"
+    gk11 = 'Pct of passes being short' #b3
+    gk12 = "Pct of passes being lateral" #b4
+    gk13 = "Received passes per 90" #b1
+    gk14 = "Goals prevented %" #a4
+    # OTHERS
+    extra = "Accurate passes, %"
+    extra2 = 'Shots per 90'
+    extra3 = 'Accurate crosses, %'
+    extra4 = 'Smart passes per 90'
+    extra5 = 'xA per Shot Assist'
+    extra6 = 'Accelerations per 90'
+    extra7 = 'Aerial duels won per 90'
+    extra8 = 'Fouls suffered per 90'
+    extra9 = 'npxG per shot'
+    extra10 = 'Crosses per 90'
+
+    df_pros = dfProspect
+
+    ranked_columns = [
+        'midpct1', 'midpct2', 'midpct3', 'midpct4', 'midpct5', 'midpct6', 'midpct7',
+        'midpct8', 'midpct9', 'midpct10', 'midpct11', 'midpct12',
+        'fwdpct1', 'fwdpct2', 'fwdpct3', 'fwdpct4', 'fwdpct5', 'fwdpct6', 'fwdpct7',
+        'fwdpct8', 'fwdpct9', 'fwdpct10', 'fwdpct11', 'fwdpct12',
+        'gkpct2', 'gkpct4', 'gkpct5', 'gkpct6', 'gkpct7',
+        'gkpct8', 'gkpct9', 'gkpct10', 'gkpct11', 'gkpct12', 'gkpct13', 'gkpct14',
+        'defpct1','defpct2','defpct3','defpct6','defpct7','defpct8','defpct9','defpct10','defpct11','defpct12',
+        'extrapct','extrapct2','extrapct3','extrapct4','extrapct5','extrapct6','extrapct7','extrapct8','extrapct9','extrapct10',
+    ]
+    inverse_ranked_columns = [
+        'defpct4','defpct5','gkpct1','gkpct3'
+    ]
+    ranked_columns_r = [
+        mid1, mid2, mid3, mid4, mid5, mid6, mid7,
+        mid8, mid9, mid10, mid11, mid12,
+        fwd1, fwd2, fwd3, fwd4, fwd5, fwd6, fwd7,
+        fwd8, fwd9, fwd10, fwd11, fwd12,
+        gk2, gk4, gk5, gk6, gk7, gk8, gk9, gk10, gk11, gk12, gk13, gk14,
+        def1,def2,def3,def6,def7,def8,def9,def10,def11,def12,
+        extra,extra2,extra3,extra4,extra5,extra6,extra7,extra8,extra9,extra10,
+    ]
+    inverse_ranked_columns_r = [
+        def4,def5,gk1,gk3
+    ]
+    
+    dfProspect[ranked_columns] = 0.0
+    dfProspect[inverse_ranked_columns] = 0.0
+
+    for column, column_r in zip(ranked_columns, ranked_columns_r):
+        dfProspect[column] = rank_column(dfProspect, column_r)
+    for column, column_r in zip(inverse_ranked_columns, inverse_ranked_columns_r):
+        dfProspect[column] = rank_column_inverse(dfProspect, column_r)
+
+    ######################################################################
+
+    dfRadarMF = dfProspect[(dfProspect['Player']==ws_name) & (dfProspect['Team within selected timeframe']==team) & (dfProspect['Age']==age)].reset_index(drop=True)
+    dfRadarMF = dfRadarMF.fillna(0)
+    player_full_name = dfRadarMF['Full name'].values[0]
+    # Define a dictionary to map old column names to new ones
+    if custom_radar == 'n':
+        column_mapping = {
+            'attacking': {
+                'midpct1': "Short & Med\nPass %",
+                'midpct2': "Long\nPass %",
+                'midpct3': "Smart\nPass %",
+                'extrapct3': 'Cross\nCompletion %',
+                'midpct4': "Shot\nAssists",
+                'midpct5': "Expected\nAssists (xA)",
+                'extrapct5': 'xA per\nShot Assist',
+                'midpct6': "Assists",
+                'midpct7': "Second\nAssists",
+                'extrapct4': 'Smart\nPasses',
+                'fwdpct2': "npxG",
+                'fwdpct1': "Non-Pen\nGoals",
+                'fwdpct6': "Goals/Shot\non Target %",
+                'extrapct9': 'npxG\nper shot',
+                'extrapct2': "Shots",
+                'fwdpct11': 'Touches in\nPen Box',
+                'fwdpct5': "Dribble\nSuccess %",
+                'extrapct6': 'Acceleration\nwith Ball',
+                'midpct10': "Prog.\nCarries",
+                'midpct9': "Prog.\nPasses",
+                'defpct1': "Defensive\nActions",
+                'midpct12': "Tackles & Int\n(pAdj)",
+                'defpct8': 'Aerial\nWin %'
+            },
+            'defensive': {
+                'defpct1': 'Defensive\nActions',
+                'defpct2': "Tackles\n(pAdj)",
+                'defpct3': "Defensive\nDuels Won %",
+                'defpct6': "Shot Blocks",
+                'defpct7': "Interceptions\n(pAdj)",
+                'extrapct7': 'Aerial Duels\nWon',
+                'defpct8': "Aerial\nWin %",
+                'defpct9': "Long\nPass %",
+                'extrapct10': 'Crosses',
+                'extrapct3': 'Cross\nCompletion %',
+                'defpct10': "Assists &\n2nd/3rd Assists",
+                'defpct11': "Prog.\nPasses",
+                'defpct12': "Prog.\nCarries",
+                'fwdpct5': "Dribble\nSucces %",
+                'extrapct6': 'Acceleration\nwith Ball',
+                'midpct5': "Expected\nAssists",
+                'defpct4': "Fouls",
+                'defpct5': "Cards",
+                'extrapct8': 'Fouls Drawn'
+            },
+            'cb': {
+                'defpct1': 'Defensive\nActions',
+                'defpct2': "Tackles\n(pAdj)",
+                'defpct3': "Defensive\nDuels Won %",
+                'defpct6': "Shot Blocks",
+                'defpct7': "Interceptions\n(pAdj)",
+                'extrapct7': 'Aerial Duels\nWon',
+                'defpct8': "Aerial\nWin %",
+                'defpct9': "Long\nPass %",
+                'defpct10': "Assists &\n2nd/3rd Assists",
+                'defpct11': "Prog.\nPasses",
+                'defpct12': "Prog.\nCarries",
+                'fwdpct5': "Dribble\nSucces %",
+                'extrapct6': 'Acceleration\nwith Ball',
+                'midpct5': "Expected\nAssists",
+                'defpct4': "Fouls",
+                'defpct5': "Cards",
+                'extrapct8': 'Fouls Drawn'
+            },
+            'gk': {
+                'gkpct3': 'Shots\nAgainst',
+                'gkpct1': "Goals\nConceded",
+                'gkpct4': "Save %",
+                'gkpct14': "Goals\nPrevented %",
+                'gkpct2': 'Prevented\nGoals',
+                'gkpct6': "Coming Off\nLine",
+                'gkpct13': 'Received\nPasses',
+                'gkpct8': "Passes",
+                'gkpct11': "% of Passes\nBeing Short",
+                'gkpct12': "% of Passes\nBeing Lateral",
+                'gkpct9': "Long Pass\nCmp %",
+            }
+    
+        }
+        if template == 'attacking':
+            raw_vals = raw_valsdf[["Player",
+                               mid1, mid2, mid3, extra3,
+                               mid4,mid5,extra5, mid6, mid7,extra4,
+                                   fwd2,fwd1,fwd6,extra9,extra2,fwd11,
+                               fwd5,extra6,mid10,mid9,
+                                   def1,mid12,def8
+                              ]]
+            raw_vals_full = raw_valsdf_full[["Player",
+                               mid1, mid2, mid3, extra3,
+                               mid4,mid5,extra5, mid6, mid7,extra4,
+                                   fwd2,fwd1,fwd6,extra9,extra2,fwd11,
+                               fwd5,extra6,mid10,mid9,
+                                   def1,mid12,def8
+                              ]]
+        if template == 'defensive':
+            raw_vals = raw_valsdf[["Player",
+                               def1, def2, def3, def6,def7,extra7,def8,
+                               def9,extra10,extra3, def10, def11,def12,fwd5,extra6,mid5,
+                               def4,def5,extra8,
+                              ]]
+            raw_vals_full = raw_valsdf_full[["Player",
+                               def1, def2, def3, def6,def7,extra7,def8,
+                               def9,extra10,extra3, def10, def11,def12,fwd5,extra6,mid5,
+                               def4,def5,extra8,
+                              ]]
+        if template == 'cb':
+            raw_vals = raw_valsdf[["Player",
+                               def1, def2, def3, def6,def7,extra7,def8,
+                               def9, def10, def11,def12,fwd5,extra6,mid5,
+                               def4,def5,extra8,
+                              ]]
+            raw_vals_full = raw_valsdf_full[["Player",
+                               def1, def2, def3, def6,def7,extra7,def8,
+                               def9, def10, def11,def12,fwd5,extra6,mid5,
+                               def4,def5,extra8,
+                              ]]
+        if template == 'gk':
+            raw_vals = raw_valsdf[["Player",
+                               gk3, gk1, gk4, gk14, gk2, gk6,
+                               gk13, gk8, gk11, gk12, gk9
+                              ]]
+            raw_vals_full = raw_valsdf_full[["Player",
+                               gk3, gk1, gk4, gk14, gk2, gk6,
+                               gk13, gk8, gk11, gk12, gk9
+                              ]]
+        if template in column_mapping:
+            selected_columns = column_mapping[template]
+            dfRadarMF = dfRadarMF[['Player'] + list(selected_columns.keys())]
+            dfRadarMF.rename(columns=selected_columns, inplace=True)
+    if custom_radar == 'y':
+        all_possible_vars = ['Received passes per 90','Passes per 90','Pct of passes being short','Pct of passes being lateral','Accurate passes, %','Accurate short / medium passes, %','Accurate long passes, %','Crosses per 90','Accurate crosses, %','Smart passes per 90','Shot assists per 90','xA per 90','xA per Shot Assist','Assists per 90','Second assists per 90','Third assists per 90','1st, 2nd, 3rd assists','Progressive passes per 90','Progressive runs per 90','Shots per 90','npxG per 90','Non-penalty goals per 90','npxG per shot','Goal conversion, %','Successful dribbles, %','Accelerations per 90','Touches in box per 90','Fouls suffered per 90','Successful defensive actions per 90','Duels won, %','Defensive duels won, %','pAdj Tkl+Int per 90','PAdj Sliding tackles','PAdj Interceptions','Shots blocked per 90','Aerial duels per 90','Aerial duels won, %','Aerial duels won per 90','Fouls per 90','Shots against per 90','Conceded goals per 90','Save rate, %','Prevented goals per 90','Goals prevented %','Clean sheets, %','Exits per 90','Average long pass length, m']
+        names = ['Received\nPasses','Passes','% of Passes\nBeing Short','% of Passes\nBeing Lateral','Pass\nCmp %','Short & Med\nPass %','Long\nPass %','Crosses','Cross\nCompletion %','Smart\nPasses','Shot\nAssists','Expected\nAssists (xA)','xA per\nShot Assist','Assists','Second\nAssists','Third\nAssists','Assists &\n2nd/3rd Assists','Prog.\nPasses','Prog.\nCarries','Shots','npxG','Non-Pen\nGoals','npxG\nper shot','Goals/Shot\non Target %','Dribble\nSuccess %','Acceleration\nwith Ball','Touches in\nPen Box','Fouls\nDrawn','Defensive\nActions','Duel Win%','Defensive\nDuels Won %','Tackles & Int\n(pAdj)','Tackles\n(pAdj)','Interceptions\n(pAdj)','Shot\nBlocks','Aerial\nDuels','Aerial\nWin %','Aerial Duels\nWon','Fouls','Shots\nAgainst','Goals\nConceded','Save %','Prevented\nGoals','Goals\nPrevented %','Clean\nSheets %','Coming Off\nLine','Long Pass\nLength (m)']
+        base_var_names = ['gkpct13','gkpct8','gkpct11','gkpct12','extrapct','midpct1','midpct2','extrapct10','extrapct3','extrapct4','midpct4','midpct5','extrapct5','midpct6','midpct7','midpct8','defpct10','midpct9','midpct10','extrapct2','fwdpct2','fwdpct1','extrapct9','fwdpct6','fwdpct5','extrapct6','fwdpct11','extrapct8','defpct1','midpct11','defpct3','midpct12','defpct2','defpct7','defpct6','gkpct7','defpct8','extrapct7','defpct4','gkpct3','gkpct1','gkpct4','gkpct2','gkpct14','gkpct5','gkpct6','gkpct10']
+        ix_selected = []
+        for i, l in enumerate(all_possible_vars):
+            if l in metric_selections:
+                ix_selected+=[i]
+        metric_rename = []
+        for ix in ix_selected:
+            metric_rename+=[names[ix]]
+        base_vars = []
+        for ix in ix_selected:
+            base_vars+=[base_var_names[ix]]
+        column_mapping = dict(zip(base_vars, metric_rename))
+
+        use_these_cols = ["Player"]+metric_selections
+        raw_vals = raw_valsdf[use_these_cols]
+        raw_vals_full = raw_valsdf_full[use_these_cols]
+        
+        selected_columns = column_mapping
+        dfRadarMF = dfRadarMF[['Player'] + list(selected_columns.keys())]
+        dfRadarMF.rename(columns=selected_columns, inplace=True)
+
+        v_passing = ['Received passes per 90','Passes per 90','Pct of passes being short','Pct of passes being lateral','Accurate passes, %','Accurate short / medium passes, %','Accurate long passes, %','Crosses per 90','Accurate crosses, %']
+        v_playmaking = ['Smart passes per 90','Shot assists per 90','xA per 90','xA per Shot Assist','Assists per 90','Second assists per 90','Third assists per 90','1st, 2nd, 3rd assists','Progressive passes per 90','Progressive runs per 90']
+        v_shooting = ['Shots per 90','npxG per 90','Non-penalty goals per 90','npxG per shot','Goal conversion, %']
+        v_attacking = ['Successful dribbles, %','Accelerations per 90','Touches in box per 90','Fouls suffered per 90']
+        v_defending = ['Successful defensive actions per 90','Duels won, %','Defensive duels won, %','pAdj Tkl+Int per 90','PAdj Sliding tackles','PAdj Interceptions','Shots blocked per 90','Aerial duels per 90','Aerial duels won, %','Aerial duels won per 90','Fouls per 90']
+        v_goalkeeping = ['Shots against per 90','Conceded goals per 90','Save rate, %','Prevented goals per 90','Goals prevented %','Clean sheets, %','Exits per 90','Average long pass length, m']
+        
+        passing_l = 0
+        playmaking_l = 0
+        shooting_l = 0
+        attacking_l = 0
+        defending_l = 0
+        goalkeeping_l = 0
+
+        for i, l in enumerate(v_passing):
+            if l in metric_selections:
+                passing_l+=1
+        for i, l in enumerate(v_playmaking):
+            if l in metric_selections:
+                playmaking_l+=1
+        for i, l in enumerate(v_shooting):
+            if l in metric_selections:
+                shooting_l+=1
+        for i, l in enumerate(v_attacking):
+            if l in metric_selections:
+                attacking_l+=1
+        for i, l in enumerate(v_defending):
+            if l in metric_selections:
+                defending_l+=1
+        for i, l in enumerate(v_goalkeeping):
+            if l in metric_selections:
+                goalkeeping_l+=1
+        
+    ###########################################################################
+
+    df1 = dfRadarMF.T.reset_index()
+
+    df1.columns = df1.iloc[0] 
+
+    df1 = df1[1:]
+    df1 = df1.reset_index()
+    df1 = df1.rename(columns={'Player': 'Metric',
+                        ws_name: 'Value',
+                             'index': 'Group'})
+
+    if custom_radar == 'y':
+        for i in range(len(df1)):
+            if df1['Group'][i] <= passing_l:
+                df1['Group'][i] = 'Passing'
+            elif df1['Group'][i] <= passing_l+playmaking_l:
+                df1['Group'][i] = 'Playmaking'
+            elif df1['Group'][i] <= passing_l+playmaking_l+shooting_l:
+                df1['Group'][i] = 'Shooting'
+            elif df1['Group'][i] <= passing_l+playmaking_l+shooting_l+attacking_l:
+                df1['Group'][i] = 'Attacking'
+            elif df1['Group'][i] <= passing_l+playmaking_l+shooting_l+attacking_l+defending_l:
+                df1['Group'][i] = 'Defending'
+            elif df1['Group'][i] <= passing_l+playmaking_l+shooting_l+attacking_l+defending_l+goalkeeping_l:
+                df1['Group'][i] = 'Goalkeeping'
+    if custom_radar == 'n':
+        if template == 'attacking':
+            for i in range(len(df1)):
+                if df1['Group'][i] <= 4:
+                    df1['Group'][i] = 'Passing'
+                elif df1['Group'][i] <= 10:
+                    df1['Group'][i] = 'Creativity'
+                elif df1['Group'][i] <= 16:
+                    df1['Group'][i] = 'Shooting'
+                elif df1['Group'][i] <= 20:
+                    df1['Group'][i] = 'Ball Movement'
+                elif df1['Group'][i] <= 23:
+                    df1['Group'][i] = 'Defense'
+    
+        if template == 'defensive':
+            for i in range(len(df1)):
+                if df1['Group'][i] <= 7:
+                    df1['Group'][i] = 'Defending'
+                elif df1['Group'][i] <= 16:
+                    df1['Group'][i] = 'Attacking'
+                elif df1['Group'][i] <= 19:
+                    df1['Group'][i] = 'Fouling'
+    
+        if template == 'cb':
+            for i in range(len(df1)):
+                if df1['Group'][i] <= 7:
+                    df1['Group'][i] = 'Defending'
+                elif df1['Group'][i] <= 14:
+                    df1['Group'][i] = 'Attacking'
+                elif df1['Group'][i] <= 17:
+                    df1['Group'][i] = 'Fouling'
+                    
+        if template == 'gk':
+            for i in range(len(df1)):
+                if df1['Group'][i] <= 6:
+                    df1['Group'][i] = 'Defending'
+                elif df1['Group'][i] <= 11:
+                    df1['Group'][i] = 'Attacking'
+
+
+
+    #####################################################################
+
+    ### This link below is where I base a lot of my radar code off of
+    ### https://www.python-graph-gallery.com/circular-barplot-with-groups
+
+    #### I DEFINED THE LABEL AND ROTATION HERE
+
+
+    # Grab the group values
+    GROUP = df1["Group"].values
+    VALUES = df1["Value"].values
+    LABELS = df1["Metric"].values
+    OFFSET = np.pi / 2
+
+    PAD = 2
+    ANGLES_N = len(VALUES) + PAD * len(np.unique(GROUP))
+    ANGLES = np.linspace(0, 2 * np.pi, num=ANGLES_N, endpoint=False)
+    WIDTH = (2 * np.pi) / len(ANGLES)
+
+    offset = 0
+    IDXS = []
+
+    if custom_radar == 'n':
+        template_group_sizes = {
+            'attacking': [4, 6, 6, 4, 3],
+            'defensive': [7, 9, 3],
+            'cb': [7, 7, 3],
+            'gk': [6, 5]
+        }
+    if custom_radar == 'y':
+        len_list = [passing_l,playmaking_l,shooting_l,attacking_l,defending_l,goalkeeping_l]
+        len_list = [i for i in len_list if i != 0]
+        template_group_sizes = {
+            'custom': len_list,
+        }
+
+    GROUPS_SIZE = template_group_sizes.get(template, [])
+
+
+
+    for size in GROUPS_SIZE:
+        IDXS += list(range(offset + PAD, offset + size + PAD))
+        offset += size + PAD
+
+    fig, ax = plt.subplots(figsize=(10, 10), subplot_kw={"projection": "polar"})
+    ax.set_theta_offset(OFFSET)
+    ax.set_ylim(-.5, 1)
+    ax.set_frame_on(False)
+    ax.xaxis.grid(False)
+    ax.yaxis.grid(False)
+    ax.set_xticks([])
+    ax.set_yticks([])
+
+
+    COLORS = [f"C{i}" for i, size in enumerate(GROUPS_SIZE) for _ in range(size)]
+
+    ax.bar(
+        ANGLES[IDXS], VALUES, width=WIDTH, color=COLORS,
+        edgecolor="#4A2E19", linewidth=1
     )
-    fig.text(
-        x=0.15, y=.9,
-        s=f'Table code by @sonofacorner\nTable is from FotMob | football-match-reports.streamlit.app',
-        ha='left',
-        va='top',
-        weight='regular',
-        size=6, color='#4A2E19'
+
+    offset = 0 
+    for group, size in zip(GROUPS_SIZE, GROUPS_SIZE):
+        # Add line below bars
+        x1 = np.linspace(ANGLES[offset + PAD], ANGLES[offset + size + PAD - 1], num=50)
+        ax.plot(x1, [-.02] * 50, color="#4A2E19")
+
+
+        # Add reference lines at 20, 40, 60, and 80
+        x2 = np.linspace(ANGLES[offset], ANGLES[offset + PAD - 1], num=50)
+        ax.plot(x2, [.2] * 50, color="#bebebe", lw=0.8)
+        ax.plot(x2, [.4] * 50, color="#bebebe", lw=0.8)
+        ax.plot(x2, [.60] * 50, color="#bebebe", lw=0.8)
+        ax.plot(x2, [.80] * 50, color="#bebebe", lw=0.8)
+        ax.plot(x2, [1] * 50, color="#bebebe", lw=0.8)
+
+        offset += size + PAD
+        
+    text_cs = []
+    text_inv_cs = []
+    for i, bar in enumerate(ax.patches):
+        pc = 1 - bar.get_height()
+
+        if pc <= 0.1:
+            color = ('#01349b', '#d9e3f6')  # Elite
+        elif 0.1 < pc <= 0.35:
+            color = ('#007f35', '#d9f0e3')  # Above Avg
+        elif 0.35 < pc <= 0.66:
+            color = ('#9b6700', '#fff2d9')  # Avg
+        else:
+            color = ('#b60918', '#fddbde')  # Below Avg
+
+        if bar_colors == 'Benchmarking Percentiles':
+            bar.set_color(color[1])
+            bar.set_edgecolor(color[0])
+
+        text_cs.append(color[0])
+        text_inv_cs.append(color[1])
+        
+    callout_text = ''
+    title_note = ''
+
+    if callout == 'Per 90':
+        callout_text = "per 90'"
+        title_note = ' & Per 90 Values'
+    elif callout == 'Percentile':
+        callout_text = 'percentile'
+
+    for i, bar in enumerate(ax.patches):
+        if bar_colors == 'Metric Groups':
+            if callout == 'Per 90':
+                value_format = f'{round(raw_vals.iloc[0][i+1], 2)}'
+            else:
+                value_format = format(bar.get_height() * 100, '.0f')
+            color = 'black'
+            face = 'white'
+        elif bar_colors == 'Benchmarking Percentiles':
+            if callout == 'Per 90':
+                value_format = f'{round(raw_vals.iloc[0][i+1], 2)}'
+            else:
+                value_format = format(bar.get_height() * 100, '.0f')
+            color = text_inv_cs[i]
+            face = text_cs[i]
+
+        ax.annotate(value_format,
+                    (bar.get_x() + bar.get_width() / 2, bar.get_height() - 0.1),
+                    ha='center', va='center', size=10, xytext=(0, 8),
+                    textcoords='offset points', color=color, zorder=4,
+                    bbox=dict(boxstyle="round", fc=face, ec="black", lw=1))
+
+    if dist_labels == 'Yes':
+        add_labels_dist(ANGLES[IDXS], VALUES, LABELS, OFFSET, ax, text_cs, raw_vals_full)
+    if dist_labels == 'No':
+        add_labels(ANGLES[IDXS], VALUES, LABELS, OFFSET, ax, text_cs)
+
+    PAD = 0.02
+    ax.text(0.15, 0 + PAD, "0", size=10, color='#4A2E19')
+    ax.text(0.15, 0.2 + PAD, "20", size=10, color='#4A2E19')
+    ax.text(0.15, 0.4 + PAD, "40", size=10, color='#4A2E19')
+    ax.text(0.15, 0.6 + PAD, "60", size=10, color='#4A2E19')
+    ax.text(0.15, 0.8 + PAD, "80", size=10, color='#4A2E19')
+    ax.text(0.15, 1 + PAD, "100", size=10, color='#4A2E19')
+
+    plt.suptitle(f'{player_full_name.replace("  "," ")} ({age}, {player_pos}, {minplay} mins.), {team}\n{season} {league} Percentile Rankings{title_note}',
+                 fontsize=17,
+                 fontfamily="DejaVu Sans",
+                color="#4A2E19", #4A2E19
+                 fontweight="bold", fontname="DejaVu Sans",
+                x=0.5,
+                y=.97)
+
+    if dist_labels == 'Yes':
+        dist_text = "\nBlack dot line = metric mean\nColored dot line = +/- 0.5 std. deviations"
+    if dist_labels == 'No':
+        dist_text = ""
+    plt.annotate(f"Bars are percentiles | Values shown are {callout_text} values\nAll values are per 90 minutes | %s\nCompared to %s %s, %i+ mins\nData: Wyscout | %s\nSample Size: %i players{dist_text}" %(extra_text, league, compares, mins, sig, len(dfProspect)),
+                 xy = (0, -.09), xycoords='axes fraction',
+                ha='left', va='center',
+                fontsize=9, fontfamily="DejaVu Sans",
+                color="#4A2E19", fontweight="regular", fontname="DejaVu Sans",
+                ) 
+
+    try:
+        clubpath = logo_dict[raw_valsdf['Team within selected timeframe'].values[0]]
+        image = Image.open(urllib.request.urlopen(clubpath))
+        newax = fig.add_axes([.44,.43,0.15,0.15], anchor='C', zorder=1)
+        newax.imshow(image)
+        newax.axis('off')
+    except:
+        pass
+
+    ax.set_facecolor('#fbf9f4')
+    fig = plt.gcf()
+    fig.patch.set_facecolor('#fbf9f4')
+    fig.set_size_inches(12, (12*.9)) #length, height
+    
+    fig_text(
+        0.88, 0.055, "Created by Ben Griffis\n(@BeGriffis on Twitter)\n\n<Elite (Top 10%)>\n<Above Average (11-35%)>\n<Average (36-66%)>\n<Below Average (Bottom 35%)>", color="#4A2E19",
+        highlight_textprops=[{"color": '#01349b'},
+                             {'color' : '#007f35'},
+                             {"color" : '#9b6700'},
+                             {'color' : '#b60918'},
+                            ],
+        size=10, fig=fig, ha='right',va='center'
     )
+
+
 
     return fig
 
-
-
-nbi_links = pd.read_csv("https://raw.githubusercontent.com/griffisben/Post_Match_App/main/NBI_Match_Links.csv")
-lg_lookup = pd.read_csv("https://raw.githubusercontent.com/griffisben/Post_Match_App/main/PostMatchLeagues.csv")
-league_list = lg_lookup.League.tolist()
-lg_lookup = pd.read_csv("https://raw.githubusercontent.com/griffisben/Post_Match_App/main/PostMatchLeagues.csv")
-lg_id_dict = {lg_lookup.League[i]: lg_lookup.FotMob[i] for i in range(len(lg_lookup))}
-
-
-with st.sidebar:
-    lgg = st.selectbox('What League Do You Want Reports For?', league_list)
-    update_date = lg_lookup[lg_lookup.League==lgg].Update.values[0]
-    league = lgg.replace("ü","u").replace("ó","o")
+def create_player_research_table(df_basic, mins, full_league_name, pos, min_age, max_age):
+    dfProspect = df_basic[(df_basic['Minutes played'] >= mins) & (df_basic['League'] == full_league_name)].copy()
+    dfProspect = filter_by_position_long(dfProspect, pos)
     
-st.title(f"{lgg} Post-Match Reports")
-st.subheader(f"Last Updated: {update_date}\n")
-st.subheader('All data via Opta')
+    ########## PROSPECT RESEARCH ##########
+    #######################################
+    
+    # FORWARD
+    fwd1 = "Non-penalty goals per 90"
+    fwd2 = "npxG per 90"
+    fwd3 = "Assists per 90"
+    fwd4 = "xA per 90"
+    fwd5 = "Successful dribbles, %"
+    fwd6 = "Goal conversion, %"
+    fwd7 = "Shot assists per 90"
+    fwd8 = "Second assists per 90"
+    fwd9 = "Progressive runs per 90"
+    fwd10 = "Progressive passes per 90"
+    fwd11 = "Touches in box per 90"
+    fwd12 = "Aerial duels won, %"
+    # MIDFIELD
+    mid1 = "Accurate short / medium passes, %"
+    mid2 = "Accurate long passes, %"
+    mid3 = "Passes per 90" ## changed from smart pass cmp %
+    mid4 = "Shot assists per 90"
+    mid5 = "xA per 90"
+    mid6 = "Assists per 90"
+    mid7 = "Second assists per 90"
+    mid8 = "Third assists per 90"
+    mid9 = "Progressive passes per 90"
+    mid10 = "Progressive runs per 90"
+    mid11 = "Duels won, %"
+    mid12 = "pAdj Tkl+Int per 90"
+    #DEFENDER
+    def1 = "Successful defensive actions per 90"
+    def2 = "PAdj Sliding tackles"
+    def3 = "Defensive duels won, %"
+    def4 = "Fouls per 90"
+    def5 = "Cards per 90"
+    def6 = "Shots blocked per 90"
+    def7 = "PAdj Interceptions"
+    def8 = "Aerial duels won, %"
+    def9 = "Accurate long passes, %"
+    def10 = "1st, 2nd, 3rd assists"
+    def11 = "Progressive passes per 90"
+    def12 = "Progressive runs per 90"
+    #GOALKEEPER
+    gk1 = "Conceded goals per 90" #a2
+    gk2 = "Save rate, %" #a3
+    gk3 = "Dribbles per 90"
+    gk4 = "Pct of passes being short" #b3
+    gk5 = "Clean sheets, %"
+    gk6 = "Exits per 90" #a5
+    gk7 = "Aerial duels per 90"
+    gk8 = "Passes per 90" #b2
+    gk9 = "Accurate long passes, %" #b5
+    gk10 = "Prevented goals per 90" #a4
+    gk11 = 'Shots against per 90' #a1
+    gk12 = 'Pct of passes being lateral' #b4
+    gk13 = 'Received passes per 90' #b1
+    gk14 = 'Goals prevented %' #b1
+    #EXTRA
+    extra = "Accurate passes, %"
+    extra2 = 'Shots per 90'
+    extra3 = 'Accurate crosses, %'
+    extra4 = 'Smart passes per 90'
+    extra5 = 'xA per Shot Assist'
+    extra6 = 'Accelerations per 90'
+    extra7 = 'Aerial duels won per 90'
+    extra8 = 'Fouls suffered per 90'
+    extra9 = 'npxG per shot'
+    extra10 = 'Crosses per 90'
+    
+    ranked_columns = [
+        'midpct1', 'midpct2', 'midpct3', 'midpct4', 'midpct5', 'midpct6', 'midpct7',
+        'midpct8', 'midpct9', 'midpct10', 'midpct11', 'midpct12',
+        'fwdpct1', 'fwdpct2', 'fwdpct3', 'fwdpct4', 'fwdpct5', 'fwdpct6', 'fwdpct7',
+        'fwdpct8', 'fwdpct9', 'fwdpct10', 'fwdpct11', 'fwdpct12',
+        'gkpct2', 'gkpct4', 'gkpct5', 'gkpct6', 'gkpct7',
+        'gkpct8', 'gkpct9', 'gkpct10', 'gkpct11', 'gkpct12', 'gkpct13', 'gkpct14',
+        'defpct1','defpct2','defpct3','defpct6','defpct7','defpct8','defpct9','defpct10','defpct11','defpct12',
+        'extrapct','extrapct2','extrapct3','extrapct4','extrapct5','extrapct6','extrapct7','extrapct8','extrapct9','extrapct10',
+    ]
+    inverse_ranked_columns = [
+        'defpct4','defpct5','gkpct1','gkpct3'
+    ]
+    ranked_columns_r = [
+        mid1, mid2, mid3, mid4, mid5, mid6, mid7,
+        mid8, mid9, mid10, mid11, mid12,
+        fwd1, fwd2, fwd3, fwd4, fwd5, fwd6, fwd7,
+        fwd8, fwd9, fwd10, fwd11, fwd12,
+        gk2, gk4, gk5, gk6, gk7, gk8, gk9, gk10, gk11, gk12, gk13, gk14,
+        def1,def2,def3,def6,def7,def8,def9,def10,def11,def12,
+        extra,extra2,extra3,extra4,extra5,extra6,extra7,extra8,extra9,extra10,
+    ]
+    inverse_ranked_columns_r = [
+        def4,def5,gk1,gk3
+    ]
+    
+    dfProspect[ranked_columns] = 0.0
+    dfProspect[inverse_ranked_columns] = 0.0
+    
+    for column, column_r in zip(ranked_columns, ranked_columns_r):
+        dfProspect[column] = rank_column(dfProspect, column_r)
+    for column, column_r in zip(inverse_ranked_columns, inverse_ranked_columns_r):
+        dfProspect[column] = rank_column_inverse(dfProspect, column_r)
+    
+    
+    final = dfProspect[['Player','Age','League','Position','Team within selected timeframe','Birth country',
+    'fwdpct1','fwdpct2','fwdpct5','fwdpct6','fwdpct11','midpct1','midpct3','midpct4','midpct5','midpct6','midpct7','midpct8','midpct9','midpct10','midpct11','midpct12','defpct1','defpct2','defpct3','defpct4','defpct5','defpct6','defpct7','defpct8','defpct9','defpct10',
+                        'gkpct1','gkpct2','gkpct3','gkpct4','gkpct6','gkpct8','gkpct9', 'gkpct11', 'gkpct12', 'gkpct13', 'gkpct14',
+                        'extrapct','extrapct2','extrapct3','extrapct4','extrapct5','extrapct6','extrapct7','extrapct8','extrapct9','extrapct10',
+    ]]
+    
+    final.rename(columns={'fwdpct1': "Non-penalty goals per 90",
+    'fwdpct2': "npxG per 90",
+    'fwdpct5': "Successful dribbles, %",
+    'fwdpct6': "Goal conversion, %",
+    'fwdpct11': "Touches in box per 90",
+    'midpct1': "Accurate short / medium passes, %",
+    'midpct3': "Passes per 90",
+    'midpct4': "Shot assists per 90",
+    'midpct5': "xA per 90",
+    'midpct6': "Assists per 90",
+    'midpct7': "Second assists per 90",
+    'midpct8': "Third assists per 90",
+    'midpct9': "Progressive passes per 90",
+    'midpct10': "Progressive runs per 90",
+    'midpct11': "Duels won, %",
+    'midpct12': "pAdj Tkl+Int per 90",
+    'defpct1': "Successful defensive actions per 90",
+    'defpct2': "PAdj Sliding tackles",
+    'defpct3': "Defensive duels won, %",
+    'defpct4': "Fouls per 90",
+    'defpct5': "Cards per 90",
+    'defpct6': "Shots blocked per 90",
+    'defpct7': "PAdj Interceptions",
+    'defpct8': "Aerial duels won, %",
+    'defpct9': "Accurate long passes, %",
+    'defpct10': "1st, 2nd, 3rd assists",
+    'gkpct3': 'Shots\nAgainst',
+    'gkpct1': "Goals\nConceded",
+    'gkpct4': "Save %",
+    'gkpct14': "Goals\nPrevented %",
+    'gkpct2': 'Prevented\nGoals',
+    'gkpct6': "Coming Off\nLine",
+    'gkpct13': 'Received\nPasses',
+    'gkpct8': "Passes",
+    'gkpct11': "% of Passes\nBeing Short",
+    'gkpct12': "% of Passes\nBeing Lateral",
+    'gkpct9': "Long Pass\nCmp %",
+    'extrapct': "Accurate passes, %",
+    'extrapct2': "Shots per 90",
+    'extrapct3': "Accurate crosses, %",
+    'extrapct4': "Smart passes per 90",
+    'extrapct5': "xA per Shot Assist",
+    'extrapct6': "Accelerations per 90",
+    'extrapct7': "Aerial duels won per 90",
+    'extrapct8': "Fouls suffered per 90",
+    'extrapct9': "npxG per shot",
+    'extrapct10': "Crosses per 90",
+    'Team within selected timeframe': 'Team',
+    }, inplace=True)
+    
+    
+    final.Age = final.Age.astype(int)
+    final.sort_values(by=['Age'], inplace=True)
+    final = final[final['Age'].between(min_age,max_age)].reset_index(drop=True)
+    final.fillna(0,inplace=True)
+    
+    return final
 
-with st.expander('Disclaimer & Info'):
+#######################################################################################################################################
+formation_positions = {442:['GK','RCB','LCB','RB','LB','RCM','LCM','RW','LW','RS','LS',],
+                      4231:['GK','RCB','LCB','RB','LB','RCM','LCM','CAM','RW','LW','ST'],
+                      433:['GK','RCB','LCB','RB','LB','RCM','CM','LCM','RW','LW','ST'],
+                      343:['GK','RCB','CB','LCB','RB','LB','RCM','LCM','RW','LW','ST'],
+                       4222:['GK','RCB','LCB','RB','LB','RCM','LCM','RAM','LAM','RS','LS',],
+                      }
+
+rank_11_base = read_csv('https://raw.githubusercontent.com/griffisben/misc-code/main/RoleRanksApp/Ranking_XI.csv')
+role_position_lookup = read_csv('https://raw.githubusercontent.com/griffisben/misc-code/main/RoleRanksApp/Role_Positions_Lookup.csv')
+
+st.title('Best XI Players')
+st.subheader("All data from Wyscout. Created by Ben Griffis (@BeGriffis on Twitter)")
+st.subheader("Note: you are allowed to use any of the images you create here in your own work, but you MUST give me credit and not alter the images to remove my signature and Wyscout's name.")
+with st.expander('Instructions'):
     st.write('''
-    - All of the data on this app comes from Opta. I manipulate the raw data to create these, but it's all Opta data.  \n
-    - You are allowed to, and I encourage you, to share any images from this app on your socials, websites, videos, etc... I just ask that you give this site/me credit. Thank you!  \n
-    - The xG model used to generate xG in this app is my own model. It will give different xG numbers for a single game than FotMob, or Wyscout, or Understat, etc. That doesn't mean either source is wrong, as they will all differ from each other. Please compare xG numbers from this app with other xG numbers from this app, understanding that other xG models give different values. Over a full season, my model is similar to others on a player & team level.
-    - The Expected Points (xPts) model is a Pythagorean expectation model, using the xG output from my xG model. For more info on the method, please read my detailed explainer: https://cafetactiques.com/2023/04/15/creating-an-expected-points-model-inspired-by-pythagorean-expectation/
+    This app is a tool to help you find players who might be performing well in specific roles, and then lets you generate a player's performance radar so that you can see how their data stacks up against others in their position.  \n
+    Follow these steps to generate a Best XI ranking image and player radars:  \n
+    1) Select whether you want Men's or Women's competitions  \n
+    2) Select the season your competition is in. "23-24", "22-23", etc. are leagues which follow Fifa's calendar, i.e. roughly August/September to May/June. "2024", "2023", etc are leagues running from roughly February to November. South America and East Asia are examples  \n
+    3) Select your league  \n
+    4) Select the base formation you want for the roles. There are only a few loaded, as this is not an exhaustive list and all roles can be generated in these formation. I may add more formations later  \n
+    5) Input a minimum minutes threshold. Only players who have played at least this many minutes will be included in the sample. Beware of small sample sizes/variance issues for players with less than around 720 minutes  \n
+    6) Select an age range for the Best XI roles. This can account for all ages (keep at 0-45), a minimum age (move the left-most slider to your desired minimum), a maximum age (move the right-most slider to your desired maximum), or a specific range of ages (move both sliders to your desired range, minimum & maximum)  \n
+    7) Select if you want only players with contraccts expiring on or before a specific date to be included. This feature can help you find potential free transfers. Please note that these are from Wyscout, which are pulled from Transfermarkt, and may not be totally accurate (some players also have no contract expiration date noted and are therefore not included if you slecet "Yes" for this option  \n
+    7a) Enter your desired contract expiration date if needed  \n
+    8) Select the number of players you want to see for each role. Please note that if you select more than 7, the Best XI image will only show the top 7, however the table will still show you all players  \n
+    9) Select whether you want to normalize role-ranking scores from 0 (lowest score) to 100 (top score), or if you want the raw role-ranking scores (which range from 0 to 100, with 0 meaning the player has the lowest recorded numbers in every included metric, and 100 meaning the player has recorded the highest number in every metric)  \n
+    10) Choose all of your roles by position. Once you've made any changes, click the "Update Roles" button  \n
+    11) Select whether you want to show players from all teams, or if you want to create a single team's depth chart. Please note that if you create a depth chart, the player scores are all still ranked against all players in that position in the league, not just the team  \n  \n
+    Tabs:  \n
+    1) Role Ranking Image - this tab is the default, and shows the Best XI nased on all your selected criteria  \n
+    2) Role Ranking Table - this tab allows you to view the Best XI in table format. Remember that if you selected more than a Top 7, this tab will have all players, not just the top 7 shown on the image  \n
+    3) Player Radar Generation - this tab is where you can add a player's name and age in order to create their radar. Select how you want to color the radar's bars & if you want the player's actual per 90 data to be called out on each bar or if you want the percentiles instead. Then click "Submit Options" to generate their radar  \n
+    Pre-Made vs Custom Radar - the default setting here is the pre-made radar, which is a general template based on a player's position (attacking, defensive, CB, GK). However, you can also select your own metrics to include in the radar instead! First, select "Custom", and then click Submit. Then you can choose what metrics you want to include in your custom radar. Click submit again to generate the radar with your selected metrics. Every once in a while, Streamlit will whack out and if there's no image generating, make sure to check your player name & age again, sometimes the age changes randomly, sometimes the name disappears. When in doubt, clikc "Run" at the top or "Submit Options".  \n
+    4) Player List - this is a simple list of players & basic info like age, minutes, and positions that you can use for the Radar generation.  \n
+    5) Player Search, Filters - this tab allows you to define a position group that you want to find players for, and then set minimum percentile filters that players must meet in order to be shown in a table. This way, you can find players meeting specific requirements, instead of just relying on the role-scores to find players for you.  \n
+    6) Player Search, Results - this tab shows a table of players who meet your filterin criteria set in the Player Search, Filters tab. Please note that the League, Season, Minutes Played, and Age Range filters on the sidebar will pass to this table as well.  \n
+    7) Role Score Definitions & Calculations - this tab houses the definitions of roughly what each role should do (in my opinion, and it is rough), and the metrics & weights that I used to calculate each role
     ''')
 
-df = pd.read_csv(f"https://raw.githubusercontent.com/griffisben/Post_Match_App/main/League_Files/{league.replace(' ','%20')}%20Full%20Match%20List.csv")
-df['Match_Name'] = df['Match'] + ' ' + df['Date']
 
-table_indexdf, table_logos = get_fotmob_table_data(lgg)
-# fotmob_table = create_fotmob_table_img(lgg, update_date, table_indexdf, table_logos)
+logo_dict_df = read_csv('https://raw.githubusercontent.com/griffisben/Wyscout_Prospect_Research/main/Wyscout_Logo_Dict.csv')
+logo_dict = pd.Series(logo_dict_df['Team logo'].values,index=logo_dict_df['Team']).to_dict()
 
 with st.sidebar:
-    team_list = sorted(list(set(df.Home.unique().tolist() + df.Away.unique().tolist())))
-    team = st.selectbox('What team do you want reports & data for?', team_list)
+    st.header('Choose Gender')
+    gender = st.selectbox('Gender', ('Men','Women'))
+if gender == 'Men':
+    lg_lookup = read_csv('https://raw.githubusercontent.com/griffisben/Wyscout_Prospect_Research/main/league_info_lookup.csv')
+if gender == 'Women':
+    lg_lookup = read_csv('https://raw.githubusercontent.com/griffisben/Wyscout_Prospect_Research/main/league_info_lookup_women.csv')
+##########
 
-    specific = st.selectbox('Specific Match or Most Recent Matches?', ('Specific Match','Recent Matches'))
-    if specific == 'Specific Match':
-        match_list = df[(df.Home == team) | (df.Away == team)].copy()
-        match_choice = st.selectbox('Match', match_list.Match_Name.tolist())
-        render_matches = [match_choice]
-    if specific == 'Recent Matches':
-        match_list = df[(df.Home == team) | (df.Away == team)].copy()
-        num_matches = st.slider('Number of Recent Matches', min_value=1, max_value=5, value=3)
-        render_matches = match_list.head(num_matches).Match_Name.tolist()
+legaues = lg_lookup.League.unique().tolist()
+with st.sidebar:
+    lg = st.selectbox('League', (legaues))
 
-    focal_color = st.color_picker("Pick a color to highlight the team on League Ranking tab", "#4c94f6")
-    st.write(f"{lgg} Table (via FotMob)")
-    st.table(table_indexdf[::-1].reset_index(drop=True).rename(columns={' ':'Pos.'}))
-    # fotmob_table
+with st.sidebar:
+    st.header('Choose Basic Options')    
+    season = st.selectbox('Season', (sorted(lg_lookup[lg_lookup.League == lg].Season.unique().tolist(),reverse=True)))
+    mins = st.number_input('Minimum Minutes Played', 300, 2000, 900)
+    ages = st.slider('Age Range', 0, 45, (0, 45))
+    
 
-#########################
-def ben_theme():
-    return {
-        'config': {
-            'background': '#fbf9f4',
-            # 'text': '#4a2e19',
-            # 'mark': {
-            #     'color': focal_color,
-            # },
-            'axis': {
-                'titleColor': '#4a2e19',
-                'labelColor': '#4a2e19',
-            },
-            'text': {
-                'fill': '#4a2e19'
-            },
-            'title': {
-                'color': '#4a2e19',
-                'subtitleColor': '#4a2e19'
-            }
+
+full_league_name = f"{lg} {season}"
+update_date = lg_lookup[(lg_lookup.League==lg) & (lg_lookup.Season==season)].Date.values[0]
+
+    
+if gender == 'Men':
+    df = pd.read_csv(f'https://raw.githubusercontent.com/griffisben/Wyscout_Prospect_Research/main/Main%20App/{full_league_name.replace(" ","%20").replace("ü","u").replace("ó","o").replace("ö","o").replace("ã","a")}.csv')
+elif gender == 'Women':
+    df = pd.read_csv(f'https://raw.githubusercontent.com/griffisben/Wyscout_Prospect_Research/main/Main%20App/Women/{full_league_name.replace(" ","%20").replace("ü","u").replace("ó","o").replace("ö","o").replace("ã","a")}.csv')
+df['League'] = full_league_name
+df = df.dropna(subset=['Position','Team within selected timeframe', 'Age']).reset_index(drop=True)
+
+
+clean_df = load_league_data(df, full_league_name)
+df_basic = clean_df.copy()
+
+
+path_eff = [path_effects.Stroke(linewidth=0.5, foreground='#fbf9f4'), path_effects.Normal()]
+
+radar_tab, filter_tab, filter_table_tab, scatter_tab = st.tabs(['Player Radar Generation', 'Player Search, Filters', 'Player Search, Results', 'Scatter Plots'])
+
+
+with radar_tab:
+    with st.form('Player Radar Options'):
+        bar_colors = st.selectbox('Bar Color Scheme', ('Benchmarking Percentiles', 'Metric Groups'))
+        callout = st.selectbox('Data Labels on Bars', ('Per 90', 'Percentile'))
+        dist_labels = st.selectbox('Distribution Label Lines on Bars?', ('Yes', 'No'))
+        player = st.text_input("Player's Radar to Generate", "")
+        page = st.number_input("Age of the player to generate (to guarantee the correct player)", step=1)
+        submitted = st.form_submit_button("Submit Options")
+        
+        dfxxx = df_basic[df_basic['Minutes played']>=mins].copy().reset_index(drop=True)
+        dfxxx = dfxxx[dfxxx['League']==full_league_name].reset_index(drop=True)
+        df1 = dfxxx[['Player', 'Team within selected timeframe', 'Position', 'Age', 'Minutes played']]
+        df1 = df1.dropna(subset=['Position', 'Team within selected timeframe', 'Age']).reset_index(drop=True)
+        df1 = df1.dropna(subset=['Position']).reset_index(drop=True)
+        df1['Age'] = df1['Age'].astype(int)
+        df1['Main Position'] = df1['Position'].str.split().str[0].str.rstrip(',')
+        df1 = df1.dropna(subset=['Main Position']).reset_index(drop=True)
+        position_replacements = {
+            'LAMF': 'LW',
+            'RAMF': 'RW',
+            'LCB3': 'LCB',
+            'RCB3': 'RCB',
+            'LCB5': 'LCB',
+            'RCB5': 'RCB',
+            'LB5': 'LB',
+            'RB5': 'RB',
+            'RWB': 'RB',
+            'LWB': 'LB',
+            'LCM3': 'LCMF',
+            'RCM3': 'RCMF'
         }
-    }
+    
+        df1['Main Position'] = df1['Main Position'].replace(position_replacements)
+    
+        ws_pos = ['LCMF3','RCMF3','LAMF','LW','RB','LB','LCMF','DMF','RDMF','RWF','AMF','LCB','RWB','CF','LWB','GK','LDMF','RCMF','LWF','RW','RAMF','RCB','CB','RCB3','LCB3','RB5','RWB5','LB5','LWB5']
+        poses = ['Midfielder','Midfielder','Winger','Winger','Fullback','Fullback','Midfielder','Midfielder no CAM','Midfielder no CAM','Winger','Midfielder no DM','CB','Fullback','CF','Fullback','GK','Midfielder no CAM','Midfielder','Winger','Winger','Winger','CB','CB','CB','CB','Fullback','Fullback','Fullback','Fullback']
+        template = ['attacking','attacking','attacking','attacking','defensive','defensive','attacking','attacking','attacking','attacking','attacking','cb','defensive','attacking','defensive','gk','attacking','attacking','attacking','attacking','attacking','cb','cb','cb','cb','defensive','defensive','defensive','defensive']
+        compares = ['Central Midfielders','Central Midfielders','Wingers','Wingers','Fullbacks','Fullbacks','Central Midfielders','Central & Defensive Mids','Central & Defensive Mids','Wingers','Central & Attacking Mids','Center Backs','Fullbacks','Strikers','Fullbacks','Goalkeepers','Central & Defensive Mids','Central Midfielders','Wingers','Wingers','Wingers','Center Backs','Center Backs','Center Backs','Center Backs','Fullbacks','Fullbacks','Fullbacks','Fullbacks']
+    
+        xtratext = lg_lookup[(lg_lookup.League==lg) & (lg_lookup.Season==season)].Date.values[0]
 
-# register the custom theme under a chosen name
-alt.themes.register('ben_theme', ben_theme)
-
-# enable the newly registered theme
-alt.themes.enable('ben_theme')
-################################
-
-report_tab, data_tab, graph_tab, rank_tab, xg_tab, scatter_tab = st.tabs(['Match Report', 'Data by Match - Table', 'Data by Match - Graph', 'League Rankings', 'xG & xGA By Match', 'Variable Scatters'])
-
-for i in range(len(render_matches)):
-    try:
-        match_string = render_matches[i].replace(' ','%20')
-        if league == 'NB I':
-            nbi_game_link = nbi_links[nbi_links.MatchName==render_matches[i]]['URL'].values[0]
-            with report_tab:
-                st.write(f'Link to Full Match Video (some games may not have been shown on M4Sport and therefore are not available):  \n  \n{render_matches[i][:-11]} -> {nbi_game_link}')
-        url = f"https://raw.githubusercontent.com/griffisben/Post_Match_App/main/Image_Files/{league.replace(' ','%20')}/{match_string}.png"
-        response = requests.get(url)
-        game_image = Image.open(io.BytesIO(response.content))
-        report_tab.image(game_image)
-    except:
-        st.write(f"Apologies, {render_matches[i]} must not be available yet. Please check in later!")
-
-team_data = pd.read_csv(f"https://raw.githubusercontent.com/griffisben/Post_Match_App/main/Stat_Files/{league.replace(' ','%20')}.csv")
-
-conditions_team = [
-    team_data['Goals'] > team_data['Goals Conceded'],
-    team_data['Goals'] < team_data['Goals Conceded']]
-choices_team = ['W', 'L']
-team_data['Result'] = np.select(conditions_team, choices_team, default='D')
-conditions_team = [
-    team_data['Goals'] > team_data['Goals Conceded'],
-    team_data['Goals'] < team_data['Goals Conceded']]
-choices_team = [3, 0]
-team_data['Pts'] = np.select(conditions_team, choices_team, default=1)
-
-team_data['Field Tilt - Possession'] = team_data['Field Tilt'] - team_data['Possession']
-team_data['xT Difference'] = team_data['xT'] - team_data['xT Against']
-
-gc_lookup = team_data.groupby(['Match','Date'])['Game Control'].sum().reset_index()
-team_data['Game Control Share'] = [round(100*team_data['Game Control'][i]/gc_lookup[(gc_lookup.Match==team_data.Match[i]) & (gc_lookup.Date==team_data.Date[i])]['Game Control'].values[0],2) for i in range(len(team_data))]
-
-team_data['xPts'] = [3 * ((team_data['xG'][i]**cxG)/((team_data['xG'][i]**cxG)+(team_data['xGA'][i]**cxG))) for i in range(len(team_data))]
-team_data['Pts-xPts'] = team_data['Pts'] - team_data['xPts']
-team_data[['xPts','Pts-xPts']] = round(team_data[['xPts','Pts-xPts']],2)
-
-league_data = team_data.copy().reset_index(drop=True)
-team_data = team_data[team_data.Team==team].reset_index(drop=True)
-
-team_data['Shots per 1.0 xT'] = team_data['Shots per 1.0 xT'].astype(float)
-team_data.rename(columns={'Shots per 1.0 xT':'Shots per 1 xT'},inplace=True)
-team_data['Shots Faced per 1.0 xT Against'] = team_data['Shots Faced per 1.0 xT Against'].astype(float)
-team_data.rename(columns={'Shots Faced per 1.0 xT Against':'Shots Faced per 1 xT Against'},inplace=True)
-
-league_data['Shots per 1.0 xT'] = league_data['Shots per 1.0 xT'].astype(float)
-league_data.rename(columns={'Shots per 1.0 xT':'Shots per 1 xT'},inplace=True)
-league_data['Shots Faced per 1.0 xT Against'] = league_data['Shots Faced per 1.0 xT Against'].astype(float)
-league_data.rename(columns={'Shots Faced per 1.0 xT Against':'Shots Faced per 1 xT Against'},inplace=True)
-
-
-team_data['xG per 1 xT'] = team_data['xG']/team_data['xT']
-league_data['xG per 1 xT'] = league_data['xG']/league_data['xT']
-
-team_data['xGA per 1 xT Against'] = team_data['xGA']/team_data['xT Against']
-league_data['xGA per 1 xT Against'] = league_data['xGA']/league_data['xT Against']
-
-available_vars = ['Possession',
-                  'xG','xGA','xGD',
-                  'GD','GD-xGD',
-                  'xPts','Pts-xPts',
-                  'Goals','Goals Conceded',
-                  'Shots','Shots Faced','Field Tilt','Field Tilt - Possession','Avg Pass Height','Passes in Opposition Half','Passes into Box','xT','xT Against','xT Difference','Shots per 1 xT','Shots Faced per 1 xT Against',
-                  'xG per 1 xT','xGA per 1 xT Against',
-                  'PPDA','High Recoveries','High Recoveries Against','Crosses','Corners','Fouls',
-                 'Throw-Ins into the Box','On-Ball Pressure','On-Ball Pressure Share','Off-Ball Pressure','Off-Ball Pressure Share','Game Control','Game Control Share',
-                 ]
-
-team_data[available_vars] = team_data[available_vars].astype(float)
-league_data[available_vars] = league_data[available_vars].astype(float)
-
-league_data_base = league_data.copy()
-
-data_tab.write(team_data)
-
-with graph_tab:
-    plot_type = st.radio("Line or Bar plot?", ['📈 Line', '📊 Bar'])
-    var = st.selectbox('Metric to Plot', available_vars)
-
-    if plot_type == '📈 Line':
-        lg_avg_var = league_data[var].mean()
-        team_avg_var = team_data[var].mean()
+        try:
+            gen = df1[(df1['Player']==player) & (df1['Age']==page)]
+            ix = ws_pos.index(gen['Main Position'].values[0])
+            minplay = int(gen['Minutes played'].values[0])
+    
+            radar_img = scout_report(
+                data_frame = df_basic, ##
+                gender = gender, ##
+                league = lg, ##
+                season = season, ##
+                xtra = ' current',
+                template = template[ix], ##
+                pos = poses[ix],
+                player_pos = ws_pos[ix],
+                compares = compares[ix],
+                mins = mins,
+                minplay=minplay,
+                name = gen['Player'].values[0],
+                ws_name = gen['Player'].values[0],
+                team = gen['Team within selected timeframe'].values[0],
+                age = gen['Age'].values[0],
+                sig = 'Twitter: @BeGriffis',
+                extra_text = xtratext,
+                custom_radar='n',
+                dist_labels=dist_labels,
+                logo_dict=logo_dict,
+            )
+            st.pyplot(radar_img.figure)
+        except:
+            st.text("Please enter a valid name & age.  \nPlease check spelling as well.")
         
-        c = (alt.Chart(
-                team_data[::-1],
-                title={
-                    "text": [f"{team} {var}, {league}"],
-                    "subtitle": [f"Data via Opta as of {update_date} | Created: Ben Griffis (@BeGriffis) via football-match-reports.streamlit.app"]
-                }
-            )
-            .mark_line(point=True, color='#4c94f6')
-            .encode(
-                x=alt.X('Date', sort=None),
-                y=alt.Y(var, scale=alt.Scale(zero=False)),
-                tooltip=['Match', 'Date', var, 'Possession','Field Tilt']
-            )
-        )
-    
-        lg_avg_line = alt.Chart(pd.DataFrame({'y': [lg_avg_var]})).mark_rule(color='#ee5454').encode(y='y')
-        
-        lg_avg_label = lg_avg_line.mark_text(
-            x="width",
-            dx=-2,
-            align="right",
-            baseline="bottom",
-            text="League Avg",
-            color='#ee5454'
-        )
-    
-        team_avg_line = alt.Chart(pd.DataFrame({'y': [team_avg_var]})).mark_rule(color='#f6ba00').encode(y='y')
-        
-        team_avg_label = team_avg_line.mark_text(
-            x="width",
-            dx=-2,
-            align="right",
-            baseline="bottom",
-            text="Team Avg",
-            color='#f6ba00'
-        )
-    
-    
-        chart = (c + lg_avg_line + lg_avg_label + team_avg_line + team_avg_label)
-        st.altair_chart(chart, use_container_width=True)
+with filter_tab:
+    st.button("Reset Sliders", on_click=_update_slider, kwargs={"value": 0.0})
+    with st.form('Minimum Percentile Filters'):
+        submitted = st.form_submit_button("Submit Filters")
+        pos_select = st.selectbox('Positions', ('Strikers', 'Strikers and Wingers', 'Forwards (AM, W, CF)',
+                                'Forwards no ST (AM, W)', 'Wingers', 'Central Midfielders (DM, CM, CAM)',
+                                'Central Midfielders no CAM (DM, CM)', 'Central Midfielders no DM (CM, CAM)', 'Fullbacks (FBs/WBs)',
+                                'Defenders (CB, FB/WB, DM)', 'Centre-Backs', 'CBs & DMs','Goalkeepers'))
 
-    if plot_type == '📊 Bar':
-        lg_avg_var = league_data[var].mean()
-        team_avg_var = team_data[var].mean()
-
-        c = (alt.Chart(
-                team_data[::-1],
-                title={
-                    "text": [f"{team} {var}, {league}"],
-                    "subtitle": [f"Data via Opta as of {update_date} | Created: Ben Griffis (@BeGriffis) via football-match-reports.streamlit.app"]
-                }
-            )
-            .mark_bar()
-            .encode(
-                x=alt.X('Date', sort=None),
-                y=alt.Y(var, scale=alt.Scale(zero=False)), 
-                color=alt.condition(alt.datum[var] >= 0, alt.value('#4c94f6'), alt.value('#4a2e19')),
-                tooltip=['Match', 'Date', var, 'Possession','Field Tilt']
-            )
-        )
-
-        if var not in ['xT Difference','GD-xGD','Pts-xPts']:
-            lg_avg_line = alt.Chart(pd.DataFrame({'y': [lg_avg_var]})).mark_rule(color='#ee5454').encode(y='y')
             
-            lg_avg_label = lg_avg_line.mark_text(
-                x="width",
-                dx=-2,
-                align="right",
-                baseline="bottom",
-                text="League Avg",
-                color='#ee5454'
-            )
-        if var in ['xT Difference','GD-xGD','Pts-xPts']:
-            lg_avg_line = alt.Chart(pd.DataFrame({'y': [0]})).mark_rule(color='k').encode(y='y')
-    
-        team_avg_line = alt.Chart(pd.DataFrame({'y': [team_avg_var]})).mark_rule(color='#f6ba00').encode(y='y')
+        if ['slider1','slider2','slider3','slider4','slider5','slider6','slider7','slider8','slider9','slider10','slider11','slider12','slider13','slider14','slider15','slider16','slider17','slider18','slider19','slider20','slider21','slider22','slider23','slider24','slider25','slider26','slider27','slider28','slider29','slider30','slider31','slider32','slider33'] not in st.session_state:
+            pass
         
-        team_avg_label = team_avg_line.mark_text(
-            x="width",
-            dx=-2,
-            align="right",
-            baseline="bottom",
-            text="Team Avg",
-            color='#f6ba00'
-        )
-    
-
-        if var not in ['xT Difference','GD-xGD','Pts-xPts']:
-            chart = (c + lg_avg_line + lg_avg_label + team_avg_line + team_avg_label)
-        if var in ['xT Difference','GD-xGD','Pts-xPts']:
-            chart = (c + lg_avg_line + team_avg_line + team_avg_label)
-        st.altair_chart(chart, use_container_width=True)
-
-
-with rank_tab:
-    ranking_base_df = league_data_base.copy()
-    rank_method = st.selectbox('Ranking Method', ['Average','Total','Median'])
-    rank_var = st.selectbox('Metric to Rank', available_vars)
-
-    if rank_method == 'Median':
-        rank_df = ranking_base_df.groupby(['Team'])[available_vars].median().reset_index()
-    if rank_method == 'Total':
-        rank_df = ranking_base_df.groupby(['Team'])[available_vars].sum().reset_index()
-    if rank_method == 'Average':
-        rank_df = ranking_base_df.groupby(['Team'])[available_vars].mean().reset_index()
-
-    if rank_var in ['xGA','Goals Conceded','Shots Faced','xT Against','xGA per 1 xT Against','PPDA','Fouls','High Recoveries Against', 'Shots Faced per 1 xT Against']:
-        sort_method = True
-    else:
-        sort_method = False
-
-    indexdf_short = rank_df.sort_values(by=[rank_var],ascending=sort_method)[['Team',rank_var]].reset_index(drop=True)[::-1]
-    
-    sns.set(rc={'axes.facecolor':'#fbf9f4', 'figure.facecolor':'#fbf9f4',
-           'ytick.labelcolor':'#4A2E19', 'xtick.labelcolor':'#4A2E19'})
-
-    fig = plt.figure(figsize=(7,8), dpi=200)
-    ax = plt.subplot()
-    
-    ncols = len(indexdf_short.columns.tolist())+1
-    nrows = indexdf_short.shape[0]
-
-    ax.set_xlim(0, ncols + .5)
-    ax.set_ylim(0, nrows + 1.5)
-    
-    positions = [0.05, 2.0]
-    columns = indexdf_short.columns.tolist()
-    
-    # Add table's main text
-    for i in range(nrows):
-        for j, column in enumerate(columns):
-            if column == 'Team':
-                if nrows-i < 10:
-                    text_label = f'{nrows-i}     {indexdf_short[column].iloc[i]}'
-                else:
-                    text_label = f'{nrows-i}   {indexdf_short[column].iloc[i]}'
-            else:
-                text_label = f'{round(indexdf_short[column].iloc[i],2)}'
-            if indexdf_short['Team'].iloc[i] == team:
-                t_color = focal_color
-                weight = 'bold'
-            else:
-                t_color = '#4A2E19'
-                weight = 'regular'
-            ax.annotate(
-                xy=(positions[j], i + .5),
-                text = text_label,
-                ha='left',
-                va='center', color=t_color,
-                weight=weight
-            )
+        short = st.slider('Short & Medium Pass Cmp %', 0.0, 1.0, 0.0, key='slider1')
+        long = st.slider('Long Pass Cmp %', 0.0, 1.0, 0.0, key='slider2')
+        passestot = st.slider('Passes per 90', 0.0, 1.0, 0.0, key='slider3')
+        smart = st.slider('Smart Passes per 90', 0.0, 1.0, 0.0, key='slider4')
+        crosspct = st.slider('Cross Cmp %', 0.0, 1.0, 0.0, key='slider5')
+        crosses = st.slider('Crosses per 90', 0.0, 1.0, 0.0, key='slider6')
+        shotassist = st.slider('Shot Assists per 90', 0.0, 1.0, 0.0, key='slider7')
+        xa = st.slider('xA per 90', 0.0, 1.0, 0.0, key='slider8')
+        xasa = st.slider('xA per Shot Assist', 0.0, 1.0, 0.0, key='slider9')
+        ast = st.slider('Assists per 90', 0.0, 1.0, 0.0, key='slider10')
+        ast2 = st.slider('Second Assists per 90', 0.0, 1.0, 0.0, key='slider11')
+        ast123 = st.slider('1st, 2nd, & 3rd Assists', 0.0, 1.0, 0.0, key='slider12')
+        npxg = st.slider('npxG per 90', 0.0, 1.0, 0.0, key='slider13')
+        npg = st.slider('Non-Pen Goals per 90', 0.0, 1.0, 0.0, key='slider14')
+        gc = st.slider('Goals per Shot on Target', 0.0, 1.0, 0.0, key='slider15')
+        npxgshot = st.slider('npxG per shot', 0.0, 1.0, 0.0, key='slider16')
+        shots = st.slider('Shots per 90', 0.0, 1.0, 0.0, key='slider17')
+        boxtouches = st.slider('Touches in Penalty Box per 90', 0.0, 1.0, 0.0, key='slider18')
+        drib = st.slider('Dribble Success %', 0.0, 1.0, 0.0, key='slider19')
+        accel = st.slider('Accelerations per 90', 0.0, 1.0, 0.0, key='slider20')
+        progcarry = st.slider('Progressive Carries per 90', 0.0, 1.0, 0.0, key='slider21')
+        progpass = st.slider('Progressive Passes per 90', 0.0, 1.0, 0.0, key='slider22')
+        aerial = st.slider('Aerial Win %', 0.0, 1.0, 0.0, key='slider23')
+        aerialswon = st.slider('Aerials Won per 90', 0.0, 1.0, 0.0, key='slider24')
+        defduels = st.slider('Defensive Duels Success %', 0.0, 1.0, 0.0, key='slider25')
+        defend = st.slider('Successful Defensive Actions per 90', 0.0, 1.0, 0.0, key='slider26')
+        tklint = st.slider('Tackles & Interceptions per 90', 0.0, 1.0, 0.0, key='slider27')
+        tkl = st.slider('Sliding Tackles per 90', 0.0, 1.0, 0.0, key='slider28')
+        intercept = st.slider('Interceptions per 90', 0.0, 1.0, 0.0, key='slider29')
+        shotblock = st.slider('Shots Blocked per 90', 0.0, 1.0, 0.0, key='slider30')
+        foul = st.slider('Fouls Committed per 90', 0.0, 1.0, 0.0, key='slider31')
+        fouldraw = st.slider('Fouls Drawn per 90', 0.0, 1.0, 0.0, key='slider32')
+        cards = st.slider('Cards per 90', 0.0, 1.0, 0.0, key='slider33')
             
-    # Add column names
-    column_names = columns
-    for index, cs in enumerate(column_names):
-            ax.annotate(
-                xy=(positions[index], nrows + .25),
-                text=column_names[index],
-                ha='left',
-                va='bottom',
-                weight='bold', color='#4A2E19'
-            )
 
-    # Add dividing lines
-    ax.plot([ax.get_xlim()[0], ax.get_xlim()[1]], [nrows, nrows], lw=1.5, color='black', marker='', zorder=4)
-    ax.plot([ax.get_xlim()[0], ax.get_xlim()[1]], [0, 0], lw=1.5, color='black', marker='', zorder=4)
-    for x in range(1, nrows):
-        ax.plot([ax.get_xlim()[0], ax.get_xlim()[1]], [x, x], lw=1.15, color='gray', ls=':', zorder=3 , marker='')
+with filter_table_tab:
+    final = create_player_research_table(df_basic, mins, full_league_name, pos_select, ages[0], ages[1])
+    player_research_table = final[(final['Accurate short / medium passes, %']>=short) &
+                 (final['Accurate long passes, %']>=long) &
+                  (final['Smart passes per 90']>=smart) &
+                 (final['Passes per 90']>=passestot) &
+                  (final['Crosses per 90']>=crosses) &
+                  (final['Accurate crosses, %']>=crosspct) &
+                  (final['Shot assists per 90']>=shotassist) &
+                  (final['xA per 90']>=xa) &
+                  (final['xA per Shot Assist']>=xasa) &
+                  (final['Assists per 90']>=ast) &
+                  (final['Second assists per 90']>=ast2) &
+                  (final['1st, 2nd, 3rd assists']>=ast123) &
+                  (final['npxG per 90']>=npxg) &
+                  (final['Non-penalty goals per 90']>=npg) &
+                  (final['Goal conversion, %']>=gc) &
+                  (final['npxG per shot']>=npxgshot) &
+                  (final['Shots per 90']>=shots) &
+                  (final['Touches in box per 90']>=boxtouches) &
+                  (final['Successful dribbles, %']>=drib) &
+                  (final['Accelerations per 90']>=accel) &
+                  (final['Progressive runs per 90']>=progcarry) &
+                  (final['Progressive passes per 90']>=progpass) &
+                  (final['Successful defensive actions per 90']>=defend) &
+                  (final['Defensive duels won, %']>=defduels) &
+                  (final['pAdj Tkl+Int per 90']>=tklint) &
+                  (final['PAdj Sliding tackles']>=tkl) &
+                  (final['PAdj Interceptions']>=intercept) &
+                  (final['Aerial duels won, %']>=aerial) &
+                  (final['Aerial duels won per 90']>=aerialswon) &
+                  (final['Shots blocked per 90']>=shotblock) &
+                  (final['Fouls per 90']>=foul) &
+                  (final['Fouls suffered per 90']>=fouldraw) &
+                  (final['Cards per 90']>=cards)
+                 ].reset_index(drop=True)
     
-    ax.set_axis_off()
-    
-    DC_to_FC = ax.transData.transform
-    FC_to_NFC = fig.transFigure.inverted().transform
-    # -- Take data coordinates and transform them to normalized figure coordinates
-    DC_to_NFC = lambda x: FC_to_NFC(DC_to_FC(x))
-    # -- Add nation axes
-    ax_point_1 = DC_to_NFC([2.25, 0.25])
-    ax_point_2 = DC_to_NFC([2.75, 0.75])
-    ax_width = abs(ax_point_1[0] - ax_point_2[0])
-    ax_height = abs(ax_point_1[1] - ax_point_2[1])
-
-    fig.text(
-        x=0.14, y=.91,
-        s=f"{rank_var} {rank_method} Rankings",
-        ha='left',
-        va='bottom',
-        weight='bold',
-        size=13, color='#4A2E19'
-    )
-    fig.text(
-        x=0.14, y=.9,
-        s=f"Data via Opta as of {update_date}  \nCreated: Ben Griffis (@BeGriffis) via football-match-reports.streamlit.app",
-        ha='left',
-        va='top',
-        weight='regular',
-        size=11, color='#4A2E19'
-    )
-
-    fig
-
-with xg_tab:
-    scatter_select = st.radio("Expected Goals (xG) or Expected Threat (xT)?", ['⚽ xG', '⚡ xT'])
-    
-    if scatter_select == '⚽ xG':
-        xvar, yvar, diffvar = 'xG', 'xGA', 'xGD'
-    elif scatter_select == '⚡ xT':
-        xvar, yvar, diffvar = 'xT', 'xT Against', 'xT Difference'
-    
-    lg_chart_xg = alt.Chart(league_data,  title=alt.Title(
-       f"{team} {xvar} & {yvar} by Match, {league}",
-       subtitle=[f"Data via Opta | Created by Ben Griffis (@BeGriffis) | Data as of {update_date}",f"Small grey points are all matches in the league. Large Colored points are {team}'s matches","Generated on: football-match-reports.streamlit.app"],
-    )).mark_circle(size=30, color='silver').encode(
-        x=xvar,
-        y=yvar,
-        tooltip=['Team','Match','Date',xvar,yvar,diffvar,'Possession','Field Tilt']
-    ).properties(height=500).interactive()
-    
-    domain = ['W','D','L']
-    range_ = ['blue','black','darkorange']
-    team_chart_xg = alt.Chart(team_data,  title=alt.Title(
-       f"{team} {xvar} & {yvar} by Match, {league}",
-       subtitle=[f"Data via Opta | Created by Ben Griffis (@BeGriffis) | Data as of {update_date}",f"Small grey points are all matches in the league. Large Colored points are {team}'s matches","Generated on: football-match-reports.streamlit.app"],
-    )).mark_circle(size=90).encode(
-        x=xvar,
-        y=yvar,
-        color=alt.Color('Result').scale(domain=domain, range=range_),
-        tooltip=['Team','Match','Date',xvar,yvar,diffvar,'Possession','Field Tilt']
-    ).properties(height=500).interactive()
-    
-    line = pd.DataFrame({
-        xvar: [0, max(league_data[xvar])],
-        yvar: [0, max(league_data[yvar])],
-    })
-    
-    line_plot_xg = alt.Chart(line).mark_line(color='grey', size=1).encode(
-        x=xvar,
-        y=yvar
-    )
-    
-    
-    chart_xg = (lg_chart_xg + team_chart_xg + line_plot_xg)
-
-    st.altair_chart(chart_xg, use_container_width=True)
+    st.dataframe(player_research_table.style.applymap(color_percentile, subset=player_research_table.columns[6:]))
 
 with scatter_tab:
-    xvar = st.selectbox('X-Axis Variable', available_vars)
-    rank_method_x = st.radio("X-Axis Method", ['Average','Total','Median'])
-    yvar = st.selectbox('Y-Axis Variable', available_vars)
-    rank_method_y = st.radio("Y-Axis Method", ['Average','Total','Median'])
-    
-    league_scatter = league_data_base.copy()
-    
-    if rank_method_x == 'Median':
-        league_scatter_x = league_scatter.groupby(['Team'])[xvar].median().reset_index()
-    if rank_method_x == 'Total':
-        league_scatter_x = league_scatter.groupby(['Team'])[xvar].sum().reset_index()
-    if rank_method_x == 'Average':
-        league_scatter_x = league_scatter.groupby(['Team'])[xvar].mean().reset_index()
-    
-    if rank_method_y == 'Median':
-        league_scatter_y = league_scatter.groupby(['Team'])[yvar].median().reset_index()
-    if rank_method_y == 'Total':
-        league_scatter_y = league_scatter.groupby(['Team'])[yvar].sum().reset_index()
-    if rank_method_y == 'Average':
-        league_scatter_y = league_scatter.groupby(['Team'])[yvar].mean().reset_index()
-    
-    league_scatter = league_scatter_x.merge(league_scatter_y)
-    team_scatter = league_scatter[league_scatter.Team==team]
-    
-    lg_chart_scatter = alt.Chart(league_scatter,  title=alt.Title(
-       f"{league}, {rank_method_x} {xvar} & {rank_method_y} {yvar}",
-       subtitle=[f"Data via Opta | Created by Ben Griffis (@BeGriffis) | Data as of {update_date}",f"Colored point indicates {team}","Generated on: football-match-reports.streamlit.app"],
-    )).mark_circle(size=75, color='grey').encode(
-        x=alt.X(xvar).scale(zero=False),
-        y=alt.Y(yvar).scale(zero=False),
-        # color='Result',
-        tooltip=['Team',xvar,yvar,]
-    ).properties(height=500).interactive()
+    scatter_df = clean_df.copy()
 
-    team_chart_scatter = alt.Chart(team_scatter,  title=alt.Title(
-       f"{league}, {rank_method_x} {xvar} & {rank_method_y} {yvar}",
-       subtitle=[f"Data via Opta | Created by Ben Griffis (@BeGriffis) | Data as of {update_date}",f"Colored point indicates {team}","Generated on: football-match-reports.streamlit.app"],
-    )).mark_circle(size=125,color=focal_color).encode(
-        x=alt.X(xvar).scale(zero=False),
-        y=alt.Y(yvar).scale(zero=False),
-        # color=alt.Color('Result').scale(domain=domain, range=range_),
-        tooltip=['Team',xvar,yvar,]
-    ).properties(height=500).interactive()
+    with st.form("Scatter Options"):
+        submitted = st.form_submit_button("Submit Options")
+
+        pos_select_scatter = st.selectbox('Positions', ('Strikers', 'Strikers and Wingers', 'Forwards (AM, W, CF)',
+                                'Forwards no ST (AM, W)', 'Wingers', 'Central Midfielders (DM, CM, CAM)',
+                                'Central Midfielders no CAM (DM, CM)', 'Central Midfielders no DM (CM, CAM)', 'Fullbacks (FBs/WBs)',
+                                'Defenders (CB, FB/WB, DM)', 'Centre-Backs', 'CBs & DMs', 'Goalkeepers'))
+        
+        xx = st.selectbox('X-Axis Variable', ['Age']+(scatter_df.columns[18:len(scatter_df.columns)-1].tolist()))
+        yy = st.selectbox('Y-Axis Variable', ['Age']+(scatter_df.columns[18:len(scatter_df.columns)-1].tolist()))
+        cc = st.selectbox('Point Color Variable', ['Age']+(scatter_df.columns[18:len(scatter_df.columns)-1].tolist()))
+        cscale = st.selectbox('Point Colorscale', colorscales, index=78)
+
+        dfProspect_scatter = scatter_df[(scatter_df['Minutes played'] >= mins) & (scatter_df['League'] == full_league_name)].copy()
+        dfProspect_scatter = filter_by_position_long(dfProspect_scatter, pos_select_scatter)
+        
+    if ages[0] == 0 and ages[1] == 45:
+        age_text_scatter = f''
+    elif ages[0] == 0:
+        age_text_scatter = f'U{ages[1]} players only, '
+    elif ages[1] == 45:
+        age_text_scatter = f'Players {ages[0]} & older, '
+    else:
+        age_text_scatter = f'Players between {ages[0]} & {ages[1]}, '
+
+    fig_scatter = px.scatter(
+        dfProspect_scatter,
+        x = xx,
+        y = yy,
+        color = cc,
+        color_continuous_scale = cscale,
+        text = 'Player',
+        hover_data=['Team', 'Age', 'Position', 'Minutes played'],
+        hover_name = 'Player',
+        title = '%s %s, %s & %s <br><sup>%s%s min. %i minutes played | %s</sup><br><sup>Created by @BeGriffis, made on best-11-scouting.streamlit.app</sup>' %(season,lg,xx,yy,age_text_scatter,pos_select_scatter,mins,update_date),
+        width=900,
+        height=700)
+    fig_scatter.update_traces(textposition='top right', marker=dict(size=10, line=dict(width=1, color='black')))
     
+    fig_scatter.add_hline(y=dfProspect_scatter[yy].median(), name='Median', line_width=0.5)
+    fig_scatter.add_vline(x=dfProspect_scatter[xx].median(), name='Median', line_width=0.5)
     
-    scatter_chart = (lg_chart_scatter + team_chart_scatter)
-    
-    st.altair_chart(scatter_chart, use_container_width=True)
+    st.plotly_chart(fig_scatter, theme=None, use_container_width=False)
 
 
-with st.expander("Game Control, On-Ball Pressure, & Off-Ball Pressure Explainer"):
-    st.write('''
-    The Game Control Index visualizes both the stretches of time a team was in control of a match as well as the magnitude of control they exerted.  \n
-    You can use this index to see which team was in control of the match overall, how a team responded after conceding or scoring, the ebbs and flows of the game, and more.  \n
-    Unlike many “momentum” or “flow” charts you normally see (such as from Sofa Score or FotMob), this takes into account both on-ball/attacking data & off-ball/defensive data.  \n
-    Other models such as FotMob's are very good as well, they are just different than my model in that they usually don't account for off-ball info.  \n  \n
-    - On-ball pressure includes shots, passes into good areas, & passes completed in the final third.  \n
-    - Off-ball pressure includes forcing opponents out of the final third, keeping their possession deep, & intercepting passes.  \n
-    All on-ball & off-ball actions are weighted differently, and the model has been iteratively tested & tweaked vs my eyes when watching many games across many different style leagues. Your opinion may differe, and that is perfectly fine as no model is perfect, foolproof, or should be taken at face-value. Please understand there are always limits.
-    ''')
 

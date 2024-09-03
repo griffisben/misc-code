@@ -1557,21 +1557,16 @@ rank_11_base = read_csv('https://raw.githubusercontent.com/griffisben/misc-code/
 role_position_lookup = read_csv('https://raw.githubusercontent.com/griffisben/misc-code/main/RoleRanksApp/Role_Positions_Lookup.csv')
 
 st.subheader("All data from Wyscout. Created by Ben Griffis (@BeGriffis on Twitter)")
-st.subheader("Note: you are allowed to use any of the images you create here in your own work, may not alter the images.")
+st.subheader("You are allowed to use any of the images you create here in your own work, but you may not alter the images.")
 with st.expander('App Details & Instructions'):
     st.write('''
     This app helps you find players that meet specific criteria.
-    First, choose a league, minimum minutes threshold, and age range.
-    These will determine the sample size of players that percentile ratings will generate for. Note that the .
-    Then, use the metric filters on the sidebar to pass minimum percentile ranking thresholds.
-    Players not meeting all of these criteria will be filtered out.
-    Finally, you can type or copy+paste any of the player names into the textbox below to generate their radar chart.  \n  \n
-    1) Choose your gender, league, positions, and minimum minutes from the filters on the left  \n
-    2) Set the max age of the players to be displayed in the table (this will not impact the sample)  \n
-    3) Choose the data labels son the bars, as well as the bar colors  \n
-    4) You can choose to add any percentile filters for metrics, and this will update the table (again, not the sample)  \n
-    5) To create a radar, enter the exact name & age in the text boxes below  \n
-    NOTE: the player you want a radar for doesn't need to be in the table (as in, maybe they don't hit the metric filters you've set or are above the age limit), but they do need to meet the sample criteria of gender, league, position, and minimum minutes played.
+    1) First, choose a league & minimum minutes threshold. This initializes the sample used to generate percentile rankings.
+    2) Then, use the metric filters on the "Player Search, Filters" tab to pass a minimum percentile ranking thresholds & an age range.
+    3) Players not meeting ALL of these criteria will be filtered out.
+    4) Finally, type or copy+paste any of the player names into the textbox on the "Player Radar Generation" tab to generate their radar chart.  \n  \n
+    5) On the "Player Radar Generation" tab, select the Bar color Scheme (bars colored by percentile rank or metric group), Data Labels On Bars (per 90 values or percentile ranks in the bubbles calling out data), and if you want Distribution Label Lines on each bar, calling out both the average and +/- 1 standard deviation of the metric  \n
+    NOTE: the player you want a radar for doesn't need to be in the table (as in, maybe they don't hit the metric filters you've set or are above the age limit), but they do need to meet the sample criteria of gender, league, & minimum minutes played.
     ''')
 
 

@@ -1,6 +1,5 @@
 import seaborn as sns
 import pandas as pd
-import datetime
 import matplotlib.pyplot as plt
 import numpy as np
 from scipy import stats
@@ -12,11 +11,9 @@ import warnings
 warnings.filterwarnings('ignore')
 import matplotlib
 from PIL import Image
+from highlight_text import fig_text
 import urllib.request
 matplotlib.rcParams.update(matplotlib.rcParamsDefault)
-import plotly.express as px
-import plotly.figure_factory as ff
-from plotly.graph_objects import Layout
 
 colorscales = px.colors.named_colorscales()
 colorscales2 = [f"{cc}_r" for cc in colorscales]

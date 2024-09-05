@@ -539,6 +539,7 @@ with rank_tab:
     fig
 
 with full_ranks_tab:
+    sort_var = st.selectbox('Metric to Sort By', rank_vars)
     league_data_rank_base = league_data.copy()
 
     league_ranks = league_data_base.groupby(['Team'])[rank_vars].mean()
@@ -549,11 +550,9 @@ with full_ranks_tab:
     
     league_ranks[rank_vars] = league_ranks[rank_vars].astype(int)
     
-    sort_var = 'xPts'
     league_ranks = league_ranks.sort_values(by=[sort_var],ascending=rank_tfs_inv[rank_vars.index(sort_var)])
     league_ranks = league_ranks.T
     
-    league_ranks
     norm = matplotlib.colors.Normalize(vmin=1, vmax=len(league_ranks))
     st.dataframe(league_ranks.T.style.applymap(color_percentile,))
 

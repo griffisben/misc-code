@@ -10,6 +10,7 @@ from bs4 import BeautifulSoup
 import urllib.request
 import numpy as np
 from io import StringIO
+import matplotlib
 
 cxG = 1.53570624482222
 
@@ -543,7 +544,6 @@ with full_ranks_tab:
     league_data_rank_base = league_data.copy()
 
     league_ranks = league_data_base.groupby(['Team'])[rank_vars].mean()
-    league_ranks
     
     for i in range(len(rank_vars)):
         league_ranks[rank_vars[i]] = league_ranks[rank_vars[i]].rank(ascending=rank_tfs[i])

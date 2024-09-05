@@ -16,8 +16,11 @@ cxG = 1.53570624482222
 
 @st.cache_data(ttl=60*15)
 
+
 def color_percentile(pc):
     return f'background-color: {cmap(norm(pc))}'
+norm = matplotlib.colors.Normalize(vmin=1, vmax=16)
+cmap = matplotlib.colormaps['coolwarm']
 
 def get_fotmob_table_data(lg):
     img_base = "https://images.fotmob.com/image_resources/logo/teamlogo"

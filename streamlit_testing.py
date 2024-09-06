@@ -19,7 +19,7 @@ cxG = 1.53570624482222
 
 def color_percentile(pc):
     rgb = cmap(norm(pc))
-    return 'background-color: #%02x%02x%02x' % (int(rgb[0]*100), int(rgb[1]*100), int(rgb[2]*100))
+    return {'background-color: #%02x%02x%02x' % (int(rgb[0]*100), int(rgb[1]*100), int(rgb[2]*100)), 'alpha':0.3}
 norm = matplotlib.colors.Normalize(vmin=1, vmax=16)
 cmap = matplotlib.colormaps['coolwarm']
 
@@ -557,7 +557,7 @@ with full_ranks_tab:
     league_ranks = league_ranks.sort_values(by=[sort_var],ascending=rank_tfs_inv[rank_vars.index(sort_var)])
     
     norm = matplotlib.colors.Normalize(vmin=1, vmax=len(league_ranks))
-    st.dataframe(league_ranks.T.style.applymap(color_percentile, alpha=.3))
+    st.dataframe(league_ranks.T.style.applymap(color_percentile))
 
 with xg_tab:
     scatter_select = st.radio("Expected Goals (xG) or Expected Threat (xT)?", ['⚽ xG', '⚡ xT'])

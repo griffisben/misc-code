@@ -19,7 +19,7 @@ cxG = 1.53570624482222
 
 def color_percentile(pc):
     rgb = cmap(norm(pc))
-    return 'background-color: #%02x%02x%02x; opacity: 0.33; textcolor: white' % (int(rgb[0]*100), int(rgb[1]*100), int(rgb[2]*100))
+    return 'background-color: #%02x%02x%02x; opacity: 0.33; textcolor: white' % (int(rgb[0]*10), int(rgb[1]*10), int(rgb[2]*10))
 norm = matplotlib.colors.Normalize(vmin=1, vmax=16)
 cmap = matplotlib.colormaps['coolwarm']
 
@@ -193,8 +193,7 @@ with st.expander('Disclaimer & Info'):
 df = pd.read_csv(f"https://raw.githubusercontent.com/griffisben/Post_Match_App/main/League_Files/{league.replace(' ','%20')}%20Full%20Match%20List.csv")
 df['Match_Name'] = df['Match'] + ' ' + df['Date']
 
-table_indexdf, table_logos = get_fotmob_table_data(lgg)
-# fotmob_table = create_fotmob_table_img(lgg, update_date, table_indexdf, table_logos)
+
 
 with st.sidebar:
     team_list = sorted(list(set(df.Home.unique().tolist() + df.Away.unique().tolist())))
@@ -211,9 +210,14 @@ with st.sidebar:
         render_matches = match_list.head(num_matches).Match_Name.tolist()
 
     focal_color = st.color_picker("Pick a color to highlight the team on League Ranking tab", "#4c94f6")
-    st.write(f"{lgg} Table (via FotMob)")
-    st.table(table_indexdf[::-1].reset_index(drop=True).rename(columns={' ':'Pos.'}))
-    # fotmob_table
+
+try:
+    with st.sidebar:
+        st.write(f"{lgg} Table (via FotMob)")
+        table_indexdf, table_logos = get_fotmob_table_data(lgg)
+        st.table(table_indexdf[::-1].reset_index(drop=True).rename(columns={' ':'Pos.'}))
+except:
+    pass
 
 #########################
 def ben_theme():

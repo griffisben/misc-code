@@ -561,7 +561,7 @@ with full_ranks_tab:
     league_ranks = league_ranks.sort_values(by=[sort_var],ascending=rank_tfs_inv[rank_vars.index(sort_var)])
     
     norm = matplotlib.colors.Normalize(vmin=1, vmax=len(league_ranks))
-    st.dataframe(league_ranks.T.style.applymap(color_percentile))
+    st.dataframe(league_ranks.T.style.map(color_percentile))
 
 with xg_tab:
     scatter_select = st.radio("Expected Goals (xG) or Expected Threat (xT)?", ['⚽ xG', '⚡ xT'])

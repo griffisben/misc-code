@@ -404,7 +404,7 @@ with graph_tab:
                 )
             )
             
-            chart = (mov_avg_line + c + lg_avg_line + lg_avg_label + team_avg_line + team_avg_label)
+            chart = (c + lg_avg_line + lg_avg_label + team_avg_line + team_avg_label + mov_avg_line)
         if mov_avg == 'No':
             chart = (c + lg_avg_line + lg_avg_label + team_avg_line + team_avg_label)
             
@@ -468,9 +468,9 @@ with graph_tab:
                 )
             )
             if var not in ['xT Difference','GD-xGD','Pts-xPts','npxGD','Open Play xGD','Set Piece xGD']:
-                chart = (mov_avg_line + c + lg_avg_line + lg_avg_label + team_avg_line + team_avg_label)
+                chart = (c + lg_avg_line + lg_avg_label + team_avg_line + team_avg_label + mov_avg_line)
             if var in ['xT Difference','GD-xGD','Pts-xPts','npxGD','Open Play xGD','Set Piece xGD']:
-                chart = (mov_avg_line + c + lg_avg_line + team_avg_line + team_avg_label)
+                chart = (c + lg_avg_line + team_avg_line + team_avg_label + mov_avg_line)
 
         if mov_avg == 'No':
             if var not in ['xT Difference','GD-xGD','Pts-xPts','npxGD','Open Play xGD','Set Piece xGD']:

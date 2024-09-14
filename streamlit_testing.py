@@ -19,7 +19,7 @@ cxG = 1.53570624482222
 
 def color_percentile(pc):
     rgb = cmap(norm(pc))
-    return 'color: #%02x%02x%02x; opacity: 0.01; textcolor: white' % (int(rgb[0]*100), int(rgb[1]*100), int(rgb[2]*100))
+    return 'color: #%02x%02x%02x; opacity: 0.6; textcolor: white' % (int(rgb[0]*100), int(rgb[1]*100), int(rgb[2]*100))
 norm = matplotlib.colors.Normalize(vmin=1, vmax=16)
 cmap = matplotlib.colormaps['coolwarm']
 

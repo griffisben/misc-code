@@ -391,7 +391,16 @@ with graph_tab:
             color='#f6ba00'
         )
 
-        mov_avg_line = c.mark_line(point=True, color='#4c94f6').encode(x=alt.X('Date', sort=None),y=alt.Y('MovAvg', scale=alt.Scale(zero=False)))
+        mov_avg_line = (alt.Chart(
+                team_data2[::-1],
+            )
+            .mark_line(point=True, color='#4c94f6')
+            .encode(
+                x=alt.X('Date', sort=None),
+                y=alt.Y('MovAvg', scale=alt.Scale(zero=False)),
+                tooltip=['Match', 'Date', var, 'Possession','Field Tilt']
+            )
+        )
     
     
         chart = (c + lg_avg_line + lg_avg_label + team_avg_line + team_avg_label + mov_avg_line)

@@ -168,7 +168,7 @@ def add_mov_avg(df,var):
     df['MovAvg'] = np.nan
     for i in range(len(df)):
         if i+4 <= len(df):
-            df['MovAvg'][i] = df[var][i:i+4].mean()
+            df.loc[i, 'MovAvg'] = df[var][i:i+4].mean()
     return df
 
 

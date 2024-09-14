@@ -164,6 +164,12 @@ def create_fotmob_table_img(lg, date, indexdf, logos):
 
     return fig
 
+def add_mov_avg(df,var):
+    df['MovAvg'] = np.nan
+    for i in range(len(df)):
+        if i+4 <= len(df):
+            df['MovAvg'][i] = df[var][i:i+4].mean()
+    return df
 
 
 nbi_links = pd.read_csv("https://raw.githubusercontent.com/griffisben/Post_Match_App/main/NBI_Match_Links.csv")
@@ -342,6 +348,7 @@ data_tab.write(team_data)
 with graph_tab:
     plot_type = st.radio("Line or Bar plot?", ['📈 Line', '📊 Bar'])
     var = st.selectbox('Metric to Plot', available_vars)
+    team_data2 = add_mov_avg(team_data,var)
 
     if plot_type == '📈 Line':
         lg_avg_var = league_data[var].mean()
@@ -373,7 +380,7 @@ with graph_tab:
             color='#ee5454'
         )
     
-        team_avg_line = alt.Chart(pd.DataFrame({'y': [team_avg_var]})).mark_rule(color='#f6ba00').encode(y='y')
+        team_avg_line = alt.Chart(team_data2).mark_rule(color='#f6ba00').encode(y='MovAvg')
         
         team_avg_label = team_avg_line.mark_text(
             x="width",
@@ -383,9 +390,11 @@ with graph_tab:
             text="Team Avg",
             color='#f6ba00'
         )
+
+        mov_avg_line = alt.Chart(pd.DataFrame({'y': [lg_avg_var]})).mark_rule(color='#ee5454').encode(y='y')
     
     
-        chart = (c + lg_avg_line + lg_avg_label + team_avg_line + team_avg_label)
+        chart = (c + lg_avg_line + lg_avg_label + team_avg_line + team_avg_label + mov_avg_line)
         st.altair_chart(chart, use_container_width=True)
 
     if plot_type == '📊 Bar':

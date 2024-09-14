@@ -399,7 +399,7 @@ with graph_tab:
                 .mark_line(point=False, color='#a6988e')
                 .encode(
                     x=alt.X('Date', sort=None),
-                    y=alt.Y('MovAvg', scale=alt.Scale(zero=False)),
+                    y=alt.Y('4-Match Moving Average', scale=alt.Scale(zero=False)),
                     tooltip=['Match', 'Date', '4-Match Moving Average']
                 )
             )
@@ -463,7 +463,7 @@ with graph_tab:
                 .mark_line(point=False, color='#a6988e')
                 .encode(
                     x=alt.X('Date', sort=None),
-                    y=alt.Y('MovAvg', scale=alt.Scale(zero=False)),
+                    y=alt.Y('4-Match Moving Average', scale=alt.Scale(zero=False)),
                     tooltip=['Match', 'Date', '4-Match Moving Average']
                 )
             )

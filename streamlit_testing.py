@@ -355,7 +355,7 @@ with graph_tab:
         team_avg_var = team_data[var].mean()
         
         c = (alt.Chart(
-                team_data[::-1],
+                team_data2[::-1],
                 title={
                     "text": [f"{team} {var}, {league}"],
                     "subtitle": [f"Data via Opta as of {update_date} | Created: Ben Griffis (@BeGriffis) via football-match-reports.streamlit.app"]
@@ -391,7 +391,7 @@ with graph_tab:
             color='#f6ba00'
         )
 
-        mov_avg_line = alt.Chart(team_data2).mark_rule(color='red').encode(x='Date',y='MovAvg')
+        mov_avg_line = c.mark_line(point=True, color='#4c94f6').encode(x=alt.X('Date', sort=None),y=alt.Y('MovAvg', scale=alt.Scale(zero=False)))
     
     
         chart = (c + lg_avg_line + lg_avg_label + team_avg_line + team_avg_label + mov_avg_line)

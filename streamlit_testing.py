@@ -403,7 +403,7 @@ with graph_tab:
         )
     
     
-        chart = (c + lg_avg_line + lg_avg_label + team_avg_line + team_avg_label)
+        chart = (c + lg_avg_line + lg_avg_label + team_avg_line + team_avg_label + mov_avg_line)
         st.altair_chart(chart, use_container_width=True)
 
     if plot_type == '📊 Bar':

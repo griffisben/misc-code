@@ -408,6 +408,7 @@ with graph_tab:
         if mov_avg == 'No':
             chart = (c + lg_avg_line + lg_avg_label + team_avg_line + team_avg_label)
             
+        chart.layer[0].encoding.y.title = var
         st.altair_chart(chart, use_container_width=True)
 
     if plot_type == '📊 Bar':
@@ -477,6 +478,8 @@ with graph_tab:
                 chart = (c + lg_avg_line + lg_avg_label + team_avg_line + team_avg_label)
             if var in ['xT Difference','GD-xGD','Pts-xPts','npxGD','Open Play xGD','Set Piece xGD']:
                 chart = (c + lg_avg_line + team_avg_line + team_avg_label)
+
+        chart.layer[0].encoding.y.title = var
         st.altair_chart(chart, use_container_width=True)
 
 

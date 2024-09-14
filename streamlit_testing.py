@@ -394,7 +394,7 @@ with graph_tab:
         mov_avg_line = (alt.Chart(
                 team_data2[::-1],
             )
-            .mark_line(point=False, color='#4a2e19', alpha=.6)
+            .mark_line(point=False, color='#4a2e19')
             .encode(
                 x=alt.X('Date', sort=None),
                 y=alt.Y('MovAvg', scale=alt.Scale(zero=False)),
@@ -403,7 +403,7 @@ with graph_tab:
         )
     
     
-        chart = (c + lg_avg_line + lg_avg_label + team_avg_line + team_avg_label + mov_avg_line)
+        chart = (mov_avg_line + c + lg_avg_line + lg_avg_label + team_avg_line + team_avg_label)
         st.altair_chart(chart, use_container_width=True)
 
     if plot_type == '📊 Bar':

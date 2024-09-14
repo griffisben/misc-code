@@ -380,7 +380,7 @@ with graph_tab:
             color='#ee5454'
         )
     
-        team_avg_line = alt.Chart(team_data2).mark_rule(color='#f6ba00').encode(y='MovAvg')
+        team_avg_line = alt.Chart(pd.DataFrame({'y': [team_avg_var]})).mark_rule(color='#f6ba00').encode(y='y')
         
         team_avg_label = team_avg_line.mark_text(
             x="width",
@@ -391,10 +391,10 @@ with graph_tab:
             color='#f6ba00'
         )
 
-        mov_avg_line = alt.Chart(pd.DataFrame({'y': [lg_avg_var]})).mark_rule(color='#ee5454').encode(y='y')
+        mov_avg_line = alt.Chart(pd.DataFrame(team_data2).mark_rule(color='red').encode(y='MovAvg')
     
     
-        chart = (c + lg_avg_line + lg_avg_label + team_avg_line + team_avg_label + mov_avg_line)
+        chart = (c + lg_avg_line + lg_avg_label + team_avg_line + team_avg_label)
         st.altair_chart(chart, use_container_width=True)
 
     if plot_type == '📊 Bar':

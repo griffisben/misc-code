@@ -391,10 +391,10 @@ with graph_tab:
             color='#f6ba00'
         )
 
-        mov_avg_line = alt.Chart(pd.DataFrame(team_data2).mark_rule(color='red').encode(y='MovAvg')
+        mov_avg_line = alt.Chart(team_data2).mark_rule(color='red').encode(y='MovAvg')
     
     
-        chart = (c + lg_avg_line + lg_avg_label + team_avg_line + team_avg_label)
+        chart = (c + lg_avg_line + lg_avg_label + team_avg_line + team_avg_label + mov_avg_line)
         st.altair_chart(chart, use_container_width=True)
 
     if plot_type == '📊 Bar':

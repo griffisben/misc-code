@@ -348,6 +348,7 @@ data_tab.write(team_data)
 with graph_tab:
     plot_type = st.radio("Line or Bar plot?", ['📈 Line', '📊 Bar'])
     var = st.selectbox('Metric to Plot', available_vars)
+    mov_avg = st.radio("Add a 4-Match Moving Average Line?", ['Yes', 'No'])
     team_data2 = add_mov_avg(team_data,var)
 
     if plot_type == '📈 Line':
@@ -391,19 +392,22 @@ with graph_tab:
             color='#f6ba00'
         )
 
-        mov_avg_line = (alt.Chart(
-                team_data2[::-1],
+        if mov_avg == 'Yes':
+            mov_avg_line = (alt.Chart(
+                    team_data2[::-1],
+                )
+                .mark_line(point=False, color='#806c5e')
+                .encode(
+                    x=alt.X('Date', sort=None),
+                    y=alt.Y('MovAvg', scale=alt.Scale(zero=False)),
+                    tooltip=['Match', 'Date', var, 'Possession','Field Tilt']
+                )
             )
-            .mark_line(point=False, color='#4a2e19')
-            .encode(
-                x=alt.X('Date', sort=None),
-                y=alt.Y('MovAvg', scale=alt.Scale(zero=False)),
-                tooltip=['Match', 'Date', var, 'Possession','Field Tilt']
-            )
-        )
-    
-    
-        chart = (mov_avg_line + c + lg_avg_line + lg_avg_label + team_avg_line + team_avg_label)
+            
+            chart = (mov_avg_line + c + lg_avg_line + lg_avg_label + team_avg_line + team_avg_label)
+        if mov_avg == 'No':
+            chart = (c + lg_avg_line + lg_avg_label + team_avg_line + team_avg_label)
+            
         st.altair_chart(chart, use_container_width=True)
 
     if plot_type == '📊 Bar':
@@ -452,10 +456,27 @@ with graph_tab:
         )
     
 
-        if var not in ['xT Difference','GD-xGD','Pts-xPts','npxGD','Open Play xGD','Set Piece xGD']:
-            chart = (c + lg_avg_line + lg_avg_label + team_avg_line + team_avg_label)
-        if var in ['xT Difference','GD-xGD','Pts-xPts','npxGD','Open Play xGD','Set Piece xGD']:
-            chart = (c + lg_avg_line + team_avg_line + team_avg_label)
+        if mov_avg == 'Yes':
+            mov_avg_line = (alt.Chart(
+                    team_data2[::-1],
+                )
+                .mark_line(point=False, color='#806c5e')
+                .encode(
+                    x=alt.X('Date', sort=None),
+                    y=alt.Y('MovAvg', scale=alt.Scale(zero=False)),
+                    tooltip=['Match', 'Date', var, 'Possession','Field Tilt']
+                )
+            )
+            if var not in ['xT Difference','GD-xGD','Pts-xPts','npxGD','Open Play xGD','Set Piece xGD']:
+                chart = (mov_avg_line + c + lg_avg_line + lg_avg_label + team_avg_line + team_avg_label)
+            if var in ['xT Difference','GD-xGD','Pts-xPts','npxGD','Open Play xGD','Set Piece xGD']:
+                chart = (mov_avg_line + c + lg_avg_line + team_avg_line + team_avg_label)
+
+        if mov_avg == 'No':
+            if var not in ['xT Difference','GD-xGD','Pts-xPts','npxGD','Open Play xGD','Set Piece xGD']:
+                chart = (c + lg_avg_line + lg_avg_label + team_avg_line + team_avg_label)
+            if var in ['xT Difference','GD-xGD','Pts-xPts','npxGD','Open Play xGD','Set Piece xGD']:
+                chart = (c + lg_avg_line + team_avg_line + team_avg_label)
         st.altair_chart(chart, use_container_width=True)
 
 

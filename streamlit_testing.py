@@ -396,7 +396,7 @@ with graph_tab:
             mov_avg_line = (alt.Chart(
                     team_data2[::-1],
                 )
-                .mark_line(point=False, color='#806c5e')
+                .mark_line(point=False, color='#a6988e')
                 .encode(
                     x=alt.X('Date', sort=None),
                     y=alt.Y('MovAvg', scale=alt.Scale(zero=False)),
@@ -460,7 +460,7 @@ with graph_tab:
             mov_avg_line = (alt.Chart(
                     team_data2[::-1],
                 )
-                .mark_line(point=False, color='#806c5e')
+                .mark_line(point=False, color='#a6988e')
                 .encode(
                     x=alt.X('Date', sort=None),
                     y=alt.Y('MovAvg', scale=alt.Scale(zero=False)),

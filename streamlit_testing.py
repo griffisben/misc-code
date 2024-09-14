@@ -165,10 +165,10 @@ def create_fotmob_table_img(lg, date, indexdf, logos):
     return fig
 
 def add_mov_avg(df,var):
-    df['MovAvg'] = np.nan
+    df['4-Match Moving Average'] = np.nan
     for i in range(len(df)):
         if i+4 <= len(df):
-            df.loc[i, 'MovAvg'] = df[var][i:i+4].mean()
+            df.loc[i, '4-Match Moving Average'] = df[var][i:i+4].mean()
     return df
 
 
@@ -400,7 +400,7 @@ with graph_tab:
                 .encode(
                     x=alt.X('Date', sort=None),
                     y=alt.Y('MovAvg', scale=alt.Scale(zero=False)),
-                    tooltip=['Match', 'Date', var, 'Possession','Field Tilt']
+                    tooltip=['Match', 'Date', '4-Match Moving Average']
                 )
             )
             
@@ -464,7 +464,7 @@ with graph_tab:
                 .encode(
                     x=alt.X('Date', sort=None),
                     y=alt.Y('MovAvg', scale=alt.Scale(zero=False)),
-                    tooltip=['Match', 'Date', var, 'Possession','Field Tilt']
+                    tooltip=['Match', 'Date', '4-Match Moving Average']
                 )
             )
             if var not in ['xT Difference','GD-xGD','Pts-xPts','npxGD','Open Play xGD','Set Piece xGD']:

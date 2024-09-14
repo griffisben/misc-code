@@ -426,7 +426,7 @@ with graph_tab:
             .encode(
                 x=alt.X('Date', sort=None),
                 y=alt.Y(var, scale=alt.Scale(zero=False)), 
-                color=alt.condition(alt.datum[var] >= 0, alt.value('#4c94f6'), alt.value('#4a2e19')),
+                color=alt.condition(alt.datum[var] >= 0, alt.value('#4c94f6'), alt.value('#ee5454')),
                 tooltip=['Match', 'Date', var, 'Possession','Field Tilt']
             )
         )

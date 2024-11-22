@@ -58,7 +58,7 @@ def VAEP_team_img(team,clusters,min_mins,max_mins,minimum_minutes,sub_title):
     
     my_cmap = matplotlib.colors.LinearSegmentedColormap.from_list("", ['#ee5454','#fbf9f4','#4c94f6'])
     
-    df = clusters[clusters.Team==team].sort_values(by=['Minutes'],ascending=False).reset_index(drop=True)
+    df = clusters[(clusters.Team==team) & (clusters.Minutes>=minimum_minutes)].sort_values(by=['Minutes'],ascending=False).reset_index(drop=True)
     
     
     norm = Normalize(vmin=min_mins, vmax=max_mins)

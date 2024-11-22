@@ -17,7 +17,7 @@ league_list = lg_lookup.League.unique().tolist()
 with st.sidebar:
     lg = st.selectbox('League', league_list)
     season = st.selectbox('Season', (sorted(lg_lookup[lg_lookup.League == lg].Season.unique().tolist(),reverse=True)))
-    max_mins = st.slider('+/- Vs. Position Avg', min_value=0.1, max_value=1.0, value=0.4, step='float')
+    max_mins = st.slider('+/- Vs. Position Avg', min_value=0.1, max_value=1.0, value=0.4, step=0.05)
 
 
 lg = "Danish 1. Division"

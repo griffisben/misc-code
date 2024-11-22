@@ -1,5 +1,5 @@
 import pandas as pd
-# import streamlit as st
+import streamlit as st
 import matplotlib.pyplot as plt
 from mplsoccer import Pitch
 import matplotlib

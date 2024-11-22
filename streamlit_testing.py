@@ -30,8 +30,10 @@ min_mins = -max_mins
 
 clusters = pd.read_csv(f"https://raw.githubusercontent.com/griffisben/misc-code/main/VAEP/{sub_title.replace(' ','%20')}%20VAEP%20Data.csv")
 team_list = sorted(clusters.Team.unique().tolist())
+min_mins_sample = lg_lookup[(lg_lookup.League==lg) & (lg_lookup.Season==season)].minimum_minutes.values[0]
 with st.sidebar:
     team = st.selectbox('Team', team_list)
+    minimum_minutes = st.slider('Minimum Minutes Played', min_value=min_mins_sample, max_value=int(clusters.Minutes.max()*.75), value=min_mins_sample)
 
 #################################################################################################################
 def VAEP_team_img(team,clusters,min_mins,max_mins,minimum_minutes,sub_title):

@@ -119,6 +119,6 @@ vaep_img = VAEP_team_img(team,adj_clusters,min_mins,max_mins,minimum_minutes,sub
 vaep_img
 
 team_vaep_players = adj_clusters[adj_clusters.Team==team][['playerName','Team','Minutes','Desc','VAEP_value','VAEP/90 vs Group Avg','P_goal_diff','P_concede_diff']].rename(columns={
-    'playerName':'Player','Desc':'Role','P_goal_diff':'GF Probability (+)','P_concede_diff':'GA Probability (-)','VAEP_value':'VAEP'
+    'playerName':'Player','Desc':'Role','P_goal_diff':'Attack Value (+)','P_concede_diff':'Defense Value (-)','VAEP_value':'VAEP'
 })
 team_vaep_players

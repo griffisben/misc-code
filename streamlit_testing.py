@@ -14,6 +14,11 @@ plt.rcParams['figure.dpi'] = 300
 lg_lookup = pd.read_csv("https://raw.githubusercontent.com/griffisben/misc-code/main/VAEP/VAEP_app_leagues.csv")
 league_list = lg_lookup.League.unique().tolist()
 
+clusters = pd.read_csv(f"https://raw.githubusercontent.com/griffisben/misc-code/main/VAEP/{sub_title.replace(' ','%20')}%20VAEP%20Data.csv")
+team_list = sorted(clusters.Team.unique().tolist())
+min_mins_sample = lg_lookup[(lg_lookup.League==lg) & (lg_lookup.Season==season)].minimum_minutes.values[0]
+max_mins_75_sample = int(clusters.Minutes.max()*.75)
+
 with st.sidebar:
     lg = st.selectbox('League', league_list)
     season = st.selectbox('Season', (sorted(lg_lookup[lg_lookup.League == lg].Season.unique().tolist(),reverse=True)))
@@ -28,12 +33,15 @@ sub_title = f"{lg} {data_date}"
 minimum_minutes = lg_lookup[(lg_lookup.League==lg) & (lg_lookup.Season==season)].minimum_minutes.values[0]
 min_mins = -max_mins
 
-clusters = pd.read_csv(f"https://raw.githubusercontent.com/griffisben/misc-code/main/VAEP/{sub_title.replace(' ','%20')}%20VAEP%20Data.csv")
-team_list = sorted(clusters.Team.unique().tolist())
-min_mins_sample = lg_lookup[(lg_lookup.League==lg) & (lg_lookup.Season==season)].minimum_minutes.values[0]
 with st.sidebar:
     team = st.selectbox('Team', team_list)
-    minimum_minutes = st.slider('Minimum Minutes Played', min_value=min_mins_sample, max_value=int(clusters.Minutes.max()*.75), value=min_mins_sample)
+    minimum_minutes = st.slider('Minimum Minutes Played', min_value=min_mins_sample, max_value=max_mins_75_sample, value=min_mins_sample)
+
+adj_clusters = clusters[clusters.Minutes>=minimum_minutes]
+position_avg = adj_clusters.groupby('Group')['VAEP/90'].mean().rename('GroupAvg')
+adj_clusters = adj_clusters.merge(position_avg, on='Group')
+adj_clusters['VAEP/90 vs Group Avg'] = adj_clusters['VAEP/90'] - adj_clusters['GroupAvg']
+adj_clusters = adj_clusters.sort_values(by=['VAEP/90 vs Group Avg'],ascending=False).reset_index(drop=True)
 
 #################################################################################################################
 def VAEP_team_img(team,clusters,min_mins,max_mins,minimum_minutes,sub_title):
@@ -111,10 +119,10 @@ def VAEP_team_img(team,clusters,min_mins,max_mins,minimum_minutes,sub_title):
         axs['pitch'].text(103, ys[i], round(ticks[i],2), color=my_cmap(norm(ticks[i])), path_effects=path_eff, size=14, ha='left', va='center')
 
     return fig
-vaep_img = VAEP_team_img(team,clusters,min_mins,max_mins,minimum_minutes,sub_title)
+vaep_img = VAEP_team_img(team,adj_clusters,min_mins,max_mins,minimum_minutes,sub_title)
 vaep_img
 
-team_vaep_players = clusters[clusters.Team==team][['playerName','Team','Minutes','Desc','P_goal_diff','P_concede_diff','VAEP_value','VAEP/90 vs Group Avg']].rename(columns={
+team_vaep_players = adj_clusters[adj_clusters.Team==team][['playerName','Team','Minutes','Desc','P_goal_diff','P_concede_diff','VAEP_value','VAEP/90 vs Group Avg']].rename(columns={
     'playerName':'Player','Desc':'Role','P_goal_diff':'GF Probability (+)','P_concede_diff':'GA Probability (-)','VAEP_value':'VAEP'
 })
 team_vaep_players

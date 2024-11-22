@@ -34,9 +34,9 @@ with st.sidebar:
     minimum_minutes = st.slider('Minimum Minutes Played', min_value=min_mins_sample, max_value=max_mins_75_sample, value=min_mins_sample)
 
 adj_clusters = clusters[clusters.Minutes>=minimum_minutes]
-position_avg = adj_clusters.groupby('Group')['VAEP/90'].mean().rename('GroupAvg')
+position_avg = adj_clusters.groupby('Group')['VAEP/90'].mean().rename('Group_Avg')
 adj_clusters = adj_clusters.merge(position_avg, on='Group')
-adj_clusters['VAEP/90 vs Group Avg'] = adj_clusters['VAEP/90'] - adj_clusters['GroupAvg']
+adj_clusters['VAEP/90 vs Group Avg'] = adj_clusters['VAEP/90'] - adj_clusters['Group_Avg']
 adj_clusters = adj_clusters.sort_values(by=['VAEP/90 vs Group Avg'],ascending=False).reset_index(drop=True)
 
 #################################################################################################################

@@ -110,4 +110,4 @@ for i in range(len(ys)):
 
     axs['pitch'].text(103, ys[i], round(ticks[i],2), color=my_cmap(norm(ticks[i])), path_effects=path_eff, size=14, ha='left', va='center')
 
-st.image(fig)
+# st.image(fig)

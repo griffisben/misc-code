@@ -113,3 +113,5 @@ def VAEP_team_img(team,clusters,min_mins,max_mins,minimum_minutes,sub_title):
     return fig
 vaep_img = VAEP_team_img(team,clusters,min_mins,max_mins,minimum_minutes,sub_title)
 vaep_img
+
+clusters[clusters.Team==team]

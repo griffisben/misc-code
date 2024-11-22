@@ -109,4 +109,5 @@ def VAEP_team_img(team,clusters,min_mins,max_mins,minimum_minutes,sub_title):
         axs['pitch'].text(103, ys[i], round(ticks[i],2), color=my_cmap(norm(ticks[i])), path_effects=path_eff, size=14, ha='left', va='center')
 
     return fig
-VAEP_team_img(team,clusters,min_mins,max_mins,minimum_minutes,sub_title)
+vaep_img = VAEP_team_img(team,clusters,min_mins,max_mins,minimum_minutes,sub_title)
+vaep_img

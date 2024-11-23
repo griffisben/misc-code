@@ -15,7 +15,8 @@ def rank_column(df, column_name):
     return stats.rankdata(df[column_name], "average") / len(df[column_name])
 def rank_column_inverse(df, column_name):
     return 1-stats.rankdata(df[column_name], "average") / len(df[column_name])
-def color_percentile(pc):
+def style_rows(row):
+    pc=row['VAEP/90 Pctile']
     if 1-pc <= 0.1:
         color = ('#01349b', '#d9e3f6')  # Elite
     elif 0.1 < 1-pc <= 0.35:
@@ -24,11 +25,9 @@ def color_percentile(pc):
         color = ('#9b6700', '#fff2d9')  # Avg
     else:
         color = ('#b60918', '#fddbde')  # Below Avg
-
-    return f'background-color: {color[1]}'
-
-def style_rows(row):
-    pc=row['VAEP/90 Pctile']
+    return [f'background-color: {color[1]}'] * len(row)
+def style_rows_group_avg(row):
+    pc=row['VAEP/90 vs Group Avg Percentile']
     if 1-pc <= 0.1:
         color = ('#01349b', '#d9e3f6')  # Elite
     elif 0.1 < 1-pc <= 0.35:
@@ -84,6 +83,9 @@ adj_clusters['VAEP/90 vs Group Avg'] = adj_clusters['VAEP/90'] - adj_clusters['G
 adj_clusters = adj_clusters.sort_values(by=['VAEP/90 vs Group Avg'],ascending=False).reset_index(drop=True)
 adj_clusters['P_goal_diff/90'] = adj_clusters['P_goal_diff']/(adj_clusters['Minutes']/90)
 adj_clusters['P_concede_diff/90'] = adj_clusters['P_concede_diff']/(adj_clusters['Minutes']/90)
+adj_clusters['VAEP/90 vs Group Avg Percentile'] = adj_clusters.groupby('Group')['VAEP/90 vs Group Avg'].transform(
+    lambda x: rankdata(x, method='average') / len(x) * 100
+)
 
 #################################################################################################################
 def VAEP_team_img(team,clusters,min_mins,max_mins,minimum_minutes,sub_title):    
@@ -156,10 +158,10 @@ with team_tab:
     vaep_img = VAEP_team_img(team,adj_clusters,min_mins,max_mins,minimum_minutes,sub_title)
     vaep_img
 
-    team_vaep_players = adj_clusters[adj_clusters.Team==team][['playerName','Team','Minutes','Desc','VAEP/90','VAEP/90 vs Group Avg','P_goal_diff/90','P_concede_diff/90']].rename(columns={
+    team_vaep_players = adj_clusters[adj_clusters.Team==team][['playerName','Team','Minutes','Desc','VAEP/90','VAEP/90 vs Group Avg','P_goal_diff/90','P_concede_diff/90','VAEP/90 vs Group Avg Percentile']].rename(columns={
         'playerName':'Player','Desc':'Role','P_goal_diff/90':'Attack Value (+)/90','P_concede_diff/90':'Defense Value (-)/90','VAEP_value':'VAEP'
     })
-    team_vaep_players
+    st.dataframe(team_vaep_players.style.apply(style_rows_group_avg, axis=1))
 
 with player_tab:
     foc_pos = st.selectbox('Position', ('ST','Winger','AM','CM','DM','FB','CB','GK'))

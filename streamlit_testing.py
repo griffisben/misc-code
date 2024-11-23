@@ -8,6 +8,7 @@ from matplotlib import colors
 from matplotlib.colors import Normalize
 import matplotlib.patheffects as path_effects
 from adjustText import adjust_text
+from scipy import stats
 plt.rcParams['figure.dpi'] = 300
 
 def rank_column(df, column_name):

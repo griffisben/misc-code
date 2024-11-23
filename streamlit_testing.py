@@ -27,6 +27,20 @@ def color_percentile(pc):
 
     return f'background-color: {color[1]}'
 
+def style_rows(row):
+    pc=row['VAEP/90 Pctile']
+    if 1-pc <= 0.1:
+        color = ('#01349b', '#d9e3f6')  # Elite
+    elif 0.1 < 1-pc <= 0.35:
+        color = ('#007f35', '#d9f0e3')  # Above Avg
+    elif 0.35 < 1-pc <= 0.66:
+        color = ('#9b6700', '#fff2d9')  # Avg
+    else:
+        color = ('#b60918', '#fddbde')  # Below Avg
+    return [f'background-color: {color[1]}'] * len(row)
+
+
+
 with st.expander('Information about Roles & Action Values'):
     st.write("""
     Role Clusters determined by an Algorithm trained on heatmaps of all UEFA T5 league players, over 2.9 million events.  \n
@@ -154,4 +168,4 @@ with player_tab:
     })
     player_vaep_df
     player_vaep_df['VAEP/90 Pctile'] = rank_column(player_vaep_df, 'VAEP/90')
-    st.dataframe(player_vaep_df.style.applymap(color_percentile, subset=player_vaep_df.columns[-1]))
+    st.dataframe(player_vaep_df.style.apply(style_rows, axis=1))

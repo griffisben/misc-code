@@ -60,7 +60,7 @@ league_list = lg_lookup.League.unique().tolist()
 with st.sidebar:
     lg = st.selectbox('League', league_list)
     season = st.selectbox('Season', (sorted(lg_lookup[lg_lookup.League == lg].Season.unique().tolist(),reverse=True)))
-    max_mins = st.slider('+/- Vs. Position Avg', min_value=0.1, max_value=1.0, value=0.4, step=0.05)
+    max_mins = st.slider('+/- Vs. Position Avg', min_value=0.1, max_value=1.0, value=0.35, step=0.05)
 
 data_date = lg_lookup[(lg_lookup.League==lg) & (lg_lookup.Season==season)].sub_title.values[0]
 sub_title = f"{lg} {data_date}"

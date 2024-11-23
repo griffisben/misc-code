@@ -84,7 +84,7 @@ adj_clusters = adj_clusters.sort_values(by=['VAEP/90 vs Group Avg'],ascending=Fa
 adj_clusters['P_goal_diff/90'] = adj_clusters['P_goal_diff']/(adj_clusters['Minutes']/90)
 adj_clusters['P_concede_diff/90'] = adj_clusters['P_concede_diff']/(adj_clusters['Minutes']/90)
 adj_clusters['VAEP/90 vs Group Avg Percentile'] = adj_clusters.groupby('Group')['VAEP/90 vs Group Avg'].transform(
-    lambda x: stats.rankdata(x, method='average') / len(x) * 100
+    lambda x: stats.rankdata(x, method='average') / len(x)
 )
 
 #################################################################################################################

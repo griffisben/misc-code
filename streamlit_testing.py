@@ -169,11 +169,11 @@ with player_tab:
         'playerName':'Player','Desc':'Role','P_goal_diff/90':'Attack Value (+)/90','P_concede_diff/90':'Defense Value (-)/90','VAEP_value':'VAEP'
     })
     player_vaep_df['VAEP/90 Pctile'] = rank_column(player_vaep_df, 'VAEP/90')
-    st.dataframe(player_vaep_df.style.apply(style_rows, axis=1))
+    st.dataframe(player_vaep_df.style.apply(style_rows_group_avg, axis=1))
 
 with all_player_tab:
     all_player_vaep_df = adj_clusters[['playerName','Team','Minutes','Group','Desc','VAEP/90','VAEP/90 vs Group Avg','P_goal_diff/90','P_concede_diff/90']].rename(columns={
         'playerName':'Player','Desc':'Role','P_goal_diff/90':'Attack Value (+)/90','P_concede_diff/90':'Defense Value (-)/90','VAEP_value':'VAEP'
     })
     all_player_vaep_df['VAEP/90 Pctile'] = rank_column(all_player_vaep_df, 'VAEP/90')
-    st.dataframe(all_player_vaep_df.style.apply(style_rows, axis=1))
+    st.dataframe(all_player_vaep_df.style.apply(style_rows_group_avg, axis=1))

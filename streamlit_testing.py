@@ -141,14 +141,14 @@ with team_tab:
     vaep_img = VAEP_team_img(team,adj_clusters,min_mins,max_mins,minimum_minutes,sub_title)
     vaep_img
 
-    team_vaep_players = adj_clusters[adj_clusters.Team==team][['playerName','Team','Minutes','Desc','VAEP/90','VAEP/90 vs Group Avg','P_goal_diff','P_concede_diff']].rename(columns={
+    team_vaep_players = adj_clusters[adj_clusters.Team==team][['playerName','Team','Minutes','Desc','VAEP/90','VAEP/90 vs Group Avg','P_goal_diff/90','P_concede_diff/90']].rename(columns={
         'playerName':'Player','Desc':'Role','P_goal_diff/90':'Attack Value (+)/90','P_concede_diff/90':'Defense Value (-)/90','VAEP_value':'VAEP'
     })
     team_vaep_players
 
 with player_tab:
     foc_pos = st.selectbox('Gender', ('ST','Winger','AM','CM','DM','FB','CB','GK'))
-    player_vaep_df = adj_clusters[adj_clusters.Group==foc_pos][['playerName','Team','Minutes','Desc','VAEP/90','VAEP/90 vs Group Avg','P_goal_diff','P_concede_diff']].rename(columns={
+    player_vaep_df = adj_clusters[adj_clusters.Group==foc_pos][['playerName','Team','Minutes','Desc','VAEP/90','VAEP/90 vs Group Avg','P_goal_diff/90','P_concede_diff/90']].rename(columns={
         'playerName':'Player','Desc':'Role','P_goal_diff/90':'Attack Value (+)/90','P_concede_diff/90':'Defense Value (-)/90','VAEP_value':'VAEP'
     })
     player_vaep_df

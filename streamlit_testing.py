@@ -10,6 +10,10 @@ import matplotlib.patheffects as path_effects
 from adjustText import adjust_text
 plt.rcParams['figure.dpi'] = 300
 
+def rank_column(df, column_name):
+    return stats.rankdata(df[column_name], "average") / len(df[column_name])
+def rank_column_inverse(df, column_name):
+    return 1-stats.rankdata(df[column_name], "average") / len(df[column_name])
 def color_percentile(pc):
     if 1-pc <= 0.1:
         color = ('#01349b', '#d9e3f6')  # Elite

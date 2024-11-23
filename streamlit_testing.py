@@ -154,4 +154,4 @@ with player_tab:
     })
     player_vaep_df
     player_vaep_df['VAEP/90 Pctile'] = rank_column(player_vaep_df, 'VAEP/90')
-    st.dataframe(player_vaep_df.style.applymap(color_percentile, subset=player_vaep_df.columns[:-1]))
+    st.dataframe(player_vaep_df.style.applymap(color_percentile, subset=player_vaep_df['VAEP/90 Pctile']))

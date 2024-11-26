@@ -166,7 +166,7 @@ def VAEP_team_img(team,clusters,min_mins,max_mins,minimum_minutes,sub_title,foc_
 team_tab, player_tab, all_player_tab = st.tabs([f'{team} Players', 'Player Research', 'All Players'])
 
 with team_tab:
-    vaep_img = VAEP_team_img(team,adj_clusters,min_mins,max_mins,minimum_minutes,sub_title)
+    vaep_img = VAEP_team_img(team,adj_clusters,min_mins,max_mins,minimum_minutes,sub_title,foc_vaep_var)
     vaep_img
 
     team_vaep_players = adj_clusters[adj_clusters.Team==team][['playerName','Team','Minutes','Desc','VAEP/90','VAEP/90 Excl. Receiving','VAEP/90 Receiving','VAEP/90 vs Group Avg','VAEP/90 Excl. Receiving vs Group Avg','VAEP/90 Receiving vs Group Avg','P_goal_diff/90','P_concede_diff/90',f'{foc_vaep_var} Percentile']].rename(columns={

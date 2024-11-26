@@ -75,20 +75,31 @@ max_mins_75_sample = int(clusters.Minutes.max()*.75)
 with st.sidebar:
     team = st.selectbox('Team', team_list)
     minimum_minutes = st.slider('Minimum Minutes Played', min_value=min_mins_sample, max_value=max_mins_75_sample, value=min_mins_sample)
+    foc_vaep_var = st.selectbox('Variable', ["VAEP/90 vs Group Avg","VAEP/90 Excl. Receiving vs Group Avg","VAEP/90 Receiving vs Group Avg"])
 
 adj_clusters = clusters[clusters.Minutes>=minimum_minutes]
-position_avg = adj_clusters.groupby('Group')['VAEP/90'].mean().rename('Group_Avg')
-adj_clusters = adj_clusters.merge(position_avg, on='Group')
+
+all_position_avg = adj_clusters.groupby('Group')['VAEP/90'].mean().rename('Group_Avg')
+rec_position_avg = clusters_with_receiving.groupby('Group')['VAEP/90 Receiving'].mean().rename('Group_AvgWithReceipts')
+excl_position_avg = clusters_with_receiving.groupby('Group')['VAEP/90 Excl. Receiving'].mean().rename('Group_AvgNoRecepit')
+
+adj_clusters = adj_clusters.merge(all_position_avg, on='Group')
+adj_clusters = adj_clusters.merge(rec_position_avg, on='Group')
+adj_clusters = adj_clusters.merge(excl_position_avg, on='Group')
+
 adj_clusters['VAEP/90 vs Group Avg'] = adj_clusters['VAEP/90'] - adj_clusters['Group_Avg']
-adj_clusters = adj_clusters.sort_values(by=['VAEP/90 vs Group Avg'],ascending=False).reset_index(drop=True)
+adj_clusters['VAEP/90 Receiving vs Group Avg'] = adj_clusters['VAEP/90 Receiving'] - adj_clusters['Group_AvgWithReceipts']
+adj_clusters['VAEP/90 Excl. Receiving vs Group Avg'] = adj_clusters['VAEP/90 Excl. Receiving'] - adj_clusters['Group_AvgNoRecepit']
+
+adj_clusters = adj_clusters.sort_values(by=[foc_vaep_var],ascending=False).reset_index(drop=True)
 adj_clusters['P_goal_diff/90'] = adj_clusters['P_goal_diff']/(adj_clusters['Minutes']/90)
 adj_clusters['P_concede_diff/90'] = adj_clusters['P_concede_diff']/(adj_clusters['Minutes']/90)
-adj_clusters['VAEP/90 vs Group Avg Percentile'] = adj_clusters.groupby('Group')['VAEP/90 vs Group Avg'].transform(
+adj_clusters[f'{foc_vaep_var} Percentile'] = adj_clusters.groupby('Group')[foc_vaep_var].transform(
     lambda x: stats.rankdata(x, method='average') / len(x)
 )
 
 #################################################################################################################
-def VAEP_team_img(team,clusters,min_mins,max_mins,minimum_minutes,sub_title):    
+def VAEP_team_img(team,clusters,min_mins,max_mins,minimum_minutes,sub_title,foc_vaep_var):    
     pitch = Pitch(pitch_type='opta', pitch_color='#fbf9f4', line_color='#4A2E19', line_zorder=2,half=False)
     fig, axs = pitch.grid(endnote_height=0.045, endnote_space=0, figheight=12,
                           title_height=0.045, title_space=0,
@@ -104,7 +115,7 @@ def VAEP_team_img(team,clusters,min_mins,max_mins,minimum_minutes,sub_title):
     norm = Normalize(vmin=min_mins, vmax=max_mins)
     
     hm = pitch.scatter(x=df.x, y=df.y, ax=axs['pitch'],
-                  color=my_cmap(norm(df['VAEP/90 vs Group Avg'])), edgecolor='#4a2e19',
+                  color=my_cmap(norm(df[foc_vaep_var])), edgecolor='#4a2e19',
                   lw=.75,
                        # s=df['Minutes'],
                        s=600,
@@ -118,7 +129,7 @@ def VAEP_team_img(team,clusters,min_mins,max_mins,minimum_minutes,sub_title):
     texts = adjust_text(texts, only_move=dict(text='y'), ax=axs['pitch'])
     
     
-    axs['title'].text(.5, 1, f"{team} Avg Locations, Role Clusters, & Action Value", ha='center', va='center', size=25, color='#4a2e19')
+    axs['title'].text(.5, 1, f"{team} Avg Locations, Role Clusters, & {foc_var}", ha='center', va='center', size=25, color='#4a2e19')
     axs['title'].text(.5, .0, f"Players with at least {minimum_minutes} minutes | {sub_title}", ha='center', va='center', size=18, color='#4a2e19')
     
     axs['endnote'].text(0, 0.5, "Data via Opta", ha='left', va='center', size=17, color='#4a2e19')
@@ -129,7 +140,7 @@ def VAEP_team_img(team,clusters,min_mins,max_mins,minimum_minutes,sub_title):
     #                     ha='center', va='top', size=13, color='#4a2e19')
     
     ##############################
-    axs['pitch'].text(105, 99.75, 'AV/90\nvs Pos. Avg', ha='center', va='bottom', size=15, color='#4a2e19', weight='bold')
+    axs['pitch'].text(105, 99.75, 'VAEP/90\nvs Pos. Avg', ha='center', va='bottom', size=15, color='#4a2e19', weight='bold')
     
     ###
     ticks = [min_mins, min_mins+((max_mins-min_mins)*(1/7)), min_mins+((max_mins-min_mins)*(2/7)), min_mins+((max_mins-min_mins)*(3/7)), min_mins+((max_mins-min_mins)*(4/7)), min_mins+((max_mins-min_mins)*(5/7)), min_mins+((max_mins-min_mins)*(6/7)), min_mins+((max_mins-min_mins)*(7/7))]
@@ -158,21 +169,21 @@ with team_tab:
     vaep_img = VAEP_team_img(team,adj_clusters,min_mins,max_mins,minimum_minutes,sub_title)
     vaep_img
 
-    team_vaep_players = adj_clusters[adj_clusters.Team==team][['playerName','Team','Minutes','Desc','VAEP/90','VAEP/90 vs Group Avg','P_goal_diff/90','P_concede_diff/90','VAEP/90 vs Group Avg Percentile']].rename(columns={
+    team_vaep_players = adj_clusters[adj_clusters.Team==team][['playerName','Team','Minutes','Desc','VAEP/90','VAEP/90 Excl. Receiving','VAEP/90 Receiving','VAEP/90 vs Group Avg','VAEP/90 Excl. Receiving vs Group Avg','VAEP/90 Receiving vs Group Avg','P_goal_diff/90','P_concede_diff/90',f'{foc_vaep_var} Percentile']].rename(columns={
         'playerName':'Player','Desc':'Role','P_goal_diff/90':'Attack Value (+)/90','P_concede_diff/90':'Defense Value (-)/90','VAEP_value':'VAEP'
     })
     st.dataframe(team_vaep_players.style.apply(style_rows_group_avg, axis=1))
 
 with player_tab:
     foc_pos = st.selectbox('Position', ('ST','Winger','AM','CM','DM','FB','CB','GK'))
-    player_vaep_df = adj_clusters[adj_clusters.Group==foc_pos][['playerName','Team','Minutes','Desc','VAEP/90','VAEP/90 vs Group Avg','P_goal_diff/90','P_concede_diff/90']].rename(columns={
+    player_vaep_df = adj_clusters[adj_clusters.Group==foc_pos][['playerName','Team','Minutes','Desc','VAEP/90','VAEP/90 Excl. Receiving','VAEP/90 Receiving','VAEP/90 vs Group Avg','VAEP/90 Excl. Receiving vs Group Avg','VAEP/90 Receiving vs Group Avg','P_goal_diff/90','P_concede_diff/90']].rename(columns={
         'playerName':'Player','Desc':'Role','P_goal_diff/90':'Attack Value (+)/90','P_concede_diff/90':'Defense Value (-)/90','VAEP_value':'VAEP'
     })
     player_vaep_df['VAEP/90 Pctile'] = rank_column(player_vaep_df, 'VAEP/90')
     st.dataframe(player_vaep_df.style.apply(style_rows, axis=1))
 
 with all_player_tab:
-    all_player_vaep_df = adj_clusters[['playerName','Team','Minutes','Group','Desc','VAEP/90','VAEP/90 vs Group Avg','P_goal_diff/90','P_concede_diff/90','VAEP/90 vs Group Avg Percentile']].rename(columns={
+    all_player_vaep_df = adj_clusters[['playerName','Team','Minutes','Group','Desc','VAEP/90','VAEP/90 Excl. Receiving','VAEP/90 Receiving','VAEP/90 vs Group Avg','VAEP/90 Excl. Receiving vs Group Avg','VAEP/90 Receiving vs Group Avg','P_goal_diff/90','P_concede_diff/90',f'{foc_vaep_var} Percentile']].rename(columns={
         'playerName':'Player','Desc':'Role','P_goal_diff/90':'Attack Value (+)/90','P_concede_diff/90':'Defense Value (-)/90','VAEP_value':'VAEP'
     })
     st.dataframe(all_player_vaep_df.style.apply(style_rows_group_avg, axis=1))

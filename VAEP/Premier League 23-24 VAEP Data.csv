@@ -1,4 +1,4 @@
-﻿playerId,playerName,contestantId,Actions,P_goal_diff,P_concede_diff,VAEP_value,Team,x,y,Minutes,Cluster,Desc,Group,VAEP/Act,VAEP/90,GroupAvg,VAEP/90 vs Group Avg
+﻿playerId,playerName,contestantId,Actions,P_goal_diff,P_concede_diff,VAEP_value,Team,x,y,Minutes,Cluster,Desc,Group,VAEP/Act,VAEP/90,GroupAvg,VAEP/90 vs Group Avg Excl. Receiving
 85gmjxvy1g5aj1lcizegwuaui,J. Doku,a3nyxabgsqlnqfkeg41m6tnpp,1440,7.162671201676885,-6.505203500069989,13.667874701746875,Manchester City,75.5,80.2,1593.2,29,Box-Entering LW,Winger,0.009491579653990886,0.7720993743140967,0.16811018108699233,0.6039891932271044
 c2jqa9vozhqu7x79h5rr2n1ed,K. De Bruyne,a3nyxabgsqlnqfkeg41m6tnpp,1141,5.38267228474046,-1.920313463096854,7.302985747837314,Manchester City,71.6,47.1,1227.2166666666667,14,Roaming Deep ST,ST,0.006400513363573457,0.5355767527918393,0.007730912628054881,0.5278458401637843
 exviw7gzg5p3vaiwaq4ujw9ud,S. Benrahma,4txjdaqveermfryvbfrr4taf7,451,1.0748928962994722,-0.8584597440697351,1.9333526403692074,West Ham United,63.4,82.9,618.5166666666667,0,High & Wide LB,FB,0.004286812949820859,0.2813210168950909,-0.09461920892107115,0.37594022581616204

@@ -80,8 +80,8 @@ with st.sidebar:
 adj_clusters = clusters[clusters.Minutes>=minimum_minutes]
 
 all_position_avg = adj_clusters.groupby('Group')['VAEP/90'].mean().rename('Group_Avg')
-rec_position_avg = clusters_with_receiving.groupby('Group')['VAEP/90 Receiving'].mean().rename('Group_AvgWithReceipts')
-excl_position_avg = clusters_with_receiving.groupby('Group')['VAEP/90 Excl. Receiving'].mean().rename('Group_AvgNoRecepit')
+rec_position_avg = adj_clusters.groupby('Group')['VAEP/90 Receiving'].mean().rename('Group_AvgWithReceipts')
+excl_position_avg = adj_clusters.groupby('Group')['VAEP/90 Excl. Receiving'].mean().rename('Group_AvgNoRecepit')
 
 adj_clusters = adj_clusters.merge(all_position_avg, on='Group')
 adj_clusters = adj_clusters.merge(rec_position_avg, on='Group')

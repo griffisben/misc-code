@@ -125,7 +125,7 @@ def VAEP_team_img(team,clusters,min_mins,max_mins,minimum_minutes,sub_title,foc_
     
     path_eff = [path_effects.Stroke(linewidth=.66, foreground='k'), path_effects.Normal()]
     
-    texts = [axs['pitch'].text(x=df.x[i], y=df.y[i], s=f"{df.playerName[i]}\n{df.Group[i]}: {df.Desc[i]}",ha='center', va='center',size=15, color=colors.to_rgba(my_cmap(norm(df['VAEP/90 vs Group Avg']))[i])[:-1]+(0.5,), path_effects=path_eff) for i in range(len(df))]
+    texts = [axs['pitch'].text(x=df.x[i], y=df.y[i], s=f"{df.playerName[i]}\n{df.Group[i]}: {df.Desc[i]}",ha='center', va='center',size=15, color=colors.to_rgba(my_cmap(norm(df[foc_vaep_var]))[i])[:-1]+(0.5,), path_effects=path_eff) for i in range(len(df))]
     texts = adjust_text(texts, only_move=dict(text='y'), ax=axs['pitch'])
     
     

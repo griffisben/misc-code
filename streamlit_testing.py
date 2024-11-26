@@ -10,6 +10,9 @@ import matplotlib.patheffects as path_effects
 from adjustText import adjust_text
 from scipy import stats
 plt.rcParams['figure.dpi'] = 300
+import plotly.express as px
+import plotly.figure_factory as ff
+from plotly.graph_objects import Layout
 
 def rank_column(df, column_name):
     return stats.rankdata(df[column_name], "average") / len(df[column_name])
@@ -163,7 +166,7 @@ def VAEP_team_img(team,clusters,min_mins,max_mins,minimum_minutes,sub_title,foc_
 
     return fig
 
-team_tab, player_tab, all_player_tab = st.tabs([f'{team} Players', 'Player Research', 'All Players'])
+team_tab, player_tab, all_player_tab, scatter_tab = st.tabs([f'{team} Players', 'Player Research', 'All Players', 'Player Scatters'])
 
 with team_tab:
     vaep_img = VAEP_team_img(team,adj_clusters,min_mins,max_mins,minimum_minutes,sub_title,foc_vaep_var)
@@ -187,3 +190,25 @@ with all_player_tab:
         'playerName':'Player','Desc':'Role','P_goal_diff/90':'Attack Value (+)/90','P_concede_diff/90':'Defense Value (-)/90','VAEP_value':'VAEP'
     })
     st.dataframe(all_player_vaep_df.style.apply(style_rows_group_avg, axis=1))
+
+with scatter_tab:
+    scatter_df = adj_clusters.copy()
+
+    fig_scatter = px.scatter(
+        scatter_df,
+        x = 'VAEP/90 Excl. Receiving vs Group Avg',
+        y = 'VAEP/90 Receiving vs Group Avg',
+        color = 'VAEP/90 vs Group Avg',
+        color_continuous_scale = 'rdylgn',
+        text = 'playerName',
+        hover_data=['Team', 'Minutes', 'Group', 'Desc'],
+        hover_name = 'playerName',
+        width=900,
+        height=700)
+    fig_scatter.update_traces(textposition='top right', marker=dict(size=10, line=dict(width=1, color='black')))
+    
+    fig_scatter.add_hline(y=dfProspect_scatter['VAEP/90 Receiving vs Group Avg'].median(), name='Median', line_width=0.5)
+    fig_scatter.add_vline(x=dfProspect_scatter['VAEP/90 Excl. Receiving vs Group Avg'].median(), name='Median', line_width=0.5)
+    
+    st.plotly_chart(fig_scatter, theme=None, use_container_width=False)
+

@@ -192,7 +192,13 @@ with all_player_tab:
     st.dataframe(all_player_vaep_df.style.apply(style_rows_group_avg, axis=1))
 
 with scatter_tab:
+    pos_select_scatter = st.selectbox('Positions', ('ST', 'Winger', 'AM',
+                                'CM', 'DM','FB','CB','GK','All'))
+
     scatter_df = adj_clusters.copy()
+
+    if pos_select_scatter != 'All':
+        scatter_df = scatter_df[scatter_df.Group==pos_select_scatter]
 
     fig_scatter = px.scatter(
         scatter_df,

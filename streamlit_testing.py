@@ -129,7 +129,7 @@ def VAEP_team_img(team,clusters,min_mins,max_mins,minimum_minutes,sub_title,foc_
     texts = adjust_text(texts, only_move=dict(text='y'), ax=axs['pitch'])
     
     
-    axs['title'].text(.5, 1, f"{team} Avg Locations, Role Clusters, & {foc_var}", ha='center', va='center', size=25, color='#4a2e19')
+    axs['title'].text(.5, 1, f"{team} Avg Locations, Role Clusters, & {foc_vaep_var}", ha='center', va='center', size=25, color='#4a2e19')
     axs['title'].text(.5, .0, f"Players with at least {minimum_minutes} minutes | {sub_title}", ha='center', va='center', size=18, color='#4a2e19')
     
     axs['endnote'].text(0, 0.5, "Data via Opta", ha='left', va='center', size=17, color='#4a2e19')

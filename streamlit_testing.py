@@ -27,7 +27,7 @@ def style_rows(row):
         color = ('#b60918', '#fddbde')  # Below Avg
     return [f'background-color: {color[1]}'] * len(row)
 def style_rows_group_avg(row):
-    pc=row[foc_vaep_var]
+    pc=row[f'{foc_vaep_var} Percentile']
     if 1-pc <= 0.1:
         color = ('#01349b', '#d9e3f6')  # Elite
     elif 0.1 < 1-pc <= 0.35:

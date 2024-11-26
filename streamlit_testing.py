@@ -26,8 +26,8 @@ def style_rows(row):
     else:
         color = ('#b60918', '#fddbde')  # Below Avg
     return [f'background-color: {color[1]}'] * len(row)
-def style_rows_group_avg(row):
-    pc=row['VAEP/90 vs Group Avg Percentile']
+def style_rows_group_avg(row,foc_vaep_var):
+    pc=row[foc_vaep_var]
     if 1-pc <= 0.1:
         color = ('#01349b', '#d9e3f6')  # Elite
     elif 0.1 < 1-pc <= 0.35:
@@ -172,7 +172,7 @@ with team_tab:
     team_vaep_players = adj_clusters[adj_clusters.Team==team][['playerName','Team','Minutes','Desc','VAEP/90','VAEP/90 Excl. Receiving','VAEP/90 Receiving','VAEP/90 vs Group Avg','VAEP/90 Excl. Receiving vs Group Avg','VAEP/90 Receiving vs Group Avg','P_goal_diff/90','P_concede_diff/90',f'{foc_vaep_var} Percentile']].rename(columns={
         'playerName':'Player','Desc':'Role','P_goal_diff/90':'Attack Value (+)/90','P_concede_diff/90':'Defense Value (-)/90','VAEP_value':'VAEP'
     })
-    st.dataframe(team_vaep_players.style.apply(style_rows_group_avg, axis=1))
+    st.dataframe(team_vaep_players.style.apply(style_rows_group_avg(foc_vaep_var), axis=1))
 
 with player_tab:
     foc_pos = st.selectbox('Position', ('ST','Winger','AM','CM','DM','FB','CB','GK'))
@@ -186,4 +186,4 @@ with all_player_tab:
     all_player_vaep_df = adj_clusters[['playerName','Team','Minutes','Group','Desc','VAEP/90','VAEP/90 Excl. Receiving','VAEP/90 Receiving','VAEP/90 vs Group Avg','VAEP/90 Excl. Receiving vs Group Avg','VAEP/90 Receiving vs Group Avg','P_goal_diff/90','P_concede_diff/90',f'{foc_vaep_var} Percentile']].rename(columns={
         'playerName':'Player','Desc':'Role','P_goal_diff/90':'Attack Value (+)/90','P_concede_diff/90':'Defense Value (-)/90','VAEP_value':'VAEP'
     })
-    st.dataframe(all_player_vaep_df.style.apply(style_rows_group_avg, axis=1))
+    st.dataframe(all_player_vaep_df.style.apply(style_rows_group_avg(foc_vaep_var), axis=1))

@@ -209,7 +209,7 @@ with scatter_tab:
         text = 'playerName',
         hover_data=['Team', 'Minutes', 'Group', 'Desc'],
         hover_name = 'playerName',
-        width=900,
+        width=1100,
         height=700)
     fig_scatter.update_traces(textposition='top right', marker=dict(size=10, line=dict(width=1, color='black')))
     

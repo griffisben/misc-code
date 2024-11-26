@@ -60,6 +60,7 @@ league_list = lg_lookup.League.unique().tolist()
 with st.sidebar:
     lg = st.selectbox('League', league_list)
     season = st.selectbox('Season', (sorted(lg_lookup[lg_lookup.League == lg].Season.unique().tolist(),reverse=True)))
+    foc_vaep_var = st.selectbox('Variable', ["VAEP/90 vs Group Avg","VAEP/90 Excl. Receiving vs Group Avg","VAEP/90 Receiving vs Group Avg"])
     max_mins = st.slider('+/- Vs. Position Avg', min_value=0.1, max_value=1.0, value=0.35, step=0.05)
 
 data_date = lg_lookup[(lg_lookup.League==lg) & (lg_lookup.Season==season)].sub_title.values[0]
@@ -75,7 +76,6 @@ max_mins_75_sample = int(clusters.Minutes.max()*.75)
 with st.sidebar:
     team = st.selectbox('Team', team_list)
     minimum_minutes = st.slider('Minimum Minutes Played', min_value=min_mins_sample, max_value=max_mins_75_sample, value=min_mins_sample)
-    foc_vaep_var = st.selectbox('Variable', ["VAEP/90 vs Group Avg","VAEP/90 Excl. Receiving vs Group Avg","VAEP/90 Receiving vs Group Avg"])
 
 adj_clusters = clusters[clusters.Minutes>=minimum_minutes]
 

@@ -209,13 +209,13 @@ with scatter_tab:
         text = 'playerName',
         hover_data=['Team', 'Minutes', 'Group', 'Desc'],
         hover_name = 'playerName',
-        # width=1100,
-        # height=700
+        width=600,
+        height=600
     )
     fig_scatter.update_traces(textposition='top right', marker=dict(size=10, line=dict(width=1, color='black')))
     
     fig_scatter.add_hline(y=scatter_df['VAEP/90 Receiving vs Group Avg'].median(), name='Median', line_width=0.5)
     fig_scatter.add_vline(x=scatter_df['VAEP/90 Excl. Receiving vs Group Avg'].median(), name='Median', line_width=0.5)
     
-    st.plotly_chart(fig_scatter, theme=None, use_container_width=True)
+    st.plotly_chart(fig_scatter, theme=None, use_container_width=False)
 

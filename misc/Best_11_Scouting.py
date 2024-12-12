@@ -1368,7 +1368,7 @@ def scout_report(data_frame, gender, league, season, xtra, template, pos, player
     fig.set_size_inches(12, (12*.9)) #length, height
     
     fig_text(
-        0.88, 0.055, "Created by Ben Griffis\n(@BeGriffis on Twitter)\n\n<Elite (Top 10%)>\n<Above Average (11-35%)>\n<Average (36-66%)>\n<Below Average (Bottom 35%)>", color="#4A2E19",
+        0.88, 0.055, "\n\n\n\n\n<Elite (Top 10%)>\n<Above Average (11-35%)>\n<Average (36-66%)>\n<Below Average (Bottom 35%)>", color="#4A2E19",
         highlight_textprops=[{"color": '#01349b'},
                              {'color' : '#007f35'},
                              {"color" : '#9b6700'},
@@ -1564,7 +1564,7 @@ formation_positions = {442:['GK','RCB','LCB','RB','LB','RCM','LCM','RW','LW','RS
 rank_11_base = read_csv('https://raw.githubusercontent.com/griffisben/misc-code/main/RoleRanksApp/Ranking_XI.csv')
 role_position_lookup = read_csv('https://raw.githubusercontent.com/griffisben/misc-code/main/RoleRanksApp/Role_Positions_Lookup.csv')
 
-st.subheader("All data from Wyscout. Created by Ben Griffis (@BeGriffis on Twitter)")
+st.subheader("All data from Wyscout")
 st.subheader("You are allowed to use any of the images you create here in your own work, but you may not alter the images.")
 with st.expander('Instructions'):
     st.write('''
@@ -1751,7 +1751,7 @@ def make_fig(ages,exp_contracts,rank_11_base,show_ranks2,season,lg,normalize_to_
     
     axs['title'].text(0.5, 1.5, f'{season} {lg},{team_text}',
                      ha='center',va='bottom', size=20, weight='bold', color='#4a2e19')
-    axs['title'].text(0.5, 1.35, f'Data via Wyscout | {lg_lookup[(lg_lookup.League==lg) & (lg_lookup.Season==season)].Date.values[0]} | Created by Ben Griffis (@BeGriffis on Twitter)',
+    axs['title'].text(0.5, 1.35, f'Data via Wyscout | {lg_lookup[(lg_lookup.League==lg) & (lg_lookup.Season==season)].Date.values[0]}',
                      ha='center',va='top', size=12, color='#4a2e19')
     axs['title'].text(0.5, .95, f"{nation_text}{sub_title_text}",
                      ha='center',va='top', size=12, color='#4a2e19')
@@ -1869,7 +1869,7 @@ with radar_tab:
                     ws_name = gen['Player'].values[0],
                     team = gen['Team within selected timeframe'].values[0],
                     age = gen['Age'].values[0],
-                    sig = 'Twitter: @BeGriffis',
+                    sig = '',
                     extra_text = xtratext,
                     custom_radar='n',
                     dist_labels=dist_labels,
@@ -1892,7 +1892,7 @@ with radar_tab:
                     ws_name = gen['Player'].values[0],
                     team = gen['Team within selected timeframe'].values[0],
                     age = gen['Age'].values[0],
-                    sig = 'Twitter: @BeGriffis',
+                    sig = '',
                     extra_text = xtratext,
                     custom_radar='y',
                     metric_selections=metric_selections,
@@ -2050,7 +2050,7 @@ with scatter_tab:
         text = 'Player',
         hover_data=['Team', 'Age', 'Position', 'Minutes played'],
         hover_name = 'Player',
-        title = '%s %s, %s & %s <br><sup>%s%s min. %i minutes played | %s</sup><br><sup>Created by @BeGriffis, made on Best11Scouting.streamlit.app</sup>' %(season,lg,xx,yy,age_text_scatter,pos_select_scatter,mins,update_date),
+        title = '%s %s, %s & %s <br><sup>%s%s min. %i minutes played | %s</sup>' %(season,lg,xx,yy,age_text_scatter,pos_select_scatter,mins,update_date),
         width=900,
         height=700)
     fig_scatter.update_traces(textposition='top right', marker=dict(size=10, line=dict(width=1, color='black')))

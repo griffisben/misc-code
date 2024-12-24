@@ -10,6 +10,14 @@ def pythagorean_expectation(xg, xga, c):
     win_prob = (xg ** c) / (xg ** c + xga ** c)
     return win_prob
 
+def sensitivity_analysis(xg, xga, c, games):
+    """Calculate the sensitivity of expected points to changes in xG and xGA."""
+    d_win_dxg = (c * (xg ** (c - 1)) * (xga ** c)) / ((xg ** c + xga ** c) ** 2)
+    d_win_dxga = -(c * (xga ** (c - 1)) * (xg ** c)) / ((xg ** c + xga ** c) ** 2)
+    sensitivity_xg = 3 * d_win_dxg * games  # Adjusted for season points
+    sensitivity_xga = -3 * d_win_dxga * games  # Negative because reducing xGA increases points
+    return sensitivity_xg, sensitivity_xga
+
 # Streamlit app
 st.title("Season-Based Pythagorean Expectation for Soccer")
 
@@ -28,11 +36,20 @@ games = st.sidebar.number_input("Number of Games in Season", min_value=1, value=
 win_prob = pythagorean_expectation(avg_xg, avg_xga, C)
 expected_points_per_game = 3 * win_prob
 expected_points_season = expected_points_per_game * games
+sensitivity_xg, sensitivity_xga = sensitivity_analysis(avg_xg, avg_xga, C, games)
 
 # Display results
 st.subheader("Results")
 st.write(f"**Expected Points Per Game:** {expected_points_per_game:.2f}")
 st.write(f"**Expected Points for the Season:** {expected_points_season:.2f}")
+st.write(f"**Sensitivity to xG:** {sensitivity_xg:.2f} expected points per season")
+st.write(f"**Sensitivity to xGA:** {sensitivity_xga:.2f} expected points per season")
+
+# Highlight which adjustment is better
+if sensitivity_xg > sensitivity_xga:
+    st.write("💡 Increasing **xG** would lead to more expected points per season.")
+else:
+    st.write("💡 Decreasing **xGA** would lead to more expected points per season.")
 
 # Visualization
 st.subheader("Visualization of Impact")

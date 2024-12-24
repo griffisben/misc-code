@@ -20,8 +20,10 @@ def sensitivity_analysis(xg, xga, c, games):
     """Calculate the sensitivity of expected points to changes in xG and xGA."""
     d_win_dxg = (c * (xg ** (c - 1)) * (xga ** c)) / ((xg ** c + xga ** c) ** 2)
     d_win_dxga = -(c * (xga ** (c - 1)) * (xg ** c)) / ((xg ** c + xga ** c) ** 2)
-    sensitivity_xg = 3 * d_win_dxg * games  # Adjusted for season points
-    sensitivity_xga = -3 * d_win_dxga * games  # Negative because reducing xGA increases points
+    
+    # Sensitivity with 0.5 unit change instead of 1.0
+    sensitivity_xg = 0.5 * d_win_dxg * games  # Adjusted for 0.5 unit change in xG
+    sensitivity_xga = -0.5 * d_win_dxga * games  # Negative because reducing xGA increases points
     return sensitivity_xg, sensitivity_xga
 
 def get_expected_position(points):
@@ -57,14 +59,31 @@ st.subheader("Results")
 st.write(f"**Expected Points Per Game:** {expected_points_per_game:.2f}")
 st.write(f"**Expected Points for the Season:** {expected_points_season:.2f}")
 st.write(f"**Expected Table Position:** {expected_position}")
-st.write(f"**Sensitivity to xG:** {sensitivity_xg:.2f} expected points per season")
-st.write(f"**Sensitivity to xGA:** {sensitivity_xga:.2f} expected points per season")
+st.write(f"**Sensitivity to xG:** {sensitivity_xg:.2f} expected points per season (for a 0.5 unit change)")
+st.write(f"**Sensitivity to xGA:** {sensitivity_xga:.2f} expected points per season (for a 0.5 unit change)")
 
 # Highlight which adjustment is better
 if sensitivity_xg > sensitivity_xga:
     st.write("💡 Increasing **xG** would lead to more expected points per season.")
 else:
     st.write("💡 Decreasing **xGA** would lead to more expected points per season.")
+
+# Add an intuitive explanation for sensitivity
+st.markdown("""
+### What Does Sensitivity to xG and xGA Mean?
+
+- **Sensitivity to xG:** This value indicates how much **expected points** would change for every **0.5-unit increase in xG per game**, while keeping **xGA constant**. 
+- For example, if the sensitivity to xG is 23.32, this means that for every **0.5-unit increase in xG per game**, the team would expect an additional **23.32 points** over the course of the season. 
+- A higher sensitivity to xG means **improving attacking performance** will have a **large impact** on expected points.
+
+- **Sensitivity to xGA:** This value shows how much **expected points** would change for every **0.5-unit decrease in xGA per game**, while keeping **xG constant**. 
+- For example, if the sensitivity to xGA is -18.75, this means that for every **0.5-unit decrease in xGA per game**, the team would expect an additional **18.75 points** over the course of the season. 
+- A higher sensitivity to xGA means **improving defensive performance** (lowering xGA) will have a **large impact** on expected points.
+
+### Which Should You Focus On?
+- If the sensitivity to **xG** is higher, then improving your team's attacking performance is the best way to increase expected points.
+- If the sensitivity to **xGA** is higher, then focusing on improving your defense will yield a better return in terms of points.
+""")
 
 # Visualization
 st.subheader("Visualization of Impact")
@@ -93,8 +112,8 @@ ax.set_ylabel("Average xGA per Game")
 # Highlight user-provided values with rounded xG and xGA
 rounded_xg = round(avg_xg, 2)
 rounded_xga = round(avg_xga, 2)
-ax.axvline(x=avg_xg, color="#4a2e19", linestyle="--", label=f"User Avg xG = {rounded_xg}")
-ax.axhline(y=avg_xga, color="#4a2e19", linestyle="--", label=f"User Avg xGA = {rounded_xga}")
+ax.axvline(x=avg_xg, color="#4a2e19", linestyle="--", label=f"Avg xG = {rounded_xg}")
+ax.axhline(y=avg_xga, color="#4a2e19", linestyle="--", label=f"Avg xGA = {rounded_xga}")
 
 # Add the legend
 ax.legend()

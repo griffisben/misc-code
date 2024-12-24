@@ -63,8 +63,8 @@ fig.colorbar(cp, label="Expected Points")
 ax.set_title("Impact of xG and xGA on Expected Points")
 ax.set_xlabel("Expected Goals For (xG)")
 ax.set_ylabel("Expected Goals Against (xGA)")
-ax.axvline(x=xg, color="red", linestyle="--", label=f"xG = {xg}")
-ax.axhline(y=xga, color="blue", linestyle="--", label=f"xGA = {xga}")
+ax.axvline(x=xg, color="red", linestyle="--", label=f"xG = {round(xg,2)}")
+ax.axhline(y=xga, color="blue", linestyle="--", label=f"xGA = {round(xga,2)}")
 ax.legend()
 
 # Display the plot in Streamlit

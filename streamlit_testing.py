@@ -68,22 +68,21 @@ if sensitivity_xg > sensitivity_xga:
 else:
     st.write("💡 Decreasing **xGA** would lead to more expected points per season.")
 
-# Add an intuitive explanation for sensitivity
-st.markdown("""
-### What Does Sensitivity to xG and xGA Mean?
+# Dropdown to show sensitivity explanation
+with st.expander("What Does Sensitivity to xG and xGA Mean?"):
+    st.markdown("""
+    - **Sensitivity to xG:** This value indicates how much **expected points** would change for every **0.5-unit increase in xG per game**, while keeping **xGA constant**. 
+    - For example, if the sensitivity to xG is 23.32, this means that for every **0.5-unit increase in xG per game**, the team would expect an additional **23.32 points** over the course of the season. 
+    - A higher sensitivity to xG means **improving attacking performance** will have a **large impact** on expected points.
 
-- **Sensitivity to xG:** This value indicates how much **expected points** would change for every **0.5-unit increase in xG per game**, while keeping **xGA constant**. 
-- For example, if the sensitivity to xG is 23.32, this means that for every **0.5-unit increase in xG per game**, the team would expect an additional **23.32 points** over the course of the season. 
-- A higher sensitivity to xG means **improving attacking performance** will have a **large impact** on expected points.
+    - **Sensitivity to xGA:** This value shows how much **expected points** would change for every **0.5-unit decrease in xGA per game**, while keeping **xG constant**. 
+    - For example, if the sensitivity to xGA is -18.75, this means that for every **0.5-unit decrease in xGA per game**, the team would expect an additional **18.75 points** over the course of the season. 
+    - A higher sensitivity to xGA means **improving defensive performance** (lowering xGA) will have a **large impact** on expected points.
 
-- **Sensitivity to xGA:** This value shows how much **expected points** would change for every **0.5-unit decrease in xGA per game**, while keeping **xG constant**. 
-- For example, if the sensitivity to xGA is -18.75, this means that for every **0.5-unit decrease in xGA per game**, the team would expect an additional **18.75 points** over the course of the season. 
-- A higher sensitivity to xGA means **improving defensive performance** (lowering xGA) will have a **large impact** on expected points.
-
-### Which Should You Focus On?
-- If the sensitivity to **xG** is higher, then improving your team's attacking performance is the best way to increase expected points.
-- If the sensitivity to **xGA** is higher, then focusing on improving your defense will yield a better return in terms of points.
-""")
+    ### Which Should You Focus On?
+    - If the sensitivity to **xG** is higher, then improving your team's attacking performance is the best way to increase expected points.
+    - If the sensitivity to **xGA** is higher, then focusing on improving your defense will yield a better return in terms of points.
+    """)
 
 # Visualization
 st.subheader("Visualization of Impact")

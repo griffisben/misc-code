@@ -5,6 +5,12 @@ import matplotlib.pyplot as plt
 # Fixed constant
 C = 1.535706245
 
+# Historical average points by position (20-team Premier League)
+avg_points_by_position = [
+    87.8, 79, 72, 68, 65, 62, 59, 56, 54, 52,
+    50, 48, 46, 44, 42, 40, 38, 36, 34, 32
+]
+
 def pythagorean_expectation(xg, xga, c):
     """Calculate the win probability using the Pythagorean expectation formula."""
     win_prob = (xg ** c) / (xg ** c + xga ** c)
@@ -17,6 +23,13 @@ def sensitivity_analysis(xg, xga, c, games):
     sensitivity_xg = 3 * d_win_dxg * games  # Adjusted for season points
     sensitivity_xga = -3 * d_win_dxga * games  # Negative because reducing xGA increases points
     return sensitivity_xg, sensitivity_xga
+
+def get_expected_position(points):
+    """Get the expected league position based on historical averages."""
+    for i, avg_points in enumerate(avg_points_by_position, start=1):
+        if points >= avg_points:
+            return i
+    return 20  # Last position if points are very low
 
 # Streamlit app
 st.title("Season-Based Pythagorean Expectation for Soccer")
@@ -36,12 +49,14 @@ games = st.sidebar.number_input("Number of Games in Season", min_value=1, value=
 win_prob = pythagorean_expectation(avg_xg, avg_xga, C)
 expected_points_per_game = 3 * win_prob
 expected_points_season = expected_points_per_game * games
+expected_position = get_expected_position(expected_points_season)
 sensitivity_xg, sensitivity_xga = sensitivity_analysis(avg_xg, avg_xga, C, games)
 
 # Display results
 st.subheader("Results")
 st.write(f"**Expected Points Per Game:** {expected_points_per_game:.2f}")
 st.write(f"**Expected Points for the Season:** {expected_points_season:.2f}")
+st.write(f"**Expected Table Position:** {expected_position}")
 st.write(f"**Sensitivity to xG:** {sensitivity_xg:.2f} expected points per season")
 st.write(f"**Sensitivity to xGA:** {sensitivity_xga:.2f} expected points per season")
 

@@ -96,19 +96,6 @@ rounded_xga = round(avg_xga, 2)
 ax.axvline(x=avg_xg, color="red", linestyle="--", label=f"User Avg xG = {rounded_xg}")
 ax.axhline(y=avg_xga, color="blue", linestyle="--", label=f"User Avg xGA = {rounded_xga}")
 
-# Add lines for average position points with reduced linewidth
-for i, avg_points in enumerate(avg_points_by_position, start=1):
-    ax.contour(
-        X, Y, expected_points.T, levels=[avg_points], colors=["white"], linestyles="--", linewidths=0.33
-    )
-    ax.text(
-        X[-1, -1] + 0.1,
-        avg_points,
-        f"{i}th: {avg_points:.1f} pts",
-        color="white",
-        fontsize=8,
-    )
-
 # Add the legend
 ax.legend()
 

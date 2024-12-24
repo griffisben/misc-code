@@ -99,7 +99,7 @@ ax.axhline(y=avg_xga, color="blue", linestyle="--", label=f"User Avg xGA = {roun
 # Add lines for average position points
 for i, avg_points in enumerate(avg_points_by_position, start=1):
     ax.contour(
-        X, Y, expected_points.T, levels=[avg_points], colors=["white"], linestyles="--"
+        X, Y, expected_points.T, levels=[avg_points], colors=["white"], linestyles="--", width=.33,
     )
     ax.text(
         X[-1, -1] + 0.1,

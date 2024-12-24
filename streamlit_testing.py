@@ -84,7 +84,7 @@ for i, xg_val in enumerate(xg_values):
 # Plotting the graph using Matplotlib
 fig, ax = plt.subplots(figsize=(10, 6))
 X, Y = np.meshgrid(xg_values, xga_values)
-cp = ax.contourf(X, Y, expected_points.T, cmap="viridis", levels=20)
+cp = ax.contourf(X, Y, expected_points.T, cmap="coolwarm", levels=20)
 colorbar = fig.colorbar(cp, label="Expected Points for the Season")
 ax.set_title("Impact of Average xG and xGA on Expected Points for a Season")
 ax.set_xlabel("Average xG per Game")

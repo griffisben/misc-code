@@ -96,10 +96,10 @@ rounded_xga = round(avg_xga, 2)
 ax.axvline(x=avg_xg, color="red", linestyle="--", label=f"User Avg xG = {rounded_xg}")
 ax.axhline(y=avg_xga, color="blue", linestyle="--", label=f"User Avg xGA = {rounded_xga}")
 
-# Add lines for average position points
+# Add lines for average position points with reduced linewidth
 for i, avg_points in enumerate(avg_points_by_position, start=1):
     ax.contour(
-        X, Y, expected_points.T, levels=[avg_points], colors=["white"], linestyles="--", width=.33,
+        X, Y, expected_points.T, levels=[avg_points], colors=["white"], linestyles="--", linewidths=0.33
     )
     ax.text(
         X[-1, -1] + 0.1,
@@ -109,7 +109,11 @@ for i, avg_points in enumerate(avg_points_by_position, start=1):
         fontsize=8,
     )
 
+# Add the legend
 ax.legend()
+
+# Adjust layout to reduce white space above the graph
+plt.tight_layout()
 
 # Display the plot in Streamlit
 st.pyplot(fig)

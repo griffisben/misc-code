@@ -93,8 +93,8 @@ ax.set_ylabel("Average xGA per Game")
 # Highlight user-provided values with rounded xG and xGA
 rounded_xg = round(avg_xg, 2)
 rounded_xga = round(avg_xga, 2)
-ax.axvline(x=avg_xg, color="tab:orange", linestyle="--", label=f"User Avg xG = {rounded_xg}")
-ax.axhline(y=avg_xga, color="tab:blue", linestyle="--", label=f"User Avg xGA = {rounded_xga}")
+ax.axvline(x=avg_xg, color="#4a2e19", linestyle="--", label=f"User Avg xG = {rounded_xg}")
+ax.axhline(y=avg_xga, color="#4a2e19", linestyle="--", label=f"User Avg xGA = {rounded_xga}")
 
 # Add the legend
 ax.legend()

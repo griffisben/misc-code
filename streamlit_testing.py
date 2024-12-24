@@ -82,10 +82,10 @@ for i, xg_val in enumerate(xg_values):
         expected_points[i, j] = 3 * win_prob * games
 
 # Plotting the graph using Matplotlib
-fig, ax = plt.subplots(figsize=(8, 6))
+fig, ax = plt.subplots(figsize=(10, 6))
 X, Y = np.meshgrid(xg_values, xga_values)
 cp = ax.contourf(X, Y, expected_points.T, cmap="viridis", levels=20)
-fig.colorbar(cp, label="Expected Points for the Season")
+colorbar = fig.colorbar(cp, label="Expected Points for the Season")
 ax.set_title("Impact of Average xG and xGA on Expected Points for a Season")
 ax.set_xlabel("Average xG per Game")
 ax.set_ylabel("Average xGA per Game")
@@ -93,8 +93,22 @@ ax.set_ylabel("Average xGA per Game")
 # Highlight user-provided values with rounded xG and xGA
 rounded_xg = round(avg_xg, 2)
 rounded_xga = round(avg_xga, 2)
-ax.axvline(x=avg_xg, color="red", linestyle="--", label=f"Avg xG = {rounded_xg}")
-ax.axhline(y=avg_xga, color="blue", linestyle="--", label=f"Avg xGA = {rounded_xga}")
+ax.axvline(x=avg_xg, color="red", linestyle="--", label=f"User Avg xG = {rounded_xg}")
+ax.axhline(y=avg_xga, color="blue", linestyle="--", label=f"User Avg xGA = {rounded_xga}")
+
+# Add lines for average position points
+for i, avg_points in enumerate(avg_points_by_position, start=1):
+    ax.contour(
+        X, Y, expected_points.T, levels=[avg_points], colors=["white"], linestyles="--"
+    )
+    ax.text(
+        X[-1, -1] + 0.1,
+        avg_points,
+        f"{i}th: {avg_points:.1f} pts",
+        color="white",
+        fontsize=8,
+    )
+
 ax.legend()
 
 # Display the plot in Streamlit

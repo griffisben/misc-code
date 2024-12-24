@@ -19,6 +19,11 @@ def sensitivity_analysis(xg, xga, c):
 # Streamlit app
 st.title("Pythagorean Expectation for Soccer")
 
+# Display the formula
+st.latex(r"""
+\text{Win Probability} = \frac{\text{xG}^c}{\text{xG}^c + \text{xGA}^c}
+""")
+
 # User inputs
 st.sidebar.header("Inputs")
 xg = st.sidebar.number_input("Expected Goals For (xG)", min_value=0.0, value=1.5, step=0.1)
@@ -63,8 +68,12 @@ fig.colorbar(cp, label="Expected Points")
 ax.set_title("Impact of xG and xGA on Expected Points")
 ax.set_xlabel("Expected Goals For (xG)")
 ax.set_ylabel("Expected Goals Against (xGA)")
-ax.axvline(x=xg, color="red", linestyle="--", label=f"xG = {round(xg,2)}")
-ax.axhline(y=xga, color="blue", linestyle="--", label=f"xGA = {round(xga,2)}")
+
+# Highlight user-provided values with rounded xG and xGA
+rounded_xg = round(xg, 2)
+rounded_xga = round(xga, 2)
+ax.axvline(x=xg, color="red", linestyle="--", label=f"xG = {rounded_xg}")
+ax.axhline(y=xga, color="blue", linestyle="--", label=f"xGA = {rounded_xga}")
 ax.legend()
 
 # Display the plot in Streamlit

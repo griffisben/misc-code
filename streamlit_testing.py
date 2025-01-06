@@ -5,11 +5,18 @@ import matplotlib.pyplot as plt
 # Fixed constant
 C = 1.535706245
 
-# Historical average points by position (20-team Premier League)
-avg_points_by_position = [
+# Historical average points by position
+avg_points_premier_league = [
     87.8, 79, 72, 68, 65, 62, 59, 56, 54, 52,
     50, 48, 46, 44, 42, 40, 38, 36, 34, 32
 ]
+
+avg_points_league_one = [
+    91, 88, 83, 81, 78, 76, 73, 70, 67, 65,
+    63, 61, 59, 57, 55, 53, 51, 49, 47, 45,
+    43, 41, 39, 37
+]
+
 
 def pythagorean_expectation(xg, xga, c):
     """Calculate the win probability using the Pythagorean expectation formula."""
@@ -26,7 +33,11 @@ def sensitivity_analysis(xg, xga, c, games):
     sensitivity_xga = -0.5 * d_win_dxga * games  # Negative because reducing xGA increases points
     return sensitivity_xg, sensitivity_xga
 
-def get_expected_position(points):
+def get_expected_position(points, lg):
+    if lg=='League One':
+	avg_points_by_position = avg_points_league_one
+    if lg=='Premier League':
+	avg_points_by_position = avg_points_premier_league
     """Get the expected league position based on historical averages."""
     for i, avg_points in enumerate(avg_points_by_position, start=1):
         if points >= avg_points:
@@ -46,19 +57,20 @@ st.sidebar.header("Inputs")
 avg_xg = st.sidebar.number_input("Average xG per Game", min_value=0.0, value=1.5, step=0.1)
 avg_xga = st.sidebar.number_input("Average xGA per Game", min_value=0.0, value=1.2, step=0.1)
 games = st.sidebar.number_input("Number of Games in Season", min_value=1, value=38, step=1)
+lg = st.sidebar.selectbox("League", ["Premier League","League One"])
 
 # Calculations
 win_prob = pythagorean_expectation(avg_xg, avg_xga, C)
 expected_points_per_game = 3 * win_prob
 expected_points_season = expected_points_per_game * games
-expected_position = get_expected_position(expected_points_season)
+expected_position = get_expected_position(expected_points_season, lg)
 sensitivity_xg, sensitivity_xga = sensitivity_analysis(avg_xg, avg_xga, C, games)
 
 # Display results
 st.subheader("Results")
 st.write(f"**Expected Points Per Game:** {expected_points_per_game:.2f}")
 st.write(f"**Expected Points for the Season:** {expected_points_season:.2f}")
-st.write(f"**Expected Table Position:** {expected_position}")
+st.write(f"**Expected {lg} Position:** {expected_position}")
 st.write(f"**Sensitivity to xG:** {sensitivity_xg:.2f} expected points per season (for a 0.5 unit change)")
 st.write(f"**Sensitivity to xGA:** {sensitivity_xga:.2f} expected points per season (for a 0.5 unit change)")
 

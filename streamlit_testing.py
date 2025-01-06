@@ -35,9 +35,9 @@ def sensitivity_analysis(xg, xga, c, games):
 
 def get_expected_position(points, lg):
     if lg=='League One':
-	avg_points_by_position = avg_points_league_one
+        avg_points_by_position = avg_points_league_one
     if lg=='Premier League':
-	avg_points_by_position = avg_points_premier_league
+    	avg_points_by_position = avg_points_premier_league
     """Get the expected league position based on historical averages."""
     for i, avg_points in enumerate(avg_points_by_position, start=1):
         if points >= avg_points:

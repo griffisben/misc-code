@@ -21,6 +21,8 @@ from plotly.graph_objects import Layout
 from vega_datasets import data
 import pycountry
 import altair as alt
+from sklearn.metrics.pairwise import cosine_similarity
+from sklearn.decomposition import PCA
 
 colorscales = px.colors.named_colorscales()
 colorscales2 = [f"{cc}_r" for cc in colorscales]
@@ -29,6 +31,259 @@ colorscales += colorscales2
 country_numeric_code_lookup = {country.name: country.numeric for country in pycountry.countries}
 
 @st.cache_data(ttl=60*15)
+
+
+def prep_similarity_df(region, time_frame):
+    sim_lg_lookup = pd.read_csv('https://raw.githubusercontent.com/griffisben/Wyscout_Prospect_Research/main/league_info_lookup.csv')
+
+    if region.isna():
+        sim_lg_lookup = sim_lg_lookup.sort_values(by=['Season'],ascending=False)
+    else:
+        sim_lg_lookup = sim_lg_lookup[sim_lg_lookup.Region.isin(region)].sort_values(by=['Season'],ascending=False)
+    sim_lg_lookup_recent = sim_lg_lookup.drop_duplicates(subset=['League','Country'])
+    sim_lg_lookup_recent2 = sim_lg_lookup.drop(sim_lg_lookup_recent.index)
+    sim_lg_lookup_recent2 = sim_lg_lookup_recent2.drop_duplicates(subset=['League','Country'])
+    sim_lg_lookup_recent_last2 = pd.concat([sim_lg_lookup_recent,sim_lg_lookup_recent2],ignore_index=True)
+    sim_lg_lookup_recent.reset_index(drop=True,inplace=True)
+    sim_lg_lookup_recent2.reset_index(drop=True,inplace=True)
+    
+    if time_frame == 'Current Season':
+        sim_lg_lookup = sim_lg_lookup_recent
+    if time_frame == 'Prior Season':
+        sim_lg_lookup = sim_lg_lookup_recent2
+    if time_frame == 'Current & Prior Seasons':
+        sim_lg_lookup = sim_lg_lookup_recent_last2
+    
+    dfs = []
+    char_replacements = str.maketrans({" ": "%20", "ü": "u", "ó": "o", "ö": "o", "ã": "a", "ç": "c"})
+    for _, row in sim_lg_lookup.iterrows():
+        full_league_name = f"{row['League']} {row['Season']}"
+        formatted_name = full_league_name.translate(char_replacements)
+        url = f'https://raw.githubusercontent.com/griffisben/Wyscout_Prospect_Research/main/Main%20App/{formatted_name}.csv'
+        
+        df = pd.read_csv(url)
+        df['League'] = full_league_name
+        df = df.dropna(subset=['Position', 'Team within selected timeframe']).reset_index(drop=True)
+        clean_df = load_league_data(df, full_league_name)
+        dfs.append(clean_df)
+    full_similarity_df_raw = pd.concat(dfs, ignore_index=True)
+    
+    replace_dict = {
+        'LAMF': 'LW',
+        'RAMF': 'RW',
+        'LCB3': 'LCB',
+        'RCB3': 'RCB',
+        'LCB5': 'LCB',
+        'RCB5': 'RCB',
+        'LB5': 'LB',
+        'RB5': 'RB',
+        'RCMF3': 'RCMF',
+        'LCMF3': 'LCMF',
+    }
+    
+    full_similarity_df_raw['Main Position'] = full_similarity_df_raw['Main Position'].replace(replace_dict)
+
+def similar_players_search(df, ws_id, pos, pca_transform, compare_metrics, mins, age_band):
+    df_base = pd.DataFrame()
+    df_filtered_base = filter_by_position_long(df, pos)
+    df_filtered_base = df_filtered_base[df_filtered_base['Minutes played']>=mins]
+    
+    # FORWARD
+    fwd1 = "Non-penalty goals per 90"
+    fwd2 = "npxG per 90"
+    fwd3 = "Assists per 90"
+    fwd4 = "xA per 90"
+    fwd5 = "Successful dribbles, %"
+    fwd6 = "Goal conversion, %"
+    fwd7 = "Shot assists per 90"
+    fwd8 = "Second assists per 90"
+    fwd9 = "Progressive runs per 90"
+    fwd10 = "Progressive passes per 90"
+    fwd11 = "Touches in box per 90"
+    fwd12 = "Aerial duels won, %"
+    # MIDFIELD
+    mid1 = "Accurate short / medium passes, %"
+    mid2 = "Accurate long passes, %"
+    mid3 = "Accurate smart passes, %"
+    mid4 = "Shot assists per 90"
+    mid5 = "xA per 90"
+    mid6 = "Assists per 90"
+    mid7 = "Second assists per 90"
+    mid8 = "Third assists per 90"
+    mid9 = "Progressive passes per 90"
+    mid10 = "Progressive runs per 90"
+    mid11 = "Duels won, %"
+    mid12 = "pAdj Tkl+Int per 90"
+    #DEFENDER
+    def1 = "Defensive duels per 90"
+    def2 = "PAdj Sliding tackles"
+    def3 = "Defensive duels won, %"
+    def4 = "Fouls per 90" ##########
+    def5 = "Cards per 90"
+    def6 = "Shots blocked per 90"
+    def7 = "PAdj Interceptions"
+    def8 = "Aerial duels won, %"
+    def9 = "Accurate long passes, %"
+    def10 = "1st, 2nd, 3rd assists"
+    def11 = "Progressive passes per 90"
+    def12 = "Progressive runs per 90"
+    #GOALKEEPER
+    gk1 = "Conceded goals per 90" #yes
+    gk2 = "Save rate, %" #yes
+    gk3 = "Dribbles per 90"
+    gk4 = "Pct of passes being short" #yes
+    gk5 = "Clean sheets, %"
+    gk6 = "Exits per 90"
+    gk7 = "Aerial duels per 90"
+    gk8 = "Passes per 90" #############
+    gk9 = "Accurate long passes, %" #yes
+    gk10 = "Prevented goals per 90" #yes
+    #EXTRA
+    extra = "Accurate passes, %"
+    extra2 = 'Shots per 90'
+    extra3 = 'Accurate crosses, %'
+    extra4 = 'Smart passes per 90'
+    extra5 = 'xA per Shot Assist'
+    extra6 = 'Accelerations per 90'
+    extra7 = 'Aerial duels won per 90'
+    extra8 = 'Fouls suffered per 90'
+    extra9 = 'npxG per shot'
+    extra10 = 'Key passes per 90'
+    extra11 = 'Deep completed crosses per 90'
+    extra12 = 'Offensive duels won, %'
+    extra13 = 'Passes to final third per 90'
+    extra14 = 'Shots on target, %'
+    extra15 = 'Accurate short / medium passes, %'
+    extra16 = 'Passes per 90'
+    extra17 = 'Aerial duels per 90'
+    extra18 = 'Received passes per 90'
+    extra19 = 'Passes to final third per 90'
+    extra20 = 'Prog passes and runs per 90'
+    extra21 = 'Set pieces per 90'
+    extra22 = 'Passes to penalty area per 90'
+    extra23 = 'Pct of passes being smart'
+    extra24 = 'Short / medium passes per 90'
+    
+    
+    # Define metrics grouped by position
+    metrics = {
+        "mid": [mid1, mid2, mid3, mid4, mid5, mid6, mid7, mid8, mid9, mid10, mid11, mid12],
+        "fwd": [fwd1, fwd2, fwd3, fwd4, fwd5, fwd6, fwd7, fwd8, fwd9, fwd10, fwd11, fwd12],
+        "def": [def1, def2, def3, def4, def5, def6, def7, def8, def9, def10, def11, def12],
+        "gk":  [gk1, gk2, gk3, gk4, gk5, gk6, gk7, gk8, gk9, gk10],
+        "extra": [
+            extra, extra2, extra3, extra4, extra5, extra6, extra7, extra8, extra9, extra10,
+            extra11, extra12, extra13, extra14, extra15, extra16, extra17, extra18, extra19,
+            extra20, extra21, extra22, extra23, extra24
+        ]
+    }
+    
+    # Normalizing function
+    def NormalizeData(data):
+        return (data - data.min()) / (data.max() - data.min())
+    
+    for z in range(len(leagues)):
+        dfProspect = df_filtered_base[(df_filtered_base['League'] == leagues[z])].copy()
+        dfProspect = dfProspect.reset_index(drop=True)
+        
+        # Compute z-scores and create new columns dynamically
+        for group, group_metrics in metrics.items():
+            for idx, metric in enumerate(group_metrics, start=1):
+                col_name = f"{group}pct{idx}"
+                dfProspect[col_name] = stats.zscore(dfProspect[metric])
+                
+                # Invert values for metrics where lower is better (e.g., fouls, cards, conceded goals)
+                if metric in [def4, def5, gk1, extra23]:
+                    dfProspect[col_name] *= -1
+        
+        # Normalize the newly created z-score columns
+        zscore_columns = dfProspect.columns[dfProspect.columns.str.endswith('pct')]
+        for col in zscore_columns:
+            dfProspect[col] += abs(dfProspect[col].min())  # Shift to start at 0
+            dfProspect[col] = NormalizeData(dfProspect[col])  # Normalize
+        
+        # Concatenate with base DataFrame
+        df_base = pd.concat([df_base, dfProspect], ignore_index=True)
+    
+    
+    
+    # Assuming df is your DataFrame and focal_player is the row of your focal player
+    df_base = filter_by_position(df_base, pos)
+    focal_player = df_base.loc[(df_base['Wyscout id'] == ws_id)].iloc[0]
+    focal_player_index = df_base[(df_base['Wyscout id'] == ws_id)].index[0]
+    
+    # Remove any identifiers or non-numeric columns if necessary
+    if compare_metrics == "all":
+        columns_to_compare = [
+            '1st, 2nd, 3rd assists','Accelerations per 90','Accurate crosses, %','Accurate long passes, %','Accurate passes, %','Accurate short / medium passes, %','Accurate smart passes, %','Aerial duels per 90','Aerial duels won per 90','Aerial duels won, %','Assists per 90','Cards per 90','Clean sheets, %','Conceded goals per 90','Deep completed crosses per 90','Defensive duels per 90','Defensive duels won, %','Dribbles per 90','Duels won, %','Exits per 90','Fouls per 90','Fouls suffered per 90','Goal conversion, %','Key passes per 90','Non-penalty goals per 90','npxG per 90','npxG per shot','Offensive duels won, %','PAdj Interceptions','PAdj Sliding tackles','pAdj Tkl+Int per 90','Passes per 90','Passes to final third per 90','Passes to penalty area per 90','Pct of passes being short','Pct of passes being smart','Prevented goals per 90','Prog passes and runs per 90','Progressive passes per 90','Progressive runs per 90','Received passes per 90','Save rate, %','Second assists per 90','Set pieces per 90','Short / medium passes per 90','Shot assists per 90','Shots blocked per 90','Shots on target, %','Shots per 90','Smart passes per 90','Successful dribbles, %','Third assists per 90','Touches in box per 90','xA per 90','xA per Shot Assist','Crosses per 90',
+        ]
+    elif compare_metrics == "ST":
+        columns_to_compare = ['Accurate short / medium passes, %','Aerial duels won, %','Assists per 90','Goal conversion, %','Key passes per 90','Non-penalty goals per 90','npxG per 90','npxG per shot','Offensive duels won, %','pAdj Tkl+Int per 90','Received passes per 90','Shot assists per 90','Shots on target, %','Shots per 90','Touches in box per 90','xA per 90','Fouls suffered per 90',
+        ]
+    elif compare_metrics == "W":
+        columns_to_compare = ['1st, 2nd, 3rd assists','Accelerations per 90','Accurate short / medium passes, %','Assists per 90','Deep completed crosses per 90','Defensive duels per 90','Dribbles per 90','Fouls suffered per 90','Goal conversion, %','Key passes per 90','Non-penalty goals per 90','npxG per 90','npxG per shot','Offensive duels won, %','pAdj Tkl+Int per 90','Passes to final third per 90','Passes to penalty area per 90','Pct of passes being smart','Progressive passes per 90','Progressive runs per 90','Received passes per 90','Shot assists per 90','Shots on target, %','Shots per 90','Smart passes per 90','Successful dribbles, %','Touches in box per 90','xA per 90','xA per Shot Assist','Accurate crosses, %','Crosses per 90',
+        ]
+    elif compare_metrics == "CAM":
+        columns_to_compare = ['Accurate short / medium passes, %','Assists per 90','Defensive duels per 90','Dribbles per 90','Fouls suffered per 90','Key passes per 90','Non-penalty goals per 90','npxG per 90','npxG per shot','Offensive duels won, %','pAdj Tkl+Int per 90','Passes per 90','Passes to final third per 90','Passes to penalty area per 90','Pct of passes being smart','Progressive passes per 90','Received passes per 90','Set pieces per 90','Shot assists per 90','Shots per 90','Successful dribbles, %','Touches in box per 90','xA per 90','xA per Shot Assist',
+        ]
+    elif compare_metrics == "CM":
+        columns_to_compare = ['1st, 2nd, 3rd assists','Accelerations per 90','Accurate long passes, %','Accurate short / medium passes, %','Aerial duels per 90','Aerial duels won, %','Assists per 90','Defensive duels per 90','Defensive duels won, %','Fouls per 90','Fouls suffered per 90','Key passes per 90','Offensive duels won, %','PAdj Interceptions','PAdj Sliding tackles','Passes per 90','Passes to final third per 90','Passes to penalty area per 90','Pct of passes being short','Pct of passes being smart','Progressive passes per 90','Progressive runs per 90','Received passes per 90','Shot assists per 90','Shots per 90','Successful dribbles, %','Touches in box per 90','xA per 90',
+        ]
+    elif compare_metrics == "DM":
+        columns_to_compare = ['1st, 2nd, 3rd assists','Accelerations per 90','Accurate long passes, %','Accurate short / medium passes, %','Aerial duels per 90','Aerial duels won, %','Defensive duels per 90','Defensive duels won, %','Dribbles per 90','Duels won, %','Fouls per 90','Offensive duels won, %','PAdj Interceptions','PAdj Sliding tackles','pAdj Tkl+Int per 90','Passes per 90','Passes to final third per 90','Pct of passes being short','Progressive passes per 90','Progressive runs per 90','Received passes per 90','Shots blocked per 90',
+        ]
+    elif compare_metrics == "FB":
+        columns_to_compare = ['1st, 2nd, 3rd assists','Accelerations per 90','Accurate long passes, %','Accurate short / medium passes, %','Aerial duels per 90','Aerial duels won, %','Defensive duels per 90','Defensive duels won, %','Dribbles per 90','Duels won, %','Fouls per 90','Offensive duels won, %','PAdj Interceptions','PAdj Sliding tackles','pAdj Tkl+Int per 90','Passes per 90','Passes to final third per 90','Pct of passes being short','Progressive passes per 90','Progressive runs per 90','Received passes per 90','Shots blocked per 90','Deep completed crosses per 90','Fouls suffered per 90','Shots per 90','xA per 90','Accurate crosses, %','Crosses per 90',
+        ]
+    elif compare_metrics == "CB":
+        columns_to_compare = ['1st, 2nd, 3rd assists','Accelerations per 90','Accurate long passes, %','Accurate short / medium passes, %','Aerial duels per 90','Aerial duels won, %','Defensive duels per 90','Defensive duels won, %','Fouls per 90','PAdj Interceptions','PAdj Sliding tackles','pAdj Tkl+Int per 90','Passes per 90','Passes to final third per 90','Pct of passes being short','Progressive passes per 90','Progressive runs per 90','Received passes per 90','Shots blocked per 90',
+        ]
+    elif compare_metrics == "GK":
+        columns_to_compare = ['Accurate long passes, %','Accurate short / medium passes, %','Aerial duels per 90','Aerial duels won, %','Clean sheets, %','Conceded goals per 90','Exits per 90','Pct of passes being short','Prevented goals per 90','Received passes per 90','Save rate, %',
+        ]
+    else:
+        columns_to_compare = compare_metrics
+    
+    
+    
+    # Select only the columns to compare
+    df_compare = df_base[columns_to_compare]
+    
+    # Get the focal player's data
+    focal_player_data = df_compare.loc[[focal_player_index]]
+    
+    # Calculate the Cosine Similarity
+    if pca_transform == 'Yes':
+        pca = PCA(n_components=0.95)
+        df_compare_pca = pca.fit_transform(df_compare)
+        focal_player_data_pca = pca.transform(focal_player_data)
+        df_compare['similarity_percentage'] = cosine_similarity(df_compare_pca, focal_player_data_pca).flatten()
+    if pca_transform == 'No':
+        df_compare['similarity_percentage'] = cosine_similarity(df_compare, focal_player_data).flatten()
+    
+    # Add additional columns to the result DataFrame
+    additional_columns = ['Player', 'Age', 'Passport country', 'Team within selected timeframe', 'Minutes played', 'Position', 'League','On loan','Market value']
+    df_compare = df_compare.join(df_base[additional_columns])
+    
+    # Sort by similarity percentage (descending order for highest similarity first)
+    df_compare_sorted = df_compare.sort_values(by='similarity_percentage', ascending=False)
+    
+    # Get the most similar players and include the additional columns
+    similar_players = df_compare_sorted[additional_columns + ['similarity_percentage']].rename(columns={'Team within selected timeframe':'Team','similarity_percentage':'Similarity %'})
+    
+    similar_players = similar_players.drop_duplicates(subset=['Player','Age','Team','Minutes played','Position'])
+    
+    print(f"{player} age: {int(similar_players.Age.iloc[0])}")
+    print(f"{player} minutes: {similar_players['Minutes played'].iloc[0]}")
+    
+    similar_players.reset_index(drop=True,inplace=True)
+    similar_players.reset_index(inplace=True)
+    similar_players.rename(columns={'index':'Rank'},inplace=True)
+    similar_players = similar_players.iloc[1:,:]
+    similar_players = similar_players[(similar_players.Age>=age_band[0]) & (similar_players.Age<=age_band[1])] 
+
+    return similar_players
+
 
 def get_numeric_code(country_name):
     return int(country_numeric_code_lookup[country_name])
@@ -186,13 +441,13 @@ def load_league_data(data, league_season):
     df['Lateral passes per 90'] = df['Passes per 90'] - df['Vertical passes per 90'] - df['Back passes per 90']
     df['pAdj Tkl+Int per 90'] = df['PAdj Sliding tackles'] + df['PAdj Interceptions']
     df['1st, 2nd, 3rd assists'] = df['Assists per 90'] + df['Second assists per 90'] + df['Third assists per 90']
-    df['xA per Shot Assist'] = df['xA per 90'] / df['Shot assists per 90']
+    df['xA per Shot Assist'] = df['xA per 90'] / df['Shot assists per 90'].replace(0, np.nan)
     df['Aerial duels won per 90'] = df['Aerial duels per 90'] * (df['Aerial duels won, %']/100)
     df['Cards per 90'] = df['Yellow cards per 90'] + df['Red cards per 90']
     df['Clean sheets, %'] = df['Clean sheets'] / df['Matches played']
     df['npxG'] = df['xG'] - (.76 * df['Penalties taken'])
     df['npxG per 90'] = df['npxG'] / (df['Minutes played'] / 90)
-    df['npxG per shot'] = df['npxG'] / (df['Shots'] - df['Penalties taken'])
+    df['npxG per shot'] = df['npxG'] / (df['Shots'] - df['Penalties taken']).replace(0,np.nan)
     df['Passes to final third & deep completions'] = df['Passes to final third per 90'] + df['Deep completions per 90']
     df['Pct of passes being short'] = df['Short / medium passes per 90'] / df['Passes per 90'] * 100
     df['Prog passes and runs per 90'] = df['Progressive passes per 90'] + df['Progressive runs per 90']
@@ -1766,7 +2021,7 @@ def make_fig(ages,exp_contracts,rank_11_base,show_ranks2,season,lg,normalize_to_
 
 show_ranks = show_ranks[['Player','Team','Age','Squad Position','Player Pos.','Score','Role Rank']].copy()
 
-image_tab, table_tab, radar_tab, all_player_list_tab, filter_tab, filter_table_tab, scatter_tab, notes_tab, map_tab = st.tabs(['Role Ranking Image', 'Role Ranking Table', 'Player Radar Generation', 'Player List', 'Player Search, Filters', 'Player Search, Results', 'Scatter Plots', 'Role Score Definitions & Calculations', 'Available Leagues'])
+image_tab, table_tab, radar_tab, all_player_list_tab, similarity_tab, filter_tab, filter_table_tab, scatter_tab, notes_tab, map_tab = st.tabs(['Role Ranking Image', 'Role Ranking Table', 'Player Radar Generation', 'Player List', 'Similar Player Search', 'Player Search, Filters', 'Player Search, Results', 'Scatter Plots', 'Role Score Definitions & Calculations', 'Available Leagues'])
 
 with image_tab:
     fig = make_fig(ages,exp_contracts,rank_11_base,show_ranks2,season,lg,normalize_to_100,team_text,chosen_nations)
@@ -1914,7 +2169,37 @@ with all_player_list_tab:
         player_list_df = player_list_df[player_list_df['Team within selected timeframe']==chosen_team].sort_values(by=['Player']).reset_index(drop=True)
         player_list_df = player_list_df[['Wyscout id','Full name','Player','Age','Team within selected timeframe','Position','Minutes played','On loan','Passport country']].rename(columns={'Player':'Radar Name','Team within selected timeframe':'Team','Position':'Positions'})
         player_list_df
+
+
+with similarity_tab:
+    with st.form('Similar Player Search'):
+        submitted = st.form_submit_button("Find Similar Players")
+        similar_player_lg_lookup = pd.read_csv('https://raw.githubusercontent.com/griffisben/Wyscout_Prospect_Research/main/league_info_lookup.csv')
+        region = st.multiselect("Region(s) to include  \nLeave blank for all regions", similar_player_lg_lookup.Region.unique().tolist())
+        time_frame = st.selectbox('Time Frame', ('Current Season','Prior Season','Current & Prior Seasons'))  ### Current Season | Prior Season | Current & Prior Seasons
+        wyscout_id = st.text_input("Player's Wyscout ID (get from 'Player List' tab)", "")
+        sim_pos = st.selectbox('Positions', ('Strikers', 'Strikers and Wingers', 'Forwards (AM, W, CF)',
+                                'Forwards no ST (AM, W)', 'Wingers', 'Central Midfielders (DM, CM, CAM)',
+                                'Central Midfielders no CAM (DM, CM)', 'Central Midfielders no DM (CM, CAM)', 'Fullbacks (FBs/WBs)',
+                                'Defenders (CB, FB/WB, DM)', 'Centre-Backs', 'CBs & DMs','Goalkeepers'))
+        pca_transform = st.selectbox('Dimensionality Reduction? (recommended: can help produce better matches)' ('Yes','No'))
+        custom_metric_comparison = st.selectbox('Pre-Made or Custom Metrics to Compare By?', ('Pre-Made','Custom'))
+        if custom_metric_comparison == 'Custom':
+            compare_metrics = st.multiselect("Select the metrics you want on the radar", ['Received passes per 90','Passes per 90','Pct of passes being short','Pct of passes being lateral','Accurate passes, %','Accurate short / medium passes, %','Accurate long passes, %','Crosses per 90','Accurate crosses, %','Smart passes per 90','Shot assists per 90','xA per 90','xA per Shot Assist','Assists per 90','Second assists per 90','Third assists per 90','1st, 2nd, 3rd assists','Progressive passes per 90','Progressive runs per 90','Shots per 90','npxG per 90','Non-penalty goals per 90','npxG per shot','Goal conversion, %','Successful dribbles, %','Accelerations per 90','Touches in box per 90','Fouls suffered per 90','Successful defensive actions per 90','Duels won, %','Defensive duels won, %','pAdj Tkl+Int per 90','PAdj Sliding tackles','PAdj Interceptions','Shots blocked per 90','Aerial duels per 90','Aerial duels won, %','Aerial duels won per 90','Fouls per 90','Shots against per 90','Conceded goals per 90','Save rate, %','Prevented goals per 90','Goals prevented %','Clean sheets, %','Exits per 90','Average long pass length, m'], ['Received passes per 90','Passes per 90','Pct of passes being short','Pct of passes being lateral','Accurate passes, %','Accurate short / medium passes, %','Accurate long passes, %','Crosses per 90','Accurate crosses, %','Smart passes per 90','Shot assists per 90','xA per 90','xA per Shot Assist'])
+        if custom_metric_comparison == 'Pre-Made':
+            compare_metrics = st.selectbox('Metric Comparison Group', ('all','ST','W','CAM','CM','DM','FB','CB','GK'))
         
+        similar_players = similar_players_search(
+            df=prep_similarity_df(region, time_frame),
+            ws_id=wyscout_id,
+            pos=sim_pos,
+            pca_transform=pca_transform,
+            compare_metrics=compare_metrics,
+            mins=mins,
+            age_band=ages
+        )
+    st.dataframe(similar_players.style.applymap(color_percentile, subset=similar_players.columns[10]))
+
 with filter_tab:
     st.button("Reset Sliders", on_click=_update_slider, kwargs={"value": 0.0})
     with st.form('Minimum Percentile Filters'):

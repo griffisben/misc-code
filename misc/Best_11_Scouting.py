@@ -2192,6 +2192,7 @@ with similarity_tab:
             compare_metrics = st.selectbox('Metric Comparison Group', ('all','ST','W','CAM','CM','DM','FB','CB','GK'))
 
         full_similarity_df_raw = prep_similarity_df(region, time_frame)
+        full_similarity_df_raw[full_similarity_df_raw['Wyscout id']==wyscout_id]
         similar_players_df = similar_players_search(
             df=full_similarity_df_raw,
             ws_id=wyscout_id,

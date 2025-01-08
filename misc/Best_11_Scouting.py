@@ -2179,7 +2179,7 @@ with similarity_tab:
         similar_player_lg_lookup = pd.read_csv('https://raw.githubusercontent.com/griffisben/Wyscout_Prospect_Research/main/league_info_lookup.csv')
         region = st.multiselect("Region(s) to include  \nLeave blank for all regions", similar_player_lg_lookup.Region.unique().tolist())
         time_frame = st.selectbox('Time Frame', ('Current Season','Prior Season','Current & Prior Seasons'))  ### Current Season | Prior Season | Current & Prior Seasons
-        wyscout_id = st.text_input("Player's Wyscout ID (get from 'Player List' tab)", "")
+        wyscout_id = st.nuumber_input("Player's Wyscout ID (get from 'Player List' tab)", 0)
         sim_pos = st.selectbox('Positions', ('Strikers', 'Strikers and Wingers', 'Forwards (AM, W, CF)',
                                 'Forwards no ST (AM, W)', 'Wingers', 'Central Midfielders (DM, CM, CAM)',
                                 'Central Midfielders no CAM (DM, CM)', 'Central Midfielders no DM (CM, CAM)', 'Fullbacks (FBs/WBs)',

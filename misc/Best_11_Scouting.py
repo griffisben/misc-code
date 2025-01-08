@@ -33,13 +33,27 @@ country_numeric_code_lookup = {country.name: country.numeric for country in pyco
 @st.cache_data(ttl=60*15)
 
 
-def prep_similarity_df(region, time_frame):
+def prep_similarity_df(geo_input, region, tiers, time_frame):
     sim_lg_lookup = pd.read_csv('https://raw.githubusercontent.com/griffisben/Wyscout_Prospect_Research/main/league_info_lookup.csv')
 
-    if region==[]:
-        sim_lg_lookup = sim_lg_lookup.sort_values(by=['Season'],ascending=False)
-    else:
-        sim_lg_lookup = sim_lg_lookup[sim_lg_lookup.Region.isin(region)].sort_values(by=['Season'],ascending=False)
+    if geo_input == 'Region':
+        if region==[]:
+            sim_lg_lookup = sim_lg_lookup.sort_values(by=['Season'],ascending=False)
+        else:
+            sim_lg_lookup = sim_lg_lookup[sim_lg_lookup.Region.isin(region)].sort_values(by=['Season'],ascending=False)
+    if geo_input == 'Country':
+        if region==[]:
+            sim_lg_lookup = sim_lg_lookup.sort_values(by=['Season'],ascending=False)
+        else:
+            sim_lg_lookup = sim_lg_lookup[sim_lg_lookup.Country.isin(region)].sort_values(by=['Season'],ascending=False)
+    if geo_input == 'Continent':
+        if region==[]:
+            sim_lg_lookup = sim_lg_lookup.sort_values(by=['Season'],ascending=False)
+        else:
+            sim_lg_lookup = sim_lg_lookup[sim_lg_lookup.Continent.isin(region)].sort_values(by=['Season'],ascending=False)
+
+    if tiers != []:
+        sim_lg_lookup = sim_lg_lookup[sim_lg_lookup.Tier.isin(tiers)]
     sim_lg_lookup_recent = sim_lg_lookup.drop_duplicates(subset=['League','Country'])
     sim_lg_lookup_recent2 = sim_lg_lookup.drop(sim_lg_lookup_recent.index)
     sim_lg_lookup_recent2 = sim_lg_lookup_recent2.drop_duplicates(subset=['League','Country'])
@@ -2182,7 +2196,9 @@ with similarity_tab:
     with st.form('Similar Player Search'):
         submitted = st.form_submit_button("Find Similar Players")
         similar_player_lg_lookup = pd.read_csv('https://raw.githubusercontent.com/griffisben/Wyscout_Prospect_Research/main/league_info_lookup.csv')
-        region = st.multiselect("Region(s) to include  \nLeave blank for all regions", similar_player_lg_lookup.Region.unique().tolist())
+        geo_input = st.selectbox("Geography Region", ("Region",'Country','Continent'))
+        region = st.multiselect(f"{geo_input}(s) to include (leave blank to include all countries)", similar_player_lg_lookup[geo_input].unique().tolist())
+        tiers = st.multiselect("Tiers to include (leave blank to include all)", ('1','2','3','4','5','6','Youth'))
         time_frame = st.selectbox('Time Frame', ('Current Season','Prior Season','Current & Prior Seasons'))  ### Current Season | Prior Season | Current & Prior Seasons
         wyscout_id = st.text_input("Player's Wyscout ID (get from 'Player List' tab)", "")
         sim_pos = st.selectbox('Positions', ('Strikers', 'Strikers and Wingers', 'Forwards (AM, W, CF)',
@@ -2196,7 +2212,7 @@ with similarity_tab:
         if custom_metric_comparison == 'Pre-Made':
             compare_metrics = st.selectbox('Metric Comparison Group', ('all','ST','W','CAM','CM','DM','FB','CB','GK'))
 
-        full_similarity_df_raw = prep_similarity_df(region, time_frame)
+        full_similarity_df_raw = prep_similarity_df(geo_input, region, tiers, time_frame)
     try:
         similar_players_df, player_name, player_age, player_position, player_team = similar_players_search(
             df=full_similarity_df_raw,

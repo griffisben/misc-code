@@ -286,7 +286,7 @@ def similar_players_search(df, ws_id, pos, pca_transform, compare_metrics, mins,
     similar_players['Age'] = similar_players['Age'].astype(int)
     
 
-    return similar_players[['Rank','Similarity %','Player','Age','Passport country','Team','Minutes played','Position','League','On loan','Market value']], focal_player['Full name'].iloc[0], focal_player['Age'].iloc[0], focal_player['Position'].iloc[0], focal_player['Team within selected timeframe'].iloc[0]
+    return similar_players[['Rank','Similarity %','Player','Age','Passport country','Team','Minutes played','Position','League','On loan','Market value']], focal_player['Full name'].iloc[0], focal_player['Age'].iloc[0], focal_player['Main Position'].iloc[0], focal_player['Team within selected timeframe'].iloc[0]
 
 
 def get_numeric_code(country_name):

@@ -2194,21 +2194,21 @@ with similarity_tab:
             compare_metrics = st.selectbox('Metric Comparison Group', ('all','ST','W','CAM','CM','DM','FB','CB','GK'))
 
         full_similarity_df_raw = prep_similarity_df(region, time_frame)
-    try:
-        similar_players_df, player_name, player_age, player_position, player_team = similar_players_search(
-            df=full_similarity_df_raw,
-            ws_id=int(wyscout_id),
-            pos=sim_pos,
-            pca_transform=pca_transform,
-            compare_metrics=compare_metrics,
-            mins=mins,
-            age_band=ages
-        )
-        st.write(f"Players similar to {player_name} ({player_age}, {player_position}, {player_team})")
-        if len(similar_players_df)>0:
-            st.dataframe(similar_players_df.style.applymap(color_percentile, subset=similar_players_df.columns[1]))
-    except:
-        st.write("Please enter a player's ID. Make sure the Region & Time Frame includes the league the focal player plays in")
+    # try:
+    similar_players_df, player_name, player_age, player_position, player_team = similar_players_search(
+        df=full_similarity_df_raw,
+        ws_id=int(wyscout_id),
+        pos=sim_pos,
+        pca_transform=pca_transform,
+        compare_metrics=compare_metrics,
+        mins=mins,
+        age_band=ages
+    )
+    st.write(f"Players similar to {player_name} ({player_age}, {player_position}, {player_team})")
+    if len(similar_players_df)>0:
+        st.dataframe(similar_players_df.style.applymap(color_percentile, subset=similar_players_df.columns[1]))
+    # except:
+    #     st.write("Please enter a player's ID. Make sure the Region & Time Frame includes the league the focal player plays in")
 
 with filter_tab:
     st.button("Reset Sliders", on_click=_update_slider, kwargs={"value": 0.0})

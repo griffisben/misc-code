@@ -2190,17 +2190,17 @@ with similarity_tab:
         if custom_metric_comparison == 'Pre-Made':
             compare_metrics = st.selectbox('Metric Comparison Group', ('all','ST','W','CAM','CM','DM','FB','CB','GK'))
         
-        # similar_players = similar_players_search(
-        #     df=prep_similarity_df(region, time_frame),
-        #     ws_id=wyscout_id,
-        #     pos=sim_pos,
-        #     pca_transform=pca_transform,
-        #     compare_metrics=compare_metrics,
-        #     mins=mins,
-        #     age_band=ages
-        # )
-    st.table(prep_similarity_df(region, time_frame))
-    # st.dataframe(similar_players.style.applymap(color_percentile, subset=similar_players.columns[10]))
+        similar_players = similar_players_search(
+            df=prep_similarity_df(region, time_frame),
+            ws_id=wyscout_id,
+            pos=sim_pos,
+            pca_transform=pca_transform,
+            compare_metrics=compare_metrics,
+            mins=mins,
+            age_band=ages
+        )
+    if len(similar_players)>0:
+        st.dataframe(similar_players.style.applymap(color_percentile, subset=similar_players.columns[10]))
 
 with filter_tab:
     st.button("Reset Sliders", on_click=_update_slider, kwargs={"value": 0.0})

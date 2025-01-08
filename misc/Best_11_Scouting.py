@@ -210,7 +210,7 @@ def similar_players_search(df, ws_id, pos, pca_transform, compare_metrics, mins,
     
     
     # Assuming df is your DataFrame and focal_player is the row of your focal player
-    df_base = filter_by_position(df_base, pos)
+    df_base = filter_by_position_long(df_base, pos)
     focal_player = df_base.loc[(df_base['Wyscout id'] == ws_id)].iloc[0]
     focal_player_index = df_base[(df_base['Wyscout id'] == ws_id)].index[0]
     
@@ -2192,8 +2192,7 @@ with similarity_tab:
             compare_metrics = st.selectbox('Metric Comparison Group', ('all','ST','W','CAM','CM','DM','FB','CB','GK'))
 
         full_similarity_df_raw = prep_similarity_df(region, time_frame)
-        full_similarity_df_raw
-        similar_players = similar_players_search(
+        similar_players_df = similar_players_search(
             df=full_similarity_df_raw,
             ws_id=wyscout_id,
             pos=sim_pos,
@@ -2202,8 +2201,8 @@ with similarity_tab:
             mins=mins,
             age_band=ages
         )
-    if len(similar_players)>0:
-        st.dataframe(similar_players.style.applymap(color_percentile, subset=similar_players.columns[10]))
+    if len(similar_players_df)>0:
+        st.dataframe(similar_players_df.style.applymap(color_percentile, subset=similar_players_df.columns[10]))
 
 with filter_tab:
     st.button("Reset Sliders", on_click=_update_slider, kwargs={"value": 0.0})

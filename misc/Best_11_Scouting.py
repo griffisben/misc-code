@@ -286,7 +286,7 @@ def similar_players_search(df, ws_id, pos, pca_transform, compare_metrics, mins,
     similar_players['Age'] = similar_players['Age'].astype(int)
     
 
-    return similar_players[['Rank','Similarity %','Player','Age','Passport country','Team','Minutes played','Position','League','On loan','Market value']]
+    return similar_players[['Rank','Similarity %','Player','Age','Passport country','Team','Minutes played','Position','League','On loan','Market value']], focal_player['Full name'].iloc[0], focal_player['Age'].iloc[0], focal_player['Position'].iloc[0], focal_player['Team within selected timeframe'].iloc[0]
 
 
 def get_numeric_code(country_name):
@@ -2195,7 +2195,8 @@ with similarity_tab:
 
         full_similarity_df_raw = prep_similarity_df(region, time_frame)
     try:
-        similar_players_df = similar_players_search(
+        st.write(f"Players similar to {player_name} ({player_age}, {player_position}, {player_team})")
+        similar_players_df, player_name, player_age, player_position, player_team = similar_players_search(
             df=full_similarity_df_raw,
             ws_id=int(wyscout_id),
             pos=sim_pos,

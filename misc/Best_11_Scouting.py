@@ -82,6 +82,7 @@ def prep_similarity_df(region, time_frame):
     }
     
     full_similarity_df_raw['Main Position'] = full_similarity_df_raw['Main Position'].replace(replace_dict)
+    return full_similarity_df_raw
 
 def similar_players_search(df, ws_id, pos, pca_transform, compare_metrics, mins, age_band):
     df_base = pd.DataFrame()

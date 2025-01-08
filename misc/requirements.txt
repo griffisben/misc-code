@@ -10,4 +10,4 @@ plotly
 highlight-text
 vega_datasets
 pycountry
-sklearn
+scikit-learn

@@ -2195,7 +2195,6 @@ with similarity_tab:
 
         full_similarity_df_raw = prep_similarity_df(region, time_frame)
     try:
-        st.write(f"Players similar to {player_name} ({player_age}, {player_position}, {player_team})")
         similar_players_df, player_name, player_age, player_position, player_team = similar_players_search(
             df=full_similarity_df_raw,
             ws_id=int(wyscout_id),
@@ -2205,6 +2204,7 @@ with similarity_tab:
             mins=mins,
             age_band=ages
         )
+        st.write(f"Players similar to {player_name} ({player_age}, {player_position}, {player_team})")
         if len(similar_players_df)>0:
             st.dataframe(similar_players_df.style.applymap(color_percentile, subset=similar_players_df.columns[1]))
     except:

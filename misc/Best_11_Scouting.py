@@ -51,6 +51,11 @@ def prep_similarity_df(geo_input, region, tiers, time_frame):
             sim_lg_lookup = sim_lg_lookup.sort_values(by=['Season'],ascending=False)
         else:
             sim_lg_lookup = sim_lg_lookup[sim_lg_lookup.Continent.isin(region)].sort_values(by=['Season'],ascending=False)
+    if geo_input == 'League':
+        if region==[]:
+            sim_lg_lookup = sim_lg_lookup.sort_values(by=['Season'],ascending=False)
+        else:
+            sim_lg_lookup = sim_lg_lookup[sim_lg_lookup.League.isin(region)].sort_values(by=['Season'],ascending=False)
 
     if tiers != []:
         sim_lg_lookup = sim_lg_lookup[sim_lg_lookup.Tier.isin(tiers)]
@@ -2196,8 +2201,8 @@ with similarity_tab:
     with st.form('Similar Player Search'):
         submitted = st.form_submit_button("Find Similar Players")
         similar_player_lg_lookup = pd.read_csv('https://raw.githubusercontent.com/griffisben/Wyscout_Prospect_Research/main/league_info_lookup.csv')
-        geo_input = st.selectbox("Geography Region", ("Region",'Country','Continent'))
-        region = st.multiselect(f"{geo_input}(s) to include (leave blank to include all countries)", similar_player_lg_lookup[geo_input].unique().tolist())
+        geo_input = st.selectbox("Geography Region", ("Region",'Country','Continent','League'))
+        region = st.multiselect(f"{geo_input}(s) to include (leave blank to include all)", similar_player_lg_lookup[geo_input].unique().tolist())
         tiers = st.multiselect("Tiers to include (leave blank to include all)", ('1','2','3','4','5','6','Youth'))
         time_frame = st.selectbox('Time Frame', ('Current Season','Prior Season','Current & Prior Seasons'))  ### Current Season | Prior Season | Current & Prior Seasons
         wyscout_id = st.text_input("Player's Wyscout ID (get from 'Player List' tab)", "")

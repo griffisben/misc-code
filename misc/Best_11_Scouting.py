@@ -282,9 +282,11 @@ def similar_players_search(df, ws_id, pos, pca_transform, compare_metrics, mins,
     similar_players.reset_index(inplace=True)
     similar_players.rename(columns={'index':'Rank'},inplace=True)
     similar_players = similar_players.iloc[1:,:]
-    similar_players = similar_players[(similar_players.Age>=age_band[0]) & (similar_players.Age<=age_band[1])] 
+    similar_players = similar_players[(similar_players.Age>=age_band[0]) & (similar_players.Age<=age_band[1])]
+    similar_players['Age'] = similar_players['Age'].astype(int)
+    
 
-    return similar_players
+    return similar_players[['Rank','Similarity %','Player','Age','Passport country','Team','Minutes played','Position','League','On loan','Market value']]
 
 
 def get_numeric_code(country_name):
@@ -2192,7 +2194,7 @@ with similarity_tab:
             compare_metrics = st.selectbox('Metric Comparison Group', ('all','ST','W','CAM','CM','DM','FB','CB','GK'))
 
         full_similarity_df_raw = prep_similarity_df(region, time_frame)
-        full_similarity_df_raw[full_similarity_df_raw['Wyscout id']==int(wyscout_id)]
+    try:
         similar_players_df = similar_players_search(
             df=full_similarity_df_raw,
             ws_id=int(wyscout_id),
@@ -2202,8 +2204,10 @@ with similarity_tab:
             mins=mins,
             age_band=ages
         )
-    if len(similar_players_df)>0:
-        st.dataframe(similar_players_df.style.applymap(color_percentile, subset=similar_players_df.columns[10]))
+        if len(similar_players_df)>0:
+            st.dataframe(similar_players_df.style.applymap(color_percentile, subset=similar_players_df.columns[1]))
+    except:
+        st.write("Please enter a player's ID. Make sure the Region & Time Frame includes the league the focal player plays in")
 
 with filter_tab:
     st.button("Reset Sliders", on_click=_update_slider, kwargs={"value": 0.0})

@@ -36,7 +36,7 @@ country_numeric_code_lookup = {country.name: country.numeric for country in pyco
 def prep_similarity_df(region, time_frame):
     sim_lg_lookup = pd.read_csv('https://raw.githubusercontent.com/griffisben/Wyscout_Prospect_Research/main/league_info_lookup.csv')
 
-    if region.isna():
+    if region==[]:
         sim_lg_lookup = sim_lg_lookup.sort_values(by=['Season'],ascending=False)
     else:
         sim_lg_lookup = sim_lg_lookup[sim_lg_lookup.Region.isin(region)].sort_values(by=['Season'],ascending=False)

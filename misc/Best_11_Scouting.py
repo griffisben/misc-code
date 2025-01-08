@@ -2179,7 +2179,7 @@ with similarity_tab:
         similar_player_lg_lookup = pd.read_csv('https://raw.githubusercontent.com/griffisben/Wyscout_Prospect_Research/main/league_info_lookup.csv')
         region = st.multiselect("Region(s) to include  \nLeave blank for all regions", similar_player_lg_lookup.Region.unique().tolist())
         time_frame = st.selectbox('Time Frame', ('Current Season','Prior Season','Current & Prior Seasons'))  ### Current Season | Prior Season | Current & Prior Seasons
-        wyscout_id = st.number_input("Player's Wyscout ID (get from 'Player List' tab)", 0)
+        wyscout_id = st.text_input("Player's Wyscout ID (get from 'Player List' tab)", "")
         sim_pos = st.selectbox('Positions', ('Strikers', 'Strikers and Wingers', 'Forwards (AM, W, CF)',
                                 'Forwards no ST (AM, W)', 'Wingers', 'Central Midfielders (DM, CM, CAM)',
                                 'Central Midfielders no CAM (DM, CM)', 'Central Midfielders no DM (CM, CAM)', 'Fullbacks (FBs/WBs)',
@@ -2192,10 +2192,10 @@ with similarity_tab:
             compare_metrics = st.selectbox('Metric Comparison Group', ('all','ST','W','CAM','CM','DM','FB','CB','GK'))
 
         full_similarity_df_raw = prep_similarity_df(region, time_frame)
-        full_similarity_df_raw[full_similarity_df_raw['Wyscout id']==wyscout_id]
+        full_similarity_df_raw[full_similarity_df_raw['Wyscout id']==int(wyscout_id)]
         similar_players_df = similar_players_search(
             df=full_similarity_df_raw,
-            ws_id=wyscout_id,
+            ws_id=int(wyscout_id),
             pos=sim_pos,
             pca_transform=pca_transform,
             compare_metrics=compare_metrics,

@@ -60,12 +60,15 @@ def prep_similarity_df(region, time_frame):
         full_league_name = f"{row['League']} {row['Season']}"
         formatted_name = full_league_name.translate(char_replacements)
         url = f'https://raw.githubusercontent.com/griffisben/Wyscout_Prospect_Research/main/Main%20App/{formatted_name}.csv'
-        
-        df = pd.read_csv(url)
-        df['League'] = full_league_name
-        df = df.dropna(subset=['Position', 'Team within selected timeframe']).reset_index(drop=True)
-        clean_df = load_league_data(df, full_league_name)
-        dfs.append(clean_df)
+
+        try:
+            df = pd.read_csv(url)
+            df['League'] = full_league_name
+            df = df.dropna(subset=['Position', 'Team within selected timeframe']).reset_index(drop=True)
+            clean_df = load_league_data(df, full_league_name)
+            dfs.append(clean_df)
+        except:
+            print(f'Error: {full_league_name}')
     full_similarity_df_raw = pd.concat(dfs, ignore_index=True)
     
     replace_dict = {
@@ -2194,21 +2197,21 @@ with similarity_tab:
             compare_metrics = st.selectbox('Metric Comparison Group', ('all','ST','W','CAM','CM','DM','FB','CB','GK'))
 
         full_similarity_df_raw = prep_similarity_df(region, time_frame)
-    # try:
-    similar_players_df, player_name, player_age, player_position, player_team = similar_players_search(
-        df=full_similarity_df_raw,
-        ws_id=int(wyscout_id),
-        pos=sim_pos,
-        pca_transform=pca_transform,
-        compare_metrics=compare_metrics,
-        mins=mins,
-        age_band=ages
-    )
-    st.write(f"Players similar to {player_name} ({player_age}, {player_position}, {player_team})")
-    if len(similar_players_df)>0:
-        st.dataframe(similar_players_df.style.applymap(color_percentile, subset=similar_players_df.columns[1]))
-    # except:
-    #     st.write("Please enter a player's ID. Make sure the Region & Time Frame includes the league the focal player plays in")
+    try:
+        similar_players_df, player_name, player_age, player_position, player_team = similar_players_search(
+            df=full_similarity_df_raw,
+            ws_id=int(wyscout_id),
+            pos=sim_pos,
+            pca_transform=pca_transform,
+            compare_metrics=compare_metrics,
+            mins=mins,
+            age_band=ages
+        )
+        st.write(f"Players similar to {player_name} ({player_age}, {player_position}, {player_team})")
+        if len(similar_players_df)>0:
+            st.dataframe(similar_players_df.style.applymap(color_percentile, subset=similar_players_df.columns[1]))
+    except:
+        st.write("Please enter a player's ID. Make sure the Region & Time Frame includes the league the focal player plays in")
 
 with filter_tab:
     st.button("Reset Sliders", on_click=_update_slider, kwargs={"value": 0.0})

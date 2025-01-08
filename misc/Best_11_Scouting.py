@@ -68,7 +68,7 @@ def prep_similarity_df(region, time_frame):
             clean_df = load_league_data(df, full_league_name)
             dfs.append(clean_df)
         except:
-            print(f'Error: {full_league_name}')
+            st.write(f'Error: {full_league_name}')
     full_similarity_df_raw = pd.concat(dfs, ignore_index=True)
     
     replace_dict = {

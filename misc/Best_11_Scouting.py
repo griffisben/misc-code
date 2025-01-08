@@ -182,7 +182,8 @@ def similar_players_search(df, ws_id, pos, pca_transform, compare_metrics, mins,
     # Normalizing function
     def NormalizeData(data):
         return (data - data.min()) / (data.max() - data.min())
-    
+
+    leagues = df.League.unique().tolist()
     for z in range(len(leagues)):
         dfProspect = df_filtered_base[(df_filtered_base['League'] == leagues[z])].copy()
         dfProspect = dfProspect.reset_index(drop=True)

@@ -1308,6 +1308,7 @@ def scout_report(data_frame, gender, league, season, xtra, template, pos, player
                 
                 'fwdpct7' : 'Shot\nassists',
                 'fwdpct4' : 'xA',
+                'fwdpct3' : 'Assists',
                 'extrapct17' : 'Key\npasses',
                 
                 'fwdpct9' : 'Prog.\nruns',
@@ -1409,10 +1410,10 @@ def scout_report(data_frame, gender, league, season, xtra, template, pos, player
                               ]]
         if template == 'midfielders':
             raw_vals = raw_valsdf[["Player",
-                                gk11 ,mid2 ,mid1 ,extra11,extra20,extra12,extra13,extra14,extra15,fwd7 ,fwd4 ,extra17,fwd9 ,extra16,fwd11 ,extra7 ,fwd12 ,extra18,def3 ,def7 ,def2 ,extra2 ,fwd2 ,extra9 ,fwd1 ,fwd6 ,
+                                gk11 ,mid2 ,mid1 ,extra11,extra20,extra12,extra13,extra14,extra15,fwd7 ,fwd4 ,fwd3,extra17,fwd9 ,extra16,fwd11 ,extra7 ,fwd12 ,extra18,def3 ,def7 ,def2 ,extra2 ,fwd2 ,extra9 ,fwd1 ,fwd6 ,
                               ]]
             raw_vals_full = raw_valsdf_full[["Player",
-                                gk11 ,mid2 ,mid1 ,extra11,extra20,extra12,extra13,extra14,extra15,fwd7 ,fwd4 ,extra17,fwd9 ,extra16,fwd11 ,extra7 ,fwd12 ,extra18,def3 ,def7 ,def2 ,extra2 ,fwd2 ,extra9 ,fwd1 ,fwd6 ,
+                                gk11 ,mid2 ,mid1 ,extra11,extra20,extra12,extra13,extra14,extra15,fwd7 ,fwd4 ,fwd3,extra17,fwd9 ,extra16,fwd11 ,extra7 ,fwd12 ,extra18,def3 ,def7 ,def2 ,extra2 ,fwd2 ,extra9 ,fwd1 ,fwd6 ,
                               ]]
         if template == 'fullbacks':
             raw_vals = raw_valsdf[["Player",
@@ -1553,13 +1554,13 @@ def scout_report(data_frame, gender, league, season, xtra, template, pos, player
             for i in range(len(df1)):
                 if df1['Group'][i] <= 9:
                     df1['Group'][i] = 'Passing'
-                elif df1['Group'][i] <= 12:
+                elif df1['Group'][i] <= 13:
                     df1['Group'][i] = 'Creativity'
-                elif df1['Group'][i] <= 15:
+                elif df1['Group'][i] <= 16:
                     df1['Group'][i] = 'Shooting'
-                elif df1['Group'][i] <= 21:
+                elif df1['Group'][i] <= 22:
                     df1['Group'][i] = 'Ball Movement'
-                elif df1['Group'][i] <= 26:
+                elif df1['Group'][i] <= 27:
                     df1['Group'][i] = 'Defense'
     
         if template == 'fullbacks':
@@ -1620,7 +1621,7 @@ def scout_report(data_frame, gender, league, season, xtra, template, pos, player
         template_group_sizes = {
             'strikers': [5,4,4,5,6],
             'wingers': [6,4,5,5,6],
-            'midfielders': [9,3,3,6,5],
+            'midfielders': [9,4,3,6,5],
             'fullbacks': [6,4,3,6,2],
             'centerbacks': [9,2,5,2],
             'goalkeepers': [6,6],

@@ -1236,7 +1236,7 @@ def scout_report(data_frame, gender, league, season, xtra, template, pos, player
             'strikers': {
                 'extrapct11' : 'Crosses',
                 'extrapct12' : 'Passes\nto box',
-                'extrapct13' : 'Prog. passes',
+                'extrapct13' : 'Prog.\npasses',
                 'extrapct14' : 'Through\npasses',
                 'extrapct15' : 'Smart\npasses',
                 
@@ -1245,8 +1245,8 @@ def scout_report(data_frame, gender, league, season, xtra, template, pos, player
                 'fwdpct3' : 'Assists',
                 'extrapct17' : 'Key\npasses',
                 
-                'extrapct6' : 'Acceler.',
-                'fwdpct9' : 'Prog. runs',
+                'extrapct6' : 'Accelerations',
+                'fwdpct9' : 'Prog.\nruns',
                 'extrapct16' : 'Dribbles',
                 'fwdpct11' : 'Touches\nin box',
                 

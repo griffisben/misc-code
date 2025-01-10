@@ -1376,7 +1376,7 @@ def scout_report(data_frame, gender, league, season, xtra, template, pos, player
                 
                 'extrapct2' : 'Shots',
                 'fwdpct2' : 'npxG',
-            }
+            },
             'goalkeepers': {
                 'gkpct8' : 'Passes',
                 'gkpct13' : 'Received\npasses',

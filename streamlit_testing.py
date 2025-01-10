@@ -1609,7 +1609,6 @@ def scout_report(data_frame, gender, league, season, xtra, template, pos, player
     OFFSET = np.pi / 2
 
     PAD = 2
-    st.table(df1)
     ANGLES_N = len(VALUES) + PAD * len(np.unique(GROUP))
     ANGLES = np.linspace(0, 2 * np.pi, num=ANGLES_N, endpoint=False)
     WIDTH = (2 * np.pi) / len(ANGLES)

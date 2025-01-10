@@ -1252,7 +1252,7 @@ def scout_report(data_frame, gender, league, season, xtra, template, pos, player
                 
                 'extrapct7' : 'Aerial\nwins',
                 'fwdpct12' : 'Aerial\nwin %',
-                'extrapct18' : 'Def. duels',
+                'extrapct18' : 'Defensive\nduels',
                 'defpct3' : 'Def. duel\nwin %',
                 'midpct12' : 'pAdj\nTkl+Int',
                 
@@ -1284,7 +1284,7 @@ def scout_report(data_frame, gender, league, season, xtra, template, pos, player
                 
                 'extrapct7' : 'Aerial\nwins',
                 'fwdpct12' : 'Aerial\nwin %',
-                'extrapct18' : 'Def. duels',
+                'extrapct18' : 'Defensive\nduels',
                 'defpct3' : 'Def. duel\nwin %',
                 'midpct12' : 'pAdj\nTkl+Int',
                 

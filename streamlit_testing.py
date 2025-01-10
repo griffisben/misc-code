@@ -1235,23 +1235,23 @@ def scout_report(data_frame, gender, league, season, xtra, template, pos, player
         column_mapping = {
             'strikers': {
                 'extrapct11' : 'Crosses',
-                'extrapct12' : 'Passes to box',
+                'extrapct12' : 'Passes\nto box',
                 'extrapct13' : 'Prog. passes',
-                'extrapct14' : 'Through passes',
-                'extrapct15' : 'Smart passes',
+                'extrapct14' : 'Through\npasses',
+                'extrapct15' : 'Smart\npasses',
                 
-                'fwdpct7' : 'Shot\nassists',
+                'fwdpct7' : 'Shot assists',
                 'fwdpct4' : 'xA',
                 'fwdpct3' : 'Assists',
                 'extrapct17' : 'Key\npasses',
                 
-                'extrapct6' : 'Accelerations',
+                'extrapct6' : 'Acceler.',
                 'fwdpct9' : 'Prog. runs',
                 'extrapct16' : 'Dribbles',
                 'fwdpct11' : 'Touches\nin box',
                 
-                'extrapct7' : 'Aerial wins',
-                'fwdpct12' : 'Aerial win %',
+                'extrapct7' : 'Aerial\nwins',
+                'fwdpct12' : 'Aerial\nwin %',
                 'extrapct18' : 'Def. duels',
                 'defpct3' : 'Def. duel\nwin %',
                 'midpct12' : 'pAdj\nTkl+Int',
@@ -1538,59 +1538,59 @@ def scout_report(data_frame, gender, league, season, xtra, template, pos, player
     
         if template == 'wingers':
             for i in range(len(df1)):
-                if df1['Group'][i] <= 5:
-                    df1['Group'][i] = 'Passing'
-                elif df1['Group'][i] <= 9:
-                    df1['Group'][i] = 'Creativity'
-                elif df1['Group'][i] <= 14:
-                    df1['Group'][i] = 'Shooting'
-                elif df1['Group'][i] <= 19:
-                    df1['Group'][i] = 'Ball Movement'
-                elif df1['Group'][i] <= 25:
-                    df1['Group'][i] = 'Defense'
-    
-        if template == 'midfielders':
-            for i in range(len(df1)):
-                if df1['Group'][i] <= 8:
-                    df1['Group'][i] = 'Passing'
-                elif df1['Group'][i] <= 11:
-                    df1['Group'][i] = 'Creativity'
-                elif df1['Group'][i] <= 14:
-                    df1['Group'][i] = 'Shooting'
-                elif df1['Group'][i] <= 20:
-                    df1['Group'][i] = 'Ball Movement'
-                elif df1['Group'][i] <= 25:
-                    df1['Group'][i] = 'Defense'
-    
-        if template == 'fullbacks':
-            for i in range(len(df1)):
-                if df1['Group'][i] <= 5:
-                    df1['Group'][i] = 'Passing'
-                elif df1['Group'][i] <= 9:
-                    df1['Group'][i] = 'Creativity'
-                elif df1['Group'][i] <= 12:
-                    df1['Group'][i] = 'Shooting'
-                elif df1['Group'][i] <= 18:
-                    df1['Group'][i] = 'Ball Movement'
-                elif df1['Group'][i] <= 20:
-                    df1['Group'][i] = 'Defense'
-
-        if template == 'centerbacks':
-            for i in range(len(df1)):
-                if df1['Group'][i] <= 8:
+                if df1['Group'][i] <= 6:
                     df1['Group'][i] = 'Passing'
                 elif df1['Group'][i] <= 10:
                     df1['Group'][i] = 'Creativity'
                 elif df1['Group'][i] <= 15:
                     df1['Group'][i] = 'Shooting'
-                elif df1['Group'][i] <= 17:
+                elif df1['Group'][i] <= 20:
+                    df1['Group'][i] = 'Ball Movement'
+                elif df1['Group'][i] <= 26:
+                    df1['Group'][i] = 'Defense'
+    
+        if template == 'midfielders':
+            for i in range(len(df1)):
+                if df1['Group'][i] <= 9:
+                    df1['Group'][i] = 'Passing'
+                elif df1['Group'][i] <= 12:
+                    df1['Group'][i] = 'Creativity'
+                elif df1['Group'][i] <= 15:
+                    df1['Group'][i] = 'Shooting'
+                elif df1['Group'][i] <= 21:
+                    df1['Group'][i] = 'Ball Movement'
+                elif df1['Group'][i] <= 26:
+                    df1['Group'][i] = 'Defense'
+    
+        if template == 'fullbacks':
+            for i in range(len(df1)):
+                if df1['Group'][i] <= 6:
+                    df1['Group'][i] = 'Passing'
+                elif df1['Group'][i] <= 10:
+                    df1['Group'][i] = 'Creativity'
+                elif df1['Group'][i] <= 13:
+                    df1['Group'][i] = 'Shooting'
+                elif df1['Group'][i] <= 19:
+                    df1['Group'][i] = 'Ball Movement'
+                elif df1['Group'][i] <= 21:
+                    df1['Group'][i] = 'Defense'
+
+        if template == 'centerbacks':
+            for i in range(len(df1)):
+                if df1['Group'][i] <= 9:
+                    df1['Group'][i] = 'Passing'
+                elif df1['Group'][i] <= 11:
+                    df1['Group'][i] = 'Creativity'
+                elif df1['Group'][i] <= 16:
+                    df1['Group'][i] = 'Shooting'
+                elif df1['Group'][i] <= 18:
                     df1['Group'][i] = 'Ball Movement'
     
         if template == 'goalkeepers':
             for i in range(len(df1)):
-                if df1['Group'][i] <= 5:
+                if df1['Group'][i] <= 6:
                     df1['Group'][i] = 'Defending'
-                elif df1['Group'][i] <= 11:
+                elif df1['Group'][i] <= 12:
                     df1['Group'][i] = 'Attacking'
 
 

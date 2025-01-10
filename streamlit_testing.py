@@ -1523,7 +1523,6 @@ def scout_report(data_frame, gender, league, season, xtra, template, pos, player
             elif df1['Group'][i] <= passing_l+playmaking_l+shooting_l+attacking_l+defending_l+goalkeeping_l:
                 df1['Group'][i] = 'Goalkeeping'
     if custom_radar == 'n':
-        print(df1)
         if template == 'strikers':
             for i in range(len(df1)):
                 if df1['Group'][i] <= 4:
@@ -1610,6 +1609,7 @@ def scout_report(data_frame, gender, league, season, xtra, template, pos, player
     OFFSET = np.pi / 2
 
     PAD = 2
+    st.table(df1)
     ANGLES_N = len(VALUES) + PAD * len(np.unique(GROUP))
     ANGLES = np.linspace(0, 2 * np.pi, num=ANGLES_N, endpoint=False)
     WIDTH = (2 * np.pi) / len(ANGLES)

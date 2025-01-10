@@ -1266,10 +1266,10 @@ def scout_report(data_frame, gender, league, season, xtra, template, pos, player
             'wingers': {
                 'extrapct3' : 'Cross\nCmp %',
                 'extrapct11' : 'Crosses',
-                'extrapct12' : 'Passes to box',
-                'extrapct13' : 'Prog. passes',
-                'extrapct14' : 'Through passes',
-                'extrapct15' : 'Smart passes',
+                'extrapct12' : 'Passes\nto box',
+                'extrapct13' : 'Prog.\npasses',
+                'extrapct14' : 'Through\npasses',
+                'extrapct15' : 'Smart\npasses',
                 
                 'fwdpct7' : 'Shot\nassists',
                 'fwdpct4' : 'xA',
@@ -1277,13 +1277,13 @@ def scout_report(data_frame, gender, league, season, xtra, template, pos, player
                 'extrapct17' : 'Key\npasses',
                 
                 'extrapct6' : 'Accelerations',
-                'fwdpct9' : 'Prog. runs',
+                'fwdpct9' : 'Prog.\nruns',
                 'extrapct16' : 'Dribbles',
                 'fwdpct5' : 'Dribble\nwin %',
                 'fwdpct11' : 'Touches\nin box',
                 
-                'extrapct7' : 'Aerial wins',
-                'fwdpct12' : 'Aerial win %',
+                'extrapct7' : 'Aerial\nwins',
+                'fwdpct12' : 'Aerial\nwin %',
                 'extrapct18' : 'Def. duels',
                 'defpct3' : 'Def. duel\nwin %',
                 'midpct12' : 'pAdj\nTkl+Int',

@@ -1752,7 +1752,7 @@ def scout_report(data_frame, gender, league, season, xtra, template, pos, player
         dist_text = "\nBlack dot line = metric mean\nColored dot line = +/- 0.5 std. deviations"
     if dist_labels == 'No':
         dist_text = ""
-    plt.annotate(f"Bars are percentiles | Values shown are {callout_text} values\nAll values are per 90 minutes | %s\nCompared to %s %s, %i+ mins\nData: Wyscout | %s\nSample Size: %i players{dist_text}" %(extra_text, league, compares, mins, sig, len(dfProspect)),
+    plt.annotate(f"Bars are percentiles | Values shown are {callout_text} values\nAll values are per 90 minutes | %s\nCompared to %s %s, %i+ mins\nData: Wyscout | Sample Size: %i players{dist_text}" %(extra_text, league, compares, mins, len(dfProspect)),
                  xy = (0, -.09), xycoords='axes fraction',
                 ha='left', va='center',
                 fontsize=9, fontfamily="DejaVu Sans",

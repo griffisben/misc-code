@@ -1236,9 +1236,9 @@ def scout_report(data_frame, gender, league, season, xtra, template, pos, player
             'strikers': {
                 'extrapct11' : 'Crosses',
                 'extrapct12' : 'Passes\nto box',
-                'extrapct13' : 'Prog.\npasses',
                 'extrapct14' : 'Through\npasses',
                 'extrapct15' : 'Smart\npasses',
+                'extrapct13' : 'Prog.\npasses',
                 
                 'fwdpct7' : 'Shot assists',
                 'fwdpct4' : 'xA',
@@ -1248,7 +1248,6 @@ def scout_report(data_frame, gender, league, season, xtra, template, pos, player
                 'extrapct6' : 'Accelerations',
                 'fwdpct9' : 'Prog.\nruns',
                 'extrapct16' : 'Dribbles',
-                'fwdpct11' : 'Touches\nin box',
                 
                 'extrapct7' : 'Aerial\nwins',
                 'fwdpct12' : 'Aerial\nwin %',
@@ -1262,14 +1261,15 @@ def scout_report(data_frame, gender, league, season, xtra, template, pos, player
                 'fwdpct1' : 'Non-pen\ngoals',
                 'extrapct19' : 'Head\ngoals',
                 'fwdpct6' : 'Goal\nconv. %',
+                'fwdpct11' : 'Touches\nin box',
             },
             'wingers': {
                 'extrapct3' : 'Cross\nCmp %',
                 'extrapct11' : 'Crosses',
                 'extrapct12' : 'Passes\nto box',
-                'extrapct13' : 'Prog.\npasses',
                 'extrapct14' : 'Through\npasses',
                 'extrapct15' : 'Smart\npasses',
+                'extrapct13' : 'Prog.\npasses',
                 
                 'fwdpct7' : 'Shot\nassists',
                 'fwdpct4' : 'xA',
@@ -1280,7 +1280,6 @@ def scout_report(data_frame, gender, league, season, xtra, template, pos, player
                 'fwdpct9' : 'Prog.\nruns',
                 'extrapct16' : 'Dribbles',
                 'fwdpct5' : 'Dribble\nwin %',
-                'fwdpct11' : 'Touches\nin box',
                 
                 'extrapct7' : 'Aerial\nwins',
                 'fwdpct12' : 'Aerial\nwin %',
@@ -1294,15 +1293,17 @@ def scout_report(data_frame, gender, league, season, xtra, template, pos, player
                 'fwdpct1' : 'Non-pen\ngoals',
                 'extrapct19' : 'Head\ngoals',
                 'fwdpct6' : 'Goal\nconv. %',
+                'fwdpct11' : 'Touches\nin box',
             },
             'midfielders': {
                 'gkpct11' : '% passes\nbeing short',
                 'midpct2' : 'Long pass\ncmp %',
                 'midpct1' : 'Short&med\ncmp %',
-                'extrapct11' : 'Crosses',
-                'extrapct20' : 'Passes to\nfinal 3rd',
-                'extrapct12' : 'Passes\nto box',
                 'extrapct13' : 'Prog.\npasses',
+                'extrapct20' : 'Passes to\nfinal 3rd',
+                
+                'extrapct11' : 'Crosses',
+                'extrapct12' : 'Passes\nto box',
                 'extrapct14' : 'Through\npasses',
                 'extrapct15' : 'Smart\npasses',
                 
@@ -1313,7 +1314,6 @@ def scout_report(data_frame, gender, league, season, xtra, template, pos, player
                 
                 'fwdpct9' : 'Prog.\nruns',
                 'extrapct16' : 'Dribbles',
-                'fwdpct11' : 'Touches\nin box',
                 
                 'extrapct7' : 'Aerial\nwins',
                 'fwdpct12' : 'Aerial\nwin %',
@@ -1327,14 +1327,16 @@ def scout_report(data_frame, gender, league, season, xtra, template, pos, player
                 'extrapct9' : 'npxG/shot',
                 'fwdpct1' : 'Non-pen\ngoals',
                 'fwdpct6' : 'Goal\nconv. %',
+                'fwdpct11' : 'Touches\nin box',
             },
             'fullbacks': {
                 'extrapct3' : 'Cross\nCmp %',
                 'extrapct11' : 'Crosses',
-                'extrapct20' : 'Passes to\nfinal 3rd',
                 'extrapct12' : 'Passes\nto box',
-                'extrapct13' : 'Prog.\npasses',
                 'extrapct14' : 'Through\npasses',
+
+                'extrapct20' : 'Passes to\nfinal 3rd',
+                'extrapct13' : 'Prog.\npasses',
                 
                 'fwdpct7' : 'Shot\nassists',
                 'fwdpct4' : 'xA',
@@ -1343,7 +1345,6 @@ def scout_report(data_frame, gender, league, season, xtra, template, pos, player
                 
                 'fwdpct9' : 'Prog.\nruns',
                 'extrapct16' : 'Dribbles',
-                'fwdpct11' : 'Touches\nin box',
                 
                 'extrapct7' : 'Aerial\nwins',
                 'fwdpct12' : 'Aerial\nwin %',
@@ -1354,20 +1355,21 @@ def scout_report(data_frame, gender, league, season, xtra, template, pos, player
                 
                 'extrapct2' : 'Shots',
                 'fwdpct2' : 'npxG',
+                'fwdpct11' : 'Touches\nin box',
             },
             'centerbacks': {
                 'gkpct8' : 'Passes',
                 'gkpct11' : '% passes\nbeing short',
                 'midpct2' : 'Long pass\ncmp %',
-                'extrapct11' : 'Crosses',
                 'extrapct20' : 'Passes to\nfinal 3rd',
                 'extrapct13' : 'Prog.\npasses',
+
+                'extrapct11' : 'Crosses',
                 'extrapct14' : 'Through\npasses',
                 'fwdpct4' : 'xA',
                 'defpct10' : '1, 2, 3\nassists',
                 
                 'fwdpct9' : 'Prog.\nruns',
-                'fwdpct11' : 'Touches\nin box',
                 
                 'extrapct7' : 'Aerial\nwins',
                 'fwdpct12' : 'Aerial\nwin %',
@@ -1377,6 +1379,7 @@ def scout_report(data_frame, gender, league, season, xtra, template, pos, player
                 
                 'extrapct2' : 'Shots',
                 'fwdpct2' : 'npxG',
+                'fwdpct11' : 'Touches\nin box',
             },
             'goalkeepers': {
                 'gkpct8' : 'Passes',
@@ -1396,38 +1399,38 @@ def scout_report(data_frame, gender, league, season, xtra, template, pos, player
         }
         if template == 'strikers':
             raw_vals = raw_valsdf[["Player",
-                               extra11,extra12,extra13,extra14,extra15,fwd7 ,fwd4 ,fwd3 ,extra17,extra6 ,fwd9 ,extra16,fwd11 ,extra7 ,fwd12 ,extra18,def3 ,mid12 ,extra2 ,fwd2 ,extra9 ,fwd1 ,extra19,fwd6 ,
+                               extra11,extra12,extra14,extra15,extra13,fwd7 ,fwd4 ,fwd3 ,extra17,extra6 ,fwd9 ,extra16 ,extra7 ,fwd12 ,extra18,def3 ,mid12 ,extra2 ,fwd2 ,extra9 ,fwd1 ,extra19,fwd6 ,fwd11
                               ]]
             raw_vals_full = raw_valsdf_full[["Player",
-                               extra11,extra12,extra13,extra14,extra15,fwd7 ,fwd4 ,fwd3 ,extra17,extra6 ,fwd9 ,extra16,fwd11 ,extra7 ,fwd12 ,extra18,def3 ,mid12 ,extra2 ,fwd2 ,extra9 ,fwd1 ,extra19,fwd6 ,
+                               extra11,extra12,extra14,extra15,extra13,fwd7 ,fwd4 ,fwd3 ,extra17,extra6 ,fwd9 ,extra16 ,extra7 ,fwd12 ,extra18,def3 ,mid12 ,extra2 ,fwd2 ,extra9 ,fwd1 ,extra19,fwd6 ,fwd11
                               ]]
         if template == 'wingers':
             raw_vals = raw_valsdf[["Player",
-                                extra3 ,extra11,extra12,extra13,extra14,extra15,fwd7 ,fwd4 ,fwd3 ,extra17,extra6 ,fwd9 ,extra16,fwd5 ,fwd11 ,extra7 ,fwd12 ,extra18,def3 ,mid12 ,extra2 ,fwd2 ,extra9 ,fwd1 ,extra19,fwd6 ,
+                                extra3 ,extra11,extra12,extra14,extra15,extra13,fwd7 ,fwd4 ,fwd3 ,extra17,extra6 ,fwd9 ,extra16,fwd5 ,extra7 ,fwd12 ,extra18,def3 ,mid12 ,extra2 ,fwd2 ,extra9 ,fwd1 ,extra19,fwd6 ,fwd11
                               ]]
             raw_vals_full = raw_valsdf_full[["Player",
-                                extra3 ,extra11,extra12,extra13,extra14,extra15,fwd7 ,fwd4 ,fwd3 ,extra17,extra6 ,fwd9 ,extra16,fwd5 ,fwd11 ,extra7 ,fwd12 ,extra18,def3 ,mid12 ,extra2 ,fwd2 ,extra9 ,fwd1 ,extra19,fwd6 ,
+                                extra3 ,extra11,extra12,extra14,extra15,extra13,fwd7 ,fwd4 ,fwd3 ,extra17,extra6 ,fwd9 ,extra16,fwd5 ,extra7 ,fwd12 ,extra18,def3 ,mid12 ,extra2 ,fwd2 ,extra9 ,fwd1 ,extra19,fwd6 ,fwd11
                               ]]
         if template == 'midfielders':
             raw_vals = raw_valsdf[["Player",
-                                gk11 ,mid2 ,mid1 ,extra11,extra20,extra12,extra13,extra14,extra15,fwd7 ,fwd4 ,fwd3,extra17,fwd9 ,extra16,fwd11 ,extra7 ,fwd12 ,extra18,def3 ,def7 ,def2 ,extra2 ,fwd2 ,extra9 ,fwd1 ,fwd6 ,
+                                gk11 ,mid2 ,mid1, extra13, extra20 ,extra11,extra12,extra14,extra15,fwd7 ,fwd4 ,fwd3,extra17,fwd9 ,extra16 ,extra7 ,fwd12 ,extra18,def3 ,def7 ,def2 ,extra2 ,fwd2 ,extra9 ,fwd1 ,fwd6 ,fwd11
                               ]]
             raw_vals_full = raw_valsdf_full[["Player",
-                                gk11 ,mid2 ,mid1 ,extra11,extra20,extra12,extra13,extra14,extra15,fwd7 ,fwd4 ,fwd3,extra17,fwd9 ,extra16,fwd11 ,extra7 ,fwd12 ,extra18,def3 ,def7 ,def2 ,extra2 ,fwd2 ,extra9 ,fwd1 ,fwd6 ,
+                                gk11 ,mid2 ,mid1, extra13, extra20 ,extra11,extra12,extra14,extra15,fwd7 ,fwd4 ,fwd3,extra17,fwd9 ,extra16 ,extra7 ,fwd12 ,extra18,def3 ,def7 ,def2 ,extra2 ,fwd2 ,extra9 ,fwd1 ,fwd6 ,fwd11
                               ]]
         if template == 'fullbacks':
             raw_vals = raw_valsdf[["Player",
-                                extra3 ,extra11,extra20,extra12,extra13,extra14,fwd7 ,fwd4 ,extra17,def10 ,fwd9 ,extra16,fwd11 ,extra7 ,fwd12 ,extra18,def3 ,def7 ,def2 ,extra2 ,fwd2 ,
+                                extra3 ,extra11,extra12,extra14,extra20,extra13,fwd7 ,fwd4 ,extra17,def10 ,fwd9 ,extra16 ,extra7 ,fwd12 ,extra18,def3 ,def7 ,def2 ,extra2 ,fwd2 ,fwd11
                               ]]
             raw_vals_full = raw_valsdf_full[["Player",
-                                extra3 ,extra11,extra20,extra12,extra13,extra14,fwd7 ,fwd4 ,extra17,def10 ,fwd9 ,extra16,fwd11 ,extra7 ,fwd12 ,extra18,def3 ,def7 ,def2 ,extra2 ,fwd2 ,
+                                extra3 ,extra11,extra12,extra14,extra20,extra13,fwd7 ,fwd4 ,extra17,def10 ,fwd9 ,extra16 ,extra7 ,fwd12 ,extra18,def3 ,def7 ,def2 ,extra2 ,fwd2 ,fwd11
                               ]]
         if template == 'centerbacks':
             raw_vals = raw_valsdf[["Player",
-                                gk8 ,gk11 ,mid2 ,extra11,extra20,extra13,extra14,fwd4 ,def10 ,fwd9 ,fwd11 ,extra7 ,fwd12 ,def3 ,mid12 ,def4 ,extra2 ,fwd2 ,
+                                gk8 ,gk11 ,mid2, extra20, extra13 ,extra11,extra14,fwd4 ,def10 ,fwd9 ,extra7 ,fwd12 ,def3 ,mid12 ,def4 ,extra2 ,fwd2 ,fwd11
                               ]]
             raw_vals_full = raw_valsdf_full[["Player",
-                                gk8 ,gk11 ,mid2 ,extra11,extra20,extra13,extra14,fwd4 ,def10 ,fwd9 ,fwd11 ,extra7 ,fwd12 ,def3 ,mid12 ,def4 ,extra2 ,fwd2 ,
+                                gk8 ,gk11 ,mid2, extra20, extra13 ,extra11,extra14,fwd4 ,def10 ,fwd9 ,extra7 ,fwd12 ,def3 ,mid12 ,def4 ,extra2 ,fwd2 ,fwd11
                               ]]
         if template == 'goalkeepers':
             raw_vals = raw_valsdf[["Player",
@@ -1530,9 +1533,9 @@ def scout_report(data_frame, gender, league, season, xtra, template, pos, player
                     df1['Group'][i] = 'Passing'
                 elif df1['Group'][i] <= 9:
                     df1['Group'][i] = 'Creativity'
-                elif df1['Group'][i] <= 13:
+                elif df1['Group'][i] <= 12:
                     df1['Group'][i] = 'Shooting'
-                elif df1['Group'][i] <= 18:
+                elif df1['Group'][i] <= 17:
                     df1['Group'][i] = 'Ball Movement'
                 elif df1['Group'][i] <= 24:
                     df1['Group'][i] = 'Defense'
@@ -1543,50 +1546,56 @@ def scout_report(data_frame, gender, league, season, xtra, template, pos, player
                     df1['Group'][i] = 'Passing'
                 elif df1['Group'][i] <= 10:
                     df1['Group'][i] = 'Creativity'
-                elif df1['Group'][i] <= 15:
+                elif df1['Group'][i] <= 14:
                     df1['Group'][i] = 'Shooting'
-                elif df1['Group'][i] <= 20:
+                elif df1['Group'][i] <= 19:
                     df1['Group'][i] = 'Ball Movement'
                 elif df1['Group'][i] <= 26:
                     df1['Group'][i] = 'Defense'
     
         if template == 'midfielders':
             for i in range(len(df1)):
-                if df1['Group'][i] <= 9:
+                if df1['Group'][i] <= 5:
                     df1['Group'][i] = 'Passing'
-                elif df1['Group'][i] <= 13:
-                    df1['Group'][i] = 'Creativity'
-                elif df1['Group'][i] <= 16:
-                    df1['Group'][i] = 'Shooting'
-                elif df1['Group'][i] <= 22:
-                    df1['Group'][i] = 'Ball Movement'
-                elif df1['Group'][i] <= 27:
-                    df1['Group'][i] = 'Defense'
-    
-        if template == 'fullbacks':
-            for i in range(len(df1)):
-                if df1['Group'][i] <= 6:
-                    df1['Group'][i] = 'Passing'
-                elif df1['Group'][i] <= 10:
+                elif df1['Group'][i] <= 9:
                     df1['Group'][i] = 'Creativity'
                 elif df1['Group'][i] <= 13:
                     df1['Group'][i] = 'Shooting'
-                elif df1['Group'][i] <= 19:
+                elif df1['Group'][i] <= 15:
                     df1['Group'][i] = 'Ball Movement'
                 elif df1['Group'][i] <= 21:
                     df1['Group'][i] = 'Defense'
-
+                elif df1['Group'][i] <= 27:
+                    df1['Group'][i] = 'Direct'
+                    
+        if template == 'fullbacks':
+            for i in range(len(df1)):
+                if df1['Group'][i] <= 4:
+                    df1['Group'][i] = 'Passing'
+                elif df1['Group'][i] <= 6:
+                    df1['Group'][i] = 'Creativity'
+                elif df1['Group'][i] <= 10:
+                    df1['Group'][i] = 'Shooting'
+                elif df1['Group'][i] <= 12:
+                    df1['Group'][i] = 'Ball Movement'
+                elif df1['Group'][i] <= 18:
+                    df1['Group'][i] = 'Defense'
+                elif df1['Group'][i] <= 21:
+                    df1['Group'][i] = 'Direct'
+                    
         if template == 'centerbacks':
             for i in range(len(df1)):
-                if df1['Group'][i] <= 9:
+                if df1['Group'][i] <= 5:
                     df1['Group'][i] = 'Passing'
-                elif df1['Group'][i] <= 11:
+                elif df1['Group'][i] <= 9:
                     df1['Group'][i] = 'Creativity'
-                elif df1['Group'][i] <= 16:
+                elif df1['Group'][i] <= 10:
                     df1['Group'][i] = 'Shooting'
-                elif df1['Group'][i] <= 18:
+                elif df1['Group'][i] <= 15:
                     df1['Group'][i] = 'Ball Movement'
-    
+                elif df1['Group'][i] <= 18:
+                    df1['Group'][i] = 'Defense'
+                    
         if template == 'goalkeepers':
             for i in range(len(df1)):
                 if df1['Group'][i] <= 6:
@@ -1619,11 +1628,11 @@ def scout_report(data_frame, gender, league, season, xtra, template, pos, player
 
     if custom_radar == 'n':
         template_group_sizes = {
-            'strikers': [5,4,4,5,6],
-            'wingers': [6,4,5,5,6],
-            'midfielders': [9,4,3,6,5],
-            'fullbacks': [6,4,3,6,2],
-            'centerbacks': [9,2,5,2],
+            'strikers': [5,4,3,5,7],
+            'wingers': [6,4,4,5,7],
+            'midfielders': [5,4,4,2,6,6],
+            'fullbacks': [4,2,4,2,6,3],
+            'centerbacks': [5,4,1,5,3],
             'goalkeepers': [6,6],
         }
     if custom_radar == 'y':

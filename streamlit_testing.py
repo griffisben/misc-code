@@ -2223,6 +2223,7 @@ with radar_tab:
         callout = st.selectbox('Data Labels on Bars', ('Per 90', 'Percentile'))
         dist_labels = st.selectbox('Distribution Label Lines on Bars?', ('Yes', 'No'))
         player = st.text_input("Player's Radar to Generate", "")
+        chosen_template = st.selectbox('Radar Template', ('Strikers','Wingers','Midfielders','Fullbacks','Centerbacks','Goalkeepers'))
         page = st.number_input("Age of the player to generate (to guarantee the correct player)", step=1)
         submitted = st.form_submit_button("Submit Options")
         
@@ -2270,7 +2271,7 @@ with radar_tab:
                     league = lg, ##
                     season = season, ##
                     xtra = ' current',
-                    template = template[ix], ##
+                    template = chosen_template.lower(),
                     pos = poses[ix],
                     player_pos = ws_pos[ix],
                     compares = compares[ix],

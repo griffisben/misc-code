@@ -337,61 +337,64 @@ from mplsoccer import VerticalPitch, FontManager
 import matplotlib.patheffects as path_effects
 
 
-def filter_by_position(df, position):
-    fw = ["CF", "RW", "LW", "AMF"]
-    if position == "Forward":
-        return df[df['Main Position'].str.contains('|'.join(fw), na=False)]
-    
-    stw = ["CF", "RW", "LW", "LAMF", "RAMF"]
-    if position == "Strikers and Wingers":
-        return df[df['Main Position'].str.contains('|'.join(stw), na=False)]
-    
-    fwns = ["RW", "LW", "AMF"]
-    if position == "Forwards no ST":
-        return df[df['Main Position'].str.contains('|'.join(fwns), na=False)]
-    
-    wing = ["RW", "LW", "WF", "LAMF", "RAMF"]
-    if position == "Winger":
-        return df[df['Main Position'].str.contains('|'.join(wing), na=False)]
-
-    mids = ["DMF", "CMF", "AMF"]
-    if position == "Midfielder":
-        return df[df['Main Position'].str.contains('|'.join(mids), na=False)]
-
-    cms = ["CMF", "AMF"]
-    if position == "Midfielder no DM":
-        return df[df['Main Position'].str.contains('|'.join(cms), na=False)]
-
-    dms = ["CMF", "DMF"]
-    if position == "Midfielder no CAM":
-        return df[df['Main Position'].str.contains('|'.join(dms), na=False)]
-
-    fbs = ["LB", "RB", "WB"]
-    if position == "Fullback":
-        return df[df['Main Position'].str.contains('|'.join(fbs), na=False)]
-
-    defs = ["LB", "RB", "WB", "CB", "DMF"]
-    if position == "Defenders":
-        return df[df['Main Position'].str.contains('|'.join(defs), na=False)]
-
-    cbdm = ["CB", "DMF"]
-    if position == "CBs & DMs":
-        return df[df['Main Position'].str.contains('|'.join(cbdm), na=False)]
-
-    cf = ["CF"]
-    if position == "CF":
-        return df[df['Main Position'].str.contains('|'.join(cf), na=False)]
-
-    cb = ["CB"]
-    if position == "CB":
-        return df[df['Main Position'].str.contains('|'.join(cb), na=False)]
-
-    gk = ["GK"]
-    if position == "GK":
-        return df[df['Main Position'].str.contains('|'.join(gk), na=False)]
-
+def filter_by_position(df, position, include_in_sample=None):
+    if include_in_sample:
+        return df[df['Main Position'].isin(include_in_sample)]
     else:
-        return df
+        fw = ["CF", "RW", "LW", "AMF"]
+        if position == "Forward":
+            return df[df['Main Position'].str.contains('|'.join(fw), na=False)]
+        
+        stw = ["CF", "RW", "LW", "LAMF", "RAMF"]
+        if position == "Strikers and Wingers":
+            return df[df['Main Position'].str.contains('|'.join(stw), na=False)]
+        
+        fwns = ["RW", "LW", "AMF"]
+        if position == "Forwards no ST":
+            return df[df['Main Position'].str.contains('|'.join(fwns), na=False)]
+        
+        wing = ["RW", "LW", "WF", "LAMF", "RAMF"]
+        if position == "Winger":
+            return df[df['Main Position'].str.contains('|'.join(wing), na=False)]
+    
+        mids = ["DMF", "CMF", "AMF"]
+        if position == "Midfielder":
+            return df[df['Main Position'].str.contains('|'.join(mids), na=False)]
+    
+        cms = ["CMF", "AMF"]
+        if position == "Midfielder no DM":
+            return df[df['Main Position'].str.contains('|'.join(cms), na=False)]
+    
+        dms = ["CMF", "DMF"]
+        if position == "Midfielder no CAM":
+            return df[df['Main Position'].str.contains('|'.join(dms), na=False)]
+    
+        fbs = ["LB", "RB", "WB"]
+        if position == "Fullback":
+            return df[df['Main Position'].str.contains('|'.join(fbs), na=False)]
+    
+        defs = ["LB", "RB", "WB", "CB", "DMF"]
+        if position == "Defenders":
+            return df[df['Main Position'].str.contains('|'.join(defs), na=False)]
+    
+        cbdm = ["CB", "DMF"]
+        if position == "CBs & DMs":
+            return df[df['Main Position'].str.contains('|'.join(cbdm), na=False)]
+    
+        cf = ["CF"]
+        if position == "CF":
+            return df[df['Main Position'].str.contains('|'.join(cf), na=False)]
+    
+        cb = ["CB"]
+        if position == "CB":
+            return df[df['Main Position'].str.contains('|'.join(cb), na=False)]
+    
+        gk = ["GK"]
+        if position == "GK":
+            return df[df['Main Position'].str.contains('|'.join(gk), na=False)]
+    
+        else:
+            return df
 def filter_by_position_long(df, position):
     fw = ["CF", "RW", "LW", "AMF"]
     if position == "Forwards (AM, W, CF)":
@@ -1104,14 +1107,14 @@ def add_labels_dist(angles, values, labels, offset, ax, text_colors, raw_vals_fu
         ax.hlines(std_dev_up_percentile/100, angle - 0.055, angle + 0.055, colors=text_col, linestyles='dotted', linewidth=2, alpha=0.8, zorder=3)
         ax.hlines(std_dev_down_percentile/100, angle - 0.055, angle + 0.055, colors=text_col, linestyles='dotted', linewidth=2, alpha=0.8, zorder=3)
 
-def scout_report(data_frame, gender, league, season, xtra, template, pos, player_pos, mins, minplay, compares, name, ws_name, team, age, sig, extra_text, custom_radar, dist_labels, logo_dict, metric_selections=None):
+def scout_report(data_frame, gender, league, season, xtra, template, pos, player_pos, pos_in_sample, mins, minplay, compares, name, ws_name, team, age, sig, extra_text, custom_radar, dist_labels, logo_dict, metric_selections=None):
     plt.clf()
     df = data_frame
     df = df[df['League']==full_league_name].reset_index(drop=True)
 
     # Filter data
     dfProspect = df[(df['Minutes played'] >= mins)].copy()
-    dfProspect = filter_by_position(dfProspect, pos)
+    dfProspect = filter_by_position(dfProspect, pos, include_in_sample=pos_in_sample)
     raw_valsdf = dfProspect[(dfProspect['Player']==ws_name) & (dfProspect['Team within selected timeframe']==team) & (dfProspect['Age']==age)]
     raw_valsdf_full = dfProspect.copy()
     
@@ -2224,6 +2227,9 @@ with radar_tab:
         callout = st.selectbox('Data Labels on Bars', ('Per 90', 'Percentile'))
         dist_labels = st.selectbox('Distribution Label Lines on Bars?', ('Yes', 'No'))
         chosen_template = st.selectbox('Radar Template', ('Strikers','Wingers','Midfielders','Fullbacks','Centerbacks','Goalkeepers'))
+        compare_default_or_positions = st.selectbox('Only Compare Against Same Position?', ('Yes','Choose custom comparison group'))
+        if compare_default_or_positions == 'Choose custom comparison group':
+            comparison_positions = st.multiselect('Positions to Compare Against', ['Strikers', 'Wingers', 'Attacking Midfielders', 'Central Midfielders', 'Defensive Midfielders', 'Wing Backs', 'Fullbacks', 'Center Backs', 'Goalkeepers'])
         player = st.text_input("Player's Radar to Generate", "")
         page = st.number_input("Age of the player to generate (to guarantee the correct player)", step=1)
         submitted = st.form_submit_button("Submit Options")
@@ -2265,7 +2271,11 @@ with radar_tab:
             ix = ws_pos.index(gen['Main Position'].values[0])
             minplay = int(gen['Minutes played'].values[0])
             player_pos_compare_group = ws_pos_compare_groups[ws_pos_compare_groups.ws_pos==ws_pos[ix]].compare_positions.values[0]
-            st.write(player_pos_compare_group)
+
+            if comparison_positions==False:
+                player_pos_arg = player_pos_compare_group
+            if comparison_positions==True:
+                player_pos_arg = ws_pos_compare_groups[ws_pos_compare_groups.compare_positions==comparison_positions].ws_pos.tolist()
     
             if custom_radar_q == 'n':
                 radar_img = scout_report(
@@ -2277,6 +2287,7 @@ with radar_tab:
                     template = chosen_template.lower(),
                     pos = poses[ix],
                     player_pos = ws_pos[ix],
+                    pos_in_sample = player_pos_arg,
                     compares = compares[ix],
                     mins = mins,
                     minplay=minplay,
@@ -2300,6 +2311,7 @@ with radar_tab:
                     template = 'custom',
                     pos = poses[ix],
                     player_pos = ws_pos[ix],
+                    pos_in_sample = player_pos_arg,
                     compares = compares[ix],
                     mins = mins,
                     minplay=minplay,

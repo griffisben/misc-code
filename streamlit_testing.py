@@ -2367,7 +2367,15 @@ with similarity_tab:
         submitted = st.form_submit_button("Find Similar Players")
         similar_player_lg_lookup = pd.read_csv('https://raw.githubusercontent.com/griffisben/Wyscout_Prospect_Research/main/league_info_lookup.csv')
         geo_input = st.selectbox("Geography Region", ("Region",'Country','Continent','League'))
-        region = st.multiselect(f"{geo_input}(s) to include (leave blank to include all)", similar_player_lg_lookup[geo_input].unique().tolist(), index=0)
+        if geo_input == 'Region':
+            default_region_area = 'Nordics'
+        if geo_input == 'Country':
+            default_region_area = 'Denmark'
+        if geo_input == 'Continent':
+            default_region_area = 'Europe'
+        if geo_input == 'League':
+            default_region_area = 'Danish 1. Division'
+        region = st.multiselect(f"{geo_input}(s) to include (leave blank to include all)", similar_player_lg_lookup[geo_input].unique().tolist(), default=default_region_area)
         tiers = st.multiselect("Tiers to include (leave blank to include all)", ('1','2','3','4','5','6','Youth'))
         time_frame = st.selectbox('Time Frame', ('Current Season','Prior Season','Current & Prior Seasons'))  ### Current Season | Prior Season | Current & Prior Seasons
         wyscout_id = st.text_input("Player's Wyscout ID (get from 'Player List' tab)", "")

@@ -2390,7 +2390,10 @@ with similarity_tab:
         if custom_metric_comparison == 'Pre-Made':
             compare_metrics = st.selectbox('Metric Comparison Group', ('all','ST','W','CAM','CM','DM','FB','CB','GK'))
 
-        full_similarity_df_raw = prep_similarity_df(geo_input, region, tiers, time_frame)
+        if wyscout_id.isna():
+            st.write('Please enter a player ID')
+        else:
+            full_similarity_df_raw = prep_similarity_df(geo_input, region, tiers, time_frame)
     try:
         similar_players_df, player_name, player_age, player_position, player_team = similar_players_search(
             df=full_similarity_df_raw,

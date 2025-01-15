@@ -338,8 +338,9 @@ import matplotlib.patheffects as path_effects
 
 
 def filter_by_position(df, position, include_in_sample=None):
-    if include_in_sample != 'Default':
-        return df[df['Main Position'].isin(include_in_sample)]
+    if include_in_sample:
+        if include_in_sample != 'Default':
+            return df[df['Main Position'].isin(include_in_sample)]
     else:
         fw = ["CF", "RW", "LW", "AMF"]
         if position == "Forward":

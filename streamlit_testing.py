@@ -2293,7 +2293,7 @@ with radar_tab:
             elif len(comparison_positions) == 1:
                 compares_text = f"{', '.join(comparison_positions[0])} and {comparison_positions[1]}"
             else:
-                compares_text = 'n/a'
+                compares_text = compares[ix]
 
 
         if custom_radar_q == 'n':

@@ -339,8 +339,7 @@ import matplotlib.patheffects as path_effects
 
 def filter_by_position(df, position, include_in_sample=None):
     if include_in_sample:
-        if include_in_sample != 'Default':
-            return df[df['Main Position'].isin(include_in_sample)]
+        return df[df['Main Position'].isin(include_in_sample)]
     else:
         fw = ["CF", "RW", "LW", "AMF"]
         if position == "Forward":
@@ -2278,7 +2277,7 @@ with radar_tab:
         player_pos_compare_group = ws_pos_compare_groups[ws_pos_compare_groups.ws_pos==ws_pos[ix]].compare_positions.values[0]
 
         if comparison_positions=='n/a':
-            player_pos_arg = 'Default'
+            player_pos_arg = ws_pos_compare_groups[ws_pos_compare_groups.compare_positions==player_pos_compare_group].ws_pos.tolist()
         else:
             player_pos_arg = ws_pos_compare_groups[ws_pos_compare_groups.compare_positions.isin(comparison_positions)].ws_pos.tolist()
 

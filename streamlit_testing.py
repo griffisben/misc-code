@@ -2010,7 +2010,7 @@ with st.expander('Instructions'):
 
 logo_dict_df = read_csv('https://raw.githubusercontent.com/griffisben/Wyscout_Prospect_Research/main/Wyscout_Logo_Dict.csv')
 logo_dict = pd.Series(logo_dict_df['Team logo'].values,index=logo_dict_df['Team']).to_dict()
-ws_pos_compare_groups = read_csv('https://raw.githubusercontent.com/BG-Kolding/Scouting/main/WyscoutPositionsComparisons.csv')
+ws_pos_compare_groups = read_csv('https://raw.githubusercontent.com/griffisben/Wyscout_Prospect_Research/main/WyscoutPositionsComparisons.csv')
 
 with st.sidebar:
     st.header('Choose Gender')

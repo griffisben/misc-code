@@ -2291,7 +2291,7 @@ with radar_tab:
             elif len(comparison_positions) == 2:
                 compares_text = f"{comparison_positions[0]} and {comparison_positions[1]}"
             elif len(comparison_positions) == 1:
-                compares_text = f"{', '.join(comparison_positions[0])} and {comparison_positions[1]}"
+                compares_text = f"{comparison_positions[0]}"
             else:
                 compares_text = compares[ix]
 

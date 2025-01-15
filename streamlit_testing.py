@@ -1121,7 +1121,9 @@ def scout_report(data_frame, gender, league, season, xtra, template, pos, player
     dfProspect = filter_by_position(dfProspect, pos, include_in_sample=pos_in_sample)
     try:
         raw_valsdf = dfProspect[(dfProspect['Player']==ws_name) & (dfProspect['Team within selected timeframe']==team) & (dfProspect['Age']==age)]
+        st.write('Worked')
     except:
+        st.write('Not Work')
         dfProspect = pd.concat([dfProspect,fallback_raw_valsdf],ignore_index=True)
         raw_valsdf = dfProspect[(dfProspect['Player']==ws_name) & (dfProspect['Team within selected timeframe']==team) & (dfProspect['Age']==age)]
         st.table(raw_valsdf)

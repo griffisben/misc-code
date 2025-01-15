@@ -2289,6 +2289,7 @@ with radar_tab:
             player_pos_arg = ws_pos_compare_groups[ws_pos_compare_groups.compare_positions==player_pos_compare_group].ws_pos.tolist()
         else:
             player_pos_arg = ws_pos_compare_groups[ws_pos_compare_groups.compare_positions.isin(comparison_positions)].ws_pos.tolist()
+            st.write(f"Positions included: {'|'.join(player_pos_arg)}")
 
         if custom_radar_q == 'n':
             radar_img = scout_report(

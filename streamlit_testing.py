@@ -2277,7 +2277,7 @@ with radar_tab:
         if comparison_positions=='n/a':
             player_pos_arg = player_pos_compare_group
         else:
-            player_pos_arg = ws_pos_compare_groups[ws_pos_compare_groups.compare_positions==comparison_positions].ws_pos.tolist()
+            player_pos_arg = ws_pos_compare_groups[ws_pos_compare_groups.compare_positions.isin(comparison_positions)].ws_pos.tolist()
 
         if custom_radar_q == 'n':
             radar_img = scout_report(

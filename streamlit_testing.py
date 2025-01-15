@@ -1117,12 +1117,14 @@ def scout_report(data_frame, gender, league, season, xtra, template, pos, player
     # Filter data
     dfProspect = df[(df['Minutes played'] >= mins)].copy()
     fallback_raw_valsdf = dfProspect[(dfProspect['Player']==ws_name) & (dfProspect['Team within selected timeframe']==team) & (dfProspect['Age']==age)]
+    st.table(fallback_raw_valsdf)
     dfProspect = filter_by_position(dfProspect, pos, include_in_sample=pos_in_sample)
     try:
         raw_valsdf = dfProspect[(dfProspect['Player']==ws_name) & (dfProspect['Team within selected timeframe']==team) & (dfProspect['Age']==age)]
     except:
         dfProspect = pd.concat([dfProspect,fallback_raw_valsdf],ignore_index=True)
         raw_valsdf = dfProspect[(dfProspect['Player']==ws_name) & (dfProspect['Team within selected timeframe']==team) & (dfProspect['Age']==age)]
+        st.table(raw_valsdf)
     raw_valsdf_full = dfProspect.copy()
     
     fwd1  = 'Non-penalty goals per 90'

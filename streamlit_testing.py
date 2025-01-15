@@ -1116,8 +1116,13 @@ def scout_report(data_frame, gender, league, season, xtra, template, pos, player
 
     # Filter data
     dfProspect = df[(df['Minutes played'] >= mins)].copy()
+    fallback_raw_valsdf = dfProspect[(dfProspect['Player']==ws_name) & (dfProspect['Team within selected timeframe']==team) & (dfProspect['Age']==age)]
     dfProspect = filter_by_position(dfProspect, pos, include_in_sample=pos_in_sample)
-    raw_valsdf = dfProspect[(dfProspect['Player']==ws_name) & (dfProspect['Team within selected timeframe']==team) & (dfProspect['Age']==age)]
+    try:
+        raw_valsdf = dfProspect[(dfProspect['Player']==ws_name) & (dfProspect['Team within selected timeframe']==team) & (dfProspect['Age']==age)]
+    except:
+        dfProspect = pd.concat([dfProspect,fallback_raw_valsdf],ignore_index=True)
+        raw_valsdf = dfProspect[(dfProspect['Player']==ws_name) & (dfProspect['Team within selected timeframe']==team) & (dfProspect['Age']==age)]
     raw_valsdf_full = dfProspect.copy()
     
     fwd1  = 'Non-penalty goals per 90'
@@ -2332,7 +2337,7 @@ with radar_tab:
             )
         st.pyplot(radar_img.figure)
         # except:
-        #     st.text("Please enter a valid name & age.  \nPlease check spelling as well.  \nIf you're  using a custom radar, try Running again.")
+        #     st.text("Please enter a valid name & age.  \nPlease check spelling as well.  \nIf you're  using a custom radar, try Running again.\nAnd if you have chosen a custom sample group of positions, ensure the focal player is in the chosen positions")
 
 with all_player_list_tab:
     if chosen_team == 'N/A':

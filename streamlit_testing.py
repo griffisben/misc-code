@@ -1118,13 +1118,10 @@ def scout_report(data_frame, gender, league, season, xtra, template, pos, player
     dfProspect = df[(df['Minutes played'] >= mins)].copy()
     fallback_raw_valsdf = dfProspect[(dfProspect['Player']==ws_name) & (dfProspect['Team within selected timeframe']==team) & (dfProspect['Age']==age)]
     dfProspect = filter_by_position(dfProspect, pos, include_in_sample=pos_in_sample)
-    st.write(dfProspect['Main Position'].unique().tolist())
     raw_valsdf = dfProspect[(dfProspect['Player']==ws_name) & (dfProspect['Team within selected timeframe']==team) & (dfProspect['Age']==age)]
     if len(raw_valsdf)==0:
-        st.write('Not Work')
         dfProspect = pd.concat([dfProspect,fallback_raw_valsdf],ignore_index=True)
         raw_valsdf = dfProspect[(dfProspect['Player']==ws_name) & (dfProspect['Team within selected timeframe']==team) & (dfProspect['Age']==age)]
-        st.table(raw_valsdf)
     raw_valsdf_full = dfProspect.copy()
     
     fwd1  = 'Non-penalty goals per 90'
@@ -2285,9 +2282,14 @@ with radar_tab:
 
         if comparison_positions=='n/a':
             player_pos_arg = ws_pos_compare_groups[ws_pos_compare_groups.compare_positions==player_pos_compare_group].ws_pos.tolist()
+            compares_text = compares[ix]
         else:
             player_pos_arg = ws_pos_compare_groups[ws_pos_compare_groups.compare_positions.isin(comparison_positions)].ws_pos.tolist()
-            st.write(f"Positions included: {', '.join(player_pos_arg)}")
+            if len(comparison_positions) > 1:
+                compares_text = f"{', '.join(comparison_positions[:-1])}, and {comparison_positions[-1]}"
+            else:
+                compares_text = comparison_positions[0]
+
 
         if custom_radar_q == 'n':
             radar_img = scout_report(
@@ -2300,7 +2302,7 @@ with radar_tab:
                 pos = poses[ix],
                 player_pos = ws_pos[ix],
                 pos_in_sample = player_pos_arg,
-                compares = compares[ix],
+                compares = compares_text,
                 mins = mins,
                 minplay=minplay,
                 name = gen['Player'].values[0],

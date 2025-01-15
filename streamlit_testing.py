@@ -1386,7 +1386,7 @@ def scout_report(data_frame, gender, league, season, xtra, template, pos, player
                 'gkpct13' : 'Received\npasses',
                 'gkpct12' : '% passes\nbeing lateral',
                 'midpct2' : 'Long pass\ncmp %',
-                'fwdpct9' : 'Prog. runs',
+                'fwdpct10' : 'Prog. passes',
                 'extrapct21' : 'Prog. pass\ncmp %',
                 
                 'gkpct3' : 'Shots against',
@@ -2010,6 +2010,7 @@ with st.expander('Instructions'):
 
 logo_dict_df = read_csv('https://raw.githubusercontent.com/griffisben/Wyscout_Prospect_Research/main/Wyscout_Logo_Dict.csv')
 logo_dict = pd.Series(logo_dict_df['Team logo'].values,index=logo_dict_df['Team']).to_dict()
+ws_pos_compare_groups = read_csv('https://raw.githubusercontent.com/BG-Kolding/Scouting/main/WyscoutPositionsComparisons.csv')
 
 with st.sidebar:
     st.header('Choose Gender')
@@ -2229,7 +2230,7 @@ with radar_tab:
         
         dfxxx = df_basic[df_basic['Minutes played']>=mins].copy().reset_index(drop=True)
         dfxxx = dfxxx[dfxxx['League']==full_league_name].reset_index(drop=True)
-        df1 = dfxxx[['Player', 'Team within selected timeframe', 'Position', 'Age', 'Minutes played']]
+        df1 = dfxxx[['Wyscout id', 'Player', 'Team within selected timeframe', 'Position', 'Age', 'Minutes played']]
         df1 = df1.dropna(subset=['Position', 'Team within selected timeframe', 'Age']).reset_index(drop=True)
         df1 = df1.dropna(subset=['Position']).reset_index(drop=True)
         df1['Age'] = df1['Age'].astype(int)
@@ -2263,6 +2264,8 @@ with radar_tab:
             gen = df1[(df1['Player']==player) & (df1['Age']==page)]
             ix = ws_pos.index(gen['Main Position'].values[0])
             minplay = int(gen['Minutes played'].values[0])
+            player_pos_compare_group = ws_pos_compare_groups[ws_pos_compare_groups.ws_pos==ws_pos[ix]].compare_positions.values[0]
+            st.write(player_pos_compare_group)
     
             if custom_radar_q == 'n':
                 radar_img = scout_report(

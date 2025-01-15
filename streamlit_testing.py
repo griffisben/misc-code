@@ -2275,7 +2275,7 @@ with radar_tab:
         player_pos_compare_group = ws_pos_compare_groups[ws_pos_compare_groups.ws_pos==ws_pos[ix]].compare_positions.values[0]
 
         if comparison_positions=='n/a':
-            player_pos_arg = player_pos_compare_group
+            player_pos_arg = [player_pos_compare_group]
         else:
             player_pos_arg = ws_pos_compare_groups[ws_pos_compare_groups.compare_positions.isin(comparison_positions)].ws_pos.tolist()
 

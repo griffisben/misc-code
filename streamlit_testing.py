@@ -2230,6 +2230,8 @@ with radar_tab:
         compare_default_or_positions = st.selectbox('Only Compare Against Same Position?', ('Yes','Choose custom comparison group'))
         if compare_default_or_positions == 'Choose custom comparison group':
             comparison_positions = st.multiselect('Positions to Compare Against', ['Strikers', 'Wingers', 'Attacking Midfielders', 'Central Midfielders', 'Defensive Midfielders', 'Wing Backs', 'Fullbacks', 'Center Backs', 'Goalkeepers'])
+        else:
+            comparison_positions = 'n/a'
         player = st.text_input("Player's Radar to Generate", "")
         page = st.number_input("Age of the player to generate (to guarantee the correct player)", step=1)
         submitted = st.form_submit_button("Submit Options")
@@ -2272,9 +2274,9 @@ with radar_tab:
         minplay = int(gen['Minutes played'].values[0])
         player_pos_compare_group = ws_pos_compare_groups[ws_pos_compare_groups.ws_pos==ws_pos[ix]].compare_positions.values[0]
 
-        if comparison_positions==False:
+        if comparison_positions=='n/a':
             player_pos_arg = player_pos_compare_group
-        if comparison_positions==True:
+        else:
             player_pos_arg = ws_pos_compare_groups[ws_pos_compare_groups.compare_positions==comparison_positions].ws_pos.tolist()
 
         if custom_radar_q == 'n':

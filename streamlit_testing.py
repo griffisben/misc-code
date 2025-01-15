@@ -2274,80 +2274,80 @@ with radar_tab:
     
         xtratext = lg_lookup[(lg_lookup.League==lg) & (lg_lookup.Season==season)].Date.values[0]
 
-        # try:
-        gen = df1[(df1['Player']==player) & (df1['Age']==page)]
-        st.table(gen)
-        ix = ws_pos.index(gen['Main Position'].values[0])
-        minplay = int(gen['Minutes played'].values[0])
-        player_pos_compare_group = ws_pos_compare_groups[ws_pos_compare_groups.ws_pos==ws_pos[ix]].compare_positions.values[0]
-
-        if comparison_positions=='n/a':
-            player_pos_arg = ws_pos_compare_groups[ws_pos_compare_groups.compare_positions==player_pos_compare_group].ws_pos.tolist()
-            compares_text = compares[ix]
-        else:
-            player_pos_arg = ws_pos_compare_groups[ws_pos_compare_groups.compare_positions.isin(comparison_positions)].ws_pos.tolist()
-            if len(comparison_positions) > 2:
-                compares_text = f"{', '.join(comparison_positions[:-1])}, and {comparison_positions[-1]}"
-            elif len(comparison_positions) == 2:
-                compares_text = f"{comparison_positions[0]} and {comparison_positions[1]}"
-            elif len(comparison_positions) == 1:
-                compares_text = f"{comparison_positions[0]}"
-            else:
+        try:
+            gen = df1[(df1['Player']==player) & (df1['Age']==page)]
+            st.table(gen)
+            ix = ws_pos.index(gen['Main Position'].values[0])
+            minplay = int(gen['Minutes played'].values[0])
+            player_pos_compare_group = ws_pos_compare_groups[ws_pos_compare_groups.ws_pos==ws_pos[ix]].compare_positions.values[0]
+    
+            if comparison_positions=='n/a':
+                player_pos_arg = ws_pos_compare_groups[ws_pos_compare_groups.compare_positions==player_pos_compare_group].ws_pos.tolist()
                 compares_text = compares[ix]
-
-
-        if custom_radar_q == 'n':
-            radar_img = scout_report(
-                data_frame = df_basic, ##
-                gender = gender, ##
-                league = lg, ##
-                season = season, ##
-                xtra = ' current',
-                template = chosen_template.lower(),
-                pos = poses[ix],
-                player_pos = ws_pos[ix],
-                pos_in_sample = player_pos_arg,
-                compares = compares_text,
-                mins = mins,
-                minplay=minplay,
-                name = gen['Player'].values[0],
-                ws_name = gen['Player'].values[0],
-                team = gen['Team within selected timeframe'].values[0],
-                age = gen['Age'].values[0],
-                sig = '',
-                extra_text = xtratext,
-                custom_radar='n',
-                dist_labels=dist_labels,
-                logo_dict=logo_dict,
-            )
-        if custom_radar_q == 'y':
-            radar_img = scout_report(
-                data_frame = df_basic, ##
-                gender = gender, ##
-                league = lg, ##
-                season = season, ##
-                xtra = ' current',
-                template = 'custom',
-                pos = poses[ix],
-                player_pos = ws_pos[ix],
-                pos_in_sample = player_pos_arg,
-                compares = compares_text,
-                mins = mins,
-                minplay=minplay,
-                name = gen['Player'].values[0],
-                ws_name = gen['Player'].values[0],
-                team = gen['Team within selected timeframe'].values[0],
-                age = gen['Age'].values[0],
-                sig = '',
-                extra_text = xtratext,
-                custom_radar='y',
-                metric_selections=metric_selections,
-                dist_labels=dist_labels,
-                logo_dict=logo_dict,
-            )
-        st.pyplot(radar_img.figure)
-        # except:
-        #     st.text("Please enter a valid name & age.  \nPlease check spelling as well.  \nIf you're  using a custom radar, try Running again.\nAnd if you have chosen a custom sample group of positions, ensure the focal player is in the chosen positions")
+            else:
+                player_pos_arg = ws_pos_compare_groups[ws_pos_compare_groups.compare_positions.isin(comparison_positions)].ws_pos.tolist()
+                if len(comparison_positions) > 2:
+                    compares_text = f"{', '.join(comparison_positions[:-1])}, and {comparison_positions[-1]}"
+                elif len(comparison_positions) == 2:
+                    compares_text = f"{comparison_positions[0]} and {comparison_positions[1]}"
+                elif len(comparison_positions) == 1:
+                    compares_text = f"{comparison_positions[0]}"
+                else:
+                    compares_text = compares[ix]
+    
+    
+            if custom_radar_q == 'n':
+                radar_img = scout_report(
+                    data_frame = df_basic, ##
+                    gender = gender, ##
+                    league = lg, ##
+                    season = season, ##
+                    xtra = ' current',
+                    template = chosen_template.lower(),
+                    pos = poses[ix],
+                    player_pos = ws_pos[ix],
+                    pos_in_sample = player_pos_arg,
+                    compares = compares_text,
+                    mins = mins,
+                    minplay=minplay,
+                    name = gen['Player'].values[0],
+                    ws_name = gen['Player'].values[0],
+                    team = gen['Team within selected timeframe'].values[0],
+                    age = gen['Age'].values[0],
+                    sig = '',
+                    extra_text = xtratext,
+                    custom_radar='n',
+                    dist_labels=dist_labels,
+                    logo_dict=logo_dict,
+                )
+            if custom_radar_q == 'y':
+                radar_img = scout_report(
+                    data_frame = df_basic, ##
+                    gender = gender, ##
+                    league = lg, ##
+                    season = season, ##
+                    xtra = ' current',
+                    template = 'custom',
+                    pos = poses[ix],
+                    player_pos = ws_pos[ix],
+                    pos_in_sample = player_pos_arg,
+                    compares = compares_text,
+                    mins = mins,
+                    minplay=minplay,
+                    name = gen['Player'].values[0],
+                    ws_name = gen['Player'].values[0],
+                    team = gen['Team within selected timeframe'].values[0],
+                    age = gen['Age'].values[0],
+                    sig = '',
+                    extra_text = xtratext,
+                    custom_radar='y',
+                    metric_selections=metric_selections,
+                    dist_labels=dist_labels,
+                    logo_dict=logo_dict,
+                )
+            st.pyplot(radar_img.figure)
+        except:
+            st.text("Please enter a valid name & age.  \nPlease check spelling as well.  \nIf you're  using a custom radar, try Running again.\nAnd if you have chosen a custom sample group of positions, ensure the focal player is in the chosen positions")
 
 with all_player_list_tab:
     if chosen_team == 'N/A':

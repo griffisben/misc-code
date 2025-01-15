@@ -1119,6 +1119,7 @@ def scout_report(data_frame, gender, league, season, xtra, template, pos, player
     fallback_raw_valsdf = dfProspect[(dfProspect['Player']==ws_name) & (dfProspect['Team within selected timeframe']==team) & (dfProspect['Age']==age)]
     st.table(fallback_raw_valsdf)
     dfProspect = filter_by_position(dfProspect, pos, include_in_sample=pos_in_sample)
+    st.write(dfProspect['Main Position'].unique().tolist())
     try:
         raw_valsdf = dfProspect[(dfProspect['Player']==ws_name) & (dfProspect['Team within selected timeframe']==team) & (dfProspect['Age']==age)]
         st.write('Worked')
@@ -2289,7 +2290,7 @@ with radar_tab:
             player_pos_arg = ws_pos_compare_groups[ws_pos_compare_groups.compare_positions==player_pos_compare_group].ws_pos.tolist()
         else:
             player_pos_arg = ws_pos_compare_groups[ws_pos_compare_groups.compare_positions.isin(comparison_positions)].ws_pos.tolist()
-            st.write(f"Positions included: {'|'.join(player_pos_arg)}")
+            st.write(f"Positions included: {', '.join(player_pos_arg)}")
 
         if custom_radar_q == 'n':
             radar_img = scout_report(

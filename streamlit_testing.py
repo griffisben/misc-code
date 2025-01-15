@@ -2289,7 +2289,7 @@ with radar_tab:
             if len(comparison_positions) > 2:
                 compares_text = f"{', '.join(comparison_positions[:-1])}, and {comparison_positions[-1]}"
             elif len(comparison_positions) == 2:
-                compares_text = f"{', '.join(comparison_positions[0])} and {comparison_positions[1]}"
+                compares_text = f"{comparison_positions[0]} and {comparison_positions[1]}"
             elif len(comparison_positions) == 1:
                 compares_text = f"{', '.join(comparison_positions[0])} and {comparison_positions[1]}"
             else:

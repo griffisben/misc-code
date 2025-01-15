@@ -2286,10 +2286,14 @@ with radar_tab:
             compares_text = compares[ix]
         else:
             player_pos_arg = ws_pos_compare_groups[ws_pos_compare_groups.compare_positions.isin(comparison_positions)].ws_pos.tolist()
-            if len(comparison_positions) > 1:
+            if len(comparison_positions) > 2:
                 compares_text = f"{', '.join(comparison_positions[:-1])}, and {comparison_positions[-1]}"
+            elif len(comparison_positions) == 2:
+                compares_text = f"{', '.join(comparison_positions[0])} and {comparison_positions[1]}"
+            elif len(comparison_positions) == 1:
+                compares_text = f"{', '.join(comparison_positions[0])} and {comparison_positions[1]}"
             else:
-                compares_text = comparison_positions[0]
+                compares_text = compares[ix]
 
 
         if custom_radar_q == 'n':

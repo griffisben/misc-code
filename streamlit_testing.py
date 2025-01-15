@@ -2231,7 +2231,7 @@ with radar_tab:
         chosen_template = st.selectbox('Radar Template', ('Strikers','Wingers','Midfielders','Fullbacks','Centerbacks','Goalkeepers'))
         compare_default_or_positions = st.selectbox('Only Compare Against Same Position?', ('Yes','Choose custom comparison group'))
         if compare_default_or_positions == 'Choose custom comparison group':
-            comparison_positions = st.multiselect('Positions to Compare Against', ['Strikers', 'Wingers', 'Attacking Midfielders', 'Central Midfielders', 'Defensive Midfielders', 'Wing Backs', 'Fullbacks', 'Center Backs', 'Goalkeepers'])
+            comparison_positions = st.multiselect('Positions to Compare Against', ['Strikers', 'Wingers', 'Attacking Midfielders', 'Central Midfielders', 'Defensive Midfielders', 'FBs & WBs', 'Center Backs', 'Goalkeepers'])
         else:
             comparison_positions = 'n/a'
         player = st.text_input("Player's Radar to Generate", "")

@@ -91,8 +91,8 @@ def prep_similarity_df(geo_input, region, tiers, time_frame):
     full_similarity_df_raw = pd.concat(dfs, ignore_index=True)
     
     replace_dict = {
-        'LAMF': 'LW',
-        'RAMF': 'RW',
+        'LAMF': 'LWF',
+        'RAMF': 'RWF',
         'LCB3': 'LCB',
         'RCB3': 'RCB',
         'LCB5': 'LCB',
@@ -341,19 +341,19 @@ def filter_by_position(df, position, include_in_sample=None):
     if include_in_sample:
         return df[df['Main Position'].isin(include_in_sample)]
     else:
-        fw = ["CF", "RW", "LW", "AMF"]
+        fw = ["CF", "WF", "AMF"]
         if position == "Forward":
             return df[df['Main Position'].str.contains('|'.join(fw), na=False)]
         
-        stw = ["CF", "RW", "LW", "LAMF", "RAMF"]
+        stw = ["CF", "WF", "LAMF", "RAMF"]
         if position == "Strikers and Wingers":
             return df[df['Main Position'].str.contains('|'.join(stw), na=False)]
         
-        fwns = ["RW", "LW", "AMF"]
+        fwns = ["WF", "AMF"]
         if position == "Forwards no ST":
             return df[df['Main Position'].str.contains('|'.join(fwns), na=False)]
         
-        wing = ["RW", "LW", "WF", "LAMF", "RAMF"]
+        wing = ["WF", "LAMF", "RAMF"]
         if position == "Winger":
             return df[df['Main Position'].str.contains('|'.join(wing), na=False)]
     
@@ -396,19 +396,19 @@ def filter_by_position(df, position, include_in_sample=None):
         else:
             return df
 def filter_by_position_long(df, position):
-    fw = ["CF", "RW", "LW", "AMF"]
+    fw = ["CF", "WF", "AMF"]
     if position == "Forwards (AM, W, CF)":
         return df[df['Main Position'].str.contains('|'.join(fw), na=False)]
     
-    stw = ["CF", "RW", "LW", "LAMF", "RAMF"]
+    stw = ["CF", "WF", "LAMF", "RAMF"]
     if position == "Strikers and Wingers":
         return df[df['Main Position'].str.contains('|'.join(stw), na=False)]
     
-    fwns = ["RW", "LW", "AMF"]
+    fwns = ["WF", "AMF"]
     if position == "Forwards no ST (AM, W)":
         return df[df['Main Position'].str.contains('|'.join(fwns), na=False)]
     
-    wing = ["RW", "LW", "WF", "LAMF", "RAMF"]
+    wing = ["WF", "LAMF", "RAMF"]
     if position == "Wingers":
         return df[df['Main Position'].str.contains('|'.join(wing), na=False)]
 
@@ -497,8 +497,8 @@ def load_league_data(data, league_season):
     df['Main Position'] = df['Position'].str.split().str[0].str.rstrip(',')
     df.fillna(0,inplace=True)
     position_replacements = {
-        'LAMF': 'LW',
-        'RAMF': 'RW',
+        'LAMF': 'LWF',
+        'RAMF': 'RWF',
         'LCB3': 'LCB',
         'RCB3': 'RCB',
         'LCB5': 'LCB',
@@ -2247,16 +2247,16 @@ with radar_tab:
         df1['Main Position'] = df1['Position'].str.split().str[0].str.rstrip(',')
         df1 = df1.dropna(subset=['Main Position']).reset_index(drop=True)
         position_replacements = {
-            'LAMF': 'LW',
-            'RAMF': 'RW',
+            'LAMF': 'LWF',
+            'RAMF': 'RWF',
             'LCB3': 'LCB',
             'RCB3': 'RCB',
             'LCB5': 'LCB',
             'RCB5': 'RCB',
             'LB5': 'LB',
             'RB5': 'RB',
-            'RWB': 'RB',
-            'LWB': 'LB',
+            # 'RWB': 'RB',
+            # 'LWB': 'LB',
             'LCM3': 'LCMF',
             'RCM3': 'RCMF'
         }

@@ -2276,7 +2276,6 @@ with radar_tab:
 
         try:
             gen = df1[(df1['Player']==player) & (df1['Age']==page)]
-            st.table(gen)
             ix = ws_pos.index(gen['Main Position'].values[0])
             minplay = int(gen['Minutes played'].values[0])
             player_pos_compare_group = ws_pos_compare_groups[ws_pos_compare_groups.ws_pos==ws_pos[ix]].compare_positions.values[0]

@@ -2468,12 +2468,13 @@ with filter_tab:
         foul = st.slider('Fouls Committed per 90', min_dict['Fouls per 90'], max_dict['Fouls per 90'], key='slider31')
         fouldraw = st.slider('Fouls Drawn per 90', min_dict['Fouls suffered per 90'], max_dict['Fouls suffered per 90'], key='slider32')
         cards = st.slider('Cards per 90', min_dict['Cards per 90'], max_dict['Cards per 90'], key='slider33')
-        concede = st.slider('Conceded goals per 90', min_dict['Conceded goals per 90'], max_dict['Conceded goals per 90'], key='slider34')
-        saverate = st.slider('Save rate, %', min_dict['Save rate, %'], max_dict['Save rate, %'], key='slider35')
-        exits = st.slider('Exits per 90', min_dict['Exits per 90'], max_dict['Exits per 90'], key='slider36')
-        psxg = st.slider('Prevented goals per 90', min_dict['Prevented goals per 90'], max_dict['Prevented goals per 90'], key='slider37')
-        gppct = st.slider('Goals prevented %', min_dict['Goals prevented %'], max_dict['Goals prevented %'], key='slider38')
-        shotsfaced = st.slider('Shots against per 90', min_dict['Shots against per 90'], max_dict['Shots against per 90'], key='slider39')
+        if pos_select == 'Goalkeepers':
+            concede = st.slider('Conceded goals per 90', min_dict['Conceded goals per 90'], max_dict['Conceded goals per 90'], key='slider34')
+            saverate = st.slider('Save rate, %', min_dict['Save rate, %'], max_dict['Save rate, %'], key='slider35')
+            exits = st.slider('Exits per 90', min_dict['Exits per 90'], max_dict['Exits per 90'], key='slider36')
+            psxg = st.slider('Prevented goals per 90', min_dict['Prevented goals per 90'], max_dict['Prevented goals per 90'], key='slider37')
+            gppct = st.slider('Goals prevented %', min_dict['Goals prevented %'], max_dict['Goals prevented %'], key='slider38')
+            shotsfaced = st.slider('Shots against per 90', min_dict['Shots against per 90'], max_dict['Shots against per 90'], key='slider39')
 
 with filter_table_tab:
     final = create_player_research_table(df_basic, mins, full_league_name, pos_select, ages[0], ages[1])
@@ -2510,12 +2511,13 @@ with filter_table_tab:
                   (final['Fouls per 90']>=foul) &
                   (final['Fouls suffered per 90']>=fouldraw) &
                   (final['Cards per 90']>=cards) &
-                  (final['Conceded goals per 90']>=concede) &
-                (final['Save rate, %']>=saverate) &
-                (final['Exits per 90']>=exits) &
-                (final['Prevented goals per 90']>=psxg) &
-                (final['Goals prevented %']>=gppct) &
-                (final['Shots against per 90']>=shotsfaced)
+        if pos_select == 'Goalkeepers':
+            player_research_table = (player_research_table['Conceded goals per 90']>=concede) &
+                (player_research_table['Save rate, %']>=saverate) &
+                (player_research_table['Exits per 90']>=exits) &
+                (player_research_table['Prevented goals per 90']>=psxg) &
+                (player_research_table['Goals prevented %']>=gppct) &
+                (player_research_table['Shots against per 90']>=shotsfaced)
                  ].reset_index(drop=True)
     
     st.dataframe(player_research_table.style.applymap(color_percentile, subset=player_research_table.columns[6:]))

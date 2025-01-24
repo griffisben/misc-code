@@ -2414,27 +2414,28 @@ with similarity_tab:
 with filter_tab:
     with st.form('Position Filter Min Filters'):
         submitted = st.form_submit_button("Submit Position")
-        pos_select_1 = st.selectbox('Positions', ('Strikers', 'Strikers and Wingers', 'Forwards (AM, W, CF)',
-                                'Forwards no ST (AM, W)', 'Wingers', 'Central Midfielders (DM, CM, CAM)',
-                                'Central Midfielders no CAM (DM, CM)', 'Central Midfielders no DM (CM, CAM)', 'Fullbacks (FBs/WBs)',
-                                'Defenders (CB, FB/WB, DM)', 'Centre-Backs', 'CBs & DMs','Goalkeepers'))
-
-    final = create_player_research_table(df_basic, mins, full_league_name, pos_select_1, ages[0], ages[1])
-    min_dict = final.min()[6:]
-    max_dict = final.max()[6:]
-    st.button("Reset Sliders", on_click=_update_slider, kwargs={"value": 0.0})
-    with st.form('Minimum Percentile Filters'):
-        submitted = st.form_submit_button("Submit Filters")
         pos_select = st.selectbox('Positions', ('Strikers', 'Strikers and Wingers', 'Forwards (AM, W, CF)',
                                 'Forwards no ST (AM, W)', 'Wingers', 'Central Midfielders (DM, CM, CAM)',
                                 'Central Midfielders no CAM (DM, CM)', 'Central Midfielders no DM (CM, CAM)', 'Fullbacks (FBs/WBs)',
                                 'Defenders (CB, FB/WB, DM)', 'Centre-Backs', 'CBs & DMs','Goalkeepers'))
 
+    final = create_player_research_table(df_basic, mins, full_league_name, pos_select, ages[0], ages[1])
+    min_dict = final.min()[6:]
+    max_dict = final.max()[6:]
+    mean_dict = final.mean()[6:]
+    st.button("Reset Sliders", on_click=_update_slider, kwargs={"value": 0.0})
+    with st.form('Minimum Percentile Filters'):
+        # submitted = st.form_submit_button("Submit Filters")
+        # pos_select = st.selectbox('Positions', ('Strikers', 'Strikers and Wingers', 'Forwards (AM, W, CF)',
+        #                         'Forwards no ST (AM, W)', 'Wingers', 'Central Midfielders (DM, CM, CAM)',
+        #                         'Central Midfielders no CAM (DM, CM)', 'Central Midfielders no DM (CM, CAM)', 'Fullbacks (FBs/WBs)',
+        #                         'Defenders (CB, FB/WB, DM)', 'Centre-Backs', 'CBs & DMs','Goalkeepers'))
+
             
         if ['slider1','slider2','slider3','slider4','slider5','slider6','slider7','slider8','slider9','slider10','slider11','slider12','slider13','slider14','slider15','slider16','slider17','slider18','slider19','slider20','slider21','slider22','slider23','slider24','slider25','slider26','slider27','slider28','slider29','slider30','slider31','slider32','slider33','slider34','slider35','slider36','slider37','slider38','slider39'] not in st.session_state:
             pass
         st.write(max_dict['Passes per 90'])
-        short = st.slider('Short & Medium Pass Cmp %', min_dict['Accurate short / medium passes, %'], max_dict['Accurate short / medium passes, %'], key='slider1')
+        short = st.slider('Short & Medium Pass Cmp %', min_dict['Accurate short / medium passes, %'], max_dict['Accurate short / medium passes, %'], mean_dict['Accurate short / medium passes, %'] key='slider1')
         long = st.slider('Long Pass Cmp %', min_dict['Accurate long passes, %'], max_dict['Accurate long passes, %'], key='slider2')
         passestot = st.slider('Passes per 90', min_dict['Passes per 90'], max_dict['Passes per 90'], key='slider3')
         smart = st.slider('Smart Passes per 90', 0.0, 1.0, 0.0, key='slider4')

@@ -1907,10 +1907,10 @@ def create_player_research_table(df_basic, mins, full_league_name, pos, min_age,
     dfProspect[ranked_columns] = 0.0
     dfProspect[inverse_ranked_columns] = 0.0
     
-    for column, column_r in zip(ranked_columns, ranked_columns_r):
-        dfProspect[column] = rank_column(dfProspect, column_r)
-    for column, column_r in zip(inverse_ranked_columns, inverse_ranked_columns_r):
-        dfProspect[column] = rank_column_inverse(dfProspect, column_r)
+    # for column, column_r in zip(ranked_columns, ranked_columns_r):
+    #     dfProspect[column] = rank_column(dfProspect, column_r)
+    # for column, column_r in zip(inverse_ranked_columns, inverse_ranked_columns_r):
+    #     dfProspect[column] = rank_column_inverse(dfProspect, column_r)
     
     
     final = dfProspect[['Player','Age','League','Position','Team within selected timeframe','Birth country',
@@ -2178,10 +2178,10 @@ def make_fig(ages,exp_contracts,rank_11_base,show_ranks2,season,lg,normalize_to_
                      ha='center',va='top', size=12, color='#4a2e19')
 
     if normalize_to_100 == 'Yes':
-        axs['endnote'].text(0.5, -.3, f"Scores are gnerated by weighting z-scores of various metrics important to each role-position\nScores normalized so that the top player's score is 100 and the worst score is 0\nGenerated on Best11Scouting.streamlit.app",
+        axs['endnote'].text(0.5, -.3, f"Scores are gnerated by weighting z-scores of various metrics important to each role-position\nScores normalized so that the top player's score is 100 and the worst score is 0",
                          ha='center',va='top', size=10, color='#4a2e19')
     else:
-        axs['endnote'].text(0.5, -.3, f"Scores are gnerated by weighting z-scores of various metrics important to each role-position\nGenerated on Best11Scouting.streamlit.app",
+        axs['endnote'].text(0.5, -.3, f"Scores are gnerated by weighting z-scores of various metrics important to each role-position",
                          ha='center',va='top', size=10, color='#4a2e19')
     return fig
 
@@ -2410,6 +2410,9 @@ with similarity_tab:
         st.write("Please enter a player's ID. Make sure the Region & Time Frame includes the league the focal player plays in")
 
 with filter_tab:
+    final = create_player_research_table(df_basic, mins, full_league_name, pos_select, ages[0], ages[1])
+    min_dict = final.min()[6:]
+    max_dict = final.max()[6:]
     st.button("Reset Sliders", on_click=_update_slider, kwargs={"value": 0.0})
     with st.form('Minimum Percentile Filters'):
         submitted = st.form_submit_button("Submit Filters")
@@ -2421,10 +2424,10 @@ with filter_tab:
             
         if ['slider1','slider2','slider3','slider4','slider5','slider6','slider7','slider8','slider9','slider10','slider11','slider12','slider13','slider14','slider15','slider16','slider17','slider18','slider19','slider20','slider21','slider22','slider23','slider24','slider25','slider26','slider27','slider28','slider29','slider30','slider31','slider32','slider33','slider34','slider35','slider36','slider37','slider38','slider39'] not in st.session_state:
             pass
-        
-        short = st.slider('Short & Medium Pass Cmp %', 0.0, 1.0, 0.0, key='slider1')
-        long = st.slider('Long Pass Cmp %', 0.0, 1.0, 0.0, key='slider2')
-        passestot = st.slider('Passes per 90', 0.0, 1.0, 0.0, key='slider3')
+        st.write(max_dict['Passes per 90'])
+        short = st.slider('Short & Medium Pass Cmp %', min_dict['Accurate short / medium passes, %'], max_dict['Accurate short / medium passes, %', min_dict['Accurate short / medium passes, %'], key='slider1')
+        long = st.slider('Long Pass Cmp %', min_dict['Accurate long passes, %'], max_dict['Accurate long passes, %'], key='slider2')
+        passestot = st.slider('Passes per 90', min_dict['Passes per 90'], max_dict['Passes per 90'], key='slider3')
         smart = st.slider('Smart Passes per 90', 0.0, 1.0, 0.0, key='slider4')
         crosspct = st.slider('Cross Cmp %', 0.0, 1.0, 0.0, key='slider5')
         crosses = st.slider('Crosses per 90', 0.0, 1.0, 0.0, key='slider6')
@@ -2865,7 +2868,7 @@ with map_tab:
     ).properties(
         # width=800,
         # height=600,
-        title=alt.Title(text=f"Available {gender}'s Leagues By Country: Best11Scouting.streamlit.app",
+        title=alt.Title(text=f"Available {gender}'s Leagues By Country",
                        subtitle="Hover over each country to see the leagues loaded into the app. Darker red indicates more leagues available")
     
     ).project(

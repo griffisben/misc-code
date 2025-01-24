@@ -2410,7 +2410,14 @@ with similarity_tab:
         st.write("Please enter a player's ID. Make sure the Region & Time Frame includes the league the focal player plays in")
 
 with filter_tab:
-    final = create_player_research_table(df_basic, mins, full_league_name, pos_select, ages[0], ages[1])
+    with st.form('Minimum Percentile Filters'):
+        submitted = st.form_submit_button("Submit Position")
+        pos_select_1 = st.selectbox('Positions', ('Strikers', 'Strikers and Wingers', 'Forwards (AM, W, CF)',
+                                'Forwards no ST (AM, W)', 'Wingers', 'Central Midfielders (DM, CM, CAM)',
+                                'Central Midfielders no CAM (DM, CM)', 'Central Midfielders no DM (CM, CAM)', 'Fullbacks (FBs/WBs)',
+                                'Defenders (CB, FB/WB, DM)', 'Centre-Backs', 'CBs & DMs','Goalkeepers'))
+
+    final = create_player_research_table(df_basic, mins, full_league_name, pos_select_1, ages[0], ages[1])
     min_dict = final.min()[6:]
     max_dict = final.max()[6:]
     st.button("Reset Sliders", on_click=_update_slider, kwargs={"value": 0.0})

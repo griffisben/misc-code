@@ -2512,7 +2512,7 @@ with filter_table_tab:
                   (final['Cards per 90']>=cards)
                     ].reset_index(drop=True)
     if pos_select == 'Goalkeepers':
-        player_research_table = (player_research_table['Conceded goals per 90']>=concede) &
+        player_research_table = player_research_table[(player_research_table['Conceded goals per 90']>=concede) &
             (player_research_table['Save rate, %']>=saverate) &
             (player_research_table['Exits per 90']>=exits) &
             (player_research_table['Prevented goals per 90']>=psxg) &

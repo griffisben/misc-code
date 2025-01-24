@@ -2410,7 +2410,7 @@ with similarity_tab:
         st.write("Please enter a player's ID. Make sure the Region & Time Frame includes the league the focal player plays in")
 
 with filter_tab:
-    with st.form('Minimum Percentile Filters'):
+    with st.form('Position Filter Min Filters'):
         submitted = st.form_submit_button("Submit Position")
         pos_select_1 = st.selectbox('Positions', ('Strikers', 'Strikers and Wingers', 'Forwards (AM, W, CF)',
                                 'Forwards no ST (AM, W)', 'Wingers', 'Central Midfielders (DM, CM, CAM)',

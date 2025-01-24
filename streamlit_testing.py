@@ -1907,10 +1907,10 @@ def create_player_research_table(df_basic, mins, full_league_name, pos, min_age,
     dfProspect[ranked_columns] = 0.0
     dfProspect[inverse_ranked_columns] = 0.0
     
-    # for column, column_r in zip(ranked_columns, ranked_columns_r):
-    #     dfProspect[column] = rank_column(dfProspect, column_r)
-    # for column, column_r in zip(inverse_ranked_columns, inverse_ranked_columns_r):
-    #     dfProspect[column] = rank_column_inverse(dfProspect, column_r)
+    for column, column_r in zip(ranked_columns, ranked_columns_r):
+        dfProspect[column] = rank_column(dfProspect, column_r)
+    for column, column_r in zip(inverse_ranked_columns, inverse_ranked_columns_r):
+        dfProspect[column] = rank_column_inverse(dfProspect, column_r)
     
     
     final = dfProspect[['Player','Age','League','Position','Team within selected timeframe','Birth country',

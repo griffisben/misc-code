@@ -1039,6 +1039,7 @@ def rank_column(df, column_name):
 def rank_column_inverse(df, column_name):
     return 1-stats.rankdata(df[column_name], "average") / len(df[column_name])
 
+
 def get_label_rotation(angle, offset):
     # Rotation must be specified in degrees :(
     rotation = np.rad2deg(angle + offset)+90
@@ -1908,10 +1909,11 @@ def create_player_research_table(df_basic, mins, full_league_name, pos, min_age,
     dfProspect[inverse_ranked_columns] = 0.0
     
     for column, column_r in zip(ranked_columns, ranked_columns_r):
-        dfProspect[column] = rank_column(dfProspect, column_r)
+        # dfProspect[column] = rank_column(dfProspect, column_r)
+        dfProspect[column] = dfProspect[column_r]
     for column, column_r in zip(inverse_ranked_columns, inverse_ranked_columns_r):
-        dfProspect[column] = rank_column_inverse(dfProspect, column_r)
-    
+        # dfProspect[column] = rank_column_inverse(dfProspect, column_r)
+        dfProspect[column] = dfProspect[column_r]
     
     final = dfProspect[['Player','Age','League','Position','Team within selected timeframe','Birth country',
     'fwdpct1','fwdpct2','fwdpct5','fwdpct6','fwdpct11','midpct1','midpct3','midpct4','midpct5','midpct6','midpct7','midpct8','midpct9','midpct10','midpct11','midpct12','defpct1','defpct2','defpct3','defpct4','defpct5','defpct6','defpct7','defpct8','defpct9','defpct10',

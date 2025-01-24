@@ -2425,7 +2425,7 @@ with filter_tab:
         if ['slider1','slider2','slider3','slider4','slider5','slider6','slider7','slider8','slider9','slider10','slider11','slider12','slider13','slider14','slider15','slider16','slider17','slider18','slider19','slider20','slider21','slider22','slider23','slider24','slider25','slider26','slider27','slider28','slider29','slider30','slider31','slider32','slider33','slider34','slider35','slider36','slider37','slider38','slider39'] not in st.session_state:
             pass
         st.write(max_dict['Passes per 90'])
-        short = st.slider('Short & Medium Pass Cmp %', min_dict['Accurate short / medium passes, %'], max_dict['Accurate short / medium passes, %', min_dict['Accurate short / medium passes, %'], key='slider1')
+        short = st.slider('Short & Medium Pass Cmp %', min_dict['Accurate short / medium passes, %'], max_dict['Accurate short / medium passes, %'], key='slider1')
         long = st.slider('Long Pass Cmp %', min_dict['Accurate long passes, %'], max_dict['Accurate long passes, %'], key='slider2')
         passestot = st.slider('Passes per 90', min_dict['Passes per 90'], max_dict['Passes per 90'], key='slider3')
         smart = st.slider('Smart Passes per 90', 0.0, 1.0, 0.0, key='slider4')

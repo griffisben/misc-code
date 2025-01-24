@@ -2472,7 +2472,7 @@ with filter_tab:
         saverate = st.slider('Save rate, %', min_dict['Save rate, %'], max_dict['Save rate, %'], key='slider35')
         exits = st.slider('Exits per 90', min_dict['Exits per 90'], max_dict['Exits per 90'], key='slider36')
         psxg = st.slider('Prevented goals per 90', min_dict['Prevented goals per 90'], max_dict['Prevented goals per 90'], key='slider37')
-        gppct = st.slider('Goals prevented %', min_dict['Goals prevented %'], max_dict['Goals prevented %'] key='slider38')
+        gppct = st.slider('Goals prevented %', min_dict['Goals prevented %'], max_dict['Goals prevented %'], key='slider38')
         shotsfaced = st.slider('Shots against per 90', min_dict['Shots against per 90'], max_dict['Shots against per 90'], key='slider39')
 
 with filter_table_tab:

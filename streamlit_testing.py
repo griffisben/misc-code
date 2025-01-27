@@ -106,6 +106,10 @@ def prep_similarity_df(geo_input, region, tiers, time_frame):
     full_similarity_df_raw['Main Position'] = full_similarity_df_raw['Main Position'].replace(replace_dict)
     return full_similarity_df_raw
 
+def prep_player_research_table(geo_input, region, tiers, time_frame, mins, pos_select, ages[0], ages[1]):
+    df = prep_similarity_df(geo_input, region, tiers, time_frame)
+    return create_player_research_table(df, mins, pos, min_age, max_age)
+
 def similar_players_search(df, ws_id, pos, pca_transform, compare_metrics, mins, age_band):
     df_base = pd.DataFrame()
     df_filtered_base = filter_by_position_long(df, pos)
@@ -1806,8 +1810,8 @@ def scout_report(data_frame, gender, league, season, xtra, template, pos, player
 
     return fig
 
-def create_player_research_table(df_basic, mins, full_league_name, pos, min_age, max_age):
-    dfProspect = df_basic[(df_basic['Minutes played'] >= mins) & (df_basic['League'] == full_league_name)].copy()
+def create_player_research_table(df_basic, mins, pos, min_age, max_age):
+    dfProspect = df_basic[(df_basic['Minutes played'] >= mins)].copy()
     dfProspect = filter_by_position_long(dfProspect, pos)
     
     ########## PROSPECT RESEARCH ##########
@@ -2431,7 +2435,7 @@ with filter_tab:
         time_frame = st.selectbox('Time Frame', ('Current Season','Prior Season','Current & Prior Seasons'))  ### Current Season | Prior Season | Current & Prior Seasons
 
 
-    final = create_player_research_table(df_basic, mins, full_league_name, pos_select, ages[0], ages[1])
+    final = create_player_research_table(df_basic, mins, pos_select, ages[0], ages[1])
     min_dict = final.min()[6:]
     max_dict = final.max()[6:]
 
@@ -2489,7 +2493,8 @@ with filter_tab:
             shotsfaced = st.slider('Shots against per 90', min_dict['Shots against per 90'], max_dict['Shots against per 90'], key='slider39')
 
 with filter_table_tab:
-    final = create_player_research_table(df_basic, mins, full_league_name, pos_select, ages[0], ages[1])
+    # final = create_player_research_table(df_basic, mins, pos_select, ages[0], ages[1])
+    final = prep_player_research_table(geo_input, region, tiers, time_frame)
     player_research_table = final[(final['Accurate short / medium passes, %']>=short) &
                  (final['Accurate long passes, %']>=long) &
                   (final['Smart passes per 90']>=smart) &

@@ -2496,12 +2496,12 @@ with filter_table_tab:
     try:
         geo_input == 'Country'
         region == 'Denmark'
-        tiers == [1,2]
+        tiers == []
         time_frame == 'Current Season'
     except:
         geo_input='League',
         region='Danish 1. Division 24-25',
-        tiers=[2],
+        tiers=[],
         time_frame='Current Season'
     # final = create_player_research_table(df_basic, mins, pos_select, ages[0], ages[1])
     final = prep_player_research_table(geo_input, region, tiers, time_frame)

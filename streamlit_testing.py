@@ -106,7 +106,7 @@ def prep_similarity_df(geo_input, region, tiers, time_frame):
     full_similarity_df_raw['Main Position'] = full_similarity_df_raw['Main Position'].replace(replace_dict)
     return full_similarity_df_raw
 
-def prep_player_research_table(geo_input, region, tiers, time_frame, mins, pos_select, ages[0], ages[1]):
+def prep_player_research_table(geo_input, region, tiers, time_frame, mins, pos_select, min_age, max_age):
     df = prep_similarity_df(geo_input, region, tiers, time_frame)
     return create_player_research_table(df, mins, pos, min_age, max_age)
 

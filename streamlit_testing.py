@@ -2493,7 +2493,7 @@ with filter_tab:
         foul = st.slider('Fouls Committed per 90', min_dict['Fouls per 90'], max_dict['Fouls per 90'], key='slider31')
         fouldraw = st.slider('Fouls Drawn per 90', min_dict['Fouls suffered per 90'], max_dict['Fouls suffered per 90'], key='slider32')
         cards = st.slider('Cards per 90', min_dict['Cards per 90'], max_dict['Cards per 90'], key='slider33')
-        if pos_select == 'Goalkeepers':
+        if pos_select_filters == 'Goalkeepers':
             concede = st.slider('Conceded goals per 90', min_dict['Conceded goals per 90'], max_dict['Conceded goals per 90'], key='slider34')
             saverate = st.slider('Save rate, %', min_dict['Save rate, %'], max_dict['Save rate, %'], key='slider35')
             exits = st.slider('Exits per 90', min_dict['Exits per 90'], max_dict['Exits per 90'], key='slider36')

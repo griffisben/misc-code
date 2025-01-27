@@ -2446,7 +2446,8 @@ raw_df_for_filtering = prep_player_research_table(geo_input_filters, region_filt
 min_dict = raw_df_for_filtering.min()[6:]
 max_dict = raw_df_for_filtering.max()[6:]
 #########
-    
+
+with filter_tab:
     st.button("Reset Sliders", on_click=_update_slider, kwargs={"value": 0.0})
     with st.form('Minimum Percentile Filters'):
         submitted = st.form_submit_button("Submit Filters")

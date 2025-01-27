@@ -108,7 +108,7 @@ def prep_similarity_df(geo_input, region, tiers, time_frame):
 
 def prep_player_research_table(geo_input, region, tiers, time_frame, mins, pos_select, min_age, max_age):
     df = prep_similarity_df(geo_input, region, tiers, time_frame)
-    return create_player_research_table(df, mins, pos, min_age, max_age)
+    return create_player_research_table(df, mins, pos_select, min_age, max_age)
 
 def similar_players_search(df, ws_id, pos, pca_transform, compare_metrics, mins, age_band):
     df_base = pd.DataFrame()

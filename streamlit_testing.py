@@ -2504,7 +2504,7 @@ with filter_table_tab:
         tiers=[],
         time_frame='Current Season'
     # final = create_player_research_table(df_basic, mins, pos_select, ages[0], ages[1])
-    final = prep_player_research_table(geo_input, region, tiers, time_frame)
+    final = prep_player_research_table(geo_input, region, tiers, time_frame, mins, pos_select, ages[0], ages[1])
     player_research_table = final[(final['Accurate short / medium passes, %']>=short) &
                  (final['Accurate long passes, %']>=long) &
                   (final['Smart passes per 90']>=smart) &

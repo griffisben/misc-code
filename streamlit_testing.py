@@ -2368,14 +2368,13 @@ with similarity_tab:
         submitted = st.form_submit_button("Find Similar Players")
         similar_player_lg_lookup = pd.read_csv('https://raw.githubusercontent.com/griffisben/Wyscout_Prospect_Research/main/league_info_lookup.csv')
         geo_input = st.selectbox("Geography Region", ("Region",'Country','Continent','League'))
-        if geo_input == 'Region':
-            default_region_area = 'Nordics'
-        if geo_input == 'Country':
-            default_region_area = 'Denmark'
-        if geo_input == 'Continent':
-            default_region_area = 'Europe'
-        if geo_input == 'League':
-            default_region_area = 'Danish 1. Division'
+        geo_mapping = {
+            'Region': 'Nordics',
+            'Country': 'Denmark',
+            'Continent': 'Europe',
+            'League': 'Danish 1. Division'
+        }
+        default_region_area = geo_mapping.get(geo_input, 'Unknown')
         region = st.multiselect(f"{geo_input}(s) to include (leave blank to include all)", similar_player_lg_lookup[geo_input].unique().tolist(), default=default_region_area)
         tiers = st.multiselect("Tiers to include (leave blank to include all)", ('1','2','3','4','5','6','Youth'))
         time_frame = st.selectbox('Time Frame', ('Current Season','Prior Season','Current & Prior Seasons'))  ### Current Season | Prior Season | Current & Prior Seasons
@@ -2418,10 +2417,24 @@ with filter_tab:
                                 'Forwards no ST (AM, W)', 'Wingers', 'Central Midfielders (DM, CM, CAM)',
                                 'Central Midfielders no CAM (DM, CM)', 'Central Midfielders no DM (CM, CAM)', 'Fullbacks (FBs/WBs)',
                                 'Defenders (CB, FB/WB, DM)', 'Centre-Backs', 'CBs & DMs','Goalkeepers'))
+        similar_player_lg_lookup = pd.read_csv('https://raw.githubusercontent.com/griffisben/Wyscout_Prospect_Research/main/league_info_lookup.csv')
+        geo_input = st.selectbox("Geography Region", ("Region",'Country','Continent','League'))
+        geo_mapping = {
+            'Region': 'Nordics',
+            'Country': 'Denmark',
+            'Continent': 'Europe',
+            'League': 'Danish 1. Division'
+        }
+        default_region_area = geo_mapping.get(geo_input, 'Unknown')
+        region = st.multiselect(f"{geo_input}(s) to include (leave blank to include all)", similar_player_lg_lookup[geo_input].unique().tolist(), default=default_region_area)
+        tiers = st.multiselect("Tiers to include (leave blank to include all)", ('1','2','3','4','5','6','Youth'))
+        time_frame = st.selectbox('Time Frame', ('Current Season','Prior Season','Current & Prior Seasons'))  ### Current Season | Prior Season | Current & Prior Seasons
+
 
     final = create_player_research_table(df_basic, mins, full_league_name, pos_select, ages[0], ages[1])
     min_dict = final.min()[6:]
     max_dict = final.max()[6:]
+
     
     st.button("Reset Sliders", on_click=_update_slider, kwargs={"value": 0.0})
     with st.form('Minimum Percentile Filters'):

@@ -2452,7 +2452,7 @@ with filter_tab:
     st.button("Reset Sliders", on_click=_update_slider, kwargs={"value": 0.0})
     with st.form('Minimum Percentile Filters'):
         submitted = st.form_submit_button("Submit Filters")
-        # pos_select = st.selectbox('Positions', ('Strikers', 'Strikers and Wingers', 'Forwards (AM, W, CF)',
+        # pos_select_filters = st.selectbox('Positions', ('Strikers', 'Strikers and Wingers', 'Forwards (AM, W, CF)',
         #                         'Forwards no ST (AM, W)', 'Wingers', 'Central Midfielders (DM, CM, CAM)',
         #                         'Central Midfielders no CAM (DM, CM)', 'Central Midfielders no DM (CM, CAM)', 'Fullbacks (FBs/WBs)',
         #                         'Defenders (CB, FB/WB, DM)', 'Centre-Backs', 'CBs & DMs','Goalkeepers'))
@@ -2538,7 +2538,7 @@ with filter_table_tab:
                   (final['Fouls suffered per 90']>=fouldraw) &
                   (final['Cards per 90']>=cards)
                     ].reset_index(drop=True)
-    if pos_select == 'Goalkeepers':
+    if pos_select_filters == 'Goalkeepers':
         player_research_table = player_research_table[(player_research_table['Conceded goals per 90']>=concede) &
             (player_research_table['Save rate, %']>=saverate) &
             (player_research_table['Exits per 90']>=exits) &

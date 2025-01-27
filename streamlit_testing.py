@@ -2430,7 +2430,7 @@ with filter_tab:
             'League': 'Danish 1. Division'
         }
         default_region_area_filters = geo_mapping_filters.get(geo_input_filters, 'Unknown')
-        region_filters = st.multiselect(f"{geo_input_filters}(s) to include (leave blank to include all)", similar_player_lg_looku_filtersp[geo_input_filters].unique().tolist(), default=default_region_area_filters)
+        region_filters = st.multiselect(f"{geo_input_filters}(s) to include (leave blank to include all)", similar_player_lg_lookup_filters[geo_input_filters].unique().tolist(), default=default_region_area_filters)
         tiers_filters = st.multiselect("Tiers to include (leave blank to include all)", ('1','2','3','4','5','6','Youth'))
         time_frame_filters = st.selectbox('Time Frame', ('Current Season','Prior Season','Current & Prior Seasons'))  ### Current Season | Prior Season | Current & Prior Seasons
 

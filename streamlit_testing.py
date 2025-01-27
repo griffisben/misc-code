@@ -2416,29 +2416,36 @@ with similarity_tab:
 
 with filter_tab:
     with st.form('Position Filter Min Filters'):
-        submitted = st.form_submit_button("Submit Position")
-        pos_select = st.selectbox('Positions', ('Strikers', 'Strikers and Wingers', 'Forwards (AM, W, CF)',
+        submitted = st.form_submit_button("Submit Position & Geography Choices")
+        pos_select_filters = st.selectbox('Positions', ('Strikers', 'Strikers and Wingers', 'Forwards (AM, W, CF)',
                                 'Forwards no ST (AM, W)', 'Wingers', 'Central Midfielders (DM, CM, CAM)',
                                 'Central Midfielders no CAM (DM, CM)', 'Central Midfielders no DM (CM, CAM)', 'Fullbacks (FBs/WBs)',
                                 'Defenders (CB, FB/WB, DM)', 'Centre-Backs', 'CBs & DMs','Goalkeepers'))
-        similar_player_lg_lookup = pd.read_csv('https://raw.githubusercontent.com/griffisben/Wyscout_Prospect_Research/main/league_info_lookup.csv')
-        geo_input = st.selectbox("Geography Region", ('League','Country',"Region",'Continent'))
-        geo_mapping = {
+        similar_player_lg_lookup_filters = pd.read_csv('https://raw.githubusercontent.com/griffisben/Wyscout_Prospect_Research/main/league_info_lookup.csv')
+        geo_input_filters = st.selectbox("Geography Region", ('League','Country',"Region",'Continent'))
+        geo_mapping_filters = {
             'Region': 'Nordics',
             'Country': 'Denmark',
             'Continent': 'Europe',
             'League': 'Danish 1. Division'
         }
-        default_region_area = geo_mapping.get(geo_input, 'Unknown')
-        region = st.multiselect(f"{geo_input}(s) to include (leave blank to include all)", similar_player_lg_lookup[geo_input].unique().tolist(), default=default_region_area)
-        tiers = st.multiselect("Tiers to include (leave blank to include all)", ('1','2','3','4','5','6','Youth'))
-        time_frame = st.selectbox('Time Frame', ('Current Season','Prior Season','Current & Prior Seasons'))  ### Current Season | Prior Season | Current & Prior Seasons
+        default_region_area_filters = geo_mapping_filters.get(geo_input_filters, 'Unknown')
+        region_filters = st.multiselect(f"{geo_input_filters}(s) to include (leave blank to include all)", similar_player_lg_looku_filtersp[geo_input_filters].unique().tolist(), default=default_region_area_filters)
+        tiers_filters = st.multiselect("Tiers to include (leave blank to include all)", ('1','2','3','4','5','6','Youth'))
+        time_frame_filters = st.selectbox('Time Frame', ('Current Season','Prior Season','Current & Prior Seasons'))  ### Current Season | Prior Season | Current & Prior Seasons
 
-
-    final = create_player_research_table(df_basic, mins, pos_select, ages[0], ages[1])
-    min_dict = final.min()[6:]
-    max_dict = final.max()[6:]
-
+######
+try:
+    geo_input_filters, region_filters, tiers_filters, time_frame_filters
+except:
+    geo_input='League',
+    region='Danish 1. Division 24-25',
+    tiers=[],
+    time_frame='Current Season'
+    raw_df_for_filtering = prep_player_research_table(geo_input_filters, region_filters, tiers_filters, time_frame_filters, mins, pos_select, ages[0], ages[1])
+    min_dict = raw_df_for_filtering.min()[6:]
+    max_dict = raw_df_for_filtering.max()[6:]
+#########
     
     st.button("Reset Sliders", on_click=_update_slider, kwargs={"value": 0.0})
     with st.form('Minimum Percentile Filters'):
@@ -2493,18 +2500,8 @@ with filter_tab:
             shotsfaced = st.slider('Shots against per 90', min_dict['Shots against per 90'], max_dict['Shots against per 90'], key='slider39')
 
 with filter_table_tab:
-    try:
-        geo_input == 'Country'
-        region == 'Denmark'
-        tiers == []
-        time_frame == 'Current Season'
-    except:
-        geo_input='League',
-        region='Danish 1. Division 24-25',
-        tiers=[],
-        time_frame='Current Season'
     # final = create_player_research_table(df_basic, mins, pos_select, ages[0], ages[1])
-    final = prep_player_research_table(geo_input, region, tiers, time_frame, mins, pos_select, ages[0], ages[1])
+    final = raw_df_for_filtering
     player_research_table = final[(final['Accurate short / medium passes, %']>=short) &
                  (final['Accurate long passes, %']>=long) &
                   (final['Smart passes per 90']>=smart) &

@@ -2371,7 +2371,7 @@ with similarity_tab:
     with st.form('Similar Player Search'):
         submitted = st.form_submit_button("Find Similar Players")
         similar_player_lg_lookup = pd.read_csv('https://raw.githubusercontent.com/griffisben/Wyscout_Prospect_Research/main/league_info_lookup.csv')
-        geo_input = st.selectbox("Geography Region", ("Region",'Country','Continent','League'))
+        geo_input = st.selectbox("Geography Region", ('League','Country',"Region",'Continent'))
         geo_mapping = {
             'Region': 'Nordics',
             'Country': 'Denmark',
@@ -2422,7 +2422,7 @@ with filter_tab:
                                 'Central Midfielders no CAM (DM, CM)', 'Central Midfielders no DM (CM, CAM)', 'Fullbacks (FBs/WBs)',
                                 'Defenders (CB, FB/WB, DM)', 'Centre-Backs', 'CBs & DMs','Goalkeepers'))
         similar_player_lg_lookup = pd.read_csv('https://raw.githubusercontent.com/griffisben/Wyscout_Prospect_Research/main/league_info_lookup.csv')
-        geo_input = st.selectbox("Geography Region", ("Region",'Country','Continent','League'))
+        geo_input = st.selectbox("Geography Region", ('League','Country',"Region",'Continent'))
         geo_mapping = {
             'Region': 'Nordics',
             'Country': 'Denmark',

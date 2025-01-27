@@ -2442,9 +2442,9 @@ except:
     region='Danish 1. Division 24-25',
     tiers=[],
     time_frame='Current Season'
-    raw_df_for_filtering = prep_player_research_table(geo_input_filters, region_filters, tiers_filters, time_frame_filters, mins, pos_select, ages[0], ages[1])
-    min_dict = raw_df_for_filtering.min()[6:]
-    max_dict = raw_df_for_filtering.max()[6:]
+raw_df_for_filtering = prep_player_research_table(geo_input_filters, region_filters, tiers_filters, time_frame_filters, mins, pos_select, ages[0], ages[1])
+min_dict = raw_df_for_filtering.min()[6:]
+max_dict = raw_df_for_filtering.max()[6:]
 #########
     
     st.button("Reset Sliders", on_click=_update_slider, kwargs={"value": 0.0})

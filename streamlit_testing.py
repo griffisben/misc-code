@@ -2525,12 +2525,12 @@ with filter_tab:
         with st.form('Time Frame Filters, League'):
             similar_player_lg_lookup_filters['League-Season'] = similar_player_lg_lookup_filters.League + " " + similar_player_lg_lookup_filters.Season
             submitted = st.form_submit_button("Submit Seasons")
-            time_frame_filters = st.multiselect('League-Seasons', (similar_player_lg_lookup_filters[similar_player_lg_lookup_filters.League.isin(region_filters)]['League-Season'].tolist()))
+            time_frame_filters = st.multiselect('League-Seasons', (sorted(similar_player_lg_lookup_filters[similar_player_lg_lookup_filters.League.isin(region_filters)]['League-Season'].tolist())), default=sorted(similar_player_lg_lookup_filters[similar_player_lg_lookup_filters.League.isin(region_filters)]['League-Season'].tolist())[0])
     
     if geo_input_filters != 'League':
         with st.form('Time Frame Filters, Non-League'):
             submitted = st.form_submit_button("Submit Seasons")
-            time_frame_filters = st.multiselect('League-Seasons', (similar_player_lg_lookup_filters.Season.unique().tolist()))
+            time_frame_filters = st.multiselect('League-Seasons', (sorted(similar_player_lg_lookup_filters.Season.unique().tolist())), default=sorted(similar_player_lg_lookup_filters.Season.unique().tolist())[0])
     ######
     try:
         print(f"SELECTED OPTIONS:\nGeography Region: {geo_input_filters}\nArea: {region_filters}\nTiers: {tiers_filters}\nTime Frame: {time_frame_filters}\nPosition(s): {pos_select_filters}")

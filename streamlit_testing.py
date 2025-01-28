@@ -2603,6 +2603,7 @@ with filter_tab:
             shotsfaced = st.slider('Shots against per 90', min_dict['Shots against per 90'], max_dict['Shots against per 90'], key='slider39')
 
 with filter_table_tab:
+    st.write(f"SELECTED OPTIONS:\nGeography Region: {geo_input_filters}\nArea: {region_filters}\nTiers: {tiers_filters}\nTime Frame: {time_frame_filters}\nPosition(s): {pos_select_filters}")
     # final = create_player_research_table(df_basic, mins, pos_select, ages[0], ages[1])
     final = raw_df_for_filtering
     player_research_table = final[(final['Accurate short / medium passes, %']>=short) &

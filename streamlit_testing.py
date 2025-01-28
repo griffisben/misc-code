@@ -2533,7 +2533,7 @@ with filter_tab:
     if geo_input_filters != 'League':
         with st.form('Time Frame Filters, Non-League'):
             submitted = st.form_submit_button("Submit Seasons")
-            time_frame_filters = st.multiselect('League-Seasons', (sorted(similar_player_lg_lookup_filters.Season.unique().tolist()), reverse=True), default='24-25')
+            time_frame_filters = st.multiselect('League-Seasons', (sorted(similar_player_lg_lookup_filters.Season.unique().tolist(), reverse=True)), default='24-25')
     ######
     try:
         print(f"SELECTED OPTIONS:\nGeography Region: {geo_input_filters}\nArea: {region_filters}\nTiers: {tiers_filters}\nTime Frame: {time_frame_filters}\nPosition(s): {pos_select_filters}")

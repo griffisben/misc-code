@@ -41,24 +41,28 @@ def prep_similarity_df(geo_input, region, tiers, time_frame):
             sim_lg_lookup = sim_lg_lookup.sort_values(by=['Season'],ascending=False)
         else:
             sim_lg_lookup = sim_lg_lookup[sim_lg_lookup.Region.isin(region)].sort_values(by=['Season'],ascending=False)
+        if tiers != []:
+            sim_lg_lookup = sim_lg_lookup[sim_lg_lookup.Tier.isin(tiers)]
     if geo_input == 'Country':
         if region==[]:
             sim_lg_lookup = sim_lg_lookup.sort_values(by=['Season'],ascending=False)
         else:
             sim_lg_lookup = sim_lg_lookup[sim_lg_lookup.Country.isin(region)].sort_values(by=['Season'],ascending=False)
+        if tiers != []:
+            sim_lg_lookup = sim_lg_lookup[sim_lg_lookup.Tier.isin(tiers)]
     if geo_input == 'Continent':
         if region==[]:
             sim_lg_lookup = sim_lg_lookup.sort_values(by=['Season'],ascending=False)
         else:
             sim_lg_lookup = sim_lg_lookup[sim_lg_lookup.Continent.isin(region)].sort_values(by=['Season'],ascending=False)
+        if tiers != []:
+            sim_lg_lookup = sim_lg_lookup[sim_lg_lookup.Tier.isin(tiers)]
     if geo_input == 'League':
         if region==[]:
             sim_lg_lookup = sim_lg_lookup.sort_values(by=['Season'],ascending=False)
         else:
             sim_lg_lookup = sim_lg_lookup[sim_lg_lookup.League.isin(region)].sort_values(by=['Season'],ascending=False)
 
-    if tiers != []:
-        sim_lg_lookup = sim_lg_lookup[sim_lg_lookup.Tier.isin(tiers)]
     sim_lg_lookup_recent = sim_lg_lookup.drop_duplicates(subset=['League','Country'])
     sim_lg_lookup_recent2 = sim_lg_lookup.drop(sim_lg_lookup_recent.index)
     sim_lg_lookup_recent2 = sim_lg_lookup_recent2.drop_duplicates(subset=['League','Country'])
@@ -106,8 +110,92 @@ def prep_similarity_df(geo_input, region, tiers, time_frame):
     full_similarity_df_raw['Main Position'] = full_similarity_df_raw['Main Position'].replace(replace_dict)
     return full_similarity_df_raw
 
+def prep_similarity_df_filters(geo_input, region, tiers, time_frame):
+    sim_lg_lookup = pd.read_csv('https://raw.githubusercontent.com/griffisben/Wyscout_Prospect_Research/main/league_info_lookup.csv')
+
+    if geo_input == 'Region':
+        if region==[]:
+            sim_lg_lookup = sim_lg_lookup.sort_values(by=['Season'],ascending=False)
+        else:
+            sim_lg_lookup = sim_lg_lookup[sim_lg_lookup.Region.isin(region)].sort_values(by=['Season'],ascending=False)
+        if tiers != []:
+            sim_lg_lookup = sim_lg_lookup[sim_lg_lookup.Tier.isin(tiers)]
+        sim_lg_lookup = sim_lg_lookup[sim_lg_lookup.Season.isin(time_frame)]
+    if geo_input == 'Country':
+        if region==[]:
+            sim_lg_lookup = sim_lg_lookup.sort_values(by=['Season'],ascending=False)
+        else:
+            sim_lg_lookup = sim_lg_lookup[sim_lg_lookup.Country.isin(region)].sort_values(by=['Season'],ascending=False)
+        if tiers != []:
+            sim_lg_lookup = sim_lg_lookup[sim_lg_lookup.Tier.isin(tiers)]
+        sim_lg_lookup = sim_lg_lookup[sim_lg_lookup.Season.isin(time_frame)]
+    if geo_input == 'Continent':
+        if region==[]:
+            sim_lg_lookup = sim_lg_lookup.sort_values(by=['Season'],ascending=False)
+        else:
+            sim_lg_lookup = sim_lg_lookup[sim_lg_lookup.Continent.isin(region)].sort_values(by=['Season'],ascending=False)
+        if tiers != []:
+            sim_lg_lookup = sim_lg_lookup[sim_lg_lookup.Tier.isin(tiers)]
+        sim_lg_lookup = sim_lg_lookup[sim_lg_lookup.Season.isin(time_frame)]
+    if geo_input == 'League':
+        sim_lg_lookup['League-Season'] = sim_lg_lookup.League + " " + sim_lg_lookup.Season
+        if region==[]:
+            sim_lg_lookup = sim_lg_lookup.sort_values(by=['Season'],ascending=False)
+        else:
+            sim_lg_lookup = sim_lg_lookup[sim_lg_lookup.League.isin(region)].sort_values(by=['Season'],ascending=False)
+        sim_lg_lookup = sim_lg_lookup[sim_lg_lookup['League-Season'].isin(time_frame)]
+        
+
+    # sim_lg_lookup_recent = sim_lg_lookup.drop_duplicates(subset=['League','Country'])
+    # sim_lg_lookup_recent2 = sim_lg_lookup.drop(sim_lg_lookup_recent.index)
+    # sim_lg_lookup_recent2 = sim_lg_lookup_recent2.drop_duplicates(subset=['League','Country'])
+    # sim_lg_lookup_recent_last2 = pd.concat([sim_lg_lookup_recent,sim_lg_lookup_recent2],ignore_index=True)
+    # sim_lg_lookup_recent.reset_index(drop=True,inplace=True)
+    # sim_lg_lookup_recent2.reset_index(drop=True,inplace=True)
+    
+    # if time_frame == 'Current Season':
+    #     sim_lg_lookup = sim_lg_lookup_recent
+    # if time_frame == 'Prior Season':
+    #     sim_lg_lookup = sim_lg_lookup_recent2
+    # if time_frame == 'Current & Prior Seasons':
+    #     sim_lg_lookup = sim_lg_lookup_recent_last2
+        
+    
+    dfs = []
+    char_replacements = str.maketrans({" ": "%20", "ü": "u", "ó": "o", "ö": "o", "ã": "a", "ç": "c"})
+    for _, row in sim_lg_lookup.iterrows():
+        full_league_name = f"{row['League']} {row['Season']}"
+        formatted_name = full_league_name.translate(char_replacements)
+        url = f'https://raw.githubusercontent.com/griffisben/Wyscout_Prospect_Research/main/Main%20App/{formatted_name}.csv'
+
+        try:
+            df = pd.read_csv(url)
+            df['League'] = full_league_name
+            df = df.dropna(subset=['Position', 'Team within selected timeframe']).reset_index(drop=True)
+            clean_df = load_league_data(df, full_league_name)
+            dfs.append(clean_df)
+        except:
+            st.write(f'Error: {full_league_name}')
+    full_similarity_df_raw = pd.concat(dfs, ignore_index=True)
+    
+    replace_dict = {
+        'LAMF': 'LWF',
+        'RAMF': 'RWF',
+        'LCB3': 'LCB',
+        'RCB3': 'RCB',
+        'LCB5': 'LCB',
+        'RCB5': 'RCB',
+        'LB5': 'LB',
+        'RB5': 'RB',
+        'RCMF3': 'RCMF',
+        'LCMF3': 'LCMF',
+    }
+    
+    full_similarity_df_raw['Main Position'] = full_similarity_df_raw['Main Position'].replace(replace_dict)
+    return full_similarity_df_raw
+
 def prep_player_research_table(geo_input, region, tiers, time_frame, mins, pos_select, min_age, max_age):
-    df = prep_similarity_df(geo_input, region, tiers, time_frame)
+    df = prep_similarity_df_filters(geo_input, region, tiers, time_frame)
     return create_player_research_table(df, mins, pos_select, min_age, max_age)
 
 def similar_players_search(df, ws_id, pos, pca_transform, compare_metrics, mins, age_band):
@@ -2432,8 +2520,17 @@ with filter_tab:
         default_region_area_filters = geo_mapping_filters.get(geo_input_filters, 'Unknown')
         region_filters = st.multiselect(f"{geo_input_filters}(s) to include (leave blank to include all)", similar_player_lg_lookup_filters[geo_input_filters].unique().tolist(), default=default_region_area_filters)
         tiers_filters = st.multiselect("Tiers to include (leave blank to include all)", ('1','2','3','4','5','6','Youth'))
-        time_frame_filters = st.selectbox('Time Frame', ('Current Season','Prior Season','Current & Prior Seasons'))  ### Current Season | Prior Season | Current & Prior Seasons
 
+    if geo_input_filters == 'League':
+        with st.form('Time Frame Filters, League'):
+            similar_player_lg_lookup_filters['League-Season'] = similar_player_lg_lookup_filters.League + " " + similar_player_lg_lookup_filters.Season
+            submitted = st.form_submit_button("Submit Seasons")
+            time_frame_filters = st.multiselect('League-Seasons', (similar_player_lg_lookup_filters[similar_player_lg_lookup_filters.League.isin(region_filters)]['League-Season'].tolist()))
+    
+    if geo_input_filters != 'League':
+        with st.form('Time Frame Filters, Non-League'):
+            submitted = st.form_submit_button("Submit Seasons")
+            time_frame_filters = st.multiselect('League-Seasons', (similar_player_lg_lookup_filters.Season.unique().tolist()))
     ######
     try:
         print(f"SELECTED OPTIONS:\nGeography Region: {geo_input_filters}\nArea: {region_filters}\nTiers: {tiers_filters}\nTime Frame: {time_frame_filters}\nPosition(s): {pos_select_filters}")
@@ -2443,7 +2540,7 @@ with filter_tab:
         tiers=[],
         time_frame='Current Season'
         pos_select_filters = 'Strikers'
-    raw_df_for_filtering = prep_player_research_table(geo_input_filters, region_filters, tiers_filters, time_frame_filters, mins, pos_select_filters, ages[0], ages[1])
+    raw_df_for_filtering = prep_player_research_table_filters(geo_input_filters, region_filters, tiers_filters, time_frame_filters, mins, pos_select_filters, ages[0], ages[1])
     min_dict = raw_df_for_filtering.min()[6:]
     max_dict = raw_df_for_filtering.max()[6:]
     #########

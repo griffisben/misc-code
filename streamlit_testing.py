@@ -278,6 +278,7 @@ def similar_players_search(df, ws_id, pos, pca_transform, compare_metrics, mins,
     extra22 = 'Passes to penalty area per 90'
     extra23 = 'Pct of passes being smart'
     extra24 = 'Short / medium passes per 90'
+    extra25 = 'Successful dribbles per 90'
     
     
     # Define metrics grouped by position
@@ -289,7 +290,7 @@ def similar_players_search(df, ws_id, pos, pca_transform, compare_metrics, mins,
         "extra": [
             extra, extra2, extra3, extra4, extra5, extra6, extra7, extra8, extra9, extra10,
             extra11, extra12, extra13, extra14, extra15, extra16, extra17, extra18, extra19,
-            extra20, extra21, extra22, extra23, extra24
+            extra20, extra21, extra22, extra23, extra24, extra25
         ]
     }
     
@@ -1970,6 +1971,7 @@ def create_player_research_table(df_basic, mins, pos, min_age, max_age):
     extra8 = 'Fouls suffered per 90'
     extra9 = 'npxG per shot'
     extra10 = 'Crosses per 90'
+    extra11 = 'Successful dribbles per 90'
     
     ranked_columns = [
         'midpct1', 'midpct2', 'midpct3', 'midpct4', 'midpct5', 'midpct6', 'midpct7',
@@ -1991,7 +1993,7 @@ def create_player_research_table(df_basic, mins, pos, min_age, max_age):
         fwd8, fwd9, fwd10, fwd11, fwd12,
         gk2, gk4, gk5, gk6, gk7, gk8, gk9, gk10, gk11, gk12, gk13, gk14,
         def1,def2,def3,def6,def7,def8,def9,def10,def11,def12,
-        extra,extra2,extra3,extra4,extra5,extra6,extra7,extra8,extra9,extra10,
+        extra,extra2,extra3,extra4,extra5,extra6,extra7,extra8,extra9,extra10,extra11,
     ]
     inverse_ranked_columns_r = [
         def4,def5,gk1,gk3
@@ -2010,7 +2012,7 @@ def create_player_research_table(df_basic, mins, pos, min_age, max_age):
     final = dfProspect[['Player','Age','League','Position','Team within selected timeframe','Birth country',
     'fwdpct1','fwdpct2','fwdpct5','fwdpct6','fwdpct11','midpct1','midpct3','midpct4','midpct5','midpct6','midpct7','midpct8','midpct9','midpct10','midpct11','midpct12','defpct1','defpct2','defpct3','defpct4','defpct5','defpct6','defpct7','defpct8','defpct9','defpct10',
                         'gkpct1','gkpct2','gkpct3','gkpct4','gkpct6','gkpct8','gkpct9', 'gkpct11', 'gkpct12', 'gkpct13', 'gkpct14',
-                        'extrapct','extrapct2','extrapct3','extrapct4','extrapct5','extrapct6','extrapct7','extrapct8','extrapct9','extrapct10',
+                        'extrapct','extrapct2','extrapct3','extrapct4','extrapct5','extrapct6','extrapct7','extrapct8','extrapct9','extrapct10','extrapct11',
     ]]
     
     final.rename(columns={'fwdpct1': "Non-penalty goals per 90",
@@ -2060,6 +2062,7 @@ def create_player_research_table(df_basic, mins, pos, min_age, max_age):
     'extrapct8': "Fouls suffered per 90",
     'extrapct9': "npxG per shot",
     'extrapct10': "Crosses per 90",
+    'extrapct11': 'Successful dribbles per 90',
     'Team within selected timeframe': 'Team',
     }, inplace=True)
     

@@ -2525,12 +2525,12 @@ with filter_tab:
         with st.form('Time Frame Filters, League'):
             similar_player_lg_lookup_filters['League-Season'] = similar_player_lg_lookup_filters.League + " " + similar_player_lg_lookup_filters.Season
             submitted = st.form_submit_button("Submit Seasons")
-            time_frame_filters = st.multiselect('League-Seasons', (sorted(similar_player_lg_lookup_filters[similar_player_lg_lookup_filters.League.isin(region_filters)]['League-Season'].tolist())), default=sorted(similar_player_lg_lookup_filters[similar_player_lg_lookup_filters.League.isin(region_filters)]['League-Season'].tolist())[0])
+            time_frame_filters = st.multiselect('League-Seasons', (sorted(similar_player_lg_lookup_filters[similar_player_lg_lookup_filters.League.isin(region_filters)]['League-Season'].tolist())), default='Danish 1. Division 24-25')
     
     if geo_input_filters != 'League':
         with st.form('Time Frame Filters, Non-League'):
             submitted = st.form_submit_button("Submit Seasons")
-            time_frame_filters = st.multiselect('League-Seasons', (sorted(similar_player_lg_lookup_filters.Season.unique().tolist())), default=sorted(similar_player_lg_lookup_filters.Season.unique().tolist())[0])
+            time_frame_filters = st.multiselect('League-Seasons', (sorted(similar_player_lg_lookup_filters.Season.unique().tolist())), default='24-25')
     ######
     try:
         print(f"SELECTED OPTIONS:\nGeography Region: {geo_input_filters}\nArea: {region_filters}\nTiers: {tiers_filters}\nTime Frame: {time_frame_filters}\nPosition(s): {pos_select_filters}")
@@ -2576,6 +2576,7 @@ with filter_tab:
         shots = st.slider('Shots per 90', min_dict['Shots per 90'], max_dict['Shots per 90'], key='slider17')
         boxtouches = st.slider('Touches in Penalty Box per 90', min_dict['Touches in box per 90'], max_dict['Touches in box per 90'], key='slider18')
         drib = st.slider('Dribble Success %', min_dict['Successful dribbles, %'], max_dict['Successful dribbles, %'], key='slider19')
+        num_dribs = st.slider('Successful dribbles per 90', min_dict['Successful dribbles per 90'], max_dict['Successful dribbles per 90'], key='slider19a'))
         accel = st.slider('Accelerations per 90', min_dict['Accelerations per 90'], max_dict['Accelerations per 90'], key='slider20')
         progcarry = st.slider('Progressive Carries per 90', min_dict['Progressive runs per 90'], max_dict['Progressive runs per 90'], key='slider21')
         progpass = st.slider('Progressive Passes per 90', min_dict['Progressive passes per 90'], max_dict['Progressive passes per 90'], key='slider22')
@@ -2620,6 +2621,7 @@ with filter_table_tab:
                   (final['Shots per 90']>=shots) &
                   (final['Touches in box per 90']>=boxtouches) &
                   (final['Successful dribbles, %']>=drib) &
+                  (final['Successful dribbles per 90']>=num_dribs) &
                   (final['Accelerations per 90']>=accel) &
                   (final['Progressive runs per 90']>=progcarry) &
                   (final['Progressive passes per 90']>=progpass) &

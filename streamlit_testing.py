@@ -2528,7 +2528,7 @@ with filter_tab:
         with st.form('Time Frame Filters, League'):
             similar_player_lg_lookup_filters['League-Season'] = similar_player_lg_lookup_filters.League + " " + similar_player_lg_lookup_filters.Season
             submitted = st.form_submit_button("Submit Seasons")
-            time_frame_filters = st.multiselect('League-Seasons', (similar_player_lg_lookup_filters[similar_player_lg_lookup_filters.League.isin(region_filters)].sort_values(by=['Country','Season'],ascending=[True,False])['League-Season'].tolist()), default='Danish 1. Division 24-25')
+            time_frame_filters = st.multiselect('League-Seasons', (similar_player_lg_lookup_filters[similar_player_lg_lookup_filters.League.isin(region_filters)].sort_values(by=['Country','Tier','Season'],ascending=[True,True,False])['League-Season'].tolist()), default='Danish 1. Division 24-25')
     
     if geo_input_filters != 'League':
         with st.form('Time Frame Filters, Non-League'):

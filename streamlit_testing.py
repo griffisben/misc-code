@@ -2576,7 +2576,7 @@ with filter_tab:
         shots = st.slider('Shots per 90', min_dict['Shots per 90'], max_dict['Shots per 90'], key='slider17')
         boxtouches = st.slider('Touches in Penalty Box per 90', min_dict['Touches in box per 90'], max_dict['Touches in box per 90'], key='slider18')
         drib = st.slider('Dribble Success %', min_dict['Successful dribbles, %'], max_dict['Successful dribbles, %'], key='slider19')
-        num_dribs = st.slider('Successful dribbles per 90', min_dict['Successful dribbles per 90'], max_dict['Successful dribbles per 90'], key='slider19a'))
+        num_dribs = st.slider('Successful dribbles per 90', min_dict['Successful dribbles per 90'], max_dict['Successful dribbles per 90'], key='slider19a')
         accel = st.slider('Accelerations per 90', min_dict['Accelerations per 90'], max_dict['Accelerations per 90'], key='slider20')
         progcarry = st.slider('Progressive Carries per 90', min_dict['Progressive runs per 90'], max_dict['Progressive runs per 90'], key='slider21')
         progpass = st.slider('Progressive Passes per 90', min_dict['Progressive passes per 90'], max_dict['Progressive passes per 90'], key='slider22')

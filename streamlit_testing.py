@@ -2535,10 +2535,10 @@ with filter_tab:
     try:
         print(f"SELECTED OPTIONS:\nGeography Region: {geo_input_filters}\nArea: {region_filters}\nTiers: {tiers_filters}\nTime Frame: {time_frame_filters}\nPosition(s): {pos_select_filters}")
     except:
-        geo_input='League',
-        region='Danish 1. Division 24-25',
-        tiers=[],
-        time_frame='Current Season'
+        geo_input_filters='League',
+        region_filters='Danish 1. Division',
+        tiers_filters=[],
+        time_frame_filters='Danish 1. Division 24-25'
         pos_select_filters = 'Strikers'
     raw_df_for_filtering = prep_player_research_table(geo_input_filters, region_filters, tiers_filters, time_frame_filters, mins, pos_select_filters, ages[0], ages[1])
     min_dict = raw_df_for_filtering.min()[6:]

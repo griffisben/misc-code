@@ -2540,7 +2540,7 @@ with filter_tab:
         tiers=[],
         time_frame='Current Season'
         pos_select_filters = 'Strikers'
-    raw_df_for_filtering = prep_player_research_table_filters(geo_input_filters, region_filters, tiers_filters, time_frame_filters, mins, pos_select_filters, ages[0], ages[1])
+    raw_df_for_filtering = prep_player_research_table(geo_input_filters, region_filters, tiers_filters, time_frame_filters, mins, pos_select_filters, ages[0], ages[1])
     min_dict = raw_df_for_filtering.min()[6:]
     max_dict = raw_df_for_filtering.max()[6:]
     #########

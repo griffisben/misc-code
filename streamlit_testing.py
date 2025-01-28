@@ -1981,7 +1981,7 @@ def create_player_research_table(df_basic, mins, pos, min_age, max_age):
         'gkpct2', 'gkpct4', 'gkpct5', 'gkpct6', 'gkpct7',
         'gkpct8', 'gkpct9', 'gkpct10', 'gkpct11', 'gkpct12', 'gkpct13', 'gkpct14',
         'defpct1','defpct2','defpct3','defpct6','defpct7','defpct8','defpct9','defpct10','defpct11','defpct12',
-        'extrapct','extrapct2','extrapct3','extrapct4','extrapct5','extrapct6','extrapct7','extrapct8','extrapct9','extrapct10',
+        'extrapct','extrapct2','extrapct3','extrapct4','extrapct5','extrapct6','extrapct7','extrapct8','extrapct9','extrapct10','extrapct11',
     ]
     inverse_ranked_columns = [
         'defpct4','defpct5','gkpct1','gkpct3'

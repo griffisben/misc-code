@@ -5,7 +5,7 @@ import pandas as pd
 # Load data
 @st.cache_data
 def load_data():
-    return pd.read_csv("c:/users/ben/from mac/python/fbref/fbref files/Wyscout League Movement Changes.csv")
+    return pd.read_csv("https://raw.githubusercontent.com/griffisben/misc-code/refs/heads/main/files/Wyscout%20League%20Movement%20Changes.csv")
 
 all_changes = load_data()
 

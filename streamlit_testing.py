@@ -67,7 +67,7 @@ try:
 
     # Map visualization
     st.subheader("League Movement Map")
-    world = gpd.read_file(gpd.datasets.get_path('naturalearth_lowres'))
+    world = gpd.read_file("https://raw.githubusercontent.com/nvkelso/natural-earth-vector/master/geojson/ne_110m_admin_0_countries.geojson")
     
     path_league_info = league_info[league_info['League'].isin(shortest_path)]
     

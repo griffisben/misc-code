@@ -2,6 +2,7 @@ import streamlit as st
 import networkx as nx
 import pandas as pd
 import altair as alt
+import matplotlib.pyplot as plt
 
 # Load data
 @st.cache_data
@@ -68,7 +69,9 @@ try:
     st.subheader("League Movement Map")
     path_league_info = league_info[league_info['League'].isin(shortest_path)]
     # region_colors = {region: color for region, color in zip(path_league_info['Region'].unique(), alt.Color('Region:N', scale=alt.Scale(domain=path_league_info['Region'].unique(), range=alt.utils.schemes['category10'])))}
-    region_colors = {region: color for region, color in zip(path_league_info['Region'].unique(), alt.Chart('category10').get_color_range())}
+    category10_colors = plt.cm.tab10.colors
+    region_colors = {region: category10_colors[i % len(category10_colors)] for i, region in enumerate(path_league_info['Region'].unique())}
+
 
     country_data = path_league_info[['Country', 'Region']].drop_duplicates()
     

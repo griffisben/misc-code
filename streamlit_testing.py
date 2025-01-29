@@ -13,9 +13,9 @@ all_changes = pd.read_csv(url)
 focal_old_league = st.selectbox('Select the starting league', all_changes['LeagueName_old'].unique())
 focal_new_league = st.selectbox('Select the target league', all_changes['LeagueName_new'].unique())
 focal_position = st.selectbox('Select the position', all_changes['Primary position'].unique())
-focal_metric = st.selectbox('Select the metric', [col for col in all_changes.columns if "Change" in col])
-min_players = st.slider('Minimum number of players', 1, 20, 4)
-start_metric = st.number_input('Starting metric value', value=2.4, step=0.1)
+focal_metric = st.sidebar.selectbox("Select metric:", [col.replace(" Change", "") for col in all_changes.columns if "Change" in col])
+min_players = st.slider('Minimum number of players', 1, 10, 4)
+start_metric = st.number_input('Starting metric value', value=2.4, step=0.01)
 mins = st.number_input('Minutes played per season', value=30*90, step=1)
     
 # Create graph

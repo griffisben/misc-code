@@ -2,7 +2,6 @@ import streamlit as st
 import networkx as nx
 import pandas as pd
 import altair as alt
-import matplotlib.pyplot as plt
 import pycountry
 
 # Load data
@@ -13,37 +12,15 @@ def load_data():
 def load_league_info():
     return pd.read_csv("https://raw.githubusercontent.com/griffisben/Wyscout_Prospect_Research/refs/heads/main/league_info_lookup.csv")
 
-# Create the lookup dictionary for ISO numeric codes
+# Country numeric code lookup
 country_numeric_code_lookup = {country.name: country.numeric for country in pycountry.countries}
 
-# Load data
 all_changes = load_data()
 league_info = load_league_info()
 
-# Merge all_changes with league_info to get the 'Country' column
-all_changes = all_changes.merge(league_info[['League', 'Country']], left_on='LeagueName_old', right_on='League', how='left')
-
-# Replace country names with standardized ones
-all_changes['Country'] = all_changes['Country'].replace({
-    'England': 'United Kingdom',
-    'Scotland': 'United Kingdom',
-    'Wales': 'United Kingdom',
-    'Northern Ireland': 'United Kingdom',
-    'Bolivia': 'Bolivia, Plurinational State of',
-    'Czech Republic': 'Czechia',
-    'Korea Republic': 'Korea, Republic of',
-    'Kosovo': 'Serbia',
-    'Moldova': 'Moldova, Republic of',
-    'Republic of Ireland': 'Ireland',
-    'Russia': 'Russian Federation',
-    'Turkey': 'Türkiye',
-    'UAE': 'United Arab Emirates',
-    'Vietnam': 'Viet Nam',
-    'China PR': 'China',
-})
-
-# Add ISO Numeric Code to all_changes based on the country name
-all_changes['ISO_Numeric_Code'] = all_changes['Country'].map(country_numeric_code_lookup)
+# Merge league info into the changes DataFrame based on the League column
+merged_data = pd.merge(all_changes, league_info[['League', 'Country']], left_on='LeagueName_old', right_on='League', how='left')
+merged_data = pd.merge(merged_data, league_info[['League', 'Country']], left_on='LeagueName_new', right_on='League', how='left', suffixes=('_old', '_new'))
 
 # Streamlit UI
 st.title("Soccer League Movement Analysis")
@@ -60,7 +37,7 @@ mins = st.sidebar.number_input("Minutes played per season:", value=2700, step=1)
 
 # Create Graph
 G = nx.DiGraph(directed=True)
-short_path_data = all_changes[(all_changes['Primary position'] == focal_position) & (all_changes['# Players'] >= min_players)]
+short_path_data = merged_data[(merged_data['Primary position'] == focal_position) & (merged_data['# Players'] >= min_players)]
 
 for _, row in short_path_data.iterrows():
     G.add_edge(row['LeagueName_old'], row['LeagueName_new'], weight=row['# Players'] * 0.1)
@@ -71,9 +48,9 @@ try:
     metric_values, num_players_list = [], []
 
     for i in range(len(shortest_path) - 1):
-        filtered_df = all_changes[(all_changes['LeagueName_old'] == shortest_path[i]) &
-                                  (all_changes['LeagueName_new'] == shortest_path[i + 1]) &
-                                  (all_changes['Primary position'] == focal_position)]
+        filtered_df = merged_data[(merged_data['LeagueName_old'] == shortest_path[i]) &
+                                  (merged_data['LeagueName_new'] == shortest_path[i + 1]) &
+                                  (merged_data['Primary position'] == focal_position)]
         metric_value = filtered_df[f"{focal_metric} Change"].values
         
         if metric_value.size > 0:
@@ -97,13 +74,18 @@ try:
 
     # Plotting the movement of leagues on the map using Altair
     st.subheader("League Movement Map")
-    
+
     # Get the country data for the leagues involved in the movement
     path_league_info = league_info[league_info['League'].isin(shortest_path)]
     path_league_info['ISO_Numeric_Code'] = path_league_info['Country'].map(country_numeric_code_lookup)
-    
-    source_countries = alt.topo_feature(data.world_110m.url, 'countries')
+
+    # Fetch the world map data
+    source_countries = alt.topo_feature('https://raw.githubusercontent.com/vega/vega-datasets/master/data/world-110m.json', 'countries')
+
+    # Create the basemap
     basemap = alt.Chart(source_countries).mark_geoshape(fill='#fbf9f4', stroke='#4a2e19')
+
+    # Create the map with color based on ISO Numeric Code
     map = alt.Chart(source_countries).mark_geoshape(stroke='#4a2e19').encode(
         color=alt.Color('ISO_Numeric_Code:Q', scale=alt.Scale(scheme="goldorange")),
         tooltip=[
@@ -119,6 +101,7 @@ try:
         type="naturalEarth1"
     )
 
+    # Display the map
     st.altair_chart(basemap + map, use_container_width=True)
 
 except nx.NetworkXNoPath:

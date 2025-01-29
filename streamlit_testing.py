@@ -5,21 +5,22 @@ import pandas as pd
 # Load data
 @st.cache_data
 def load_data():
-    return pd.read_csv("https://raw.githubusercontent.com/griffisben/misc-code/refs/heads/main/files/Wyscout%20League%20Movement%20Changes.csv")
+    return pd.read_csv("c:/users/ben/from mac/python/fbref/fbref files/Wyscout League Movement Changes.csv")
 
 all_changes = load_data()
 
 # Streamlit UI
 st.title("Soccer League Movement Analysis")
 
-# User Inputs
-focal_old_league = st.selectbox("Select starting league:", sorted(all_changes['LeagueName_old'].unique()))
-focal_new_league = st.selectbox("Select target league:", sorted(all_changes['LeagueName_new'].unique()))
-focal_position = st.selectbox("Select position:", sorted(all_changes['Primary position'].unique()))
-focal_metric = st.selectbox("Select metric:", [col.replace(" Change", "") for col in all_changes.columns if "Change" in col])
-min_players = st.slider("Minimum players per transition:", 1, 10, 3)
-start_metric = st.number_input("Starting metric value:", value=1.00, step=0.01)
-mins = st.number_input("Minutes played per season:", value=2700, step=1)
+# Sidebar Inputs
+st.sidebar.header("User Inputs")
+focal_old_league = st.sidebar.selectbox("Select starting league:", sorted(all_changes['LeagueName_old'].unique()))
+focal_new_league = st.sidebar.selectbox("Select target league:", sorted(all_changes['LeagueName_new'].unique()))
+focal_position = st.sidebar.selectbox("Select position:", sorted(all_changes['Primary position'].unique()))
+focal_metric = st.sidebar.selectbox("Select metric:", [col.replace(" Change", "") for col in all_changes.columns if "Change" in col])
+min_players = st.sidebar.slider("Minimum players per transition:", 1, 10, 3)
+start_metric = st.sidebar.number_input("Starting metric value:", value=1.00, step=0.01)
+mins = st.sidebar.number_input("Minutes played per season:", value=2700, step=1)
 
 # Create Graph
 G = nx.DiGraph(directed=True)

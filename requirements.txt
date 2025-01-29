@@ -16,3 +16,4 @@ pycountry
 scikit-learn
 networkx
 geopandas
+geopy

@@ -75,26 +75,26 @@ try:
 except nx.NetworkXNoPath:
     st.write(f"No path found between {focal_old_league} and {focal_new_league}")
 
-# Plot graph
-st.subheader("League Movement Graph")
-options = {
-    'node_color': 'dodgerblue',
-    'node_size': 100,
-    'arrowstyle': '-|>',
-    'arrowsize': 12,
-    'edge_cmap': 'Reds',
-    'width': 1,
-    'font_size': 6
-}
+# # Plot graph
+# st.subheader("League Movement Graph")
+# options = {
+#     'node_color': 'dodgerblue',
+#     'node_size': 100,
+#     'arrowstyle': '-|>',
+#     'arrowsize': 12,
+#     'edge_cmap': 'Reds',
+#     'width': 1,
+#     'font_size': 6
+# }
 
-net = Network(
-    directed=True,
-    select_menu=True,
-    filter_menu=True,
-    notebook=True,
-    cdn_resources='remote'
-)
-net.from_nx(G)
-net.show_buttons()
-net.show('league_movement_graph.html')
-st.markdown('<iframe src="league_movement_graph.html" width="100%" height="600"></iframe>', unsafe_allow_html=True)
+# net = Network(
+#     directed=True,
+#     select_menu=True,
+#     filter_menu=True,
+#     notebook=True,
+#     cdn_resources='remote'
+# )
+# net.from_nx(G)
+# net.show_buttons()
+# net.show('league_movement_graph.html')
+# st.markdown('<iframe src="league_movement_graph.html" width="100%" height="600"></iframe>', unsafe_allow_html=True)

@@ -20,6 +20,9 @@ country_numeric_code_lookup = {country.name: country.numeric for country in pyco
 all_changes = load_data()
 league_info = load_league_info()
 
+# Merge all_changes with league_info to get the 'Country' column
+all_changes = all_changes.merge(league_info[['League', 'Country']], left_on='LeagueName_old', right_on='League', how='left')
+
 # Replace country names with standardized ones
 all_changes['Country'] = all_changes['Country'].replace({
     'England': 'United Kingdom',

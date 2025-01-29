@@ -1,6 +1,8 @@
 import networkx as nx
 import pandas as pd
 import streamlit as st
+import pycountry
+import altair as alt
 
 # Load data
 @st.cache_data
@@ -11,7 +13,6 @@ def load_league_info():
     return pd.read_csv("https://raw.githubusercontent.com/griffisben/Wyscout_Prospect_Research/refs/heads/main/league_info_lookup.csv")
 
 # Country numeric code lookup
-import pycountry
 country_numeric_code_lookup = {country.name: country.numeric for country in pycountry.countries}
 
 # Streamlit UI
@@ -97,3 +98,74 @@ try:
     
 except nx.NetworkXNoPath:
     st.error(f"No path found between {focal_old_league} and {focal_new_league}")
+
+# Map Plotting: Display the countries moved between
+# Extract the countries involved in the transition path (based on the shortest path)
+country_path = []
+for i in range(len(shortest_path) - 1):
+    league_old = shortest_path[i]
+    league_new = shortest_path[i + 1]
+    
+    # Get the country for the old and new league
+    country_old = merged_data[merged_data['LeagueName_old'] == league_old]['Country_old'].values[0]
+    country_new = merged_data[merged_data['LeagueName_new'] == league_new]['Country_new'].values[0]
+    
+    country_path.append(country_old)
+    country_path.append(country_new)
+
+# Remove duplicates (to avoid repeating the same country)
+country_path = list(set(country_path))
+
+# Map Data
+countries_avail = pd.DataFrame({
+    'Country': country_path,
+    'ISO_Numeric_Code': [country_numeric_code_lookup.get(country, None) for country in country_path]
+})
+
+# Remove countries with no valid ISO code
+countries_avail = countries_avail.dropna(subset=['ISO_Numeric_Code'])
+
+# Load country shapes for the map
+source_countries = alt.topo_feature('https://cdn.jsdelivr.net/npm/world-atlas@2/world/110m.json', 'countries')
+
+# Base map
+basemap = alt.Chart(source_countries).mark_geoshape(fill='#fbf9f4', stroke='#4a2e19')
+
+# Create map with color based on countries involved in league transitions
+map = alt.Chart(source_countries).mark_geoshape(stroke='#4a2e19').encode(
+    color=alt.Color('ISO_Numeric_Code:O', scale=alt.Scale(scheme="goldorange")),
+    tooltip=[
+        "Country:N",
+        "# of Leagues:N"
+    ]
+).transform_lookup(
+    lookup='id',
+    from_=alt.LookupData(countries_avail, 'ISO_Numeric_Code', ['Country'])
+).properties(
+    title="Countries Involved in League Movements"
+).project(
+    type="naturalEarth1"
+)
+
+# Add lines to represent league transitions between countries
+lines = []
+for i in range(len(shortest_path) - 1):
+    league_old = shortest_path[i]
+    league_new = shortest_path[i + 1]
+    
+    # Get coordinates for the old and new country (for simplicity, I'll use the country capital as the point)
+    # Ideally, you would use a more precise method to get the location (e.g., capitals or centroids)
+    country_old = merged_data[merged_data['LeagueName_old'] == league_old]['Country_old'].values[0]
+    country_new = merged_data[merged_data['LeagueName_new'] == league_new]['Country_new'].values[0]
+    
+    # Assuming you have a method to get coordinates for countries (for simplicity, these are placeholders)
+    country_coords_old = (0, 0)  # Replace with real coordinates lookup
+    country_coords_new = (1, 1)  # Replace with real coordinates lookup
+    
+    lines.append({
+        'source': country_coords_old,
+        'target': country_coords_new
+    })
+
+# Display map with transition lines
+st.altair_chart(basemap + map, use_container_width=True)

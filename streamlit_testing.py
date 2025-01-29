@@ -18,6 +18,10 @@ country_numeric_code_lookup = {country.name: country.numeric for country in pyco
 # Streamlit UI
 st.title("Soccer League Movement Analysis")
 
+# Load the data
+all_changes = load_data()
+league_info = load_league_info()
+
 # Sidebar Inputs
 st.sidebar.header("User Inputs")
 focal_old_league = st.sidebar.selectbox("Select starting league:", sorted(all_changes['LeagueName_old'].unique()))

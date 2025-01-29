@@ -3,6 +3,7 @@ import networkx as nx
 import pandas as pd
 import geopandas as gpd
 import matplotlib.pyplot as plt
+from geopy.geocoders import Nominatim
 
 # Load data
 @st.cache_data
@@ -14,6 +15,18 @@ def load_league_info():
 
 all_changes = load_data()
 league_info = load_league_info()
+
+gdf_world = gpd.read_file(gpd.datasets.get_path('naturalearth_lowres'))
+geolocator = Nominatim(user_agent="geoapi")
+
+def get_country_coords(country_name):
+    try:
+        location = geolocator.geocode(country_name)
+        return location.latitude, location.longitude
+    except:
+        return None, None
+
+league_info[['Latitude', 'Longitude']] = league_info['Country'].apply(lambda x: pd.Series(get_country_coords(x)))
 
 # Streamlit UI
 st.title("Soccer League Movement Analysis")
@@ -67,20 +80,16 @@ try:
 
     # Map visualization
     st.subheader("League Movement Map")
-    world = gpd.read_file("https://raw.githubusercontent.com/nvkelso/natural-earth-vector/master/geojson/ne_110m_admin_0_countries.geojson")
+    fig, ax = plt.subplots(figsize=(10, 6))
+    gdf_world.boundary.plot(ax=ax, linewidth=1, color='gray')
     
     path_league_info = league_info[league_info['League'].isin(shortest_path)]
-    
-    fig, ax = plt.subplots(figsize=(10, 6))
-    world.boundary.plot(ax=ax, linewidth=1, color='gray')
-    
-    region_colors = {
-        region: color for region, color in zip(path_league_info['Region'].unique(), plt.cm.Set1.colors)
-    }
+    region_colors = {region: color for region, color in zip(path_league_info['Region'].unique(), plt.cm.Set1.colors)}
     
     for _, row in path_league_info.iterrows():
-        ax.text(row['Country'], row['League'], row['League'], fontsize=8, ha='right')
-        ax.scatter(row['Country'], row['League'], color=region_colors.get(row['Region'], 'black'), s=100, label=row['Region'])
+        if pd.notna(row['Latitude']) and pd.notna(row['Longitude']):
+            ax.scatter(row['Longitude'], row['Latitude'], color=region_colors.get(row['Region'], 'black'), s=100, label=row['Region'])
+            ax.text(row['Longitude'], row['Latitude'], row['League'], fontsize=8, ha='right')
     
     plt.legend(loc='lower left', bbox_to_anchor=(0, -0.3), ncol=3, fontsize=8)
     st.pyplot(fig)

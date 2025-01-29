@@ -4,6 +4,7 @@ import streamlit as st
 import pycountry
 import altair as alt
 
+
 # Load data
 @st.cache_data
 def load_data():

@@ -1,9 +1,7 @@
 import streamlit as st
 import networkx as nx
 import pandas as pd
-import geopandas as gpd
-import matplotlib.pyplot as plt
-from geopy.geocoders import Nominatim
+import altair as alt
 
 # Load data
 @st.cache_data
@@ -15,18 +13,6 @@ def load_league_info():
 
 all_changes = load_data()
 league_info = load_league_info()
-
-gdf_world = gpd.read_file("https://raw.githubusercontent.com/nvkelso/natural-earth-vector/master/geojson/ne_110m_admin_0_countries.geojson")
-geolocator = Nominatim(user_agent="geoapi")
-
-def get_country_coords(country_name):
-    try:
-        location = geolocator.geocode(country_name)
-        return location.latitude, location.longitude
-    except:
-        return None, None
-
-league_info[['Latitude', 'Longitude']] = league_info['Country'].apply(lambda x: pd.Series(get_country_coords(x)))
 
 # Streamlit UI
 st.title("Soccer League Movement Analysis")
@@ -78,21 +64,35 @@ try:
     st.write(f"**Final Value:** {round(foc_num, 2)}")
     st.write(f"**Season Total ({mins} min):** {round(foc_num * (mins / 90), 2)}")
 
-    # Map visualization
+    # Map visualization using Altair
     st.subheader("League Movement Map")
-    fig, ax = plt.subplots(figsize=(10, 6))
-    gdf_world.boundary.plot(ax=ax, linewidth=1, color='gray')
-    
     path_league_info = league_info[league_info['League'].isin(shortest_path)]
-    region_colors = {region: color for region, color in zip(path_league_info['Region'].unique(), plt.cm.Set1.colors)}
+    region_colors = {region: color for region, color in zip(path_league_info['Region'].unique(), alt.scheme("category10"))}
     
-    for _, row in path_league_info.iterrows():
-        if pd.notna(row['Latitude']) and pd.notna(row['Longitude']):
-            ax.scatter(row['Longitude'], row['Latitude'], color=region_colors.get(row['Region'], 'black'), s=100, label=row['Region'])
-            ax.text(row['Longitude'], row['Latitude'], row['League'], fontsize=8, ha='right')
+    country_data = path_league_info[['Country', 'Region']].drop_duplicates()
     
-    plt.legend(loc='lower left', bbox_to_anchor=(0, -0.3), ncol=3, fontsize=8)
-    st.pyplot(fig)
+    background = alt.topo_feature("https://vega.github.io/vega-datasets/data/world-110m.json", "countries")
+    world_map = alt.Chart(background).mark_geoshape(
+        stroke='white',
+        strokeWidth=0.5
+    ).encode(
+        color=alt.Color('Region:N', scale=alt.Scale(domain=list(region_colors.keys()), range=list(region_colors.values())), legend=alt.Legend(title="Region"))
+    ).transform_lookup(
+        lookup='id',
+        from_=alt.LookupData(country_data, 'Country', ['Region'])
+    ).project('naturalEarth1').properties(width=800, height=500)
+    
+    # Create league movement lines
+    movement_data = path_league_info[['League', 'Country']].merge(path_league_info[['League', 'Country']], how='left', left_on='League', right_on='League', suffixes=('_from', '_to'))
+    movement_data = movement_data.dropna()
+    
+    connections = alt.Chart(movement_data).mark_rule(opacity=0.7).encode(
+        latitude='Country_from:N',
+        longitude='Country_to:N',
+        color=alt.Color('Region:N', scale=alt.Scale(domain=list(region_colors.keys()), range=list(region_colors.values())))
+    )
+    
+    st.altair_chart(world_map + connections)
 
 except nx.NetworkXNoPath:
     st.error(f"No path found between {focal_old_league} and {focal_new_league}.")

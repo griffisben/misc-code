@@ -67,7 +67,7 @@ try:
     # Map visualization using Altair
     st.subheader("League Movement Map")
     path_league_info = league_info[league_info['League'].isin(shortest_path)]
-    region_colors = {region: color for region, color in zip(path_league_info['Region'].unique(), alt.Color('Region:N', scale=alt.Scale(domain=path_league_info['Region'].unique(), range=alt.Chart.scheme('category10'))))}
+    region_colors = {region: color for region, color in zip(path_league_info['Region'].unique(), alt.Color('Region:N', scale=alt.Scale(domain=path_league_info['Region'].unique(), range=altair.utils.schemes['category10']))}
     
     country_data = path_league_info[['Country', 'Region']].drop_duplicates()
     

@@ -18,7 +18,7 @@ focal_new_league = st.selectbox("Select target league:", sorted(all_changes['Lea
 focal_position = st.selectbox("Select position:", sorted(all_changes['Primary position'].unique()))
 focal_metric = st.selectbox("Select metric:", [col.replace(" Change", "") for col in all_changes.columns if "Change" in col])
 min_players = st.slider("Minimum players per transition:", 1, 10, 3)
-start_metric = st.number_input("Starting metric value:")
+start_metric = st.number_input("Starting metric value:", value=1.00, step=0.01)
 mins = st.number_input("Minutes played per season:", value=2700, step=1)
 
 # Create Graph

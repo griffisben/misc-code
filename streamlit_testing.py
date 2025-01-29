@@ -16,7 +16,7 @@ def load_league_info():
 all_changes = load_data()
 league_info = load_league_info()
 
-gdf_world = gpd.read_file(gpd.datasets.get_path('naturalearth_lowres'))
+gdf_world = gpd.read_file("https://raw.githubusercontent.com/nvkelso/natural-earth-vector/master/geojson/ne_110m_admin_0_countries.geojson")
 geolocator = Nominatim(user_agent="geoapi")
 
 def get_country_coords(country_name):

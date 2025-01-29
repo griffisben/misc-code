@@ -3,28 +3,7 @@ import networkx as nx
 import pandas as pd
 import altair as alt
 import matplotlib.pyplot as plt
-import requests
-
-# OpenCage API Key and endpoint setup
-api_key = "7d2d3113a3924cb79d45a5c9095593fc"
-geocode_url = "https://api.opencagedata.com/geocode/v1/json"
-
-# Function to get latitude and longitude for a country from OpenCage
-def get_coordinates_from_opencage(country_name):
-    params = {
-        'q': country_name,
-        'key': api_key,
-        'no_annotations': 1,
-        'language': 'en'
-    }
-    response = requests.get(geocode_url, params=params)
-    if response.status_code == 200:
-        data = response.json()
-        if data['results']:
-            lat = data['results'][0]['geometry']['lat']
-            lon = data['results'][0]['geometry']['lng']
-            return lat, lon
-    return None, None
+import pycountry
 
 # Load data
 @st.cache_data
@@ -34,8 +13,34 @@ def load_data():
 def load_league_info():
     return pd.read_csv("https://raw.githubusercontent.com/griffisben/Wyscout_Prospect_Research/refs/heads/main/league_info_lookup.csv")
 
+# Create the lookup dictionary for ISO numeric codes
+country_numeric_code_lookup = {country.name: country.numeric for country in pycountry.countries}
+
+# Load data
 all_changes = load_data()
 league_info = load_league_info()
+
+# Replace country names with standardized ones
+all_changes['Country'] = all_changes['Country'].replace({
+    'England': 'United Kingdom',
+    'Scotland': 'United Kingdom',
+    'Wales': 'United Kingdom',
+    'Northern Ireland': 'United Kingdom',
+    'Bolivia': 'Bolivia, Plurinational State of',
+    'Czech Republic': 'Czechia',
+    'Korea Republic': 'Korea, Republic of',
+    'Kosovo': 'Serbia',
+    'Moldova': 'Moldova, Republic of',
+    'Republic of Ireland': 'Ireland',
+    'Russia': 'Russian Federation',
+    'Turkey': 'Türkiye',
+    'UAE': 'United Arab Emirates',
+    'Vietnam': 'Viet Nam',
+    'China PR': 'China',
+})
+
+# Add ISO Numeric Code to all_changes based on the country name
+all_changes['ISO_Numeric_Code'] = all_changes['Country'].map(country_numeric_code_lookup)
 
 # Streamlit UI
 st.title("Soccer League Movement Analysis")
@@ -87,47 +92,31 @@ try:
     st.write(f"**Final Value:** {round(foc_num, 2)}")
     st.write(f"**Season Total ({mins} min):** {round(foc_num * (mins / 90), 2)}")
 
-    # Map visualization using Altair
+    # Plotting the movement of leagues on the map using Altair
     st.subheader("League Movement Map")
+    
+    # Get the country data for the leagues involved in the movement
     path_league_info = league_info[league_info['League'].isin(shortest_path)]
-
-    # Fetch latitudes and longitudes for each country using OpenCage
-    path_league_info.loc[:, 'Coordinates'] = path_league_info['Country'].apply(get_coordinates_from_opencage)
-    path_league_info[['Lat', 'Lon']] = pd.DataFrame(path_league_info['Coordinates'].tolist(), index=path_league_info.index)
-
-    # Handle missing coordinates if any
-    path_league_info = path_league_info.dropna(subset=['Lat', 'Lon'])
-
-    # Region coloring using Altair
-    category10_colors = plt.cm.tab10.colors
-    region_colors = {region: category10_colors[i % len(category10_colors)] for i, region in enumerate(path_league_info['Region'].unique())}
-
-    country_data = path_league_info[['Country', 'Region']].drop_duplicates()
-
-    background = alt.topo_feature("https://vega.github.io/vega-datasets/data/world-110m.json", "countries")
-    world_map = alt.Chart(background).mark_geoshape(
-        stroke='white',
-        strokeWidth=0.5
-    ).encode(
-        color=alt.Color('Region:N', scale=alt.Scale(domain=list(region_colors.keys()), range=list(region_colors.values())), legend=alt.Legend(title="Region"))
+    path_league_info['ISO_Numeric_Code'] = path_league_info['Country'].map(country_numeric_code_lookup)
+    
+    source_countries = alt.topo_feature(data.world_110m.url, 'countries')
+    basemap = alt.Chart(source_countries).mark_geoshape(fill='#fbf9f4', stroke='#4a2e19')
+    map = alt.Chart(source_countries).mark_geoshape(stroke='#4a2e19').encode(
+        color=alt.Color('ISO_Numeric_Code:Q', scale=alt.Scale(scheme="goldorange")),
+        tooltip=[
+            "Country:N",
+            "ISO_Numeric_Code:Q"
+        ],
     ).transform_lookup(
         lookup='id',
-        from_=alt.LookupData(country_data, 'Country', ['Region'])
-    ).project('naturalEarth1').properties(width=800, height=500)
-
-    # Create league movement lines
-    movement_data = path_league_info[['League', 'Country']].merge(path_league_info[['League', 'Country']], how='left', on='League', suffixes=('_from', '_to'))
-    movement_data = movement_data.dropna()
-
-    connections = alt.Chart(movement_data).mark_rule(opacity=0.7).encode(
-        latitude='Lat_from:Q',
-        longitude='Lon_from:Q',
-        latitude2='Lat_to:Q',
-        longitude2='Lon_to:Q',
-        color=alt.Color('Region:N', scale=alt.Scale(domain=list(region_colors.keys()), range=list(region_colors.values())))
+        from_=alt.LookupData(path_league_info, 'ISO_Numeric_Code', ['Country'])
+    ).properties(
+        title="League Movement By Country"
+    ).project(
+        type="naturalEarth1"
     )
 
-    st.altair_chart(world_map + connections)
+    st.altair_chart(basemap + map, use_container_width=True)
 
 except nx.NetworkXNoPath:
     st.error(f"No path found between {focal_old_league} and {focal_new_league}.")

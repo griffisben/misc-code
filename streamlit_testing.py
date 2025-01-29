@@ -19,7 +19,7 @@ focal_position = st.selectbox("Select position:", sorted(all_changes['Primary po
 focal_metric = st.selectbox("Select metric:", [col.replace(" Change", "") for col in all_changes.columns if "Change" in col])
 min_players = st.slider("Minimum players per transition:", 1, 10, 3)
 start_metric = st.number_input("Starting metric value:")
-mins = st.number_input("Minutes played per season:")
+mins = st.number_input("Minutes played per season:", step=1)
 
 # Create Graph
 G = nx.DiGraph(directed=True)

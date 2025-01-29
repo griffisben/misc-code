@@ -65,8 +65,8 @@ try:
     st.subheader(f"Analysis from {focal_old_league} to {focal_new_league}")
     st.write(f"Shortest path for a {focal_position}, with at least {min_players} players for each move:")
     st.write(" -> ".join(shortest_path))
-    st.write(f"Change: {round((foc_num - start_metric) / start_metric * 100, 2)}%")
-    st.write(f"Possible {focal_new_league} {focal_metric}: **{round(foc_num, 2)}**")
+    st.write(f"Possible Overall Change: {round((foc_num - start_metric) / start_metric * 100, 2)}%")
+    st.write(f"Possible `{focal_new_league}` {focal_metric}: **{round(foc_num, 2)}**")
 
 except nx.NetworkXNoPath:
     st.write(f"No path found between {focal_old_league} and {focal_new_league}")

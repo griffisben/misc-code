@@ -1,13 +1,19 @@
 import streamlit as st
 import networkx as nx
 import pandas as pd
+import geopandas as gpd
+import matplotlib.pyplot as plt
 
 # Load data
 @st.cache_data
 def load_data():
     return pd.read_csv("https://raw.githubusercontent.com/griffisben/misc-code/refs/heads/main/files/Wyscout%20League%20Movement%20Changes.csv")
 
+def load_league_info():
+    return pd.read_csv("https://raw.githubusercontent.com/griffisben/Wyscout_Prospect_Research/refs/heads/main/league_info_lookup.csv")
+
 all_changes = load_data()
+league_info = load_league_info()
 
 # Streamlit UI
 st.title("Soccer League Movement Analysis")
@@ -58,5 +64,26 @@ try:
     st.write(f"**Starting Value:** {round(start_metric, 2)}")
     st.write(f"**Final Value:** {round(foc_num, 2)}")
     st.write(f"**Season Total ({mins} min):** {round(foc_num * (mins / 90), 2)}")
+
+    # Map visualization
+    st.subheader("League Movement Map")
+    world = gpd.read_file(gpd.datasets.get_path('naturalearth_lowres'))
+    
+    path_league_info = league_info[league_info['League'].isin(shortest_path)]
+    
+    fig, ax = plt.subplots(figsize=(10, 6))
+    world.boundary.plot(ax=ax, linewidth=1, color='gray')
+    
+    region_colors = {
+        region: color for region, color in zip(path_league_info['Region'].unique(), plt.cm.Set1.colors)
+    }
+    
+    for _, row in path_league_info.iterrows():
+        ax.text(row['Country'], row['League'], row['League'], fontsize=8, ha='right')
+        ax.scatter(row['Country'], row['League'], color=region_colors.get(row['Region'], 'black'), s=100, label=row['Region'])
+    
+    plt.legend(loc='lower left', bbox_to_anchor=(0, -0.3), ncol=3, fontsize=8)
+    st.pyplot(fig)
+
 except nx.NetworkXNoPath:
     st.error(f"No path found between {focal_old_league} and {focal_new_league}.")

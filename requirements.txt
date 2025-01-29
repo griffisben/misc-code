@@ -17,3 +17,4 @@ scikit-learn
 networkx
 geopandas
 geopy
+pyvis

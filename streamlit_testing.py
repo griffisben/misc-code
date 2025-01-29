@@ -66,8 +66,8 @@ try:
     st.write(f"Shortest path for a {focal_position}, with at least {min_players} players for each move:")
     st.write(" -> ".join(shortest_path))
     st.write(f"Change: {round((foc_num - start_metric) / start_metric * 100, 2)}%")
-    st.write(f"{focal_old_league} {focal_metric}: {round(start_metric, 2)}")
-    st.write(f"Possible {focal_new_league} {focal_metric}: {round(foc_num, 2)}")
+    st.write(f"{round(start_metric, 2)}: {focal_old_league} {focal_metric}")
+    st.write(f"{round(foc_num, 2)}: Possible {focal_new_league} {focal_metric}")
 
 except nx.NetworkXNoPath:
     st.write(f"No path found between {focal_old_league} and {focal_new_league}")

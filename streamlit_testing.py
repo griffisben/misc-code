@@ -5,6 +5,27 @@ import altair as alt
 import matplotlib.pyplot as plt
 import requests
 
+# OpenCage API Key and endpoint setup
+api_key = "7d2d3113a3924cb79d45a5c9095593fc"
+geocode_url = "https://api.opencagedata.com/geocode/v1/json"
+
+# Function to get latitude and longitude for a country from OpenCage
+def get_coordinates_from_opencage(country_name):
+    params = {
+        'q': country_name,
+        'key': api_key,
+        'no_annotations': 1,
+        'language': 'en'
+    }
+    response = requests.get(geocode_url, params=params)
+    if response.status_code == 200:
+        data = response.json()
+        if data['results']:
+            lat = data['results'][0]['geometry']['lat']
+            lon = data['results'][0]['geometry']['lng']
+            return lat, lon
+    return None, None
+
 # Load data
 @st.cache_data
 def load_data():
@@ -13,20 +34,6 @@ def load_data():
 def load_league_info():
     return pd.read_csv("https://raw.githubusercontent.com/griffisben/Wyscout_Prospect_Research/refs/heads/main/league_info_lookup.csv")
 
-# OpenCage Geocoder function
-def get_coordinates_from_opencage(country):
-    api_key = "7d2d3113a3924cb79d45a5c9095593fc"  # Replace with your actual API key
-    url = f"https://api.opencagedata.com/geocode/v1/json?q={country}&key={api_key}"
-    response = requests.get(url)
-    data = response.json()
-    
-    if data['results']:
-        lat = data['results'][0]['geometry']['lat']
-        lon = data['results'][0]['geometry']['lng']
-        return lat, lon
-    return None, None
-
-# Load datasets
 all_changes = load_data()
 league_info = load_league_info()
 
@@ -83,19 +90,20 @@ try:
     # Map visualization using Altair
     st.subheader("League Movement Map")
     path_league_info = league_info[league_info['League'].isin(shortest_path)]
-    
-    # Fetch latitudes and longitudes for each country
-    path_league_info['Coordinates'] = path_league_info['Country'].apply(get_coordinates_from_opencage)
+
+    # Fetch latitudes and longitudes for each country using OpenCage
+    path_league_info.loc[:, 'Coordinates'] = path_league_info['Country'].apply(get_coordinates_from_opencage)
     path_league_info[['Lat', 'Lon']] = pd.DataFrame(path_league_info['Coordinates'].tolist(), index=path_league_info.index)
 
     # Handle missing coordinates if any
     path_league_info = path_league_info.dropna(subset=['Lat', 'Lon'])
 
-    # Prepare region colors
+    # Region coloring using Altair
     category10_colors = plt.cm.tab10.colors
     region_colors = {region: category10_colors[i % len(category10_colors)] for i, region in enumerate(path_league_info['Region'].unique())}
-    
-    # Background for the world map
+
+    country_data = path_league_info[['Country', 'Region']].drop_duplicates()
+
     background = alt.topo_feature("https://vega.github.io/vega-datasets/data/world-110m.json", "countries")
     world_map = alt.Chart(background).mark_geoshape(
         stroke='white',
@@ -104,14 +112,13 @@ try:
         color=alt.Color('Region:N', scale=alt.Scale(domain=list(region_colors.keys()), range=list(region_colors.values())), legend=alt.Legend(title="Region"))
     ).transform_lookup(
         lookup='id',
-        from_=alt.LookupData(path_league_info, 'Country', ['Region'])
+        from_=alt.LookupData(country_data, 'Country', ['Region'])
     ).project('naturalEarth1').properties(width=800, height=500)
-    
-    # Create league movement lines (now using latitude and longitude)
-    movement_data = path_league_info[['League', 'Lat', 'Lon']].merge(path_league_info[['League', 'Lat', 'Lon']], how='left', left_on='League', right_on='League', suffixes=('_from', '_to'))
+
+    # Create league movement lines
+    movement_data = path_league_info[['League', 'Country']].merge(path_league_info[['League', 'Country']], how='left', on='League', suffixes=('_from', '_to'))
     movement_data = movement_data.dropna()
 
-    # Create connections based on latitude and longitude
     connections = alt.Chart(movement_data).mark_rule(opacity=0.7).encode(
         latitude='Lat_from:Q',
         longitude='Lon_from:Q',
@@ -119,7 +126,7 @@ try:
         longitude2='Lon_to:Q',
         color=alt.Color('Region:N', scale=alt.Scale(domain=list(region_colors.keys()), range=list(region_colors.values())))
     )
-    
+
     st.altair_chart(world_map + connections)
 
 except nx.NetworkXNoPath:

@@ -14,5 +14,5 @@ adjustText
 vega_datasets
 pycountry
 scikit-learn
-network
+networkx
 geopandas

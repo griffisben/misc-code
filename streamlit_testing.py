@@ -1,8 +1,6 @@
-import streamlit as st
 import networkx as nx
 import pandas as pd
-import altair as alt
-import pycountry
+import streamlit as st
 
 # Load data
 @st.cache_data
@@ -13,14 +11,8 @@ def load_league_info():
     return pd.read_csv("https://raw.githubusercontent.com/griffisben/Wyscout_Prospect_Research/refs/heads/main/league_info_lookup.csv")
 
 # Country numeric code lookup
+import pycountry
 country_numeric_code_lookup = {country.name: country.numeric for country in pycountry.countries}
-
-all_changes = load_data()
-league_info = load_league_info()
-
-# Merge league info into the changes DataFrame based on the League column
-merged_data = pd.merge(all_changes, league_info[['League', 'Country']], left_on='LeagueName_old', right_on='League', how='left')
-merged_data = pd.merge(merged_data, league_info[['League', 'Country']], left_on='LeagueName_new', right_on='League', how='left', suffixes=('_old', '_new'))
 
 # Streamlit UI
 st.title("Soccer League Movement Analysis")
@@ -35,74 +27,73 @@ min_players = st.sidebar.slider("Minimum players per transition:", 1, 10, 3)
 start_metric = st.sidebar.number_input("Starting metric value:", value=1.00, step=0.01)
 mins = st.sidebar.number_input("Minutes played per season:", value=2700, step=1)
 
+# Load the data
+all_changes = load_data()
+league_info = load_league_info()
+
+# Merge league info into the changes DataFrame based on the League column
+merged_data = pd.merge(all_changes, league_info[['League', 'Country']], left_on='LeagueName_old', right_on='League', how='left')
+merged_data = pd.merge(merged_data, league_info[['League', 'Country']], left_on='LeagueName_new', right_on='League', how='left', suffixes=('_old', '_new'))
+
 # Create Graph
 G = nx.DiGraph(directed=True)
 short_path_data = merged_data[(merged_data['Primary position'] == focal_position) & (merged_data['# Players'] >= min_players)]
 
+# Add edges with weights based on '# Players'
 for _, row in short_path_data.iterrows():
-    G.add_edge(row['LeagueName_old'], row['LeagueName_new'], weight=row['# Players'] * 0.1)
+    old_league = row['LeagueName_old']
+    new_league = row['LeagueName_new']
+    num_players = row['# Players']
+    
+    # Use weight as inverse of # Players to prioritize high-movement paths
+    G.add_edge(old_league, new_league, weight=num_players * 0.1)
 
-# Calculate shortest path
+# Get the shortest path
 try:
     shortest_path = nx.shortest_path(G, source=focal_old_league, target=focal_new_league, weight='# Players')
-    metric_values, num_players_list = [], []
+    all_shortest_paths = nx.all_shortest_paths(G, source=focal_old_league, target=focal_new_league, weight='# Players')
 
+    st.subheader("Results")
+    st.write(f"Shortest path from {focal_old_league} to {focal_new_league} for position {focal_position}:\n")
+    st.write(" -> ".join(shortest_path))
+    
+    # Calculate metric values along the shortest path
+    metric_values = []
+    num_players_list = []
+    
     for i in range(len(shortest_path) - 1):
-        filtered_df = merged_data[(merged_data['LeagueName_old'] == shortest_path[i]) &
-                                  (merged_data['LeagueName_new'] == shortest_path[i + 1]) &
-                                  (merged_data['Primary position'] == focal_position)]
-        metric_value = filtered_df[f"{focal_metric} Change"].values
+        league_old = shortest_path[i]
+        league_new = shortest_path[i + 1]
         
+        # Filter `all_changes` DataFrame for each pair of leagues and `Primary position`
+        filtered_df = all_changes[
+            (all_changes['LeagueName_old'] == league_old) &
+            (all_changes['LeagueName_new'] == league_new) &
+            (all_changes['Primary position'] == focal_position)
+        ]
+        
+        # Get the metric value (handling the case where no value is found)
+        metric_value = filtered_df[f"{focal_metric} Change"].values
         if metric_value.size > 0:
             metric_values.extend(metric_value)
-            num_players_list.append(filtered_df['# Players'].values[0])
         else:
             metric_values.append(None)
-            num_players_list.append(0)
-
+        
+        num_players_list.append(filtered_df['# Players'].values[0])
+    
+    # Calculate the final metric value after all transitions
     foc_num = start_metric
     for adj in metric_values:
         foc_num *= (1 + adj) if adj is not None else 1
     
     # Display results
-    st.subheader("Results")
-    st.write(f"**Shortest Path:** {' → '.join(shortest_path)}")
-    st.write(f"**Metric Change:** {round((foc_num - start_metric) / start_metric * 100, 2)}%")
-    st.write(f"**Starting Value:** {round(start_metric, 2)}")
-    st.write(f"**Final Value:** {round(foc_num, 2)}")
-    st.write(f"**Season Total ({mins} min):** {round(foc_num * (mins / 90), 2)}")
-
-    # Plotting the movement of leagues on the map using Altair
-    st.subheader("League Movement Map")
-
-    # Get the country data for the leagues involved in the movement
-    path_league_info = league_info[league_info['League'].isin(shortest_path)]
-    path_league_info['ISO_Numeric_Code'] = path_league_info['Country'].map(country_numeric_code_lookup)
-
-    # Fetch the world map data
-    source_countries = alt.topo_feature('https://raw.githubusercontent.com/vega/vega-datasets/master/data/world-110m.json', 'countries')
-
-    # Create the basemap
-    basemap = alt.Chart(source_countries).mark_geoshape(fill='#fbf9f4', stroke='#4a2e19')
-
-    # Create the map with color based on ISO Numeric Code
-    map = alt.Chart(source_countries).mark_geoshape(stroke='#4a2e19').encode(
-        color=alt.Color('ISO_Numeric_Code:Q', scale=alt.Scale(scheme="goldorange")),
-        tooltip=[
-            "Country:N",
-            "ISO_Numeric_Code:Q"
-        ],
-    ).transform_lookup(
-        lookup='id',
-        from_=alt.LookupData(path_league_info, 'ISO_Numeric_Code', ['Country'])
-    ).properties(
-        title="League Movement By Country"
-    ).project(
-        type="naturalEarth1"
-    )
-
-    # Display the map
-    st.altair_chart(basemap + map, use_container_width=True)
-
+    st.write(f"Metric values along the path: {metric_values}")
+    st.write(f"Number of players moving along this path: {num_players_list}")
+    
+    st.write(f"Change: {round((foc_num - start_metric) / start_metric * 100, 2)}%")
+    st.write(f"Starting value: {round(start_metric, 2)}")
+    st.write(f"Final value: {round(foc_num, 2)}")
+    st.write(f"Season total (at {mins} min): {round(foc_num * (mins / 90), 2)}")
+    
 except nx.NetworkXNoPath:
-    st.error(f"No path found between {focal_old_league} and {focal_new_league}.")
+    st.error(f"No path found between {focal_old_league} and {focal_new_league}")

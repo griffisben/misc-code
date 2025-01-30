@@ -463,7 +463,7 @@ def scout_report(league, season, pos, mins, name,callout, bar_colors, dist_label
 avail_data = pd.read_csv(f"https://raw.githubusercontent.com/griffisben/AFL-Radars/refs/heads/main/AvailableData.csv")
 
 with st.sidebar:
-    league = st.selectbox('League', avail_data.Competition.unique().tolist(), default='AFL')
+    league = st.selectbox('League', avail_data.Competition.unique().tolist())
     season = st.selectbox('Season', sorted(avail_data[avail_data.Competition==league].Season.tolist(),reverse=True))
     mins = st.number_input('Minimum Time On Ground %', 0, 100, 35, 1)
 

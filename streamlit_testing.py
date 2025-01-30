@@ -475,6 +475,8 @@ radar_tab, all_players_tab = st.tabs(['Player Radar', 'All Players List'])
 with radar_tab:
     with st.form('Radar Options'):
         pos = st.multiselect('Positions to Include (leave blank for all)', ['Full-Forward','Forward Pocket','Centre Half-Forward','Half-Forward','Wing','Centre','Ruck-Rover','Rover','Ruck','Half-Back','Centre Half-Back','Back-Pocket','Full-Back'])
+        if pos == []:
+            pos = None
         callout = st.selectbox('Data Labels: Per Game or Percentiles?', ['Per Game','Percentile'])
         bar_colors = st.selectbox('Bar Coloring Scheme: Benchmarking Percentiles or Metric Groups?', ['Benchmarking Percentiles','Metric Groups'])
         dist_labels = st.selectbox('Distribution Labels on Bars?', ['Yes','No'])

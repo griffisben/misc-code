@@ -478,8 +478,9 @@ with radar_tab:
         callout = st.selectbox('Data Labels: Per Game or Percentiles?', ['Per Game','Percentile'])
         bar_colors = st.selectbox('Bar Coloring Scheme: Benchmarking Percentiles or Metric Groups?', ['Benchmarking Percentiles','Metric Groups'])
         dist_labels = st.selectbox('Distribution Labels on Bars?', ['Yes','No'])
-        name = st.text_input("Player to Generate Radar For", "")
-
+        name = st.text_input("Player", "")
+        submitted = st.form_submit_button("Generate Radar!")
+        
         try:
             radar_img = scout_report(league = league,
                          season = season,

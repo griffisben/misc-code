@@ -396,7 +396,7 @@ def scout_report(league, season, pos, mins, name,callout, bar_colors, dist_label
                 x=0.5,
                 y=.97)
 
-    plt.annotate("'Per Game' means per 80 minutes\nBars are percentiles%s\nAll values are per game%s\nCompared to %s\nOnly includes players with at least %.1f games played\nData: AFL | %s\nSample Size: %i players" %(callout_text,extra_text, compares, mins, sig, len(dfProspect)),
+    plt.annotate("'Per Game' means per 80 minutes\nBars are percentiles%s\nAll values are per game%s\nCompared to %s\nOnly includes players with at least %.1f%s time on ground\nData: AFL | %s\nSample Size: %i players" %(callout_text,extra_text, compares, mins, '%', sig, len(dfProspect)),
                  xy = (-.05, -.05), xycoords='axes fraction',
                 ha='left', va='center',
                 fontsize=9, fontfamily="DejaVu Sans",

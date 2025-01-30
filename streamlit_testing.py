@@ -496,3 +496,8 @@ with radar_tab:
             st.pyplot(radar_img.figure)
         except:
             st.text("Please enter a valid player name. Refer to the All Players List tab if needed.  \nEnsure your player meets the minimum TOG% threshold.")
+
+with all_players_tab:
+    df = pd.read_csv(f"https://raw.githubusercontent.com/griffisben/AFL-Radars/refs/heads/main/Player-Data/{league}/{season}.csv")
+    df = df[['player_name','player_team','player_position','games_played','PctOfSeason','80s']].rename(columns={'player_name':'Player','player_team':'Team','player_position':'Position(s)','games_played':'Games','PctOfSeason':'TOG%',})
+    st.table(df)

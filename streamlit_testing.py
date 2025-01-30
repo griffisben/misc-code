@@ -465,7 +465,7 @@ avail_data = pd.read_csv(f"https://raw.githubusercontent.com/griffisben/AFL-Rada
 with st.sidebar:
     league = st.selectbox('League', avail_data.Competition.unique().tolist())
     season = st.selectbox('Season', sorted(avail_data[avail_data.Competition==league].Season.tolist(),reverse=True))
-    mins = st.number_input('Minimum Time On Ground %', 0, 100, 35, 1)
+    mins = st.number_input('Minimum Time On Ground %', 0, 100, 60, 1)
 
 extra_text = avail_data[(avail_data.Competition==league) & (avail_data.Season==season)].DataTime.values[0]
 

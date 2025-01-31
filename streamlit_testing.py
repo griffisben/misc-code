@@ -67,8 +67,8 @@ def make_season_metric_img(player_df, adj_80s, player, foc_var, league, season):
         plt.title('85% Time On Ground Percentage is just about average for starters per game\nDarker bar color indicates more time on ground', size=8, va='top')
     else:
         plt.title('Darker bar color indicates more time on ground', size=8, va='top')
-    fig = plt.gcf()
-    return fig
+    metric_fig = plt.gcf()
+    return metric_fig
 
 def NormalizeData(data):
     return (data - np.min(data)) / (np.max(data) - np.min(data)) * 100
@@ -1074,7 +1074,7 @@ with metric_trend_tab:
         
         #############
         if len(player_df) > 0:
-            season_metrig_fig = make_season_metric_img(player_df, adj_80s, player, foc_var, league, season)
-            st.pyplot(season_metrig_fig.figure)
+            season_metric_fig = make_season_metric_img(player_df, adj_80s, player, foc_var, league, season)
+            st.pyplot(season_metric_fig.figure)
         else:
             st.write(f"Your chosen player played 0 {league} games in {season}")

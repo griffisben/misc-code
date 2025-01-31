@@ -985,7 +985,6 @@ with ranking_tab:
 
         # Display results
         st.write("Normalized Weighted Z-Score Player Rankings")
-        st.dataframe(df_filtered.sort_values("Score", ascending=False)[["Player","Team","Position(s)",'TOG%',"Score",] + metrics])
         st.dataframe(df_filtered.sort_values("Score", ascending=False)[["Player","Team","Position(s)",'TOG%',"Score",] + metrics].style.applymap(color_percentile_100, subset=df_filtered.sort_values("Score", ascending=False)[["Player","Team","Position(s)",'TOG%',"Score",] + metrics].columns[4:]))
 
     else:

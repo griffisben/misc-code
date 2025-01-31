@@ -41,7 +41,7 @@ def make_season_metric_img(player_df, adj_80s, player, foc_var, league, season):
         adj_text = "Darker bar color indicates more time on ground"
 
     # Create a color scale based on 'TOG%'
-    color_scale = alt.Scale(domain=[0, 100], range=['white', '#4c94f6'])
+    color_scale = alt.Scale(domain=[0, 100], range=['red','white', 'dodgerblue'])
 
     # Create the bar chart
     chart = alt.Chart(player_df).mark_bar(stroke='black', strokeWidth=0.75).encode(

@@ -907,6 +907,6 @@ with ranking_tab:
 
         # Display results
         st.subheader("Ranked Players")
-        st.dataframe(df_filtered.sort_values("Score", ascending=False)[["Player","Team","Position(s)","Score"] + metrics])
+        st.dataframe(df_filtered.sort_values("Score", ascending=False)[["Player","Team","Position(s)","Score",'TOG%'] + metrics])
     else:
         st.warning("Please select at least one metric.")

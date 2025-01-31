@@ -870,7 +870,7 @@ with ranking_tab:
                       inplace=True)
     df = df[df['TOG%']>=mins/100]
 
-    with st.form('Minimum Percentile Filters'):
+    with st.form('Position & Metric Rankings'):
         submitted = st.form_submit_button("Submit Positions & Metrics")
         rank_pos = st.multiselect('Positions to Include (leave blank for all)', ['Full-Forward','Forward Pocket','Centre Half-Forward','Half-Forward','Wing','Centre','Ruck-Rover','Rover','Ruck','Half-Back','Centre Half-Back','Back-Pocket','Full-Back'])
         vars = df.columns[9:].tolist()

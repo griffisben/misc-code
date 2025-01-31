@@ -731,9 +731,6 @@ with radar_tab:
         submitted = st.form_submit_button("Generate Radar!")
         
         try:
-            plt.clf()
-            plt.style.use('default')  # Reset Matplotlib
-            sns.reset_defaults()  # Reset Seaborn
             radar_img = scout_report(league = league,
                          season = season,
                          pos = pos, #### make multiselect('Full-Forward','Forward Pocket','Centre Half-Forward','Half-Forward','Wing','Centre','Ruck-Rover','Rover','Ruck','Half-Back','Centre Half-Back','Back-Pocket','Full-Back',)
@@ -746,6 +743,9 @@ with radar_tab:
                          extra_text = f' | {extra_text}',
                         )
             st.pyplot(radar_img.figure)
+            plt.clf()
+            plt.style.use('default')  # Reset Matplotlib
+            sns.reset_defaults()  # Reset Seaborn
         except:
             st.text("Please enter a valid player name. Refer to the All Players List tab if needed.  \nEnsure your player meets the minimum TOG% threshold.")
 
@@ -1091,10 +1091,10 @@ with metric_trend_tab:
         
         #############
         if len(player_df) > 0:
+            season_metric_fig = make_season_metric_img(player_df, adj_80s, player, foc_var, league, season)
+            st.pyplot(season_metric_fig.figure)
             plt.clf()
             plt.style.use('default')  # Reset Matplotlib
             sns.reset_defaults()  # Reset Seaborn
-            season_metric_fig = make_season_metric_img(player_df, adj_80s, player, foc_var, league, season)
-            st.pyplot(season_metric_fig.figure)
         else:
             st.write(f"Your chosen player played 0 {league} games in {season}")

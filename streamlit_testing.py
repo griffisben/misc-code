@@ -58,7 +58,7 @@ with ranking_system:
         # Normalize data using z-score
         df_filtered = df.copy()
         df_filtered[metrics] = df_filtered[metrics].apply(zscore, nan_policy='omit')
-        for metric in metrics
+        for metric in metrics:
             df_filtered[metric] = df_filtered[metric] + abs(df_filtered[metric].min())
             df_filtered[metric] = NormalizeData(df_filtered[metric])
             

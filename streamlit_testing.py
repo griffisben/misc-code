@@ -18,6 +18,9 @@ import plotly.figure_factory as ff
 from plotly.graph_objects import Layout
 from sklearn.preprocessing import MinMaxScaler
 from scipy.stats import zscore
+import seaborn as sns
+from matplotlib.colors import Normalize, to_rgba
+
 
 colorscales = px.colors.named_colorscales()
 colorscales2 = [f"{cc}_r" for cc in colorscales]
@@ -657,7 +660,7 @@ with st.sidebar:
 
 extra_text = avail_data[(avail_data.Competition==league) & (avail_data.Season==season)].DataTime.values[0]
 
-radar_tab, all_players_tab, scatter_tab, filter_tab, filter_table_tab, ranking_tab = st.tabs(['Player Radar', 'All Players List', 'Scatter Plots', 'Player Search, Filters', 'Player Search, Results', 'Weighted Metric Ranking'])
+radar_tab, all_players_tab, scatter_tab, filter_tab, filter_table_tab, ranking_tab, metric_trend_tab = st.tabs(['Player Radar', 'All Players List', 'Scatter Plots', 'Player Search, Filters', 'Player Search, Results', 'Weighted Metric Ranking', 'Game-By-Game Metrics'])
 
 with radar_tab:
     with st.form('Radar Options'):
@@ -989,3 +992,78 @@ with ranking_tab:
 
     else:
         st.warning("Please select at least one metric.")
+
+with metric_trend_tab:
+    df = pd.read_csv(f"https://raw.githubusercontent.com/griffisben/AFL-Radars/refs/heads/main/Player-Data/{league}/GameByGame/{season}.csv")
+    df = df.rename(columns={'player.playerId':'player_id','player.photoURL':'picture','minutes':'minutes','kicks':'kicks','marks':'marks','handballs':'handballs','disposals':'disposals','extendedStats.effectiveDisposals':'effective_disposals','goals':'goals','behinds':'behinds','hitouts':'hitouts','tackles':'tackles','rebound50s':'rebounds','inside50s':'inside_fifties','clearances.totalClearances':'clearances','clangers':'clangers','freesFor':'free_kicks_for','freesAgainst':'free_kicks_against','':'brownlow_votes','contestedPossessions':'contested_possessions','uncontestedPossessions':'uncontested_possessions','contestedMarks':'contested_marks','marksInside50':'marks_inside_fifty','onePercenters':'one_percenters','bounces':'bounces','goalAssists':'goal_assists','dreamTeamPoints':'afl_fantasy_score','':'supercoach_score','clearances.centreClearances':'centre_clearances','clearances.stoppageClearances':'stoppage_clearances','scoreInvolvements':'score_involvements','metresGained':'metres_gained','turnovers':'turnovers','intercepts':'intercepts','tacklesInside50':'tackles_inside_fifty','extendedStats.contestDefLosses':'contest_def_losses','extendedStats.contestDefOneOnOnes':'contest_def_one_on_ones','extendedStats.contestOffOneOnOnes':'contest_off_one_on_ones','extendedStats.contestOffWins':'contest_off_wins','extendedStats.defHalfPressureActs':'def_half_pressure_acts','extendedStats.effectiveKicks':'effective_kicks','extendedStats.f50GroundBallGets':'f50_ground_ball_gets','extendedStats.groundBallGets':'ground_ball_gets','extendedStats.hitoutsToAdvantage':'hitouts_to_advantage','extendedStats.hitoutWinPercentage':'hitout_win_percentage','extendedStats.interceptMarks':'intercept_marks','extendedStats.marksOnLead':'marks_on_lead','extendedStats.pressureActs':'pressure_acts','ratingPoints':'rating_points','extendedStats.ruckContests':'ruck_contests','extendedStats.scoreLaunches':'score_launches','shotsAtGoal':'shots_at_goal','extendedStats.spoils':'spoils','team.name':'player_team','player.player.position':'player_position','player.playerJumperNumber':'guernsey_number',
+    })
+    df['minutes'] = 80*(df['timeOnGroundPercentage']/100)
+    df['player_name'] = df['player.givenName'] + " " + df['player.surname']
+    df.utcStartTime = pd.to_datetime(df.utcStartTime)
+    df = df.sort_values(['utcStartTime']).reset_index(drop=True)
+    df['Possessions'] = df['contested_possessions']+df['uncontested_possessions']
+    if league == 'AFL':
+        df['Kick Efficiency'] = df['effective_kicks']/df['kicks']*100
+        df['Handball Efficiency'] = (df['effective_disposals']-df['effective_kicks'])/df['handballs']*100
+        df['Hitout Efficiency'] = df['hitouts_to_advantage']/df['hitouts']*100
+    df['% of Possessions Contested'] = df['contested_possessions']/(df['Possessions'])*100
+    df['% of Marks Contested'] = df['contested_marks']/(df['marks'])*100
+    df['Points'] = (df['goals']*6)+(df['behinds'])
+    df['Points per Shot'] = df['Points']/df['shots_at_goal']
+    df['Points per Shot'] = [0 if df['shots_at_goal'][i]==0 else df['Points'][i]/df['shots_at_goal'][i] for i in range(len(df))]
+    df.rename(columns={'player_name':'Player','player_team':'Team','player_position':'Position(s)','timeOnGroundPercentage':'TOG%','games_played':'Games Played','kicks':'Kicks','marks':'Marks','handballs':'Handballs','disposals':'Disposals','effective_disposals':'Effective Disposals','goals':'Goals','behinds':'Behinds','hitouts':'Hitouts','tackles':'Tackles','rebounds':'Rebound 50s','inside_fifties':'Inside 50s','clearances':'Clearances','clangers':'Clangers','free_kicks_for':'Free Kicks For','free_kicks_against':'Free Kicks Against','contested_possessions':'Contested Possessions','uncontested_possessions':'Uncontested Possessions','contested_marks':'Contested Marks','marks_inside_fifty':'Marks Inside Fifty','one_percenters':'One Percenters','bounces':'Bounces','goal_assists':'Goal Assists','afl_fantasy_score':'AFL Fantasy Score','centre_clearances':'Centre Clearances','stoppage_clearances':'Stoppage Clearances','score_involvements':'Score Involvements','metres_gained':'Metres Gained','turnovers':'Turnovers','intercepts':'Intercepts','tackles_inside_fifty':'Tackles Inside Fifty','contest_def_losses':'Contest Def Losses','contest_def_one_on_ones':'Contest Def One On Ones','contest_off_one_on_ones':'Contest Off One On Ones','contest_off_wins':'Contest Off Wins','def_half_pressure_acts':'Def Half Pressure Acts','effective_kicks':'Effective Kicks','f50_ground_ball_gets':'Forward 50 Ground Ball Gets','ground_ball_gets':'Ground Ball Gets','hitouts_to_advantage':'Hitouts To Advantage','intercept_marks':'Intercept Marks','marks_on_lead':'Marks On Lead','pressure_acts':'Pressure Acts','rating_points':'Rating Points','ruck_contests':'Ruck Contests','score_launches':'Score Launches','shots_at_goal':'Shots At Goal','spoils':'Spoils'},
+                      inplace=True)
+    df['Opponent'] = [f"vs. {df['away.team.name'][i]} - {df['round.name'][i]}" if df['Team'][i]==df['home.team.name'][i] else f"at {df['home.team.name'][i]} - {df['round.name'][i]}" for i in range(len(df))]
+   
+    with st.form('Player Game-By-Game Metric Development'):
+        submitted = st.form_submit_button("Submit Player & Metric")
+        player = st.text_input("Player", "")
+        vars = df.columns[9:].tolist()
+        vars.remove('80sr')
+        vars.remove('Opponent')
+        metrics = st.multiselect("Choose metrics to include:", vars)
+        adj_80s = st.selectbox('Adjust Data for Time On Ground?', ['Yes','No'])
+        
+    player_df = df[df.Player==player].reset_index(drop=True)
+    
+    #############
+    sns.set(rc={'figure.dpi': 150,
+                'axes.grid': False,
+                'text.color': '#4A2E19',
+                'axes.facecolor': '#fbf9f4',
+                'figure.facecolor':'#fbf9f4',
+    #             'figure.figsize':(6,7),
+                'axes.labelsize': 12,
+                'ytick.labelsize': 8,
+                'xtick.labelsize': 10,
+                'ytick.color': '#4a2e19',
+                'xtick.color': '#4a2e19',
+               })
+    colors_ = player_df['TOG%']
+    norm = Normalize(vmin=50, vmax=100)
+    cmap_ = matplotlib.colors.LinearSegmentedColormap.from_list("", ['white','#4c94f6'])
+    
+    if adj_80s == 'Yes':
+        player_df[foc_var] = (player_df[foc_var]/player_df['TOG%'])*85
+        adj_text = " | Data Adjusted to 85% TOG"
+    else:
+        adj_text = ""
+    
+    plt.bar(x=player_df['Opponent'], height=player_df[foc_var],
+           color=cmap_(norm(colors_)), ec='k', lw=.75
+           )
+    plt.xticks(rotation=90, size=8)
+    plt.xlabel('')
+    plt.ylabel(foc_var, color='#4a2e19')
+    plt.ylim(plt.gca().get_ylim()[0],plt.gca().get_ylim()[1]*1.02)
+    
+    for i, xt in enumerate(player_df[foc_var].values):
+        a = .005
+        plt.text(i, xt+a, f"{round(xt,1)}", va='bottom', ha='center', rotation=0, size=6)
+    
+    plt.suptitle(f"{player} {foc_var} By Round\n{season} {league}{adj_text}", size=12,va='top')
+    if adj_80s == 'Yes':
+        plt.title('85% Time On Ground Percentage is just about average for starters per game\nDarker bar color indicates more time on ground', size=8, va='top')
+    else:
+        plt.title('Darker bar color indicates more time on ground', size=8, va='top')
+    

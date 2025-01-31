@@ -721,21 +721,21 @@ with radar_tab:
         name = st.text_input("Player", "")
         submitted = st.form_submit_button("Generate Radar!")
         
-        try:
-            radar_img = scout_report(league = league,
-                         season = season,
-                         pos = pos, #### make multiselect('Full-Forward','Forward Pocket','Centre Half-Forward','Half-Forward','Wing','Centre','Ruck-Rover','Rover','Ruck','Half-Back','Centre Half-Back','Back-Pocket','Full-Back',)
-                         mins = mins,     # time on ground (50% = 50% of season)
-                         name = name,
-                         sig = 'Created by Ben Griffis (@BeGriffis)',
-                         callout = callout, # Percentile | Per Game
-                         bar_colors = 'Benchmarking Percentiles',  ## Benchmarking Percentiles | Metric Groups
-                         dist_labels = dist_labels,
-                         extra_text = f' | {extra_text}',
-                        )
-            st.pyplot(radar_img.figure)
-        except:
-            st.text("Please enter a valid player name. Refer to the All Players List tab if needed.  \nEnsure your player meets the minimum TOG% threshold.")
+        # try:
+        radar_img = scout_report(league = league,
+                     season = season,
+                     pos = pos, #### make multiselect('Full-Forward','Forward Pocket','Centre Half-Forward','Half-Forward','Wing','Centre','Ruck-Rover','Rover','Ruck','Half-Back','Centre Half-Back','Back-Pocket','Full-Back',)
+                     mins = mins,     # time on ground (50% = 50% of season)
+                     name = name,
+                     sig = 'Created by Ben Griffis (@BeGriffis)',
+                     callout = callout, # Percentile | Per Game
+                     bar_colors = 'Benchmarking Percentiles',  ## Benchmarking Percentiles | Metric Groups
+                     dist_labels = dist_labels,
+                     extra_text = f' | {extra_text}',
+                    )
+        st.pyplot(radar_img.figure)
+        # except:
+        #     st.text("Please enter a valid player name. Refer to the All Players List tab if needed.  \nEnsure your player meets the minimum TOG% threshold.")
 
 with all_players_tab:
     df = pd.read_csv(f"https://raw.githubusercontent.com/griffisben/AFL-Radars/refs/heads/main/Player-Data/{league}/{season}.csv")

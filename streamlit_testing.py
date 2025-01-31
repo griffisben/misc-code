@@ -143,8 +143,8 @@ def create_filter_table_df(mins, filter_pos):
         'intercept_marks', 'marks_on_lead',
        'pressure_acts', 'rating_points', 'ruck_contests', 'score_launches',
        'shots_at_goal', 'spoils', '80sr',
-              'possessions','kick_efficiency', 'handball_efficiency','pct_contested_poss',
-              'pct_marks_contested','hitout_efficiency','points_per_shot']
+              'Possessions','Kick Efficiency', 'Handball Efficiency','% of Possessions Contested',
+              '% of Marks Contested','Hitout Efficiency','Points per Shot','Points']
     revcols = ['clangers', 'turnovers', 'free_kicks_against']
     if league == 'AFLW':
         trouble_cols = [
@@ -237,7 +237,7 @@ def scout_report(league, season, pos, mins, name,callout, bar_colors, dist_label
        'pressure_acts', 'rating_points', 'ruck_contests', 'score_launches',
        'shots_at_goal', 'spoils', '80sr',
               'possessions','kick_efficiency', 'handball_efficiency','pct_contested_poss',
-              'pct_marks_contested','hitout_efficiency','points_per_shot']
+              'pct_marks_contested','hitout_efficiency','points_per_shot',]
     revcols = ['clangers', 'turnovers', 'free_kicks_against']
     if league == 'AFLW':
         numcols = [x for x in numcols if x not in trouble_cols]

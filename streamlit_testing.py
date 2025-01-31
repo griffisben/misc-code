@@ -20,6 +20,7 @@ from sklearn.preprocessing import MinMaxScaler
 from scipy.stats import zscore
 import seaborn as sns
 from matplotlib.colors import Normalize, to_rgba
+import altair as alt
 
 plt.clf()
 plt.style.use('default')  # Reset Matplotlib
@@ -31,40 +32,52 @@ colorscales2 = [f"{cc}_r" for cc in colorscales]
 colorscales += colorscales2
 
 def make_season_metric_img(player_df, adj_80s, player, foc_var, league, season):
-    plt.clf()
-    plt.style.use('default')  # Reset Matplotlib
-    sns.reset_defaults()  # Reset Seaborn
-
     colors_ = player_df['TOG%']
     norm = Normalize(vmin=50, vmax=100)
     cmap_ = matplotlib.colors.LinearSegmentedColormap.from_list("", ['white','#4c94f6'])
     
+    # Adjust for 85% TOG if needed
     if adj_80s == 'Yes':
-        player_df[foc_var] = (player_df[foc_var]/player_df['TOG%'])*85
-        adj_text = " | Data Adjusted to 85% TOG"
+        player_df[foc_var] = (player_df[foc_var] / player_df['TOG%']) * 85
+        adj_text = "Data Adjusted to 85% TOG% | 85% Time On Ground Percentage is average for starters per game | Darker bar color indicates more time on ground"
     else:
-        adj_text = ""
-    
-    plt.bar(x=player_df['Opponent'], height=player_df[foc_var],
-           color=cmap_(norm(colors_)), ec='k', lw=.75
-           )
-    plt.xticks(rotation=90, size=8)
-    plt.xlabel('')
-    plt.ylabel(foc_var, color='#4a2e19')
-    plt.ylim(plt.gca().get_ylim()[0],plt.gca().get_ylim()[1]*1.02)
-    
-    for i, xt in enumerate(player_df[foc_var].values):
-        a = .005
-        plt.text(i, xt+a, f"{round(xt,1)}", va='bottom', ha='center', rotation=0, size=5.8)
-    
-    plt.suptitle(f"{player} {foc_var} By Round\n{season} {league}{adj_text}", size=12,va='center')
-    if adj_80s == 'Yes':
-        plt.title('85% Time On Ground Percentage is just about average for starters per game\nDarker bar color indicates more time on ground', size=8, va='top')
-    else:
-        plt.title('Darker bar color indicates more time on ground', size=8, va='top')
-    metric_fig = plt.gcf()
-    metric_fig.patch.set_facecolor('#fbf9f4')
-    return metric_fig
+        adj_text = "Darker bar color indicates more time on ground"
+
+    # Create a color scale based on 'TOG%'
+    color_scale = alt.Scale(domain=[50, 100], range=['white', '#4c94f6'])
+
+    # Create the bar chart
+    chart = alt.Chart(player_df).mark_bar(stroke='black', strokeWidth=0.75).encode(
+        x=alt.X('Opponent:N', title=None, sort=None),
+        y=alt.Y(f'{foc_var}:Q', title=foc_var),
+        color=alt.Color('TOG%:Q', scale=color_scale, legend=alt.Legend(title="TOG%")),
+        tooltip=[alt.Tooltip('Opponent:N', title="Opponent"),
+                 alt.Tooltip(foc_var, title=foc_var, format=".1f"),
+                 alt.Tooltip('TOG%:Q', title="TOG%", format=".1f")]
+    ).properties(
+        width=600,
+        height=400
+    )
+
+    # Add text labels on bars
+    text = chart.mark_text(
+        align='center',
+        baseline='bottom',
+        dy=-5,
+        size=10,
+        color='black'
+    ).encode(
+        text=alt.Text(foc_var, format=".1f")
+    )
+
+    # Combine bar chart and labels
+    final_chart = (chart + text).properties(
+        title=alt.Title(
+            text=f"{player} {foc_var} By Round, {season} {league}", fontSize=18,
+            subtitle=adj_text, subtitleFontSize=10, align='left', anchor='start')
+    )
+
+    return final_chart
 
 def NormalizeData(data):
     return (data - np.min(data)) / (np.max(data) - np.min(data)) * 100

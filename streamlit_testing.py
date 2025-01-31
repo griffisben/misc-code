@@ -34,18 +34,18 @@ def make_season_metric_img(player_df, adj_80s, player, foc_var, league, season):
     plt.clf()
     plt.style.use('default')  # Reset Matplotlib
     sns.reset_defaults()  # Reset Seaborn
-    sns.set(rc={'figure.dpi': 150,
-                'axes.grid': False,
-                'text.color': '#4A2E19',
-                'axes.facecolor': '#fbf9f4',
-                'figure.facecolor':'#fbf9f4',
-    #             'figure.figsize':(6,7),
-                'axes.labelsize': 16,
-                'ytick.labelsize': 13,
-                'xtick.labelsize': 14,
-                'ytick.color': '#4a2e19',
-                'xtick.color': '#4a2e19',
-               })
+    # sns.set(rc={'figure.dpi': 150,
+    #             'axes.grid': False,
+    #             'text.color': '#4A2E19',
+    #             'axes.facecolor': '#fbf9f4',
+    #             'figure.facecolor':'#fbf9f4',
+    # #             'figure.figsize':(6,7),
+    #             'axes.labelsize': 16,
+    #             'ytick.labelsize': 13,
+    #             'xtick.labelsize': 14,
+    #             'ytick.color': '#4a2e19',
+    #             'xtick.color': '#4a2e19',
+    #            })
 
     colors_ = player_df['TOG%']
     norm = Normalize(vmin=50, vmax=100)
@@ -1091,6 +1091,18 @@ with metric_trend_tab:
         
         #############
         if len(player_df) > 0:
+            sns.set(rc={'figure.dpi': 150,
+                        'axes.grid': False,
+                        'text.color': '#4A2E19',
+                        'axes.facecolor': '#fbf9f4',
+                        'figure.facecolor':'#fbf9f4',
+            #             'figure.figsize':(6,7),
+                        'axes.labelsize': 12,
+                        'ytick.labelsize': 8,
+                        'xtick.labelsize': 10,
+                        'ytick.color': '#4a2e19',
+                        'xtick.color': '#4a2e19',
+                       })
             season_metric_fig = make_season_metric_img(player_df, adj_80s, player, foc_var, league, season)
             st.pyplot(season_metric_fig.figure)
             plt.clf()

@@ -4,8 +4,20 @@ import numpy as np
 from sklearn.preprocessing import MinMaxScaler
 
 # Load the dataset
-DATA_URL = "https://raw.githubusercontent.com/griffisben/AFL-Radars/refs/heads/main/Player-Data/AFL/2024.csv"
-df = pd.read_csv(DATA_URL)
+df = pd.read_csv(f"https://raw.githubusercontent.com/griffisben/AFL-Radars/refs/heads/main/Player-Data/{league}/{season}.csv")
+df = df.dropna(subset=['player_position']).reset_index(drop=True)
+df['possessions'] = df['contested_possessions']+df['uncontested_possessions']
+if league == 'AFL':
+    df['kick_efficiency'] = df['effective_kicks']/df['kicks']*100
+    df['handball_efficiency'] = (df['effective_disposals']-df['effective_kicks'])/df['handballs']*100
+    df['hitout_efficiency'] = df['hitouts_to_advantage']/df['hitouts']*100
+df['pct_contested_poss'] = df['contested_possessions']/(df['possessions'])*100
+df['pct_marks_contested'] = df['contested_marks']/(df['marks'])*100
+df['points'] = (df['goals']*6)+(df['behinds'])
+df['points_per_shot'] = df['points']/df['shots_at_goal']
+df['points_per_shot'] = [0 if df['shots_at_goal'][i]==0 else df['points'][i]/df['shots_at_goal'][i] for i in range(len(df))]
+
+df = df[df['PctOfSeason']>=.6].reset_index(drop=True)
 
 # Define position-to-stat mapping with exact column names
 position_stats = {

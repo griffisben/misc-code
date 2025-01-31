@@ -34,18 +34,18 @@ def make_season_metric_img(player_df, adj_80s, player, foc_var, league, season):
     plt.clf()
     plt.style.use('default')  # Reset Matplotlib
     sns.reset_defaults()  # Reset Seaborn
-    # sns.set(rc={'figure.dpi': 150,
-    #             'axes.grid': False,
-    #             'text.color': '#4A2E19',
-    #             'axes.facecolor': '#fbf9f4',
-    #             'figure.facecolor':'#fbf9f4',
-    # #             'figure.figsize':(6,7),
-    #             'axes.labelsize': 12,
-    #             'ytick.labelsize': 8,
-    #             'xtick.labelsize': 10,
-    #             'ytick.color': '#4a2e19',
-    #             'xtick.color': '#4a2e19',
-    #            })
+    sns.set(rc={'figure.dpi': 150,
+                'axes.grid': False,
+                'text.color': '#4A2E19',
+                'axes.facecolor': '#fbf9f4',
+                'figure.facecolor':'#fbf9f4',
+    #             'figure.figsize':(6,7),
+                'axes.labelsize': 12,
+                'ytick.labelsize': 8,
+                'xtick.labelsize': 10,
+                'ytick.color': '#4a2e19',
+                'xtick.color': '#4a2e19',
+               })
 
     colors_ = player_df['TOG%']
     norm = Normalize(vmin=50, vmax=100)
@@ -67,13 +67,13 @@ def make_season_metric_img(player_df, adj_80s, player, foc_var, league, season):
     
     for i, xt in enumerate(player_df[foc_var].values):
         a = .005
-        plt.text(i, xt+a, f"{round(xt,1)}", va='bottom', ha='center', rotation=0, size=5.8)
+        plt.text(i, xt+a, f"{round(xt,1)}", va='bottom', ha='center', rotation=0, size=10)
     
-    plt.suptitle(f"{player} {foc_var} By Round\n{season} {league}{adj_text}\n ", size=12,va='center')
+    plt.suptitle(f"{player} {foc_var} By Round\n{season} {league}{adj_text}\n ", size=16,va='center')
     if adj_80s == 'Yes':
-        plt.title('85% Time On Ground Percentage is just about average for starters per game\nDarker bar color indicates more time on ground', size=8, va='top')
+        plt.title('85% Time On Ground Percentage is just about average for starters per game\nDarker bar color indicates more time on ground', size=13, va='top')
     else:
-        plt.title('Darker bar color indicates more time on ground', size=8, va='top')
+        plt.title('Darker bar color indicates more time on ground', size=13, va='top')
     metric_fig = plt.gcf()
     metric_fig.patch.set_facecolor('#fbf9f4')
     return metric_fig

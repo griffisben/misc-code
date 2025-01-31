@@ -61,7 +61,7 @@ df_scaled["custom_rating"] = df_scaled.apply(lambda row: compute_custom_rating(r
 # Select Best 22 based on highest rating per position
 best_22 = {}
 for pos in position_stats.keys():
-    best_22[pos] = df_scaled.sort_values("custom_rating", ascending=False).head(1)[["player", "custom_rating"]].values.tolist()
+    best_22[pos] = df_scaled.sort_values("custom_rating", ascending=False).head(1)[["player_name", "custom_rating"]].values.tolist()
 
 # Display Best 22 team
 st.subheader("🏉 Best 22 Team")

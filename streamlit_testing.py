@@ -4,7 +4,7 @@ import numpy as np
 from sklearn.preprocessing import MinMaxScaler
 
 # Load the dataset
-df = pd.read_csv(f"https://raw.githubusercontent.com/griffisben/AFL-Radars/refs/heads/main/Player-Data/{league}/{season}.csv")
+df = pd.read_csv(f"https://raw.githubusercontent.com/griffisben/AFL-Radars/refs/heads/main/Player-Data/AFL/2024.csv")
 df = df.dropna(subset=['player_position']).reset_index(drop=True)
 df['possessions'] = df['contested_possessions']+df['uncontested_possessions']
 if league == 'AFL':

@@ -40,11 +40,8 @@ def make_season_metric_img(player_df, adj_80s, player, foc_var, league, season):
     else:
         adj_text = "Darker bar color indicates more time on ground"
 
-    # Create a color scale based on 'TOG%'
-    color_scale = alt.Scale(domain=[0, 100], range=['#fbf9f4','#4a2e19'])
-
     # Create the bar chart
-    chart = alt.Chart(player_df).mark_bar(stroke='black', strokeWidth=0.75,color="dodgerblue",).encode(
+    chart = alt.Chart(player_df).mark_bar(stroke='black', strokeWidth=0.75,color="#4c94f6",).encode(
         x=alt.X('Opponent:N', title=None, sort=None),
         y=alt.Y(f'{foc_var}:Q', title=foc_var),
         tooltip=[alt.Tooltip('Opponent:N', title="Opponent"),
@@ -69,7 +66,7 @@ def make_season_metric_img(player_df, adj_80s, player, foc_var, league, season):
     final_chart = (chart + text).properties(
         title=alt.Title(
             text=f"{player} {foc_var} By Round, {season} {league}", fontSize=18,
-            subtitle=adj_text, subtitleFontSize=10, align='left', anchor='start')
+            subtitle=adj_text, subtitleFontSize=11, align='left', anchor='start')
     )
 
     return final_chart

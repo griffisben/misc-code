@@ -740,7 +740,8 @@ with filter_tab:
 
         filter_v1 = st.slider('Metres Gained', 0.0, 1.0, 0.0, key='slider1')
         filter_v2 = st.slider('Disposals', 0.0, 1.0, 0.0, key='slider2')
-        filter_v3 = st.slider('Effective Disposals', 0.0, 1.0, 0.0, key='slider3')
+        if league == 'AFL':
+            filter_v3 = st.slider('Effective Disposals', 0.0, 1.0, 0.0, key='slider3')
         filter_v4 = st.slider('Handballs', 0.0, 1.0, 0.0, key='slider4')
         if league == 'AFL':
             filter_v5 = st.slider('Handball Efficiency', 0.0, 1.0, 0.0, key='slider5')
@@ -847,7 +848,7 @@ with filter_table_tab:
         player_research_table = df[
         (df['metres_gained']>=filter_v1) &
         (df['disposals']>=filter_v2) &
-        (df['effective_disposals']>=filter_v3) &
+        # (df['effective_disposals']>=filter_v3) &
         (df['handballs']>=filter_v4) &
         # (df['Handball Efficiency']>=filter_v5) &
         (df['kicks']>=filter_v6) &

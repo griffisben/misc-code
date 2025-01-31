@@ -1067,7 +1067,7 @@ with metric_trend_tab:
         player = st.text_input("Player", "")
         # vars = df.columns[21:].tolist()
         # vars.remove('Opponent')
-        foc_var = st.selectbox("Metric to Plot:", ['TOG%']+vars)
+        foc_var = st.selectbox("Metric to Plot:", vars+['TOG%'])
         adj_80s = st.selectbox('Adjust Data for Time On Ground?', ['Yes','No'])
         
     player_df = df[df.Player==player].reset_index(drop=True)

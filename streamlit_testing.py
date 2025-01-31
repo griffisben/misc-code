@@ -155,9 +155,9 @@ def create_filter_table_df(mins, filter_pos):
     dfProspect = df[df['PctOfSeason']>=mins/100]
     
     for i in range(len(numcols)):
-        dfProspect['%s_pct' %numcols[i]] = stats.rankdata(dfProspect[numcols[i]], "average")/len(dfProspect[numcols[i]])
+        dfProspect[numcols[i]] = stats.rankdata(dfProspect[numcols[i]], "average")/len(dfProspect[numcols[i]])
     for i in range(len(revcols)):
-        dfProspect['%s_pct' %revcols[i]] = 1-stats.rankdata(dfProspect[revcols[i]], "average")/len(dfProspect[revcols[i]])
+        dfProspect[revcols[i]] = 1-stats.rankdata(dfProspect[revcols[i]], "average")/len(dfProspect[revcols[i]])
         
     dfProspect.fillna(0,inplace=True)
 

@@ -72,10 +72,10 @@ for pos, player in best_22.items():
 # Manual Override: User selects a player to replace an auto-selected one
 st.sidebar.header("Manual Player Selection")
 override_position = st.sidebar.selectbox("Select Position to Override", list(best_22.keys()))
-override_player = st.sidebar.selectbox("Select New Player", df_scaled["player"].unique())
+override_player = st.sidebar.selectbox("Select New Player", df_scaled["player_name"].unique())
 
 if st.sidebar.button("Replace Player"):
-    best_22[override_position] = [[override_player, df_scaled[df_scaled["player"] == override_player]["custom_rating"].values[0]]]
+    best_22[override_position] = [[override_player, df_scaled[df_scaled["player_name"] == override_player]["custom_rating"].values[0]]]
 
 # Display updated Best 22 team
 st.subheader("🔄 Updated Best 22 Team")

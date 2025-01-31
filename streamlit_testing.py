@@ -883,9 +883,11 @@ with ranking_tab:
 
     if metrics:
         # User assigns weights
-        weights = {}
-        for metric in metrics:
-            weights[metric] = st.slider(f"Weight for {metric}", 0.0, 1.0, 0.5, 0.05)
+        with st.form('Metric Weightings'):
+            submitted = st.form_submit_button("Submit Metric Weightings")
+            weights = {}
+            for metric in metrics:
+                weights[metric] = st.slider(f"Weight for {metric}", 0.0, 1.0, 0.5, 0.05)
         
         # Normalize data using z-score
         df_filtered = df.copy()

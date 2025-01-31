@@ -154,11 +154,12 @@ def create_filter_table_df(mins, filter_pos):
 
     dfProspect = df[df['PctOfSeason']>=mins/100]
     dfProspect['PctOfSeason'] = round(dfProspect['PctOfSeason']*100,2)
+    dfProspect['80s'] = round(dfProspect['80s']*100,2)
     
     for i in range(len(numcols)):
-        dfProspect[numcols[i]] = stats.rankdata(dfProspect[numcols[i]], "average")/len(dfProspect[numcols[i]])
+        dfProspect[numcols[i]] = round(stats.rankdata(dfProspect[numcols[i]], "average")/len(dfProspect[numcols[i]]),2)
     for i in range(len(revcols)):
-        dfProspect[revcols[i]] = 1-stats.rankdata(dfProspect[revcols[i]], "average")/len(dfProspect[revcols[i]])
+        dfProspect[revcols[i]] = round(1-stats.rankdata(dfProspect[revcols[i]], "average")/len(dfProspect[revcols[i]]),2)
         
     dfProspect.fillna(0,inplace=True)
 

@@ -875,7 +875,7 @@ with ranking_tab:
     rank_pos = st.multiselect('Positions to Include (leave blank for all)', ['Full-Forward','Forward Pocket','Centre Half-Forward','Half-Forward','Wing','Centre','Ruck-Rover','Rover','Ruck','Half-Back','Centre Half-Back','Back-Pocket','Full-Back'])
     if rank_pos != []:
         pattern = r'(^|, )(' + '|'.join(rank_pos) + r')($|, )'
-        df = df[df['player_position'].str.contains(pattern, regex=True)]
+        df = df[df['Position(s)'].str.contains(pattern, regex=True)]
     
     # Let user select metrics
     vars = df.columns[9:].tolist()

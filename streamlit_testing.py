@@ -620,7 +620,21 @@ with st.expander('Instructions'):
     3) Choose whether you want the distribution lines (mean & standard deviation) for each metric to be added to each bar. Note: this can be helpful, but be aware that not all metrics will have a normal distribution  \n
     4) Click the radar generation button to create your player's visual. You can right-click & save the image to use it for personal use (just make sure not to edit the picture to remove my signature, and please link people to this app!)  \n  \n
     **All Players List Tab**  \n
-    This tab simply has the list of every player from the league & season you've selected. You can use this to find the specific player's name you want to generate a radar for, and also double check their time on ground %
+    This tab simply has the list of every player from the league & season you've selected. You can use this to find the specific player's name you want to generate a radar for, and also double check their time on ground %  \n
+    **Scatter Plots Tab**  \n
+    1) First choose the positions you want to plot. Leave blank to plot all positions  \n
+    2) Choose your desired X, Y, and Color variables  \n
+    3) Select the colorscale to use (I've loaded all sequential & diverging (and reversed ending in _r) colorscales from this page: https://matplotlib.org/stable/gallery/color/colormap_reference.html)  \n
+    4) Submit your scatter plot options and the chart will generate. Hover over points to see the player, team, & position. You can also save the plot by hovering over it and clicking the Camera button that appears. The plot is also interactive & zoomable  \n
+    **Player Search Tabs**  \n
+    The 'Search' allows you to set minimum percentile filters for players to meet in order to show up in the 'Results' tab. The percentiles are all based off of the position(s) you select, and of course, leave the position fiilter blank to include all players  \n
+    **Weighted Metric Ranking Tab**  \n
+    1) Choose the position(s) you want to include, leaving this blank if you want to include all players  \n
+    2) Select any number of metrics you want to use for ranking players  \n
+    3) Submit these options, and sliders will appear below for you to set your weightings  \n
+    4) Set weights for your metrics. These are used to create weighted, normalized z-scores using all of the included metrics. In the table, the metrics will be 0 to 100, with the player recording the lowest value receiving 0, and the highest value 100. These normalized z-scores are thus easy to interpret across metrics while retaining the distribution of the raw scores  \n
+    5) Submit these weightings and a table will appear showing the final, normalized weighted z-score ranking of players for your specified model. The 'Score' column will always be between 0 and 100: the player with 100 is the player with the largest weighted score, and the player with 0 is the one with the lowest. Again, the use of z-scores allows us to retain the distribution of weighted scores  \n
+    6) We can interpret a player scoring 100 as the best player (in the given position(s) if applicable) that year in your specified model. And a player with a score of 73 could theoretically be 73% as good as that best player 
 """)
 
 avail_data = pd.read_csv(f"https://raw.githubusercontent.com/griffisben/AFL-Radars/refs/heads/main/AvailableData.csv")

@@ -741,9 +741,6 @@ with radar_tab:
                          extra_text = f' | {extra_text}',
                         )
             st.pyplot(radar_img.figure)
-            plt.clf()
-            plt.style.use('default')  # Reset Matplotlib
-            sns.reset_defaults()  # Reset Seaborn
         except:
             st.text("Please enter a valid player name. Refer to the All Players List tab if needed.  \nEnsure your player meets the minimum TOG% threshold.")
 
@@ -1089,22 +1086,7 @@ with metric_trend_tab:
         
         #############
         if len(player_df) > 0:
-            sns.set(rc={'figure.dpi': 150,
-                        'axes.grid': False,
-                        'text.color': '#4A2E19',
-                        'axes.facecolor': '#fbf9f4',
-                        'figure.facecolor':'#fbf9f4',
-            #             'figure.figsize':(6,7),
-                        'axes.labelsize': 12,
-                        'ytick.labelsize': 8,
-                        'xtick.labelsize': 10,
-                        'ytick.color': '#4a2e19',
-                        'xtick.color': '#4a2e19',
-                       })
             season_metric_fig = make_season_metric_img(player_df, adj_80s, player, foc_var, league, season)
-            st.pyplot(season_metric_fig.figure)
-            plt.clf()
-            plt.style.use('default')  # Reset Matplotlib
-            sns.reset_defaults()  # Reset Seaborn
+            st.altair_chart(season_metric_fig, use_container_width=True)
         else:
             st.write(f"Your chosen player played 0 {league} games in {season}")

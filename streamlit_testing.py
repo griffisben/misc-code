@@ -742,9 +742,11 @@ with filter_tab:
         filter_v2 = st.slider('Disposals', 0.0, 1.0, 0.0, key='slider2')
         filter_v3 = st.slider('Effective Disposals', 0.0, 1.0, 0.0, key='slider3')
         filter_v4 = st.slider('Handballs', 0.0, 1.0, 0.0, key='slider4')
-        filter_v5 = st.slider('Handball Efficiency', 0.0, 1.0, 0.0, key='slider5')
+        if league == 'AFL':
+            filter_v5 = st.slider('Handball Efficiency', 0.0, 1.0, 0.0, key='slider5')
         filter_v6 = st.slider('Kicks', 0.0, 1.0, 0.0, key='slider6')
-        filter_v7 = st.slider('Kick Efficiency', 0.0, 1.0, 0.0, key='slider7')
+        if league == 'AFL':
+            filter_v7 = st.slider('Kick Efficiency', 0.0, 1.0, 0.0, key='slider7')
         filter_v8 = st.slider('Shots At Goal', 0.0, 1.0, 0.0, key='slider8')
         filter_v9 = st.slider('Goals', 0.0, 1.0, 0.0, key='slider9')
         filter_v10 = st.slider('Behinds', 0.0, 1.0, 0.0, key='slider10')

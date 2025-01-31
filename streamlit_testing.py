@@ -854,7 +854,7 @@ if league == 'AFL':
         st.dataframe(player_research_table.style.applymap(color_percentile, subset=player_research_table.columns[5:]))
 
 
-with ranking_system:
+with ranking_tab:
     df = pd.read_csv(f"https://raw.githubusercontent.com/griffisben/AFL-Radars/refs/heads/main/Player-Data/{league}/{season}.csv")
     df['Possessions'] = df['contested_possessions']+df['uncontested_possessions']
     if league == 'AFL':

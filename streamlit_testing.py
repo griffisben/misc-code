@@ -1018,7 +1018,7 @@ with metric_trend_tab:
     with st.form('Player Game-By-Game Metric Development'):
         submitted = st.form_submit_button("Submit Player & Metric")
         player = st.text_input("Player", "")
-        vars = df.columns[22:].tolist()
+        vars = df.columns[21:].tolist()
         vars.remove('Opponent')
         foc_var = st.selectbox("Metric to Plot:", vars)
         adj_80s = st.selectbox('Adjust Data for Time On Ground?', ['Yes','No'])

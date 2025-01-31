@@ -110,6 +110,7 @@ def add_labels_dist(angles, values, labels, offset, ax, text_colors, raw_vals_fu
 
 def create_filter_table_df(mins, filter_pos):
     df = pd.read_csv(f"https://raw.githubusercontent.com/griffisben/AFL-Radars/refs/heads/main/Player-Data/{league}/{season}.csv")
+    df.fillna(0,inplace=True)
     df['Possessions'] = df['contested_possessions']+df['uncontested_possessions']
     if league == 'AFL':
         df['Kick Efficiency'] = df['effective_kicks']/df['kicks']*100

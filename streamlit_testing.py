@@ -4,6 +4,9 @@ import numpy as np
 from sklearn.preprocessing import MinMaxScaler
 from scipy.stats import zscore
 
+def NormalizeData(data):
+    return (data - np.min(data)) / (np.max(data) - np.min(data))
+
 avail_data = pd.read_csv(f"https://raw.githubusercontent.com/griffisben/AFL-Radars/refs/heads/main/AvailableData.csv")
 with st.sidebar:
     league = st.selectbox('League', avail_data.Competition.unique().tolist())
@@ -55,7 +58,10 @@ with ranking_system:
         # Normalize data using z-score
         df_filtered = df.copy()
         df_filtered[metrics] = df_filtered[metrics].apply(zscore, nan_policy='omit')
-        
+        for metric in metrics
+            df_filtered[metric] = df_filtered[metric] + abs(df_filtered[metric].min())
+            df_filtered[metric] = NormalizeData(df_filtered[metric])
+            
         # Compute weighted z-score ranking
         df_filtered["custom_score"] = df_filtered[metrics].apply(lambda row: sum(row[metric] * weights[metric] for metric in metrics), axis=1)
         

@@ -5,7 +5,7 @@ from sklearn.preprocessing import MinMaxScaler
 from scipy.stats import zscore
 
 def NormalizeData(data):
-    return (data - np.min(data)) / (np.max(data) - np.min(data))
+    return (data - np.min(data)) / (np.max(data) - np.min(data)) * 100
 
 avail_data = pd.read_csv(f"https://raw.githubusercontent.com/griffisben/AFL-Radars/refs/heads/main/AvailableData.csv")
 with st.sidebar:

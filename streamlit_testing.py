@@ -154,7 +154,7 @@ def create_filter_table_df(mins, filter_pos):
 
     dfProspect = df[df['PctOfSeason']>=mins/100]
     dfProspect['PctOfSeason'] = round(dfProspect['PctOfSeason']*100,2)
-    dfProspect['80s'] = round(dfProspect['80s']*100,2)
+    dfProspect['80s'] = round(dfProspect['80s'],2)
     
     for i in range(len(numcols)):
         dfProspect[numcols[i]] = stats.rankdata(dfProspect[numcols[i]], "average")/len(dfProspect[numcols[i]])

@@ -21,6 +21,10 @@ from scipy.stats import zscore
 import seaborn as sns
 from matplotlib.colors import Normalize, to_rgba
 
+plt.clf()
+plt.style.use('default')  # Reset Matplotlib
+sns.reset_defaults()  # Reset Seaborn
+
 
 colorscales = px.colors.named_colorscales()
 colorscales2 = [f"{cc}_r" for cc in colorscales]
@@ -252,8 +256,6 @@ def scout_report(league, season, pos, mins, name,callout, bar_colors, dist_label
                        'logo_url':['https://upload.wikimedia.org/wikipedia/en/thumb/0/07/Adelaide_Crows_Logo_2024.svg/1024px-Adelaide_Crows_Logo_2024.svg.png','https://upload.wikimedia.org/wikipedia/en/thumb/c/c7/Brisbane_Lions_logo_2010.svg/1024px-Brisbane_Lions_logo_2010.svg.png','https://upload.wikimedia.org/wikipedia/en/thumb/5/58/Carlton_FC_Logo_2020.svg/1024px-Carlton_FC_Logo_2020.svg.png','https://upload.wikimedia.org/wikipedia/en/thumb/a/a6/Collingwood_Football_Club_Logo_%282017%E2%80%93present%29.svg/1024px-Collingwood_Football_Club_Logo_%282017%E2%80%93present%29.svg.png','https://upload.wikimedia.org/wikipedia/en/thumb/8/8b/Essendon_FC_logo.svg/1920px-Essendon_FC_logo.svg.png','https://upload.wikimedia.org/wikipedia/en/thumb/c/ca/Fremantle_FC_logo.svg/1280px-Fremantle_FC_logo.svg.png','https://upload.wikimedia.org/wikipedia/en/thumb/5/5f/Geelong_Cats_logo.svg/1024px-Geelong_Cats_logo.svg.png','https://upload.wikimedia.org/wikipedia/en/thumb/7/73/Gold_Coast_Suns_logo_%28introduced_late_2024%29.svg/1280px-Gold_Coast_Suns_logo_%28introduced_late_2024%29.svg.png','https://upload.wikimedia.org/wikipedia/en/thumb/0/07/GWS_Giants_logo.svg/1280px-GWS_Giants_logo.svg.png','https://upload.wikimedia.org/wikipedia/en/thumb/6/62/Hawthorn-football-club-brand.svg/1280px-Hawthorn-football-club-brand.svg.png','https://upload.wikimedia.org/wikipedia/en/thumb/4/4e/Melbournefc.svg/1024px-Melbournefc.svg.png','https://upload.wikimedia.org/wikipedia/en/thumb/f/fc/North_Melbourne_FC_logo.svg/1024px-North_Melbourne_FC_logo.svg.png','https://upload.wikimedia.org/wikipedia/en/thumb/3/36/Port_Adelaide_Football_Club_logo.svg/800px-Port_Adelaide_Football_Club_logo.svg.png','https://upload.wikimedia.org/wikipedia/en/thumb/3/35/Richmond_Tigers_logo.svg/800px-Richmond_Tigers_logo.svg.png','https://upload.wikimedia.org/wikipedia/en/thumb/0/06/St_Kilda_Football_Club_logo_2024.svg/1024px-St_Kilda_Football_Club_logo_2024.svg.png','https://upload.wikimedia.org/wikipedia/en/thumb/a/af/Sydney_Swans_Logo_2020.svg/1024px-Sydney_Swans_Logo_2020.svg.png','https://upload.wikimedia.org/wikipedia/en/thumb/b/b5/West_Coast_Eagles_logo_2017.svg/1280px-West_Coast_Eagles_logo_2017.svg.png','https://upload.wikimedia.org/wikipedia/en/thumb/0/09/Western_Bulldogs_logo.svg/1024px-Western_Bulldogs_logo.svg.png']})
         game_length = 20*4
         
-    import matplotlib
-    matplotlib.rcParams.update(matplotlib.rcParamsDefault)
     df = pd.read_csv(f"https://raw.githubusercontent.com/griffisben/AFL-Radars/refs/heads/main/Player-Data/{league}/{season}.csv")
     df = df.dropna(subset=['player_position']).reset_index(drop=True)
     df['possessions'] = df['contested_possessions']+df['uncontested_possessions']
@@ -724,8 +726,9 @@ with radar_tab:
         submitted = st.form_submit_button("Generate Radar!")
         
         try:
-            import matplotlib
-            matplotlib.rcParams.update(matplotlib.rcParams)
+            plt.clf()
+            plt.style.use('default')  # Reset Matplotlib
+            sns.reset_defaults()  # Reset Seaborn
             radar_img = scout_report(league = league,
                          season = season,
                          pos = pos, #### make multiselect('Full-Forward','Forward Pocket','Centre Half-Forward','Half-Forward','Wing','Centre','Ruck-Rover','Rover','Ruck','Half-Back','Centre Half-Back','Back-Pocket','Full-Back',)
@@ -1083,8 +1086,9 @@ with metric_trend_tab:
         
         #############
         if len(player_df) > 0:
-            import matplotlib
-            matplotlib.rcParams.update(matplotlib.rcParams)
+            plt.clf()
+            plt.style.use('default')  # Reset Matplotlib
+            sns.reset_defaults()  # Reset Seaborn
             season_metric_fig = make_season_metric_img(player_df, adj_80s, player, foc_var, league, season)
             st.pyplot(season_metric_fig.figure)
         else:

@@ -1019,7 +1019,6 @@ with metric_trend_tab:
         submitted = st.form_submit_button("Submit Player & Metric")
         player = st.text_input("Player", "")
         vars = df.columns[9:].tolist()
-        vars.remove('80sr')
         vars.remove('Opponent')
         metrics = st.multiselect("Choose metrics to include:", vars)
         adj_80s = st.selectbox('Adjust Data for Time On Ground?', ['Yes','No'])

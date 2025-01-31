@@ -27,6 +27,19 @@ colorscales2 = [f"{cc}_r" for cc in colorscales]
 colorscales += colorscales2
 
 def make_season_metric_img(player_df, adj_80s, player, foc_var, league, season):
+    sns.set(rc={'figure.dpi': 150,
+                'axes.grid': False,
+                'text.color': '#4A2E19',
+                'axes.facecolor': '#fbf9f4',
+                'figure.facecolor':'#fbf9f4',
+    #             'figure.figsize':(6,7),
+                'axes.labelsize': 12,
+                'ytick.labelsize': 8,
+                'xtick.labelsize': 10,
+                'ytick.color': '#4a2e19',
+                'xtick.color': '#4a2e19',
+               })
+
     colors_ = player_df['TOG%']
     norm = Normalize(vmin=50, vmax=100)
     cmap_ = matplotlib.colors.LinearSegmentedColormap.from_list("", ['white','#4c94f6'])
@@ -1057,18 +1070,5 @@ with metric_trend_tab:
     player_df = df[df.Player==player].reset_index(drop=True)
     
     #############
-    sns.set(rc={'figure.dpi': 150,
-                'axes.grid': False,
-                'text.color': '#4A2E19',
-                'axes.facecolor': '#fbf9f4',
-                'figure.facecolor':'#fbf9f4',
-    #             'figure.figsize':(6,7),
-                'axes.labelsize': 12,
-                'ytick.labelsize': 8,
-                'xtick.labelsize': 10,
-                'ytick.color': '#4a2e19',
-                'xtick.color': '#4a2e19',
-               })
-
     season_metrig_fig = make_season_metric_img(player_df, adj_80s, player, foc_var, league, season)
     st.pyplot(season_metrig_fig.figure)

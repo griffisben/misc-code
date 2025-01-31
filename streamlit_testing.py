@@ -627,8 +627,10 @@ with st.sidebar:
 
 extra_text = avail_data[(avail_data.Competition==league) & (avail_data.Season==season)].DataTime.values[0]
 
-
-radar_tab, all_players_tab, scatter_tab, filter_tab, filter_table_tab = st.tabs(['Player Radar', 'All Players List', 'Scatter Plots', 'Player Search, Filters', 'Player Search, Results'])
+if league == 'AFL':
+    radar_tab, all_players_tab, scatter_tab, filter_tab, filter_table_tab = st.tabs(['Player Radar', 'All Players List', 'Scatter Plots', 'Player Search, Filters', 'Player Search, Results'])
+if league == 'AFLW':
+    radar_tab, all_players_tab, scatter_tab = st.tabs(['Player Radar', 'All Players List', 'Scatter Plots'])
 
 with radar_tab:
     with st.form('Radar Options'):
@@ -725,127 +727,127 @@ with scatter_tab:
     
     st.plotly_chart(fig_scatter, theme=None, use_container_width=False)
 
-
-with filter_tab:
-    st.button("Reset Sliders", on_click=_update_slider, kwargs={"value": 0.0})
-    with st.form('Minimum Percentile Filters'):
-        submitted = st.form_submit_button("Submit Filters")
-        filter_pos = st.multiselect('Positions to Include (leave blank for all)', ['Full-Forward','Forward Pocket','Centre Half-Forward','Half-Forward','Wing','Centre','Ruck-Rover','Rover','Ruck','Half-Back','Centre Half-Back','Back-Pocket','Full-Back'])
-            
-        if ['slider1','slider2','slider3','slider4','slider5','slider6','slider7','slider8','slider9','slider10','slider11','slider12','slider13','slider14','slider15','slider16','slider17','slider18','slider19','slider20','slider21','slider22','slider23','slider24','slider25','slider26','slider27','slider28','slider29','slider30','slider31','slider32','slider33','slider34','slider35','slider36','slider37','slider38','slider39','slider40','slider41','slider42','slider43','slider44','slider45'] not in st.session_state:
-            pass
-
-        filter_v1 = st.slider('Metres Gained', 0.0, 1.0, 0.0, key='slider1')
-        filter_v2 = st.slider('Disposals', 0.0, 1.0, 0.0, key='slider2')
-        filter_v3 = st.slider('Effective Disposals', 0.0, 1.0, 0.0, key='slider3')
-        filter_v4 = st.slider('Handballs', 0.0, 1.0, 0.0, key='slider4')
-        filter_v5 = st.slider('Handball Efficiency', 0.0, 1.0, 0.0, key='slider5')
-        filter_v6 = st.slider('Kicks', 0.0, 1.0, 0.0, key='slider6')
-        filter_v7 = st.slider('Kick Efficiency', 0.0, 1.0, 0.0, key='slider7')
-        filter_v8 = st.slider('Shots At Goal', 0.0, 1.0, 0.0, key='slider8')
-        filter_v9 = st.slider('Goals', 0.0, 1.0, 0.0, key='slider9')
-        filter_v10 = st.slider('Behinds', 0.0, 1.0, 0.0, key='slider10')
-        filter_v11 = st.slider('Points', 0.0, 1.0, 0.0, key='slider11')
-        filter_v12 = st.slider('Points per Shot', 0.0, 1.0, 0.0, key='slider12')
-        filter_v13 = st.slider('Goal Assists', 0.0, 1.0, 0.0, key='slider13')
-        filter_v14 = st.slider('Score Involvements', 0.0, 1.0, 0.0, key='slider14')
-        filter_v15 = st.slider('Marks', 0.0, 1.0, 0.0, key='slider15')
-        filter_v16 = st.slider('Marks Inside 50', 0.0, 1.0, 0.0, key='slider16')
-        filter_v17 = st.slider('Contested Marks', 0.0, 1.0, 0.0, key='slider17')
-        filter_v18 = st.slider('Inside 50s', 0.0, 1.0, 0.0, key='slider18')
-        filter_v19 = st.slider('Rebound 50s', 0.0, 1.0, 0.0, key='slider19')
-        filter_v20 = st.slider('Marks On Lead', 0.0, 1.0, 0.0, key='slider20')
-        filter_v21 = st.slider('Intercept Marks', 0.0, 1.0, 0.0, key='slider21')
-        filter_v22 = st.slider('% of Possessions Contested', 0.0, 1.0, 0.0, key='slider22')
-        filter_v23 = st.slider('% of Marks Contested', 0.0, 1.0, 0.0, key='slider23')
-        filter_v24 = st.slider('One Percenters', 0.0, 1.0, 0.0, key='slider24')
-        filter_v25 = st.slider('Tackles', 0.0, 1.0, 0.0, key='slider25')
-        filter_v26 = st.slider('Tackles Inside 50', 0.0, 1.0, 0.0, key='slider26')
-        filter_v27 = st.slider('Clearances', 0.0, 1.0, 0.0, key='slider27')
-        filter_v28 = st.slider('Turnovers', 0.0, 1.0, 0.0, key='slider28')
-        filter_v29 = st.slider('Intercepts', 0.0, 1.0, 0.0, key='slider29')
-        filter_v30 = st.slider('Pressure Acts', 0.0, 1.0, 0.0, key='slider30')
-        filter_v31 = st.slider('Def Half Pressure Acts', 0.0, 1.0, 0.0, key='slider31')
-        filter_v32 = st.slider('Forward 50 Ground Ball Gets', 0.0, 1.0, 0.0, key='slider32')
-        filter_v33 = st.slider('Ground Ball Gets', 0.0, 1.0, 0.0, key='slider33')
-        filter_v34 = st.slider('Ruck Contests', 0.0, 1.0, 0.0, key='slider34')
-        filter_v35 = st.slider('Hitouts', 0.0, 1.0, 0.0, key='slider35')
-        filter_v36 = st.slider('Hitout Efficiency', 0.0, 1.0, 0.0, key='slider36')
-        filter_v37 = st.slider('Hitouts To Advantage', 0.0, 1.0, 0.0, key='slider37')
-        filter_v38 = st.slider('Centre Clearances', 0.0, 1.0, 0.0, key='slider38')
-        filter_v39 = st.slider('Stoppage Clearances', 0.0, 1.0, 0.0, key='slider39')
-        filter_v40 = st.slider('Score Launches', 0.0, 1.0, 0.0, key='slider40')
-        filter_v41 = st.slider('Spoils', 0.0, 1.0, 0.0, key='slider41')
-        filter_v42 = st.slider('Free Kicks For', 0.0, 1.0, 0.0, key='slider42')
-        filter_v43 = st.slider('Free Kicks Against', 0.0, 1.0, 0.0, key='slider43')
-        filter_v44 = st.slider('Clangers', 0.0, 1.0, 0.0, key='slider44')
-        filter_v45 = st.slider('Afl Fantasy Score', 0.0, 1.0, 0.0, key='slider45')
-
-with filter_table_tab:
-    if filter_pos == []:
-        filter_pos = None
-    df = create_filter_table_df(mins, filter_pos)
-
-    player_research_table = df[
-    (df['metres_gained']>=filter_v1) &
-    (df['disposals']>=filter_v2) &
-    (df['effective_disposals']>=filter_v3) &
-    (df['handballs']>=filter_v4) &
-    (df['Handball Efficiency']>=filter_v5) &
-    (df['kicks']>=filter_v6) &
-    (df['Kick Efficiency']>=filter_v7) &
-    (df['shots_at_goal']>=filter_v8) &
-    (df['goals']>=filter_v9) &
-    (df['behinds']>=filter_v10) &
-    (df['Points']>=filter_v11) &
-    (df['Points per Shot']>=filter_v12) &
-    (df['goal_assists']>=filter_v13) &
-    (df['score_involvements']>=filter_v14) &
-    (df['marks']>=filter_v15) &
-    (df['marks_inside_fifty']>=filter_v16) &
-    (df['contested_marks']>=filter_v17) &
-    (df['inside_fifties']>=filter_v18) &
-    (df['rebounds']>=filter_v19) &
-    (df['marks_on_lead']>=filter_v20) &
-    (df['intercept_marks']>=filter_v21) &
-    (df['% of Possessions Contested']>=filter_v22) &
-    (df['% of Marks Contested']>=filter_v23) &
-    (df['one_percenters']>=filter_v24) &
-    (df['tackles']>=filter_v25) &
-    (df['tackles_inside_fifty']>=filter_v26) &
-    (df['clearances']>=filter_v27) &
-    (df['turnovers']>=filter_v28) &
-    (df['intercepts']>=filter_v29) &
-    (df['pressure_acts']>=filter_v30) &
-    (df['def_half_pressure_acts']>=filter_v31) &
-    (df['f50_ground_ball_gets']>=filter_v32) &
-    (df['ground_ball_gets']>=filter_v33) &
-    (df['ruck_contests']>=filter_v34) &
-    (df['hitouts']>=filter_v35) &
-    (df['Hitout Efficiency']>=filter_v36) &
-    (df['hitouts_to_advantage']>=filter_v37) &
-    (df['centre_clearances']>=filter_v38) &
-    (df['stoppage_clearances']>=filter_v39) &
-    (df['score_launches']>=filter_v40) &
-    (df['spoils']>=filter_v41) &
-    (df['free_kicks_for']>=filter_v42) &
-    (df['free_kicks_against']>=filter_v43) &
-    (df['clangers']>=filter_v44) &
-    (df['afl_fantasy_score']>=filter_v45)
-    ].reset_index(drop=True)
-
-    if league == 'AFL':
-        cols_to_show = ['player_name','player_team','player_position','PctOfSeason','80s','metres_gained','disposals','effective_disposals','handballs','Handball Efficiency','kicks','Kick Efficiency','shots_at_goal','goals','behinds','Points','Points per Shot','goal_assists','score_involvements','marks','marks_inside_fifty','contested_marks','inside_fifties','rebounds','marks_on_lead','intercept_marks','% of Possessions Contested','% of Marks Contested','one_percenters','tackles','tackles_inside_fifty','clearances','turnovers','intercepts','pressure_acts','def_half_pressure_acts','f50_ground_ball_gets','ground_ball_gets','ruck_contests','hitouts','Hitout Efficiency','hitouts_to_advantage','centre_clearances','stoppage_clearances','score_launches','spoils','free_kicks_for','free_kicks_against','clangers','afl_fantasy_score',]
-        player_research_table = player_research_table[cols_to_show].rename(columns={'player_name':'Player','player_team':'Team','player_position':'Position(s)','PctOfSeason':'TOG%', 'metres_gained':'Metres Gained','disposals':'Disposals','effective_disposals':'Effective Disposals','handballs':'Handballs','Handball Efficiency':'Handball Efficiency','kicks':'Kicks','Kick Efficiency':'Kick Efficiency','shots_at_goal':'Shots At Goal','goals':'Goals','behinds':'Behinds','Points':'Points','Points per Shot':'Points per Shot','goal_assists':'Goal Assists','score_involvements':'Score Involvements','marks':'Marks','marks_inside_fifty':'Marks Inside 50','contested_marks':'Contested Marks','inside_fifties':'Inside 50s','rebounds':'Rebound 50s','marks_on_lead':'Marks On Lead','intercept_marks':'Intercept Marks','% of Possessions Contested':'% of Possessions Contested','% of Marks Contested':'% of Marks Contested','one_percenters':'One Percenters','tackles':'Tackles','tackles_inside_fifty':'Tackles Inside 50','clearances':'Clearances','turnovers':'Turnovers','intercepts':'Intercepts','pressure_acts':'Pressure Acts','def_half_pressure_acts':'Def Half Pressure Acts','f50_ground_ball_gets':'Forward 50 Ground Ball Gets','ground_ball_gets':'Ground Ball Gets','ruck_contests':'Ruck Contests','hitouts':'Hitouts','Hitout Efficiency':'Hitout Efficiency','hitouts_to_advantage':'Hitouts To Advantage','centre_clearances':'Centre Clearances','stoppage_clearances':'Stoppage Clearances','score_launches':'Score Launches','spoils':'Spoils','free_kicks_for':'Free Kicks For','free_kicks_against':'Free Kicks Against','clangers':'Clangers','afl_fantasy_score':'Afl Fantasy Score',})
-    if league == 'AFLW':
-        cols_to_show = ['player_name','player_team','player_position','PctOfSeason','80s','metres_gained','disposals','effective_disposals','handballs','Handball Efficiency','kicks','Kick Efficiency','shots_at_goal','goals','behinds','Points','Points per Shot','goal_assists','score_involvements','marks','marks_inside_fifty','contested_marks','inside_fifties','rebounds','marks_on_lead','intercept_marks','% of Possessions Contested','% of Marks Contested','one_percenters','tackles','tackles_inside_fifty','clearances','turnovers','intercepts','pressure_acts','def_half_pressure_acts','f50_ground_ball_gets','ground_ball_gets','ruck_contests','hitouts','Hitout Efficiency','hitouts_to_advantage','centre_clearances','stoppage_clearances','score_launches','spoils','free_kicks_for','free_kicks_against','clangers','afl_fantasy_score',]
-        trouble_cols = [
-            'contest_def_one_on_ones', 'def_half_pressure_acts', 'intercept_marks', 'hitout_win_percentage', 'contest_off_wins', 'pressure_acts', 'score_launches', 'effective_kicks', 'contest_off_one_on_ones', 'marks_on_lead', 'spoils', 'ground_ball_gets', 'hitouts_to_advantage', 'ruck_contests', 'contest_def_losses', 'f50_ground_ball_gets', 'effective_disposals',
-            'Kick Efficiency','Handball Efficiency','Hitout Efficiency']
-        cols_to_show = [x for x in cols_to_show if x not in trouble_cols]
-        player_research_table = player_research_table[cols_to_show].rename(columns={'player_name':'Player','player_team':'Team','player_position':'Position(s)','PctOfSeason':'TOG%','80s':'68s','metres_gained':'Metres Gained','disposals':'Disposals','effective_disposals':'Effective Disposals','handballs':'Handballs','Handball Efficiency':'Handball Efficiency','kicks':'Kicks','Kick Efficiency':'Kick Efficiency','shots_at_goal':'Shots At Goal','goals':'Goals','behinds':'Behinds','Points':'Points','Points per Shot':'Points per Shot','goal_assists':'Goal Assists','score_involvements':'Score Involvements','marks':'Marks','marks_inside_fifty':'Marks Inside 50','contested_marks':'Contested Marks','inside_fifties':'Inside 50s','rebounds':'Rebound 50s','marks_on_lead':'Marks On Lead','intercept_marks':'Intercept Marks','% of Possessions Contested':'% of Possessions Contested','% of Marks Contested':'% of Marks Contested','one_percenters':'One Percenters','tackles':'Tackles','tackles_inside_fifty':'Tackles Inside 50','clearances':'Clearances','turnovers':'Turnovers','intercepts':'Intercepts','pressure_acts':'Pressure Acts','def_half_pressure_acts':'Def Half Pressure Acts','f50_ground_ball_gets':'Forward 50 Ground Ball Gets','ground_ball_gets':'Ground Ball Gets','ruck_contests':'Ruck Contests','hitouts':'Hitouts','Hitout Efficiency':'Hitout Efficiency','hitouts_to_advantage':'Hitouts To Advantage','centre_clearances':'Centre Clearances','stoppage_clearances':'Stoppage Clearances','score_launches':'Score Launches','spoils':'Spoils','free_kicks_for':'Free Kicks For','free_kicks_against':'Free Kicks Against','clangers':'Clangers','afl_fantasy_score':'Afl Fantasy Score',})
+if league == 'AFL':
+    with filter_tab:
+        st.button("Reset Sliders", on_click=_update_slider, kwargs={"value": 0.0})
+        with st.form('Minimum Percentile Filters'):
+            submitted = st.form_submit_button("Submit Filters")
+            filter_pos = st.multiselect('Positions to Include (leave blank for all)', ['Full-Forward','Forward Pocket','Centre Half-Forward','Half-Forward','Wing','Centre','Ruck-Rover','Rover','Ruck','Half-Back','Centre Half-Back','Back-Pocket','Full-Back'])
+                
+            if ['slider1','slider2','slider3','slider4','slider5','slider6','slider7','slider8','slider9','slider10','slider11','slider12','slider13','slider14','slider15','slider16','slider17','slider18','slider19','slider20','slider21','slider22','slider23','slider24','slider25','slider26','slider27','slider28','slider29','slider30','slider31','slider32','slider33','slider34','slider35','slider36','slider37','slider38','slider39','slider40','slider41','slider42','slider43','slider44','slider45'] not in st.session_state:
+                pass
     
-    st.write("Colored numbers shown are percentile ranks")
+            filter_v1 = st.slider('Metres Gained', 0.0, 1.0, 0.0, key='slider1')
+            filter_v2 = st.slider('Disposals', 0.0, 1.0, 0.0, key='slider2')
+            filter_v3 = st.slider('Effective Disposals', 0.0, 1.0, 0.0, key='slider3')
+            filter_v4 = st.slider('Handballs', 0.0, 1.0, 0.0, key='slider4')
+            filter_v5 = st.slider('Handball Efficiency', 0.0, 1.0, 0.0, key='slider5')
+            filter_v6 = st.slider('Kicks', 0.0, 1.0, 0.0, key='slider6')
+            filter_v7 = st.slider('Kick Efficiency', 0.0, 1.0, 0.0, key='slider7')
+            filter_v8 = st.slider('Shots At Goal', 0.0, 1.0, 0.0, key='slider8')
+            filter_v9 = st.slider('Goals', 0.0, 1.0, 0.0, key='slider9')
+            filter_v10 = st.slider('Behinds', 0.0, 1.0, 0.0, key='slider10')
+            filter_v11 = st.slider('Points', 0.0, 1.0, 0.0, key='slider11')
+            filter_v12 = st.slider('Points per Shot', 0.0, 1.0, 0.0, key='slider12')
+            filter_v13 = st.slider('Goal Assists', 0.0, 1.0, 0.0, key='slider13')
+            filter_v14 = st.slider('Score Involvements', 0.0, 1.0, 0.0, key='slider14')
+            filter_v15 = st.slider('Marks', 0.0, 1.0, 0.0, key='slider15')
+            filter_v16 = st.slider('Marks Inside 50', 0.0, 1.0, 0.0, key='slider16')
+            filter_v17 = st.slider('Contested Marks', 0.0, 1.0, 0.0, key='slider17')
+            filter_v18 = st.slider('Inside 50s', 0.0, 1.0, 0.0, key='slider18')
+            filter_v19 = st.slider('Rebound 50s', 0.0, 1.0, 0.0, key='slider19')
+            filter_v20 = st.slider('Marks On Lead', 0.0, 1.0, 0.0, key='slider20')
+            filter_v21 = st.slider('Intercept Marks', 0.0, 1.0, 0.0, key='slider21')
+            filter_v22 = st.slider('% of Possessions Contested', 0.0, 1.0, 0.0, key='slider22')
+            filter_v23 = st.slider('% of Marks Contested', 0.0, 1.0, 0.0, key='slider23')
+            filter_v24 = st.slider('One Percenters', 0.0, 1.0, 0.0, key='slider24')
+            filter_v25 = st.slider('Tackles', 0.0, 1.0, 0.0, key='slider25')
+            filter_v26 = st.slider('Tackles Inside 50', 0.0, 1.0, 0.0, key='slider26')
+            filter_v27 = st.slider('Clearances', 0.0, 1.0, 0.0, key='slider27')
+            filter_v28 = st.slider('Turnovers', 0.0, 1.0, 0.0, key='slider28')
+            filter_v29 = st.slider('Intercepts', 0.0, 1.0, 0.0, key='slider29')
+            filter_v30 = st.slider('Pressure Acts', 0.0, 1.0, 0.0, key='slider30')
+            filter_v31 = st.slider('Def Half Pressure Acts', 0.0, 1.0, 0.0, key='slider31')
+            filter_v32 = st.slider('Forward 50 Ground Ball Gets', 0.0, 1.0, 0.0, key='slider32')
+            filter_v33 = st.slider('Ground Ball Gets', 0.0, 1.0, 0.0, key='slider33')
+            filter_v34 = st.slider('Ruck Contests', 0.0, 1.0, 0.0, key='slider34')
+            filter_v35 = st.slider('Hitouts', 0.0, 1.0, 0.0, key='slider35')
+            filter_v36 = st.slider('Hitout Efficiency', 0.0, 1.0, 0.0, key='slider36')
+            filter_v37 = st.slider('Hitouts To Advantage', 0.0, 1.0, 0.0, key='slider37')
+            filter_v38 = st.slider('Centre Clearances', 0.0, 1.0, 0.0, key='slider38')
+            filter_v39 = st.slider('Stoppage Clearances', 0.0, 1.0, 0.0, key='slider39')
+            filter_v40 = st.slider('Score Launches', 0.0, 1.0, 0.0, key='slider40')
+            filter_v41 = st.slider('Spoils', 0.0, 1.0, 0.0, key='slider41')
+            filter_v42 = st.slider('Free Kicks For', 0.0, 1.0, 0.0, key='slider42')
+            filter_v43 = st.slider('Free Kicks Against', 0.0, 1.0, 0.0, key='slider43')
+            filter_v44 = st.slider('Clangers', 0.0, 1.0, 0.0, key='slider44')
+            filter_v45 = st.slider('Afl Fantasy Score', 0.0, 1.0, 0.0, key='slider45')
     
-    st.dataframe(player_research_table.style.applymap(color_percentile, subset=player_research_table.columns[5:]))
+    with filter_table_tab:
+        if filter_pos == []:
+            filter_pos = None
+        df = create_filter_table_df(mins, filter_pos)
     
+        player_research_table = df[
+        (df['metres_gained']>=filter_v1) &
+        (df['disposals']>=filter_v2) &
+        (df['effective_disposals']>=filter_v3) &
+        (df['handballs']>=filter_v4) &
+        (df['Handball Efficiency']>=filter_v5) &
+        (df['kicks']>=filter_v6) &
+        (df['Kick Efficiency']>=filter_v7) &
+        (df['shots_at_goal']>=filter_v8) &
+        (df['goals']>=filter_v9) &
+        (df['behinds']>=filter_v10) &
+        (df['Points']>=filter_v11) &
+        (df['Points per Shot']>=filter_v12) &
+        (df['goal_assists']>=filter_v13) &
+        (df['score_involvements']>=filter_v14) &
+        (df['marks']>=filter_v15) &
+        (df['marks_inside_fifty']>=filter_v16) &
+        (df['contested_marks']>=filter_v17) &
+        (df['inside_fifties']>=filter_v18) &
+        (df['rebounds']>=filter_v19) &
+        (df['marks_on_lead']>=filter_v20) &
+        (df['intercept_marks']>=filter_v21) &
+        (df['% of Possessions Contested']>=filter_v22) &
+        (df['% of Marks Contested']>=filter_v23) &
+        (df['one_percenters']>=filter_v24) &
+        (df['tackles']>=filter_v25) &
+        (df['tackles_inside_fifty']>=filter_v26) &
+        (df['clearances']>=filter_v27) &
+        (df['turnovers']>=filter_v28) &
+        (df['intercepts']>=filter_v29) &
+        (df['pressure_acts']>=filter_v30) &
+        (df['def_half_pressure_acts']>=filter_v31) &
+        (df['f50_ground_ball_gets']>=filter_v32) &
+        (df['ground_ball_gets']>=filter_v33) &
+        (df['ruck_contests']>=filter_v34) &
+        (df['hitouts']>=filter_v35) &
+        (df['Hitout Efficiency']>=filter_v36) &
+        (df['hitouts_to_advantage']>=filter_v37) &
+        (df['centre_clearances']>=filter_v38) &
+        (df['stoppage_clearances']>=filter_v39) &
+        (df['score_launches']>=filter_v40) &
+        (df['spoils']>=filter_v41) &
+        (df['free_kicks_for']>=filter_v42) &
+        (df['free_kicks_against']>=filter_v43) &
+        (df['clangers']>=filter_v44) &
+        (df['afl_fantasy_score']>=filter_v45)
+        ].reset_index(drop=True)
+    
+        if league == 'AFL':
+            cols_to_show = ['player_name','player_team','player_position','PctOfSeason','80s','metres_gained','disposals','effective_disposals','handballs','Handball Efficiency','kicks','Kick Efficiency','shots_at_goal','goals','behinds','Points','Points per Shot','goal_assists','score_involvements','marks','marks_inside_fifty','contested_marks','inside_fifties','rebounds','marks_on_lead','intercept_marks','% of Possessions Contested','% of Marks Contested','one_percenters','tackles','tackles_inside_fifty','clearances','turnovers','intercepts','pressure_acts','def_half_pressure_acts','f50_ground_ball_gets','ground_ball_gets','ruck_contests','hitouts','Hitout Efficiency','hitouts_to_advantage','centre_clearances','stoppage_clearances','score_launches','spoils','free_kicks_for','free_kicks_against','clangers','afl_fantasy_score',]
+            player_research_table = player_research_table[cols_to_show].rename(columns={'player_name':'Player','player_team':'Team','player_position':'Position(s)','PctOfSeason':'TOG%', 'metres_gained':'Metres Gained','disposals':'Disposals','effective_disposals':'Effective Disposals','handballs':'Handballs','Handball Efficiency':'Handball Efficiency','kicks':'Kicks','Kick Efficiency':'Kick Efficiency','shots_at_goal':'Shots At Goal','goals':'Goals','behinds':'Behinds','Points':'Points','Points per Shot':'Points per Shot','goal_assists':'Goal Assists','score_involvements':'Score Involvements','marks':'Marks','marks_inside_fifty':'Marks Inside 50','contested_marks':'Contested Marks','inside_fifties':'Inside 50s','rebounds':'Rebound 50s','marks_on_lead':'Marks On Lead','intercept_marks':'Intercept Marks','% of Possessions Contested':'% of Possessions Contested','% of Marks Contested':'% of Marks Contested','one_percenters':'One Percenters','tackles':'Tackles','tackles_inside_fifty':'Tackles Inside 50','clearances':'Clearances','turnovers':'Turnovers','intercepts':'Intercepts','pressure_acts':'Pressure Acts','def_half_pressure_acts':'Def Half Pressure Acts','f50_ground_ball_gets':'Forward 50 Ground Ball Gets','ground_ball_gets':'Ground Ball Gets','ruck_contests':'Ruck Contests','hitouts':'Hitouts','Hitout Efficiency':'Hitout Efficiency','hitouts_to_advantage':'Hitouts To Advantage','centre_clearances':'Centre Clearances','stoppage_clearances':'Stoppage Clearances','score_launches':'Score Launches','spoils':'Spoils','free_kicks_for':'Free Kicks For','free_kicks_against':'Free Kicks Against','clangers':'Clangers','afl_fantasy_score':'Afl Fantasy Score',})
+        if league == 'AFLW':
+            cols_to_show = ['player_name','player_team','player_position','PctOfSeason','80s','metres_gained','disposals','effective_disposals','handballs','Handball Efficiency','kicks','Kick Efficiency','shots_at_goal','goals','behinds','Points','Points per Shot','goal_assists','score_involvements','marks','marks_inside_fifty','contested_marks','inside_fifties','rebounds','marks_on_lead','intercept_marks','% of Possessions Contested','% of Marks Contested','one_percenters','tackles','tackles_inside_fifty','clearances','turnovers','intercepts','pressure_acts','def_half_pressure_acts','f50_ground_ball_gets','ground_ball_gets','ruck_contests','hitouts','Hitout Efficiency','hitouts_to_advantage','centre_clearances','stoppage_clearances','score_launches','spoils','free_kicks_for','free_kicks_against','clangers','afl_fantasy_score',]
+            trouble_cols = [
+                'contest_def_one_on_ones', 'def_half_pressure_acts', 'intercept_marks', 'hitout_win_percentage', 'contest_off_wins', 'pressure_acts', 'score_launches', 'effective_kicks', 'contest_off_one_on_ones', 'marks_on_lead', 'spoils', 'ground_ball_gets', 'hitouts_to_advantage', 'ruck_contests', 'contest_def_losses', 'f50_ground_ball_gets', 'effective_disposals',
+                'Kick Efficiency','Handball Efficiency','Hitout Efficiency']
+            cols_to_show = [x for x in cols_to_show if x not in trouble_cols]
+            player_research_table = player_research_table[cols_to_show].rename(columns={'player_name':'Player','player_team':'Team','player_position':'Position(s)','PctOfSeason':'TOG%','80s':'68s','metres_gained':'Metres Gained','disposals':'Disposals','effective_disposals':'Effective Disposals','handballs':'Handballs','Handball Efficiency':'Handball Efficiency','kicks':'Kicks','Kick Efficiency':'Kick Efficiency','shots_at_goal':'Shots At Goal','goals':'Goals','behinds':'Behinds','Points':'Points','Points per Shot':'Points per Shot','goal_assists':'Goal Assists','score_involvements':'Score Involvements','marks':'Marks','marks_inside_fifty':'Marks Inside 50','contested_marks':'Contested Marks','inside_fifties':'Inside 50s','rebounds':'Rebound 50s','marks_on_lead':'Marks On Lead','intercept_marks':'Intercept Marks','% of Possessions Contested':'% of Possessions Contested','% of Marks Contested':'% of Marks Contested','one_percenters':'One Percenters','tackles':'Tackles','tackles_inside_fifty':'Tackles Inside 50','clearances':'Clearances','turnovers':'Turnovers','intercepts':'Intercepts','pressure_acts':'Pressure Acts','def_half_pressure_acts':'Def Half Pressure Acts','f50_ground_ball_gets':'Forward 50 Ground Ball Gets','ground_ball_gets':'Ground Ball Gets','ruck_contests':'Ruck Contests','hitouts':'Hitouts','Hitout Efficiency':'Hitout Efficiency','hitouts_to_advantage':'Hitouts To Advantage','centre_clearances':'Centre Clearances','stoppage_clearances':'Stoppage Clearances','score_launches':'Score Launches','spoils':'Spoils','free_kicks_for':'Free Kicks For','free_kicks_against':'Free Kicks Against','clangers':'Clangers','afl_fantasy_score':'Afl Fantasy Score',})
+        
+        st.write("Colored numbers shown are percentile ranks")
+        
+        st.dataframe(player_research_table.style.applymap(color_percentile, subset=player_research_table.columns[5:]))
+        

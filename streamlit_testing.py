@@ -70,6 +70,7 @@ def make_season_metric_img(player_df, adj_80s, player, foc_var, league, season):
     else:
         plt.title('Darker bar color indicates more time on ground', size=8, va='top')
     metric_fig = plt.gcf()
+    metric_fig.patch.set_facecolor('#fbf9f4')
     return metric_fig
 
 def NormalizeData(data):

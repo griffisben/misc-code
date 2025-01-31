@@ -16,6 +16,8 @@ warnings.filterwarnings('ignore')
 import plotly.express as px
 import plotly.figure_factory as ff
 from plotly.graph_objects import Layout
+from sklearn.preprocessing import MinMaxScaler
+from scipy.stats import zscore
 
 colorscales = px.colors.named_colorscales()
 colorscales2 = [f"{cc}_r" for cc in colorscales]

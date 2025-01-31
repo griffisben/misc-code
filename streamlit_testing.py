@@ -151,7 +151,7 @@ def create_filter_table_df(mins, filter_pos):
     if league == 'AFLW':
         trouble_cols = [
             'contest_def_one_on_ones', 'def_half_pressure_acts', 'intercept_marks', 'hitout_win_percentage', 'contest_off_wins', 'pressure_acts', 'score_launches', 'effective_kicks', 'contest_off_one_on_ones', 'marks_on_lead', 'spoils', 'ground_ball_gets', 'hitouts_to_advantage', 'ruck_contests', 'contest_def_losses', 'f50_ground_ball_gets', 'effective_disposals',
-            'kick_efficiency','handball_efficiency','hitout_efficiency']
+            'Kick Efficiency','Handball Efficiency','Hitout Efficiency']
         numcols = [x for x in numcols if x not in trouble_cols]
 
     dfProspect = df[df['PctOfSeason']>=mins/100]

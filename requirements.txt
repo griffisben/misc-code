@@ -11,3 +11,4 @@ datetime
 beautifulsoup4==4.12.2
 mplsoccer
 adjustText
+scikit-learn

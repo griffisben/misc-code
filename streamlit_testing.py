@@ -32,9 +32,6 @@ colorscales2 = [f"{cc}_r" for cc in colorscales]
 colorscales += colorscales2
 
 def make_season_metric_img(player_df, adj_80s, player, foc_var, league, season):
-    colors_ = player_df['TOG%']
-    norm = Normalize(vmin=50, vmax=100)
-    cmap_ = matplotlib.colors.LinearSegmentedColormap.from_list("", ['white','#4c94f6'])
     
     # Adjust for 85% TOG if needed
     if adj_80s == 'Yes':
@@ -44,7 +41,7 @@ def make_season_metric_img(player_df, adj_80s, player, foc_var, league, season):
         adj_text = "Darker bar color indicates more time on ground"
 
     # Create a color scale based on 'TOG%'
-    color_scale = alt.Scale(domain=[50, 100], range=['white', '#4c94f6'])
+    color_scale = alt.Scale(domain=[0, 100], range=['white', '#4c94f6'])
 
     # Create the bar chart
     chart = alt.Chart(player_df).mark_bar(stroke='black', strokeWidth=0.75).encode(
@@ -55,8 +52,8 @@ def make_season_metric_img(player_df, adj_80s, player, foc_var, league, season):
                  alt.Tooltip(foc_var, title=foc_var, format=".1f"),
                  alt.Tooltip('TOG%:Q', title="TOG%", format=".1f")]
     ).properties(
-        width=600,
-        height=400
+        width=1000,
+        height=800
     )
 
     # Add text labels on bars

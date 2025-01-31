@@ -1073,5 +1073,5 @@ with metric_trend_tab:
     if len(player_df) > 0:
         season_metrig_fig = make_season_metric_img(player_df, adj_80s, player, foc_var, league, season)
         st.pyplot(season_metrig_fig.figure)
-    except:
+    else:
         st.write(f"Your chosen player played 0 {league} games in {season}")

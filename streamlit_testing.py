@@ -36,9 +36,9 @@ def make_season_metric_img(player_df, adj_80s, player, foc_var, league, season):
     # Adjust for 85% TOG if needed
     if adj_80s == 'Yes':
         player_df[foc_var] = (player_df[foc_var] / player_df['TOG%']) * 85
-        adj_text = "Data Adjusted to 85% TOG% | 85% Time On Ground Percentage is average for starters per game | Darker bar color indicates more time on ground"
+        adj_text = "Data Adjusted to 85% TOG% | 85% Time On Ground Percentage is average for starters per game"
     else:
-        adj_text = "Darker bar color indicates more time on ground"
+        adj_text = ""
 
     # Create the bar chart
     chart = alt.Chart(player_df).mark_bar(stroke='black', strokeWidth=0.75,color="#4c94f6",).encode(
@@ -65,8 +65,8 @@ def make_season_metric_img(player_df, adj_80s, player, foc_var, league, season):
     # Combine bar chart and labels
     final_chart = (chart + text).properties(
         title=alt.Title(
-            text=f"{player} {foc_var} By Round, {season} {league}", fontSize=18,
-            subtitle=adj_text, subtitleFontSize=11, align='left', anchor='start')
+            text=f"{player} {foc_var} By Round, {season} {league}", fontSize=20,
+            subtitle=adj_text, subtitleFontSize=15, align='left', anchor='start')
     )
 
     return final_chart

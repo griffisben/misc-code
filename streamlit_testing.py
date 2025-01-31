@@ -28,6 +28,7 @@ colorscales += colorscales2
 
 def make_season_metric_img(player_df, adj_80s, player, foc_var, league, season):
     plt.clf()
+    import matplotlib
     matplotlib.rcParams.update(matplotlib.rcParams)
     sns.set(rc={'figure.dpi': 150,
                 'axes.grid': False,
@@ -237,6 +238,7 @@ def create_filter_table_df(mins, filter_pos):
 
 def scout_report(league, season, pos, mins, name,callout, bar_colors, dist_labels, sig, extra_text):
     plt.clf()
+    import matplotlib
     matplotlib.rcParams.update(matplotlib.rcParams)
     if league == 'AFLW':
         logo_df = pd.DataFrame({'team':['Adelaide Crows','Brisbane Lions','Carlton','Collingwood','Essendon','Fremantle','Geelong Cats','Gold Coast SUNS','GWS GIANTS','Hawthorn','Melbourne','Kangaroos','Port Adelaide','Richmond','St Kilda','Sydney Swans','West Coast Eagles','Western Bulldogs'],

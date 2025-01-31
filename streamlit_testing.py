@@ -40,9 +40,9 @@ def make_season_metric_img(player_df, adj_80s, player, foc_var, league, season):
                 'axes.facecolor': '#fbf9f4',
                 'figure.facecolor':'#fbf9f4',
     #             'figure.figsize':(6,7),
-                'axes.labelsize': 12,
-                'ytick.labelsize': 8,
-                'xtick.labelsize': 10,
+                'axes.labelsize': 16,
+                'ytick.labelsize': 13,
+                'xtick.labelsize': 14,
                 'ytick.color': '#4a2e19',
                 'xtick.color': '#4a2e19',
                })
@@ -69,7 +69,7 @@ def make_season_metric_img(player_df, adj_80s, player, foc_var, league, season):
         a = .005
         plt.text(i, xt+a, f"{round(xt,1)}", va='bottom', ha='center', rotation=0, size=10)
     
-    plt.suptitle(f"{player} {foc_var} By Round\n{season} {league}{adj_text}\n ", size=16,va='center')
+    plt.suptitle(f"{player} {foc_var} By Round\n{season} {league}{adj_text}\n ", size=19,va='center')
     if adj_80s == 'Yes':
         plt.title('85% Time On Ground Percentage is just about average for starters per game\nDarker bar color indicates more time on ground', size=13, va='top')
     else:

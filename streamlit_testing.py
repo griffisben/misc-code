@@ -36,8 +36,14 @@ ranking_system, other = st.tabs(["Metric Weighting & Ranking", "Other"])
 with ranking_system:
     st.header("Select Metrics & Assign Weights")
     
+    pos = st.multiselect('Positions to Include (leave blank for all)', ['Full-Forward','Forward Pocket','Centre Half-Forward','Half-Forward','Wing','Centre','Ruck-Rover','Rover','Ruck','Half-Back','Centre Half-Back','Back-Pocket','Full-Back'])
+    if pos == []:
+        pos = None
+    pattern = r'(^|, )(' + '|'.join(pos) + r')($|, )'
+    df = df[df['player_position'].str.contains(pattern, regex=True)]
+    
     # Let user select metrics
-    vars = df.columns[6:].tolist()
+    vars = df.columns[9:].tolist()
     vars.remove('80sr')
     metrics = st.multiselect("Choose metrics to include:", vars)
     

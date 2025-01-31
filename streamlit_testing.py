@@ -1070,5 +1070,8 @@ with metric_trend_tab:
     player_df = df[df.Player==player].reset_index(drop=True)
     
     #############
-    season_metrig_fig = make_season_metric_img(player_df, adj_80s, player, foc_var, league, season)
-    st.pyplot(season_metrig_fig.figure)
+    if len(player_df) > 0:
+        season_metrig_fig = make_season_metric_img(player_df, adj_80s, player, foc_var, league, season)
+        st.pyplot(season_metrig_fig.figure)
+    except:
+        st.write(f"Your chosen player played 0 {league} games in {season}")

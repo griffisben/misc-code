@@ -44,10 +44,9 @@ def make_season_metric_img(player_df, adj_80s, player, foc_var, league, season):
     color_scale = alt.Scale(domain=[0, 100], range=['#fbf9f4','#4a2e19'])
 
     # Create the bar chart
-    chart = alt.Chart(player_df).mark_bar(stroke='black', strokeWidth=0.75).encode(
+    chart = alt.Chart(player_df).mark_bar(stroke='black', strokeWidth=0.75,color="dodgerblue",).encode(
         x=alt.X('Opponent:N', title=None, sort=None),
         y=alt.Y(f'{foc_var}:Q', title=foc_var),
-        color="dodgerblue",
         tooltip=[alt.Tooltip('Opponent:N', title="Opponent"),
                  alt.Tooltip(foc_var, title=foc_var, format=".1f"),
                  alt.Tooltip('TOG%:Q', title="TOG%", format=".1f")]

@@ -56,6 +56,6 @@ with ranking_system:
         
         # Display results
         st.subheader("Ranked Players")
-        st.dataframe(df_filtered.sort_values("custom_score", ascending=False)[["player_name", "custom_score"] + metrics])
+        st.dataframe(df_filtered.sort_values("custom_score", ascending=False)[["player_name","player_team", "player_position", "custom_score"] + metrics])
     else:
         st.warning("Please select at least one metric.")

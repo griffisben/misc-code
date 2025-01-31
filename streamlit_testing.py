@@ -37,7 +37,18 @@ def color_percentile(pc):
         color = ('#b60918', '#fddbde')  # Below Avg
 
     return f'background-color: {color[1]}'
+    
+def color_percentile_100(pc):
+    if 100-pc <= 10:
+        color = ('#01349b', '#d9e3f6')  # Elite
+    elif 10 < 100-pc <= 35:
+        color = ('#007f35', '#d9f0e3')  # Above Avg
+    elif 35 < 100-pc <= 66:
+        color = ('#9b6700', '#fff2d9')  # Avg
+    else:
+        color = ('#b60918', '#fddbde')  # Below Avg
 
+    return f'background-color: {color[1]}'
 def _update_slider(value):
     for i in range(1, 45):
         st.session_state[f"slider{i}"] = value
@@ -974,6 +985,8 @@ with ranking_tab:
 
         # Display results
         st.write("Normalized Weighted Z-Score Player Rankings")
-        st.dataframe(df_filtered.sort_values("Score", ascending=False)[["Player","Team","Position(s)","Score",'TOG%'] + metrics])
+        st.dataframe(df_filtered.sort_values("Score", ascending=False)[["Player","Team","Position(s)",'TOG%',"Score",] + metrics])
+        st.dataframe(df_filtered.sort_values("Score", ascending=False)[["Player","Team","Position(s)",'TOG%',"Score",] + metrics].style.applymap(color_percentile_100, subset=df_filtered.sort_values("Score", ascending=False)[["Player","Team","Position(s)",'TOG%',"Score",] + metrics].columns[4:]))
+
     else:
         st.warning("Please select at least one metric.")

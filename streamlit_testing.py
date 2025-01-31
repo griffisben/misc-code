@@ -60,7 +60,7 @@ def make_season_metric_img(player_df, adj_80s, player, foc_var, league, season):
     plt.bar(x=player_df['Opponent'], height=player_df[foc_var],
            color=cmap_(norm(colors_)), ec='k', lw=.75
            )
-    plt.xticks(rotation=90, size=8)
+    plt.xticks(rotation=90, size=14)
     plt.xlabel('')
     plt.ylabel(foc_var, color='#4a2e19')
     plt.ylim(plt.gca().get_ylim()[0],plt.gca().get_ylim()[1]*1.02)

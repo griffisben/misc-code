@@ -26,6 +26,37 @@ colorscales = px.colors.named_colorscales()
 colorscales2 = [f"{cc}_r" for cc in colorscales]
 colorscales += colorscales2
 
+def make_season_metric_img(player_df, adj_80s, player, foc_var, league, season):
+    colors_ = player_df['TOG%']
+    norm = Normalize(vmin=50, vmax=100)
+    cmap_ = matplotlib.colors.LinearSegmentedColormap.from_list("", ['white','#4c94f6'])
+    
+    if adj_80s == 'Yes':
+        player_df[foc_var] = (player_df[foc_var]/player_df['TOG%'])*85
+        adj_text = " | Data Adjusted to 85% TOG"
+    else:
+        adj_text = ""
+    
+    plt.bar(x=player_df['Opponent'], height=player_df[foc_var],
+           color=cmap_(norm(colors_)), ec='k', lw=.75
+           )
+    plt.xticks(rotation=90, size=8)
+    plt.xlabel('')
+    plt.ylabel(foc_var, color='#4a2e19')
+    plt.ylim(plt.gca().get_ylim()[0],plt.gca().get_ylim()[1]*1.02)
+    
+    for i, xt in enumerate(player_df[foc_var].values):
+        a = .005
+        plt.text(i, xt+a, f"{round(xt,1)}", va='bottom', ha='center', rotation=0, size=6)
+    
+    plt.suptitle(f"{player} {foc_var} By Round\n{season} {league}{adj_text}", size=12,va='top')
+    if adj_80s == 'Yes':
+        plt.title('85% Time On Ground Percentage is just about average for starters per game\nDarker bar color indicates more time on ground', size=8, va='top')
+    else:
+        plt.title('Darker bar color indicates more time on ground', size=8, va='top')
+    fig = plt.gcf()
+    return fig
+
 def NormalizeData(data):
     return (data - np.min(data)) / (np.max(data) - np.min(data)) * 100
 
@@ -1038,32 +1069,6 @@ with metric_trend_tab:
                 'ytick.color': '#4a2e19',
                 'xtick.color': '#4a2e19',
                })
-    colors_ = player_df['TOG%']
-    norm = Normalize(vmin=50, vmax=100)
-    cmap_ = matplotlib.colors.LinearSegmentedColormap.from_list("", ['white','#4c94f6'])
-    
-    if adj_80s == 'Yes':
-        player_df[foc_var] = (player_df[foc_var]/player_df['TOG%'])*85
-        adj_text = " | Data Adjusted to 85% TOG"
-    else:
-        adj_text = ""
-    
-    plt.bar(x=player_df['Opponent'], height=player_df[foc_var],
-           color=cmap_(norm(colors_)), ec='k', lw=.75
-           )
-    plt.xticks(rotation=90, size=8)
-    plt.xlabel('')
-    plt.ylabel(foc_var, color='#4a2e19')
-    plt.ylim(plt.gca().get_ylim()[0],plt.gca().get_ylim()[1]*1.02)
-    
-    for i, xt in enumerate(player_df[foc_var].values):
-        a = .005
-        plt.text(i, xt+a, f"{round(xt,1)}", va='bottom', ha='center', rotation=0, size=6)
-    
-    plt.suptitle(f"{player} {foc_var} By Round\n{season} {league}{adj_text}", size=12,va='top')
-    if adj_80s == 'Yes':
-        plt.title('85% Time On Ground Percentage is just about average for starters per game\nDarker bar color indicates more time on ground', size=8, va='top')
-    else:
-        plt.title('Darker bar color indicates more time on ground', size=8, va='top')
-    
-    st.pyplot(plt.figure)
+
+    season_metrig_fig = make_season_metric_img(player_df, adj_80s, player, foc_var, league, season)
+    st.pyplot(season_metrig_fig.figure)

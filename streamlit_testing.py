@@ -972,7 +972,7 @@ with ranking_tab:
         df_filtered["Score"] = (df_filtered["Score"] - min_score) / (max_score - min_score) * 100
 
         # Display results
-        st.subheader("Normalized Weighted Z-Score Player Rankings")
+        st.write("Normalized Weighted Z-Score Player Rankings")
         st.dataframe(df_filtered.sort_values("Score", ascending=False)[["Player","Team","Position(s)","Score",'TOG%'] + metrics])
     else:
         st.warning("Please select at least one metric.")

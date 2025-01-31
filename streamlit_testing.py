@@ -76,7 +76,6 @@ def make_season_metric_img(player_df, adj_80s, player, foc_var, league, season):
         plt.title('Darker bar color indicates more time on ground', size=13, va='top')
     metric_fig = plt.gcf()
     metric_fig.patch.set_facecolor('#fbf9f4')
-    plt.clf()
     plt.style.use('default')  # Reset Matplotlib
     sns.reset_defaults()  # Reset Seaborn
 
@@ -666,7 +665,6 @@ def scout_report(league, season, pos, mins, name,callout, bar_colors, dist_label
 
 
     fig_show = plt.gcf()
-    plt.clf()
     plt.style.use('default')  # Reset Matplotlib
     sns.reset_defaults()  # Reset Seaborn
     return fig_show

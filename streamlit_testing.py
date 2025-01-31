@@ -60,7 +60,7 @@ def make_season_metric_img(player_df, adj_80s, player, foc_var, league, season):
     
     for i, xt in enumerate(player_df[foc_var].values):
         a = .005
-        plt.text(i, xt+a, f"{round(xt,1)}", va='bottom', ha='center', rotation=0, size=6)
+        plt.text(i, xt+a, f"{round(xt,1)}", va='bottom', ha='center', rotation=0, size=5.8)
     
     plt.suptitle(f"{player} {foc_var} By Round\n{season} {league}{adj_text}\n ", size=12,va='center')
     if adj_80s == 'Yes':

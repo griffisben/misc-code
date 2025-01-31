@@ -870,18 +870,17 @@ with ranking_tab:
                       inplace=True)
     df = df[df['TOG%']>=mins/100]
 
-    st.header("Select Metrics & Assign Weights")
-    
-    rank_pos = st.multiselect('Positions to Include (leave blank for all)', ['Full-Forward','Forward Pocket','Centre Half-Forward','Half-Forward','Wing','Centre','Ruck-Rover','Rover','Ruck','Half-Back','Centre Half-Back','Back-Pocket','Full-Back'])
+    with st.form('Minimum Percentile Filters'):
+        submitted = st.form_submit_button("Submit Positions & Metrics")
+        rank_pos = st.multiselect('Positions to Include (leave blank for all)', ['Full-Forward','Forward Pocket','Centre Half-Forward','Half-Forward','Wing','Centre','Ruck-Rover','Rover','Ruck','Half-Back','Centre Half-Back','Back-Pocket','Full-Back'])
+        vars = df.columns[9:].tolist()
+        vars.remove('80sr')
+        metrics = st.multiselect("Choose metrics to include:", vars)
+
     if rank_pos != []:
         pattern = r'(^|, )(' + '|'.join(rank_pos) + r')($|, )'
         df = df[df['Position(s)'].str.contains(pattern, regex=True)]
-    
-    # Let user select metrics
-    vars = df.columns[9:].tolist()
-    vars.remove('80sr')
-    metrics = st.multiselect("Choose metrics to include:", vars)
-    
+
     if metrics:
         # User assigns weights
         weights = {}

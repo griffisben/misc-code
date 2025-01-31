@@ -58,13 +58,16 @@ with ranking_system:
         # Normalize data using z-score
         df_filtered = df.copy()
         df_filtered[metrics] = df_filtered[metrics].apply(zscore, nan_policy='omit')
+        for metric in metrics:
+            df_filtered[metric] = df_filtered[metric] + abs(df_filtered[metric].min())
+            df_filtered[metric] = NormalizeData(df_filtered[metric])
             
         # Compute weighted z-score ranking
         df_filtered["custom_score"] = df_filtered[metrics].apply(lambda row: sum(row[metric] * weights[metric] for metric in metrics), axis=1)
         min_score = df_filtered["custom_score"].min()
         max_score = df_filtered["custom_score"].max()
         df_filtered["custom_score"] = (df_filtered["custom_score"] - min_score) / (max_score - min_score) * 100
-        
+
         # Display results
         st.subheader("Ranked Players")
         st.dataframe(df_filtered.sort_values("custom_score", ascending=False)[["player_name","player_team", "player_position", "custom_score"] + metrics])

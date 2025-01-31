@@ -23,6 +23,9 @@ colorscales = px.colors.named_colorscales()
 colorscales2 = [f"{cc}_r" for cc in colorscales]
 colorscales += colorscales2
 
+def NormalizeData(data):
+    return (data - np.min(data)) / (np.max(data) - np.min(data)) * 100
+
 def color_percentile(pc):
     if 1-pc <= 0.1:
         color = ('#01349b', '#d9e3f6')  # Elite

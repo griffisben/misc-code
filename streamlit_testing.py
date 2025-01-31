@@ -632,10 +632,7 @@ with st.sidebar:
 
 extra_text = avail_data[(avail_data.Competition==league) & (avail_data.Season==season)].DataTime.values[0]
 
-if league == 'AFL':
-    radar_tab, all_players_tab, scatter_tab, filter_tab, filter_table_tab, ranking_tab = st.tabs(['Player Radar', 'All Players List', 'Scatter Plots', 'Player Search, Filters', 'Player Search, Results', 'Weighted Metric Ranking'])
-if league == 'AFLW':
-    radar_tab, all_players_tab, scatter_tab = st.tabs(['Player Radar', 'All Players List', 'Scatter Plots'])
+radar_tab, all_players_tab, scatter_tab, filter_tab, filter_table_tab, ranking_tab = st.tabs(['Player Radar', 'All Players List', 'Scatter Plots', 'Player Search, Filters', 'Player Search, Results', 'Weighted Metric Ranking'])
 
 with radar_tab:
     with st.form('Radar Options'):

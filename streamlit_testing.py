@@ -3,8 +3,13 @@ import pandas as pd
 import numpy as np
 from sklearn.preprocessing import MinMaxScaler
 
+with st.sidebar:
+    league = st.selectbox('League', avail_data.Competition.unique().tolist())
+    season = st.selectbox('Season', sorted(avail_data[avail_data.Competition==league].Season.tolist(),reverse=True))
+    mins = st.number_input('Minimum Time On Ground %', 0, 100, 60, 1)
+
 # Load the dataset
-df = pd.read_csv(f"https://raw.githubusercontent.com/griffisben/AFL-Radars/refs/heads/main/Player-Data/AFL/2024.csv")
+df = pd.read_csv(f"https://raw.githubusercontent.com/griffisben/AFL-Radars/refs/heads/main/Player-Data/{league}/{season}.csv")
 df = df.dropna(subset=['player_position']).reset_index(drop=True)
 df['possessions'] = df['contested_possessions']+df['uncontested_possessions']
 if league == 'AFL':
@@ -17,7 +22,7 @@ df['points'] = (df['goals']*6)+(df['behinds'])
 df['points_per_shot'] = df['points']/df['shots_at_goal']
 df['points_per_shot'] = [0 if df['shots_at_goal'][i]==0 else df['points'][i]/df['shots_at_goal'][i] for i in range(len(df))]
 
-df = df[df['PctOfSeason']>=.6].reset_index(drop=True)
+df = df[df['PctOfSeason']>=mins/100].reset_index(drop=True)
 
 # Define position-to-stat mapping with exact column names
 position_stats = {

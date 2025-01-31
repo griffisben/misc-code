@@ -30,7 +30,7 @@ df = df[df['PctOfSeason']>=mins/100].reset_index(drop=True)
 st.title("AFL Metric Weighting & Ranking System")
 
 # Create tabs
-ranking_system = st.tabs(["Metric Weighting & Ranking"])
+ranking_system, other = st.tabs(["Metric Weighting & Ranking", "Other"])
 
 # Metric Weighting & Ranking Tab
 with ranking_system:

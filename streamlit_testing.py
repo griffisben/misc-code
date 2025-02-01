@@ -2698,6 +2698,7 @@ with scatter_tab:
 
 with ranking_tab:
     ranking_df = clean_df.copy()
+    ranking_df = ranking_df[ranking_df['Minutes played']>=mins]
     with st.form('Position & Metric Rankings'):
         submitted = st.form_submit_button("Submit Positions & Metrics")
         rank_pos = st.multiselect('Positions to Include (leave blank for all)', ['Strikers', 'Wingers', 'Attacking Midfielders', 'Central Midfielders', 'Defensive Midfielders', 'FBs & WBs', 'Center Backs', 'Goalkeepers'])

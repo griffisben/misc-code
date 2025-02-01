@@ -2731,7 +2731,8 @@ with ranking_tab:
 
         # Display results
         st.write("Normalized Weighted Z-Score Player Rankings")
-        st.dataframe(df_filtered.sort_values("Score", ascending=False)[["Player","Team","Primary position","Score",] + metrics].style.applymap(color_percentile_100, subset=df_filtered.sort_values("Score", ascending=False)[["Player","Team","Position(s)",'TOG%',"Score",] + metrics].columns[4:]))
+        rank_df_final_choice = df_filtered.sort_values("Score", ascending=False)[["Wyscout id","Player","Team","Main Position","Score",] + metrics]
+        st.dataframe(rank_df_final_choice.style.applymap(color_percentile_100, subset=rank_df_final_choice.columns[4:]))
 
 
 with notes_tab:

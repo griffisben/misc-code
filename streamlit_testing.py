@@ -2712,13 +2712,13 @@ with ranking_tab:
         tiers_rankings = st.multiselect("Tiers to include (leave blank to include all)", ('1','2','3','4','5','6','Youth'))
 
     if geo_input_ranking == 'League':
-        with st.form('Time Frame Filters, League'):
+        with st.form('Time Frame Filters, League Ranking'):
             similar_player_lg_lookup_ranking['League-Season'] = similar_player_lg_lookup_ranking.League + " " + similar_player_lg_lookup_ranking.Season
             submitted = st.form_submit_button("Submit Seasons")
             time_frame_ranking = st.multiselect('League-Seasons', (similar_player_lg_lookup_ranking[similar_player_lg_lookup_ranking.League.isin(region_ranking)].sort_values(by=['Country','Tier','Season'],ascending=[True,True,False])['League-Season'].tolist()), default='Danish 1. Division 24-25')
     
     if geo_input_ranking != 'League':
-        with st.form('Time Frame Filters, Non-League'):
+        with st.form('Time Frame Filters, Non-League Ranking'):
             submitted = st.form_submit_button("Submit Seasons")
             time_frame_ranking = st.multiselect('League-Seasons', (sorted(similar_player_lg_lookup_ranking.Season.unique().tolist(), reverse=True)), default='24-25')
 

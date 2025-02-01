@@ -2731,9 +2731,9 @@ with ranking_tab:
         df_filtered["Score"] = df_filtered[metrics].apply(lambda row: sum(row[metric] * weights[metric] for metric in metrics), axis=1)
         min_score = df_filtered["Score"].min()
         max_score = df_filtered["Score"].max()
-        df_filtered["Score"] = (df_filtered["Score"] - min_score) / (max_score - min_score) * 100
+        df_filtered["Score"] = round((df_filtered["Score"] - min_score) / (max_score - min_score) * 100,2)
         for metric in metrics:
-            df_filtered[metric] = df_filtered[f'{metric} raw']
+            df_filtered[metric] = round(df_filtered[f'{metric} raw'],2)
 
         # Display results
         st.write("Normalized Weighted Z-Score Player Rankings")

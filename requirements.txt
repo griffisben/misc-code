@@ -13,3 +13,4 @@ mplsoccer
 adjustText
 scikit-learn
 vega_datasets
+pycountry

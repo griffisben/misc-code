@@ -2736,7 +2736,7 @@ with ranking_tab:
         st.write("Normalized Weighted Z-Score Player Rankings")
         st.write("Score & Metric columns are all shown as normalized Z-scores, so between 0 (lowest value) and 100 (highest value)")
         rank_df_final_choice = df_filtered.sort_values("Score", ascending=False)[["Wyscout id","Player","Team","Age","Main Position","Minutes played","Score",] + metrics]
-        st.dataframe(rank_df_final_choice.style.applymap(color_percentile_100, subset=rank_df_final_choice['Score']))
+        st.dataframe(rank_df_final_choice.style.applymap(color_percentile_100, subset=rank_df_final_choice.columns[6]))
 
 
 with notes_tab:

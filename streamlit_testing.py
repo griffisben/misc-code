@@ -2697,14 +2697,48 @@ with scatter_tab:
     st.plotly_chart(fig_scatter, theme=None, use_container_width=False)
 
 with ranking_tab:
-    ranking_df = clean_df.copy()
-    ranking_df = ranking_df[ranking_df['Minutes played']>=mins]
-    ranking_df['Age'] = ranking_df['Age'].astype(int)
-    with st.form('Position & Metric Rankings'):
+    with st.form('Geo Selection for Ranking'):
+        submitted = st.form_submit_button("Submit League Choice(s)")
+        similar_player_lg_lookup_ranking = pd.read_csv('https://raw.githubusercontent.com/griffisben/Wyscout_Prospect_Research/main/league_info_lookup.csv')
+        geo_input_ranking = st.selectbox("Geography Region", ('League','Country',"Region",'Continent'))
+        geo_mapping_ranking = {
+            'Region': 'Nordics',
+            'Country': 'Denmark',
+            'Continent': 'Europe',
+            'League': 'Danish 1. Division'
+        }
+        default_region_area_ranking = geo_mapping_ranking.get(geo_input_ranking, 'Unknown')
+        region_ranking = st.multiselect(f"{geo_input_filters}(s) to include (leave blank to include all)", similar_player_lg_lookup_ranking[geo_input_ranking].unique().tolist(), default=default_region_area_ranking)
+        tiers_rankings = st.multiselect("Tiers to include (leave blank to include all)", ('1','2','3','4','5','6','Youth'))
+
+    if geo_input_ranking == 'League':
+        with st.form('Time Frame Filters, League'):
+            similar_player_lg_lookup_ranking['League-Season'] = similar_player_lg_lookup_ranking.League + " " + similar_player_lg_lookup_ranking.Season
+            submitted = st.form_submit_button("Submit Seasons")
+            time_frame_ranking = st.multiselect('League-Seasons', (similar_player_lg_lookup_ranking[similar_player_lg_lookup_ranking.League.isin(region_ranking)].sort_values(by=['Country','Tier','Season'],ascending=[True,True,False])['League-Season'].tolist()), default='Danish 1. Division 24-25')
+    
+    if geo_input_ranking != 'League':
+        with st.form('Time Frame Filters, Non-League'):
+            submitted = st.form_submit_button("Submit Seasons")
+            time_frame_ranking = st.multiselect('League-Seasons', (sorted(similar_player_lg_lookup_ranking.Season.unique().tolist(), reverse=True)), default='24-25')
+
+    try:
+        print(f"SELECTED OPTIONS:\nGeography Region: {geo_input_filters}\nArea: {region_filters}\nTiers: {tiers_filters}\nTime Frame: {time_frame_filters}\nPosition(s): {pos_select_filters}")
+    except:
+        geo_input_ranking='League',
+        region_ranking='Danish 1. Division',
+        tiers_rankings=[],
+        time_frame_ranking='Danish 1. Division 24-25'
+    
+    with st.form('Position and Metric Selections Ranking'):
         submitted = st.form_submit_button("Submit Positions & Metrics")
         rank_pos = st.multiselect('Positions to Include (leave blank for all)', ['Strikers', 'Wingers', 'Attacking Midfielders', 'Central Midfielders', 'Defensive Midfielders', 'FBs & WBs', 'Center Backs', 'Goalkeepers'])
         vars = clean_df.columns[19:-1].tolist()
         metrics = st.multiselect("Choose metrics to include:", vars)
+
+    ranking_df = prep_similarity_df(geo_input, region, tiers, time_frame)
+    ranking_df = ranking_df[ranking_df['Minutes played']>=mins]
+    ranking_df['Age'] = ranking_df['Age'].astype(int)
 
     if rank_pos != []:
         player_pos_arg = ws_pos_compare_groups[ws_pos_compare_groups.compare_positions.isin(rank_pos)].ws_pos.tolist()
@@ -2737,7 +2771,6 @@ with ranking_tab:
 
         # Display results
         st.write("Normalized Weighted Z-Score Player Rankings")
-        st.write("Score & Metric columns are all shown as normalized Z-scores, so between 0 (lowest value) and 100 (highest value)")
         rank_df_final_choice = df_filtered.sort_values("Score", ascending=False)[["Wyscout id","Player","Team","Age","Main Position","Minutes played","Score",] + metrics]
         st.dataframe(rank_df_final_choice.style.applymap(color_percentile_100, subset=rank_df_final_choice.columns[6]))
 

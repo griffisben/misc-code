@@ -660,7 +660,7 @@ with st.expander('Instructions'):
     **Sidebar:**  \n
     1) Choose the league (AFL only for now, but I'm working on adding AFLW & VFL)  \n
     2) Select your desired season  \n
-    3) Set the minimum time on ground % for players to have played to be included  \n  \n
+    3) Set the minimum time on ground % for players to have played to be included. This is for the season, so a % of all available minutes for a player's team, not their TOG% per game  \n  \n
     **Player Radar Tab:**  \n
     1) Choose the positions to benchmark against (leave blank for all players, or choose 1 or more positions to _only_ include those position - no matter what position(s) you choose, the player you select will be included)  \n
     2) Decide if you want the data labels to be per game (per 80 minutes) numbers for each metric, or the player's percentile rank  \n
@@ -681,7 +681,11 @@ with st.expander('Instructions'):
     3) Submit these options, and sliders will appear below for you to set your weightings  \n
     4) Set weights for your metrics. These are used to create weighted, normalized z-scores using all of the included metrics. In the table, the metrics will be 0 to 100, with the player recording the lowest value receiving 0, and the highest value 100. These normalized z-scores are thus easy to interpret across metrics while retaining the distribution of the raw scores  \n
     5) Submit these weightings and a table will appear showing the final, normalized weighted z-score ranking of players for your specified model. The 'Score' column will always be between 0 and 100: the player with 100 is the player with the largest weighted score, and the player with 0 is the one with the lowest. Again, the use of z-scores allows us to retain the distribution of weighted scores  \n
-    6) We can interpret a player scoring 100 as the best player (in the given position(s) if applicable) that year in your specified model. And a player with a score of 73 could theoretically be 73% as good as that best player 
+    6) We can interpret a player scoring 100 as the best player (in the given position(s) if applicable) that year in your specified model. And a player with a score of 73 could theoretically be 73% as good as that best player  \n
+    **Game-By-Game Metrics Tab**  \n
+    1) Enter the player you want to see game-by-game numbers for  \n
+    2) Select the metric you want to visualize by each game  \n
+    3) Choose whether you want to adjust the metrics to 85% time on ground. This might make it a little easier to compare game to game. For example, if a player was on ground for 95% of a game, their data would be adjusted down. Conversely, if a player played less than 85%, their numbers for that game would be adjusted up
 """)
 
 avail_data = pd.read_csv(f"https://raw.githubusercontent.com/griffisben/AFL-Radars/refs/heads/main/AvailableData.csv")
@@ -689,7 +693,7 @@ avail_data = pd.read_csv(f"https://raw.githubusercontent.com/griffisben/AFL-Rada
 with st.sidebar:
     league = st.selectbox('League', avail_data.Competition.unique().tolist())
     season = st.selectbox('Season', sorted(avail_data[avail_data.Competition==league].Season.tolist(),reverse=True))
-    mins = st.number_input('Minimum Time On Ground %', 0, 100, 60, 1)
+    mins = st.number_input('Minimum Time On Ground % (season, not per game)', 0, 100, 60, 1)
 
 extra_text = avail_data[(avail_data.Competition==league) & (avail_data.Season==season)].DataTime.values[0]
 

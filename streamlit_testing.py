@@ -2720,6 +2720,7 @@ with ranking_tab:
         df_filtered = ranking_df.copy()
         df_filtered[metrics] = df_filtered[metrics].apply(stats.zscore, nan_policy='omit')
         for metric in metrics:
+            df_filtered[f'{metric} raw'] = df_filtered[metric]
             df_filtered[metric] = df_filtered[metric] + abs(df_filtered[metric].min())
             df_filtered[metric] = NormalizeData(df_filtered[metric])
             
@@ -2728,11 +2729,14 @@ with ranking_tab:
         min_score = df_filtered["Score"].min()
         max_score = df_filtered["Score"].max()
         df_filtered["Score"] = (df_filtered["Score"] - min_score) / (max_score - min_score) * 100
+        for metric in metrics:
+            df_filtered[metric] = df_filtered[f'{metric} raw']
 
         # Display results
         st.write("Normalized Weighted Z-Score Player Rankings")
+        st.write("Score & Metric columns are all shown as normalized Z-scores, so between 0 (lowest value) and 100 (highest value)")
         rank_df_final_choice = df_filtered.sort_values("Score", ascending=False)[["Wyscout id","Player","Team","Age","Main Position","Minutes played","Score",] + metrics]
-        st.dataframe(rank_df_final_choice.style.applymap(color_percentile_100, subset=rank_df_final_choice.columns[6:]))
+        st.dataframe(rank_df_final_choice.style.applymap(color_percentile_100, subset=rank_df_final_choice['Score']))
 
 
 with notes_tab:

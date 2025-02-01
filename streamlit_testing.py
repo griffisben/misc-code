@@ -2718,9 +2718,10 @@ with ranking_tab:
         
         # Normalize data using z-score
         df_filtered = ranking_df.copy()
-        df_filtered[metrics] = df_filtered[metrics].apply(stats.zscore, nan_policy='omit')
         for metric in metrics:
             df_filtered[f'{metric} raw'] = df_filtered[metric]
+        df_filtered[metrics] = df_filtered[metrics].apply(stats.zscore, nan_policy='omit')
+        for metric in metrics:
             df_filtered[metric] = df_filtered[metric] + abs(df_filtered[metric].min())
             df_filtered[metric] = NormalizeData(df_filtered[metric])
             

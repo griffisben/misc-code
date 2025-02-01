@@ -2736,7 +2736,7 @@ with ranking_tab:
         vars = clean_df.columns[19:-1].tolist()
         metrics = st.multiselect("Choose metrics to include:", vars)
 
-    ranking_df = prep_similarity_df(geo_input, region, tiers, time_frame)
+    ranking_df = prep_similarity_df_filters(geo_input, region, tiers, time_frame)
     ranking_df = ranking_df[ranking_df['Minutes played']>=mins]
     ranking_df['Age'] = ranking_df['Age'].astype(int)
 

@@ -2688,7 +2688,7 @@ with ranking_tab:
     with st.form('Position & Metric Rankings'):
         submitted = st.form_submit_button("Submit Positions & Metrics")
         rank_pos = st.multiselect('Positions to Include (leave blank for all)', ['Strikers', 'Wingers', 'Attacking Midfielders', 'Central Midfielders', 'Defensive Midfielders', 'FBs & WBs', 'Center Backs', 'Goalkeepers'])
-        vars = clean_df.columns[0:].tolist()
+        vars = clean_df.columns[19:-1].tolist()
         metrics = st.multiselect("Choose metrics to include:", vars)
 
     if rank_pos != []:

@@ -32,6 +32,8 @@ country_numeric_code_lookup = {country.name: country.numeric for country in pyco
 
 @st.cache_data(ttl=60*15)
 
+def NormalizeData(data):
+    return (data - np.min(data)) / (np.max(data) - np.min(data)) * 100
 
 def prep_similarity_df(geo_input, region, tiers, time_frame):
     sim_lg_lookup = pd.read_csv('https://raw.githubusercontent.com/griffisben/Wyscout_Prospect_Research/main/league_info_lookup.csv')

@@ -45,7 +45,7 @@ pass_types = st.sidebar.multiselect("Select Pass Types", ["Complete", "Incomplet
 
 # Apply Event Type Filters
 if event_types:
-    type_map = {"Pass": 1, "Shot": [13, 14, 15, 16], "Tackle": 7, "Interception": 8, "Dribble": 3, "Aerial": 44, "Missed Tackle": [45, 83], "Ball Recovery": 49, "Blocked Pass": 74}
+    type_map = {"Pass": 1, "Shot": [13, 14, 15, 16], "Dribble": 3, "Tackle": 7, "Interception": 8, "Aerial": 44, "Ball Recovery": 49, "Blocked Pass": 74, "Missed Tackle": [45, 83]}
     selected_ids = [type_map[event] for event in event_types]
     selected_ids = [x if isinstance(x, list) else [x] for x in selected_ids]
     selected_ids = [item for sublist in selected_ids for item in sublist]
@@ -75,8 +75,8 @@ fig.set_facecolor('#fbf9f4')
 cmp_color = '#4c94f6'
 inc_color = 'silver'
 key_color = '#f6ba00'
-won_aerial_color = 'tab:blue'
-lost_aerial_color = 'tab:orange'
+won_color = 'tab:blue'
+lost_color = 'tab:orange'
 
 # Plot Events
 for _, row in filtered_df.iterrows():
@@ -98,9 +98,10 @@ for _, row in filtered_df.iterrows():
     elif row['typeId'] == 8:  # Interceptions
         pitch.scatter(row['x'], row['y'], ax=axs['pitch'], color='tab:blue', marker='s', s=45)
     elif row['typeId'] == 3:  # Dribbles
-        pitch.scatter(row['x'], row['y'], ax=axs['pitch'], color='green', marker='>', s=45)
+        dribble_color = won_color if row['outcome'] == 1 else lost_color
+        pitch.scatter(row['x'], row['y'], ax=axs['pitch'], color=dribble_color, marker='>', s=45)
     elif row['typeId'] == 44:  # Aerials
-        aerial_color = won_aerial_color if row['outcome'] == 1 else lost_aerial_color
+        aerial_color = won_color if row['outcome'] == 1 else lost_color
         pitch.scatter(row['x'], row['y'], ax=axs['pitch'], color=aerial_color, marker='^', s=45)
     elif row['typeId'] == 49:  # Ball Recoveries
         pitch.scatter(row['x'], row['y'], ax=axs['pitch'], color='k', marker='x', s=45)

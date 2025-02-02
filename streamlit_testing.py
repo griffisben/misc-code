@@ -64,7 +64,7 @@ if pass_types:
         filtered_df = filtered_df[~((filtered_df["typeId"] == 1) & ((filtered_df["assist"] == 1) | (filtered_df["keyPass"] == 1)))]
 
 # Draw Pitch
-pitch = Pitch(pitch_type='opta', pitch_color='#fbf9f4', line_color='#4A2E19', line_zorder=2, half=False)
+pitch = Pitch(pitch_type='opta', pitch_color='#fbf9f4', line_color='#4A2E19', line_zorder=0, half=False)
 fig, axs = pitch.grid(endnote_height=0.045, endnote_space=0, figheight=12,
                       title_height=0.045, title_space=0,
                       axis=False,

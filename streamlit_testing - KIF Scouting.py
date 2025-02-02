@@ -32,6 +32,8 @@ country_numeric_code_lookup = {country.name: country.numeric for country in pyco
 
 @st.cache_data(ttl=60*15)
 
+def NormalizeData(data):
+    return (data - np.min(data)) / (np.max(data) - np.min(data)) * 100
 
 def prep_similarity_df(geo_input, region, tiers, time_frame):
     sim_lg_lookup = pd.read_csv('https://raw.githubusercontent.com/griffisben/Wyscout_Prospect_Research/main/league_info_lookup.csv')
@@ -143,23 +145,7 @@ def prep_similarity_df_filters(geo_input, region, tiers, time_frame):
             sim_lg_lookup = sim_lg_lookup.sort_values(by=['Season'],ascending=False)
         else:
             sim_lg_lookup = sim_lg_lookup[sim_lg_lookup.League.isin(region)].sort_values(by=['Season'],ascending=False)
-        sim_lg_lookup = sim_lg_lookup[sim_lg_lookup['League-Season'].isin(time_frame)]
-        
-
-    # sim_lg_lookup_recent = sim_lg_lookup.drop_duplicates(subset=['League','Country'])
-    # sim_lg_lookup_recent2 = sim_lg_lookup.drop(sim_lg_lookup_recent.index)
-    # sim_lg_lookup_recent2 = sim_lg_lookup_recent2.drop_duplicates(subset=['League','Country'])
-    # sim_lg_lookup_recent_last2 = pd.concat([sim_lg_lookup_recent,sim_lg_lookup_recent2],ignore_index=True)
-    # sim_lg_lookup_recent.reset_index(drop=True,inplace=True)
-    # sim_lg_lookup_recent2.reset_index(drop=True,inplace=True)
-    
-    # if time_frame == 'Current Season':
-    #     sim_lg_lookup = sim_lg_lookup_recent
-    # if time_frame == 'Prior Season':
-    #     sim_lg_lookup = sim_lg_lookup_recent2
-    # if time_frame == 'Current & Prior Seasons':
-    #     sim_lg_lookup = sim_lg_lookup_recent_last2
-        
+        sim_lg_lookup = sim_lg_lookup[sim_lg_lookup['League-Season'].isin(time_frame)]        
     
     dfs = []
     char_replacements = str.maketrans({" ": "%20", "ü": "u", "ó": "o", "ö": "o", "ã": "a", "ç": "c"})
@@ -413,6 +399,17 @@ def color_percentile(pc):
     elif 0.1 < 1-pc <= 0.35:
         color = ('#007f35', '#d9f0e3')  # Above Avg
     elif 0.35 < 1-pc <= 0.66:
+        color = ('#9b6700', '#fff2d9')  # Avg
+    else:
+        color = ('#b60918', '#fddbde')  # Below Avg
+
+    return f'background-color: {color[1]}'
+def color_percentile_100(pc):
+    if 100-pc <= 10:
+        color = ('#01349b', '#d9e3f6')  # Elite
+    elif 10 < 100-pc <= 35:
+        color = ('#007f35', '#d9f0e3')  # Above Avg
+    elif 35 < 100-pc <= 66:
         color = ('#9b6700', '#fff2d9')  # Avg
     else:
         color = ('#b60918', '#fddbde')  # Below Avg
@@ -2284,7 +2281,7 @@ def make_fig(ages,exp_contracts,rank_11_base,show_ranks2,season,lg,normalize_to_
 
 show_ranks = show_ranks[['Player','Team','Age','Squad Position','Player Pos.','Score','Role Rank']].copy()
 
-image_tab, table_tab, radar_tab, all_player_list_tab, similarity_tab, filter_tab, filter_table_tab, scatter_tab, notes_tab, map_tab = st.tabs(['Role Ranking Image', 'Role Ranking Table', 'Player Radar Generation', 'Player List', 'Similar Player Search', 'Player Search, Filters', 'Player Search, Results', 'Scatter Plots', 'Role Score Definitions & Calculations', 'Available Leagues'])
+image_tab, table_tab, radar_tab, all_player_list_tab, similarity_tab, filter_tab, filter_table_tab, scatter_tab,ranking_tab,  notes_tab, map_tab = st.tabs(['Role Ranking Image', 'Role Ranking Table', 'Player Radar Generation', 'Player List', 'Similar Player Search', 'Player Search, Filters', 'Player Search, Results', 'Scatter Plots', 'Custom Player Ranking Model', 'Role Score Definitions & Calculations', 'Available Leagues'])
 
 with image_tab:
     fig = make_fig(ages,exp_contracts,rank_11_base,show_ranks2,season,lg,normalize_to_100,team_text,chosen_nations)
@@ -2698,6 +2695,84 @@ with scatter_tab:
     fig_scatter.add_vline(x=dfProspect_scatter[xx].median(), name='Median', line_width=0.5)
     
     st.plotly_chart(fig_scatter, theme=None, use_container_width=False)
+
+with ranking_tab:
+    with st.form('Geo Selection for Ranking'):
+        submitted = st.form_submit_button("Submit League Choice(s)")
+        similar_player_lg_lookup_ranking = pd.read_csv('https://raw.githubusercontent.com/griffisben/Wyscout_Prospect_Research/main/league_info_lookup.csv')
+        geo_input_ranking = st.selectbox("Geography Region", ('League','Country',"Region",'Continent'))
+        geo_mapping_ranking = {
+            'Region': 'Nordics',
+            'Country': 'Denmark',
+            'Continent': 'Europe',
+            'League': 'Danish 1. Division'
+        }
+        default_region_area_ranking = geo_mapping_ranking.get(geo_input_ranking, 'Unknown')
+        region_ranking = st.multiselect(f"{geo_input_filters}(s) to include (leave blank to include all)", similar_player_lg_lookup_ranking[geo_input_ranking].unique().tolist(), default=default_region_area_ranking)
+        tiers_rankings = st.multiselect("Tiers to include (leave blank to include all)", ('1','2','3','4','5','6','Youth'))
+
+    if geo_input_ranking == 'League':
+        with st.form('Time Frame Filters, League Ranking'):
+            similar_player_lg_lookup_ranking['League-Season'] = similar_player_lg_lookup_ranking.League + " " + similar_player_lg_lookup_ranking.Season
+            submitted = st.form_submit_button("Submit Seasons")
+            time_frame_ranking = st.multiselect('League-Seasons', (similar_player_lg_lookup_ranking[similar_player_lg_lookup_ranking.League.isin(region_ranking)].sort_values(by=['Country','Tier','Season'],ascending=[True,True,False])['League-Season'].tolist()), default='Danish 1. Division 24-25')
+    
+    if geo_input_ranking != 'League':
+        with st.form('Time Frame Filters, Non-League Ranking'):
+            submitted = st.form_submit_button("Submit Seasons")
+            time_frame_ranking = st.multiselect('League-Seasons', (sorted(similar_player_lg_lookup_ranking.Season.unique().tolist(), reverse=True)), default='24-25')
+
+    try:
+        print(f"SELECTED OPTIONS:\nGeography Region: {geo_input_filters}\nArea: {region_filters}\nTiers: {tiers_filters}\nTime Frame: {time_frame_filters}\nPosition(s): {pos_select_filters}")
+    except:
+        geo_input_ranking='League',
+        region_ranking='Danish 1. Division',
+        tiers_rankings=[],
+        time_frame_ranking='Danish 1. Division 24-25'
+    
+    with st.form('Position and Metric Selections Ranking'):
+        submitted = st.form_submit_button("Submit Positions & Metrics")
+        rank_pos = st.multiselect('Positions to Include (leave blank for all)', ['Strikers', 'Wingers', 'Attacking Midfielders', 'Central Midfielders', 'Defensive Midfielders', 'FBs & WBs', 'Center Backs', 'Goalkeepers'])
+        vars = clean_df.columns[19:-1].tolist()
+        metrics = st.multiselect("Choose metrics to include:", vars)
+
+    ranking_df = prep_similarity_df_filters(geo_input_ranking, region_ranking, tiers_rankings, time_frame_ranking)
+    ranking_df = ranking_df[ranking_df['Minutes played']>=mins]
+    ranking_df['Age'] = ranking_df['Age'].astype(int)
+
+    if rank_pos != []:
+        player_pos_arg = ws_pos_compare_groups[ws_pos_compare_groups.compare_positions.isin(rank_pos)].ws_pos.tolist()
+        ranking_df = ranking_df[ranking_df['Primary position'].isin(player_pos_arg)]
+        
+    if metrics:
+        # User assigns weights
+        with st.form('Metric Weightings'):
+            submitted = st.form_submit_button("Submit Metric Weightings")
+            weights = {}
+            for metric in metrics:
+                weights[metric] = st.slider(f"Weight for {metric}", 0.0, 1.0, 0.5, 0.05)
+        
+        # Normalize data using z-score
+        df_filtered = ranking_df.copy()
+        for metric in metrics:
+            df_filtered[f'{metric} raw'] = df_filtered[metric]
+        df_filtered[metrics] = df_filtered[metrics].apply(stats.zscore, nan_policy='omit')
+        for metric in metrics:
+            df_filtered[metric] = df_filtered[metric] + abs(df_filtered[metric].min())
+            df_filtered[metric] = NormalizeData(df_filtered[metric])
+            
+        # Compute weighted z-score ranking
+        df_filtered["Score"] = df_filtered[metrics].apply(lambda row: sum(row[metric] * weights[metric] for metric in metrics), axis=1)
+        min_score = df_filtered["Score"].min()
+        max_score = df_filtered["Score"].max()
+        df_filtered["Score"] = round((df_filtered["Score"] - min_score) / (max_score - min_score) * 100,2)
+        for metric in metrics:
+            df_filtered[metric] = round(df_filtered[f'{metric} raw'],2)
+
+        # Display results
+        st.write("Normalized Weighted Z-Score Player Rankings")
+        rank_df_final_choice = df_filtered.sort_values("Score", ascending=False)[["Wyscout id","Player","Team","Age","Main Position","Minutes played","Score",] + metrics]
+        st.dataframe(rank_df_final_choice.style.applymap(color_percentile_100, subset=rank_df_final_choice.columns[6]))
 
 
 with notes_tab:

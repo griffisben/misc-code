@@ -24,14 +24,14 @@ match = st.sidebar.selectbox("Select Match", team_matches)
 team_match_players = df[(df["Team"] == team) & (df["Match"] == match)]["playerName"].unique()
 players = st.sidebar.multiselect("Select Players", team_match_players)
 
-event_types = st.sidebar.multiselect("Select Event Types", ["Pass", "Shot", "Tackle", "Interception", "Dribble"])
+event_types = st.sidebar.multiselect("Select Event Types", ["Pass", "Shot", "Tackle", "Interception", "Dribble", "Aerial", "Missed Tackle", "Ball Recovery", "Blocked Pass"])
 
 # Filter Data
 filtered_df = df[(df["Team"] == team) & (df["Match"] == match)]
 if players:
     filtered_df = filtered_df[filtered_df["playerName"].isin(players)]
 if event_types:
-    type_map = {"Pass": 1, "Shot": [13, 14, 15, 16], "Tackle": 7, "Interception": 8, "Dribble": 3}
+    type_map = {"Pass": 1, "Shot": [13, 14, 15, 16], "Tackle": 7, "Interception": 8, "Dribble": 3, "Aerial": 44, "Missed Tackle": [45, 83], "Ball Recovery": 49, "Blocked Pass": 74}
     selected_ids = [type_map[event] for event in event_types]
     selected_ids = [x if isinstance(x, list) else [x] for x in selected_ids]
     selected_ids = [item for sublist in selected_ids for item in sublist]
@@ -46,14 +46,19 @@ fig, axs = pitch.grid(endnote_height=0.045, endnote_space=0, figheight=12,
 fig.set_facecolor('#fbf9f4')
 
 # Define colors for event types
-cmp_color = 'blue'
+cmp_color = '#4c94f6'
+inc_color = 'silver'
+key_color = '#f6ba00'
 
 # Plot Events
 for _, row in filtered_df.iterrows():
     if row['typeId'] == 1:  # Passes (Comet style)
+        pass_color = cmp_color if row['outcome'] == 1 else inc_color
+        if row.get('assist', 0) == 1 or row.get('keyPass', 0) == 1:
+            pass_color = key_color
         pitch.lines(row['x'], row['y'], row['endX'], row['endY'],
-                    comet=True, alpha=0.3, lw=4, color=cmp_color, ax=axs['pitch'])
-        pitch.scatter(row['endX'], row['endY'], s=30, c=cmp_color, zorder=2, ax=axs['pitch'])
+                    comet=True, alpha=0.3, lw=4, color=pass_color, ax=axs['pitch'])
+        pitch.scatter(row['endX'], row['endY'], s=30, c=pass_color, zorder=2, ax=axs['pitch'])
     elif row['typeId'] in [13, 14, 15, 16]:  # Shots
         pitch.scatter(row['x'], row['y'], ax=axs['pitch'], color='red', s=100 * row.get('xG', 0.05))
     elif row['typeId'] == 7:  # Tackles
@@ -62,5 +67,13 @@ for _, row in filtered_df.iterrows():
         pitch.scatter(row['x'], row['y'], ax=axs['pitch'], color='purple', marker='s')
     elif row['typeId'] == 3:  # Dribbles
         pitch.scatter(row['x'], row['y'], ax=axs['pitch'], color='orange', marker='D')
+    elif row['typeId'] == 44:  # Aerials
+        pitch.scatter(row['x'], row['y'], ax=axs['pitch'], color='cyan', marker='^')
+    elif row['typeId'] in [45, 83]:  # Missed Tackles
+        pitch.scatter(row['x'], row['y'], ax=axs['pitch'], color='pink', marker='x')
+    elif row['typeId'] == 49:  # Ball Recoveries
+        pitch.scatter(row['x'], row['y'], ax=axs['pitch'], color='brown', marker='o')
+    elif row['typeId'] == 74:  # Blocked Passes
+        pitch.scatter(row['x'], row['y'], ax=axs['pitch'], color='gray', marker='s')
 
 st.pyplot(fig)

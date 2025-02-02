@@ -92,20 +92,20 @@ for _, row in filtered_df.iterrows():
     elif row['typeId'] in [13, 14, 15]:  # Goals
         pitch.scatter(row['x'], row['y'], ax=axs['pitch'], color='gold', ec='k', s=200 * row.get('xG', 0.05))
     elif row['typeId'] == 7:  # Tackles
-        pitch.scatter(row['x'], row['y'], ax=axs['pitch'], color='tab:blue', marker='D', s=45)
+        pitch.scatter(row['x'], row['y'], ax=axs['pitch'], color='tab:blue', marker='D', s=65)
     elif row['typeId'] in [45, 83]:  # Missed Tackles
-        pitch.scatter(row['x'], row['y'], ax=axs['pitch'], color='tab:orange', marker='D', s=45)
+        pitch.scatter(row['x'], row['y'], ax=axs['pitch'], color='tab:orange', marker='D', s=65)
     elif row['typeId'] == 8:  # Interceptions
-        pitch.scatter(row['x'], row['y'], ax=axs['pitch'], color='tab:blue', marker='s', s=45)
+        pitch.scatter(row['x'], row['y'], ax=axs['pitch'], color='tab:blue', marker='s', s=65)
     elif row['typeId'] == 3:  # Dribbles
         dribble_color = won_color if row['outcome'] == 1 else lost_color
-        pitch.scatter(row['x'], row['y'], ax=axs['pitch'], color=dribble_color, marker='>', s=45)
+        pitch.scatter(row['x'], row['y'], ax=axs['pitch'], color=dribble_color, marker='>', s=65)
     elif row['typeId'] == 44:  # Aerials
         aerial_color = won_color if row['outcome'] == 1 else lost_color
-        pitch.scatter(row['x'], row['y'], ax=axs['pitch'], color=aerial_color, marker='^', s=45)
+        pitch.scatter(row['x'], row['y'], ax=axs['pitch'], color=aerial_color, marker='^', s=65)
     elif row['typeId'] == 49:  # Ball Recoveries
-        pitch.scatter(row['x'], row['y'], ax=axs['pitch'], color='k', marker='x', s=45)
+        pitch.scatter(row['x'], row['y'], ax=axs['pitch'], color='k', marker='x', s=65)
     elif row['typeId'] == 74:  # Blocked Passes
-        pitch.scatter(row['x'], row['y'], ax=axs['pitch'], color='silver', marker='<', s=45)
+        pitch.scatter(row['x'], row['y'], ax=axs['pitch'], color='silver', marker='<', s=65)
 
 st.pyplot(fig)

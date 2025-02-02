@@ -45,10 +45,15 @@ fig, axs = pitch.grid(endnote_height=0.045, endnote_space=0, figheight=12,
                       grid_height=0.86)
 fig.set_facecolor('#fbf9f4')
 
+# Define colors for event types
+cmp_color = 'blue'
+
 # Plot Events
 for _, row in filtered_df.iterrows():
-    if row['typeId'] == 1:  # Passes
-        pitch.arrows(row['x'], row['y'], row['endX'], row['endY'], ax=axs['pitch'], color='blue', width=2)
+    if row['typeId'] == 1:  # Passes (Comet style)
+        pitch.lines(row['x'], row['y'], row['endX'], row['endY'],
+                    comet=True, alpha=0.3, lw=4, color=cmp_color, ax=axs['pitch'])
+        pitch.scatter(row['endX'], row['endY'], s=30, c=cmp_color, zorder=2, ax=axs['pitch'])
     elif row['typeId'] in [13, 14, 15, 16]:  # Shots
         pitch.scatter(row['x'], row['y'], ax=axs['pitch'], color='red', s=100 * row.get('xG', 0.05))
     elif row['typeId'] == 7:  # Tackles

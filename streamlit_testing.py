@@ -89,7 +89,7 @@ for _, row in filtered_df.iterrows():
         pitch.scatter(row['endX'], row['endY'], s=45, c=pass_color, zorder=2, ax=axs['pitch'])
     elif row['typeId'] in [13, 14, 15]:  # Shots
         pitch.scatter(row['x'], row['y'], ax=axs['pitch'], color='lightgrey', ec='k', s=(500 * row.get('xG', 0.05))+30)
-    elif row['typeId'] in [13, 14, 15]:  # Goals
+    elif row['typeId'] in [16]:  # Goals
         pitch.scatter(row['x'], row['y'], ax=axs['pitch'], color='gold', ec='k', s=(500 * row.get('xG', 0.05))+30)
     elif row['typeId'] == 7:  # Tackles
         pitch.scatter(row['x'], row['y'], ax=axs['pitch'], color='tab:blue', marker='D', s=65)

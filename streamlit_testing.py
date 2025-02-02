@@ -12,27 +12,38 @@ def load_data():
 
 df = load_data()
 
+# Sidebar Selection Mode
+st.sidebar.header("Visualization Mode")
+mode = st.sidebar.radio("Select Mode", ["Match View", "Player Season View"])
+
 # Sidebar Filters
 st.sidebar.header("Filters")
 team = st.sidebar.selectbox("Select Team", df["Team"].unique())
 
-# Filter matches based on team
-team_matches = df[df["Team"] == team]["Match"].unique()
-match = st.sidebar.selectbox("Select Match", team_matches)
+if mode == "Match View":
+    # Filter matches based on team
+    team_matches = df[df["Team"] == team]["Match"].unique()
+    match = st.sidebar.selectbox("Select Match", team_matches)
+    
+    # Filter players based on team and match
+    team_match_players = df[(df["Team"] == team) & (df["Match"] == match)]["playerName"].unique()
+    players = st.sidebar.multiselect("Select Players", team_match_players)
+    
+    filtered_df = df[(df["Team"] == team) & (df["Match"] == match)]
+    if players:
+        filtered_df = filtered_df[filtered_df["playerName"].isin(players)]
+else:
+    # Player Season View
+    team_players = df[df["Team"] == team]["playerName"].unique()
+    player = st.sidebar.selectbox("Select Player", team_players)
+    filtered_df = df[(df["Team"] == team) & (df["playerName"] == player)]
 
-# Filter players based on team and match
-team_match_players = df[(df["Team"] == team) & (df["Match"] == match)]["playerName"].unique()
-players = st.sidebar.multiselect("Select Players", team_match_players)
-
+# Event Type Filters
 event_types = st.sidebar.multiselect("Select Event Types", ["Pass", "Shot", "Tackle", "Interception", "Dribble", "Aerial", "Missed Tackle", "Ball Recovery", "Blocked Pass"])
-
 include_set_pieces = st.sidebar.checkbox("Include Set Piece Passes/Shots", value=True)
 pass_types = st.sidebar.multiselect("Select Pass Types", ["Complete", "Incomplete", "Shot Assist"])
 
-# Filter Data
-filtered_df = df[(df["Team"] == team) & (df["Match"] == match)]
-if players:
-    filtered_df = filtered_df[filtered_df["playerName"].isin(players)]
+# Apply Event Type Filters
 if event_types:
     type_map = {"Pass": 1, "Shot": [13, 14, 15, 16], "Tackle": 7, "Interception": 8, "Dribble": 3, "Aerial": 44, "Missed Tackle": [45, 83], "Ball Recovery": 49, "Blocked Pass": 74}
     selected_ids = [type_map[event] for event in event_types]

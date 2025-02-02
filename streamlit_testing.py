@@ -26,6 +26,9 @@ players = st.sidebar.multiselect("Select Players", team_match_players)
 
 event_types = st.sidebar.multiselect("Select Event Types", ["Pass", "Shot", "Tackle", "Interception", "Dribble", "Aerial", "Missed Tackle", "Ball Recovery", "Blocked Pass"])
 
+include_set_pieces = st.sidebar.checkbox("Include Set Piece Passes/Shots", value=True)
+pass_types = st.sidebar.multiselect("Select Pass Types", ["Complete", "Incomplete", "Shot Assist"])
+
 # Filter Data
 filtered_df = df[(df["Team"] == team) & (df["Match"] == match)]
 if players:
@@ -36,6 +39,18 @@ if event_types:
     selected_ids = [x if isinstance(x, list) else [x] for x in selected_ids]
     selected_ids = [item for sublist in selected_ids for item in sublist]
     filtered_df = filtered_df[filtered_df["typeId"].isin(selected_ids)]
+
+if not include_set_pieces:
+    filtered_df = filtered_df[~((filtered_df["typeId"] == 1) & (filtered_df[["FK", "GK", "ThrowIn", "Corner", "KickOff"]].sum(axis=1) > 0))]
+    filtered_df = filtered_df[~((filtered_df["typeId"].between(13, 16)) & (filtered_df["Corner"] == 1))]
+
+if pass_types:
+    if "Complete" not in pass_types:
+        filtered_df = filtered_df[~((filtered_df["typeId"] == 1) & (filtered_df["outcome"] == 1) & (filtered_df["assist"] != 1) & (filtered_df["keyPass"] != 1))]
+    if "Incomplete" not in pass_types:
+        filtered_df = filtered_df[~((filtered_df["typeId"] == 1) & (filtered_df["outcome"] == 0))]
+    if "Shot Assist" not in pass_types:
+        filtered_df = filtered_df[~((filtered_df["typeId"] == 1) & ((filtered_df["assist"] == 1) | (filtered_df["keyPass"] == 1)))]
 
 # Draw Pitch
 pitch = Pitch(pitch_type='opta', pitch_color='#fbf9f4', line_color='#4A2E19', line_zorder=2, half=False)
@@ -55,7 +70,6 @@ lost_aerial_color = 'red'
 # Plot Events
 for _, row in filtered_df.iterrows():
     if row['typeId'] == 1:  # Passes (Comet style)
-        is_set_piece = row[['FK', 'GK', 'ThrowIn', 'Corner', 'KickOff']].sum() > 0
         pass_color = cmp_color if row['outcome'] == 1 else inc_color
         if row.get('assist', 0) == 1 or row.get('keyPass', 0) == 1:
             pass_color = key_color

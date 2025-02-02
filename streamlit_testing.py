@@ -75,8 +75,8 @@ fig.set_facecolor('#fbf9f4')
 cmp_color = '#4c94f6'
 inc_color = 'silver'
 key_color = '#f6ba00'
-won_aerial_color = 'blue'
-lost_aerial_color = 'red'
+won_aerial_color = 'tab:blue'
+lost_aerial_color = 'tab:orange'
 
 # Plot Events
 for _, row in filtered_df.iterrows():
@@ -85,24 +85,26 @@ for _, row in filtered_df.iterrows():
         if row.get('assist', 0) == 1 or row.get('keyPass', 0) == 1:
             pass_color = key_color
         pitch.lines(row['x'], row['y'], row['endX'], row['endY'],
-                    comet=True, alpha=0.3, lw=4.8, color=pass_color, ax=axs['pitch'])
-        pitch.scatter(row['endX'], row['endY'], s=36, c=pass_color, zorder=2, ax=axs['pitch'])
-    elif row['typeId'] in [13, 14, 15, 16]:  # Shots
-        pitch.scatter(row['x'], row['y'], ax=axs['pitch'], color='red', s=120 * row.get('xG', 0.05))
+                    comet=True, alpha=0.3, lw=5, color=pass_color, ax=axs['pitch'])
+        pitch.scatter(row['endX'], row['endY'], s=45, c=pass_color, zorder=2, ax=axs['pitch'])
+    elif row['typeId'] in [13, 14, 15]:  # Shots
+        pitch.scatter(row['x'], row['y'], ax=axs['pitch'], color='lightgrey', ec='k', s=200 * row.get('xG', 0.05))
+    elif row['typeId'] in [13, 14, 15]:  # Goals
+        pitch.scatter(row['x'], row['y'], ax=axs['pitch'], color='gold', ec='k', s=200 * row.get('xG', 0.05))
     elif row['typeId'] == 7:  # Tackles
-        pitch.scatter(row['x'], row['y'], ax=axs['pitch'], color='green', marker='x', s=36)
+        pitch.scatter(row['x'], row['y'], ax=axs['pitch'], color='tab:blue', marker='D', s=45)
+    elif row['typeId'] in [45, 83]:  # Missed Tackles
+        pitch.scatter(row['x'], row['y'], ax=axs['pitch'], color='tab:orange', marker='D', s=45)
     elif row['typeId'] == 8:  # Interceptions
-        pitch.scatter(row['x'], row['y'], ax=axs['pitch'], color='purple', marker='s', s=36)
+        pitch.scatter(row['x'], row['y'], ax=axs['pitch'], color='tab:blue', marker='s', s=45)
     elif row['typeId'] == 3:  # Dribbles
-        pitch.scatter(row['x'], row['y'], ax=axs['pitch'], color='orange', marker='D', s=36)
+        pitch.scatter(row['x'], row['y'], ax=axs['pitch'], color='green', marker='>', s=45)
     elif row['typeId'] == 44:  # Aerials
         aerial_color = won_aerial_color if row['outcome'] == 1 else lost_aerial_color
-        pitch.scatter(row['x'], row['y'], ax=axs['pitch'], color=aerial_color, marker='^', s=36)
-    elif row['typeId'] in [45, 83]:  # Missed Tackles
-        pitch.scatter(row['x'], row['y'], ax=axs['pitch'], color='pink', marker='x', s=36)
+        pitch.scatter(row['x'], row['y'], ax=axs['pitch'], color=aerial_color, marker='^', s=45)
     elif row['typeId'] == 49:  # Ball Recoveries
-        pitch.scatter(row['x'], row['y'], ax=axs['pitch'], color='brown', marker='o', s=36)
+        pitch.scatter(row['x'], row['y'], ax=axs['pitch'], color='k', marker='x', s=45)
     elif row['typeId'] == 74:  # Blocked Passes
-        pitch.scatter(row['x'], row['y'], ax=axs['pitch'], color='gray', marker='s', s=36)
+        pitch.scatter(row['x'], row['y'], ax=axs['pitch'], color='silver', marker='<', s=45)
 
 st.pyplot(fig)

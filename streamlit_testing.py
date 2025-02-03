@@ -69,7 +69,7 @@ metrics = ['Counters','High Press','Low Block','Long Balls','GK Buildup','Circul
 text_cs = []
 text_inv_cs = []
 for m in metrics:
-    pc = 1 - team_data[m]
+    pc = 1 - team_data[m].values[0]
     if pc <= 0.1:
         color = ('#01349b', '#d9e3f6')  # Elite
     elif 0.1 < pc <= 0.35:

@@ -22,7 +22,7 @@ selected_season = st.sidebar.selectbox("Select Season", sorted(seasons, reverse=
 
 # Filter data for selected team and season
 team_data = df_percentiles[(df_percentiles["Team"] == selected_team) & (df_percentiles["Season"] == selected_season)]
-metrics = ["Wing Play", "Territory", "Crossing", "High Press", "Counters", "Low Block", "Long Balls", "Circulation", "GK Buildup"]
+metrics = ['Long Balls','GK Buildup','Circulation','Territory','Wing Play','Crossing','Counters','High Press','Low Block']
 
 # Radar chart using go.Barpolar
 fig = go.Figure()
@@ -49,5 +49,6 @@ st.subheader("Most Similar Teams")
 team_vector = team_data[metrics].values.flatten()
 similarities = df_percentiles.copy()
 similarities["Similarity"] = similarities[metrics].apply(lambda row: -np.linalg.norm(row.values - team_vector), axis=1)
+similarities['Similarity'] = (1 - similarities['Similarity'] / similarities['Similarity'].max()) * 100
 closest_teams = similarities.sort_values("Similarity", ascending=False).head(10)
 st.dataframe(closest_teams[["Team", "Season", "League", "Similarity"]])

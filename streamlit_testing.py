@@ -69,7 +69,7 @@ else:
     num_seasons = 1
 
 # Filter data for selected team and season
-team_seasons = df_percentiles[(df_percentiles["Team"] == selected_team)].sort_values("Season", ascending=False).head(num_seasons)
+team_seasons = df_percentiles[(df_percentiles["Team"] == team)].sort_values("Season", ascending=False).head(num_seasons)
 metrics = ['Counters','High Press','Low Block','Long Balls','GK Buildup','Circulation','Territory','Wing Play','Crossing',]
 
 for i, row in team_seasons.iterrows():
@@ -96,7 +96,7 @@ for i, row in team_seasons.iterrows():
     ))
 fig.update_layout(polar=dict(radialaxis=dict(showticklabels=False, visible=True, range=[0, 1])), showlegend=False)
 if num_seasons > 1:
-    st.subheader(f"Playstyle Profile: {selected_team}, last {num_seasons} Seasons")
+    st.subheader(f"Playstyle Profile: {team}, last {num_seasons} Seasons")
 else:
     st.subheader(f"Playstyle Profile: {team} {season}")
 st.plotly_chart(fig)

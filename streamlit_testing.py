@@ -47,12 +47,8 @@ st.plotly_chart(fig2)
 
 # Similar teams using Euclidean distance
 st.subheader("Most Similar Teams")
-team_vector = team_data[metrics]
-df_compare = df_percentiles[metrics]
-df_compare['distance'] = np.linalg.norm(df_compare - team_vector, axis=1)
-max_distance = df_compare['distance'].max()
-df_compare['Similarity'] = (1 - df_compare['distance'] / max_distance) * 100
-additional_columns = ['Team','League','Season']
-df_compare = df_compare.join(df_percentiles[additional_columns])
-closest_teams = df_compare.sort_values("Similarity", ascending=False).head(10)
+team_vector = team_data[metrics].values.flatten()
+similarities = df_percentiles.copy()
+similarities["Similarity"] = similarities[metrics].apply(lambda row: -np.linalg.norm(row.values - team_vector), axis=1)
+closest_teams = similarities.sort_values("Similarity", ascending=False).head(10)
 st.dataframe(closest_teams[["Team", "Season", "League", "Similarity"]])

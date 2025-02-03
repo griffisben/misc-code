@@ -3,6 +3,8 @@ import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
 import numpy as np
+import warnings
+warnings.filterwarnings("ignore")
 
 def similar_teams(team, season, metrics):
     df_base = pd.read_csv("https://raw.githubusercontent.com/griffisben/misc-code/refs/heads/main/files/Coaching%20Profiles%20Percentiles.csv")

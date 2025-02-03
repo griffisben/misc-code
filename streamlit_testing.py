@@ -24,15 +24,14 @@ selected_season = st.sidebar.selectbox("Select Season", sorted(seasons, reverse=
 team_data = df_percentiles[(df_percentiles["Team"] == selected_team) & (df_percentiles["Season"] == selected_season)]
 metrics = ["Wing Play", "Territory", "Crossing", "High Press", "Counters", "Low Block", "Long Balls", "Circulation", "GK Buildup"]
 
-# Radar chart
+# Radar chart using go.Barpolar
 fig = go.Figure()
 fig.add_trace(go.Barpolar(
     r=team_data[metrics].values.flatten(),
     theta=metrics,
-    fill='toself',
-    name=f"{selected_team} ({selected_season})"
+    marker=dict(color="blue", opacity=0.7)
 ))
-fig.update_layout(polar=dict(radialaxis=dict(visible=True, range=[0, 1])), showlegend=True)
+fig.update_layout(polar=dict(radialaxis=dict(visible=True, range=[0, 1])), showlegend=False)
 st.subheader(f"Playstyle Profile: {selected_team} ({selected_season})")
 st.plotly_chart(fig)
 

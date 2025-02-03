@@ -22,7 +22,8 @@ selected_season = st.sidebar.selectbox("Select Season", sorted(seasons, reverse=
 
 # Filter data for selected team and season
 team_data = df_percentiles[(df_percentiles["Team"] == selected_team) & (df_percentiles["Season"] == selected_season)]
-metrics = ['Long Balls','GK Buildup','Circulation','Territory','Wing Play','Crossing','Counters','High Press','Low Block']
+# metrics = ['Long Balls','GK Buildup','Circulation','Territory','Wing Play','Crossing','Counters','High Press','Low Block']
+metrics = ['Counters','High Press','Low Block','Long Balls','GK Buildup','Circulation','Territory','Wing Play','Crossing',]
 
 # Radar chart using go.Barpolar
 fig = go.Figure()

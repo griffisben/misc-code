@@ -63,36 +63,69 @@ teams = df_percentiles["Team"].unique()
 team = st.sidebar.selectbox("Select Team", teams)
 seasons = df_percentiles[df_percentiles["Team"] == team]["Season"].unique()
 season = st.sidebar.selectbox("Select Season", sorted(seasons, reverse=True))
+if len(seasons) > 1:
+    num_seasons = st.sidebar.selectbox("Number of Seasons to Visualize", [1, 2, 3, 4], index=0)
+else:
+    num_seasons = 1
 
 # Filter data for selected team and season
-team_data = df_percentiles[(df_percentiles["Team"] == team) & (df_percentiles["Season"] == season)]
+team_seasons = df_percentiles[(df_percentiles["Team"] == selected_team)].sort_values("Season", ascending=False).head(num_seasons)
 metrics = ['Counters','High Press','Low Block','Long Balls','GK Buildup','Circulation','Territory','Wing Play','Crossing',]
 
-text_cs = []
-text_inv_cs = []
-for m in metrics:
-    pc = 1 - team_data[m].values[0]
-    if pc <= 0.1:
-        color = ('#01349b', '#d9e3f6')  # Elite
-    elif 0.1 < pc <= 0.35:
-        color = ('#007f35', '#d9f0e3')  # Above Avg
-    elif 0.35 < pc <= 0.66:
-        color = ('#9b6700', '#fff2d9')  # Avg
-    else:
-        color = ('#b60918', '#fddbde')  # Below Avg
-    text_cs.append(color[0])
-    text_inv_cs.append(color[1])
-    
-# Radar chart using go.Barpolar
-fig = go.Figure()
-fig.add_trace(go.Barpolar(
-    r=team_data[metrics].values.flatten(),
-    theta=metrics,
-    marker=dict(color=text_inv_cs, line_width=1.5, line_color=text_cs)
-))
+for i, row in team_seasons.iterrows():
+    text_cs = []
+    text_inv_cs = []
+    for m in metrics:
+        pc = 1 - team_data[m].values[0]
+        if pc <= 0.1:
+            color = ('#01349b', '#d9e3f6')  # Elite
+        elif 0.1 < pc <= 0.35:
+            color = ('#007f35', '#d9f0e3')  # Above Avg
+        elif 0.35 < pc <= 0.66:
+            color = ('#9b6700', '#fff2d9')  # Avg
+        else:
+            color = ('#b60918', '#fddbde')  # Below Avg
+        text_cs.append(color[0])
+        text_inv_cs.append(color[1])
+        
+    fig.add_trace(go.Barpolar(
+        r=row[metrics].values.flatten(),
+        theta=metrics,
+        name=row["Season"],
+        marker=dict(color=text_inv_cs, line_width=1.5, line_color=text_cs)
+    ))
 fig.update_layout(polar=dict(radialaxis=dict(showticklabels=False, visible=True, range=[0, 1])), showlegend=False)
-st.subheader(f"Playstyle Profile: {team} ({season})")
+if num_seasons > 1:
+    st.subheader(f"Playstyle Profile: {selected_team}, last {num_seasons} Seasons")
+else:
+    st.subheader(f"Playstyle Profile: {team} {season}")
 st.plotly_chart(fig)
+
+# text_cs = []
+# text_inv_cs = []
+# for m in metrics:
+#     pc = 1 - team_data[m].values[0]
+#     if pc <= 0.1:
+#         color = ('#01349b', '#d9e3f6')  # Elite
+#     elif 0.1 < pc <= 0.35:
+#         color = ('#007f35', '#d9f0e3')  # Above Avg
+#     elif 0.35 < pc <= 0.66:
+#         color = ('#9b6700', '#fff2d9')  # Avg
+#     else:
+#         color = ('#b60918', '#fddbde')  # Below Avg
+#     text_cs.append(color[0])
+#     text_inv_cs.append(color[1])
+    
+# # Radar chart using go.Barpolar
+# fig = go.Figure()
+# fig.add_trace(go.Barpolar(
+#     r=team_data[metrics].values.flatten(),
+#     theta=metrics,
+#     marker=dict(color=text_inv_cs, line_width=1.5, line_color=text_cs)
+# ))
+# fig.update_layout(polar=dict(radialaxis=dict(showticklabels=False, visible=True, range=[0, 1])), showlegend=False)
+# st.subheader(f"Playstyle Profile: {team} ({season})")
+# st.plotly_chart(fig)
 
 # Style development over seasons
 st.subheader(f"Style Development Over Seasons")

@@ -64,15 +64,29 @@ season = st.sidebar.selectbox("Select Season", sorted(seasons, reverse=True))
 
 # Filter data for selected team and season
 team_data = df_percentiles[(df_percentiles["Team"] == team) & (df_percentiles["Season"] == season)]
-# metrics = ['Long Balls','GK Buildup','Circulation','Territory','Wing Play','Crossing','Counters','High Press','Low Block']
 metrics = ['Counters','High Press','Low Block','Long Balls','GK Buildup','Circulation','Territory','Wing Play','Crossing',]
 
+text_cs = []
+text_inv_cs = []
+for m in metrics:
+    pc = 1 - team_data[m]
+    if pc <= 0.1:
+        color = ('#01349b', '#d9e3f6')  # Elite
+    elif 0.1 < pc <= 0.35:
+        color = ('#007f35', '#d9f0e3')  # Above Avg
+    elif 0.35 < pc <= 0.66:
+        color = ('#9b6700', '#fff2d9')  # Avg
+    else:
+        color = ('#b60918', '#fddbde')  # Below Avg
+    text_cs.append(color[0])
+    text_inv_cs.append(color[1])
+    
 # Radar chart using go.Barpolar
 fig = go.Figure()
 fig.add_trace(go.Barpolar(
     r=team_data[metrics].values.flatten(),
     theta=metrics,
-    marker=dict(color="blue", opacity=0.7)
+    marker=dict(color=text_cs, opacity=0.7)
 ))
 fig.update_layout(polar=dict(radialaxis=dict(visible=True, range=[0, 1])), showlegend=False)
 st.subheader(f"Playstyle Profile: {team} ({season})")
@@ -89,10 +103,9 @@ st.plotly_chart(fig2)
 
 # Similar teams using Euclidean distance
 st.subheader("Most Similar Teams")
-team_vector = team_data[metrics].values.flatten()
-similarities = df_percentiles.copy()
-similarities["Similarity"] = similarities[metrics].apply(lambda row: -np.linalg.norm(row.values - team_vector), axis=1)
-similarities['Similarity'] = similarities['Similarity'] + 1
-closest_teams = similarities.sort_values("Similarity", ascending=False).head(10)
+# team_vector = team_data[metrics].values.flatten()
+# similarities = df_percentiles.copy()
+# similarities["Similarity"] = similarities[metrics].apply(lambda row: -np.linalg.norm(row.values - team_vector), axis=1)
+# closest_teams = similarities.sort_values("Similarity", ascending=False).head(10)
 similar_teams = similar_teams(team, season, metrics)
-st.dataframe(similar_teams[['Team','League','Season','Similarity']])
+st.dataframe(similar_teams[['Team','League','Season','Similarity']].head(20))

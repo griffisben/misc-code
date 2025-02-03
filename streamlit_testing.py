@@ -32,7 +32,7 @@ fig.add_trace(go.Scatterpolar(
     fill='toself',
     name=f"{selected_team} ({selected_season})"
 ))
-fig.update_layout(polar=dict(radialaxis=dict(visible=True, range=[0, 100])), showlegend=True)
+fig.update_layout(polar=dict(radialaxis=dict(visible=True, range=[0, 1])), showlegend=True)
 st.subheader(f"Playstyle Profile: {selected_team} ({selected_season})")
 st.plotly_chart(fig)
 

@@ -50,5 +50,6 @@ st.subheader("Most Similar Teams")
 team_vector = team_data[metrics].values.flatten()
 similarities = df_percentiles.copy()
 similarities["Similarity"] = similarities[metrics].apply(lambda row: -np.linalg.norm(row.values - team_vector), axis=1)
+similarities['Similarity'] = similarities['Similarity'] + 1
 closest_teams = similarities.sort_values("Similarity", ascending=False).head(10)
 st.dataframe(closest_teams[["Team", "Season", "League", "Similarity"]])

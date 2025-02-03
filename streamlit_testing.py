@@ -72,6 +72,7 @@ else:
 team_seasons = df_percentiles[(df_percentiles["Team"] == team)].sort_values("Season", ascending=False).head(num_seasons)
 metrics = ['Counters','High Press','Low Block','Long Balls','GK Buildup','Circulation','Territory','Wing Play','Crossing',]
 
+fig = go.Figure()
 for i, row in team_seasons.iterrows():
     text_cs = []
     text_inv_cs = []

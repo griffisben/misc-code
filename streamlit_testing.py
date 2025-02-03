@@ -101,6 +101,7 @@ fig2 = px.line(
     teams_seasonal, x="Season", y=metrics, markers=True,
     title=f"{team} Style Evolution"
 )
+fig2.update_layout(range=[0,1])
 st.plotly_chart(fig2)
 
 # Similar teams using Euclidean distance

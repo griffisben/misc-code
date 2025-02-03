@@ -2,7 +2,7 @@ import streamlit as st
 import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
-from sklearn.metrics.pairwise import cosine_similarity
+import numpy as np
 
 # Load datasets
 @st.cache_data
@@ -26,7 +26,7 @@ metrics = ["Wing Play", "Territory", "Crossing", "High Press", "Counters", "Low 
 
 # Radar chart
 fig = go.Figure()
-fig.add_trace(go.Scatterpolar(
+fig.add_trace(go.Barpolar(
     r=team_data[metrics].values.flatten(),
     theta=metrics,
     fill='toself',
@@ -45,10 +45,10 @@ fig2 = px.line(
 )
 st.plotly_chart(fig2)
 
-# Similar teams
+# Similar teams using Euclidean distance
 st.subheader("Most Similar Teams")
-team_vector = team_data[metrics].values.reshape(1, -1)
+team_vector = team_data[metrics].values.flatten()
 similarities = df_percentiles.copy()
-similarities["Similarity"] = cosine_similarity(similarities[metrics].values, team_vector).flatten()
+similarities["Similarity"] = similarities[metrics].apply(lambda row: -np.linalg.norm(row.values - team_vector), axis=1)
 closest_teams = similarities.sort_values("Similarity", ascending=False).head(10)
 st.dataframe(closest_teams[["Team", "Season", "League", "Similarity"]])

@@ -88,7 +88,7 @@ fig.add_trace(go.Barpolar(
     theta=metrics,
     marker=dict(color=text_inv_cs, line_width=1.5, line_color=text_cs)
 ))
-fig.update_layout(polar=dict(radialaxis=dict(showticklabels=False, visible=True, range=[0, 1])), showlegend=False, grid=False)
+fig.update_layout(polar=dict(radialaxis=dict(showticklabels=False, visible=True, range=[0, 1])), showlegend=False)
 st.subheader(f"Playstyle Profile: {team} ({season})")
 st.plotly_chart(fig)
 

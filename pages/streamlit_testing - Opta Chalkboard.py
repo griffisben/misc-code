@@ -3,6 +3,8 @@ import pandas as pd
 import matplotlib.pyplot as plt
 from mplsoccer import Pitch
 
+st.set_page_config(page_title="Opta Chalkboard", page_icon="📈")
+
 # Load Data
 @st.cache_data
 def load_data():

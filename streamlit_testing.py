@@ -98,7 +98,7 @@ st.plotly_chart(fig)
 # Style development over seasons
 st.subheader(f"Style Development Over Seasons")
 teams_seasonal = df_percentiles[df_percentiles["Team"] == team].sort_values("Season")
-teams_seasonal['League Season'] = teams_seasonal['League'] + " " + teams_seasonal['Season']
+teams_seasonal['League Season'] = teams_seasonal['League'] + "\n" + teams_seasonal['Season']
 fig2 = px.line(
     teams_seasonal, x="League Season", y=metrics, markers=True,
     title=f"{team} Style Evolution"

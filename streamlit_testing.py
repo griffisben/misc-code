@@ -66,6 +66,7 @@ season = st.sidebar.selectbox("Select Season", sorted(seasons, reverse=True))
 
 # Filter data for selected team and season
 team_data = df_percentiles[(df_percentiles["Team"] == team) & (df_percentiles["Season"] == season)]
+league = team_data.League.values[0]
 metrics = ['Counters','High Press','Low Block','Long Balls','GK Buildup','Circulation','Territory','Wing Play','Crossing',]
 
 text_cs = []
@@ -91,12 +92,13 @@ fig.add_trace(go.Barpolar(
     marker=dict(color=text_inv_cs, line_width=1.5, line_color=text_cs)
 ))
 fig.update_layout(polar=dict(radialaxis=dict(showticklabels=False, visible=True, range=[0, 1])), showlegend=False)
-st.subheader(f"Playstyle Profile: {team} ({season})")
+st.subheader(f"Playstyle Profile: {team} ({league} {season})")
 st.plotly_chart(fig)
 
 # Style development over seasons
 st.subheader(f"Style Development Over Seasons")
 teams_seasonal = df_percentiles[df_percentiles["Team"] == team].sort_values("Season")
+teams_seasonal['LeagueSeason'] = teams_seasonal['League'] + " " + teams_seasonal['Season']
 fig2 = px.line(
     teams_seasonal, x="Season", y=metrics, markers=True,
     title=f"{team} Style Evolution"

@@ -46,7 +46,11 @@ else:
 event_types = st.sidebar.multiselect("Select Event Types", ["Pass", "Shot", "Tackle", "Interception", "Dribble", "Aerial", "Missed Tackle", "Ball Recovery", "Blocked Pass"])
 include_set_pieces = st.sidebar.checkbox("Include Set Piece Passes/Shots", value=True)
 pass_types = st.sidebar.multiselect("Select Pass Types", ["Complete", "Incomplete", "Shot Assist"])
+possessions = st.sidebar.multiselect("Show Individual Possession(s)", filtered_df.Sequence.unique())
 
+if possessions:
+    filtered_df = filtered_df[filtered_df.Sequence.isin(possessions)]
+    
 # Apply Event Type Filters
 if event_types:
     type_map = {"Pass": 1, "Shot": [13, 14, 15, 16], "Dribble": 3, "Tackle": 7, "Interception": 8, "Aerial": 44, "Ball Recovery": 49, "Blocked Pass": 74, "Missed Tackle": [45, 83]}

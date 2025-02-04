@@ -119,4 +119,6 @@ for _, row in filtered_df.iterrows():
 st.pyplot(fig)
 
 filtered_df['Sequence'].fillna(method='bfill')
-filtered_df[['playerName','typeId','timeMin','timeSec','outcome','xT','xG','xGA','Sequence','Sequence xT','Gamestate']]
+filtered_df[['playerName','typeId','timeMin','timeSec','outcome','xT','xG','xGA','Sequence','seq_xT','seq_xG','Passes in Sequence','Gamestate']].rename(columns={
+    'playerName':'Player','timeMin':'Minute','timeSec':'Second','Sequence':'Poss. ID','seq_xT':'xT of Poss.','seq_xG':'xG of Poss.','Passes in Sequence':'Passes in Poss.'
+})

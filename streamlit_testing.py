@@ -36,6 +36,7 @@ else:
     # Player Season View
     team_players = df[df["Team"] == team]["playerName"].unique().tolist()
     team_players.remove('0')
+    team_players.remove(0)
     team_players = sorted(team_players)
     player = st.sidebar.selectbox("Select Player", team_players)
     filtered_df = df[(df["Team"] == team) & (df["playerName"] == player)]

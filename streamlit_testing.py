@@ -113,3 +113,5 @@ for _, row in filtered_df.iterrows():
         pitch.scatter(row['x'], row['y'], ax=axs['pitch'], color='silver', ec='k', marker='<', s=65)
 
 st.pyplot(fig)
+
+filtered_df[['playerName','typeId','timeMin','timeSec','outcome','xT','xG','xGA','Sequence','Gamestate']]

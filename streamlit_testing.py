@@ -18,7 +18,7 @@ mode = st.sidebar.radio("Select View", ["Match View", "Player Season View"])
 
 # Sidebar Filters
 st.sidebar.header("Filters")
-team = st.sidebar.selectbox("Select Team", df["Team"].unique())
+team = st.sidebar.selectbox("Select Team", sorted(df["Team"].unique()))
 
 if mode == "Match View":
     # Filter matches based on team

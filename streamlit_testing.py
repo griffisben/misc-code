@@ -34,7 +34,7 @@ if mode == "Match View":
         filtered_df = filtered_df[filtered_df["playerName"].isin(players)]
 else:
     # Player Season View
-    team_players = df[df["Team"] == team]["playerName"].unique()
+    team_players = sorted(df[df["Team"] == team]["playerName"].unique().tolist().remove(0))
     player = st.sidebar.selectbox("Select Player", team_players)
     filtered_df = df[(df["Team"] == team) & (df["playerName"] == player)]
 

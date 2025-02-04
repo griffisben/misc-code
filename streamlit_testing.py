@@ -26,7 +26,9 @@ if mode == "Match View":
     match = st.sidebar.selectbox("Select Match", team_matches)
     
     # Filter players based on team and match
-    team_match_players = df[(df["Team"] == team) & (df["Match"] == match)]["playerName"].unique()
+    team_match_players = df[(df["Team"] == team) & (df["Match"] == match)]["playerName"].unique().tolist()
+    team_match_players.remove('0')
+    team_match_players = sorted(team_match_players)
     players = st.sidebar.multiselect("Select Players", team_match_players)
     
     filtered_df = df[(df["Team"] == team) & (df["Match"] == match)]

@@ -22,6 +22,7 @@ st.sidebar.header("Match or Individual Player Season")
 league = st.sidebar.selectbox("League", lookup.League.unique().tolist())
 season = st.sidebar.selectbox("Season", sorted(lookup[lookup.League==league].Season.unique().tolist(),reverse=True))
 data_as_of = lookup[(lookup.League==league) & (lookup.Season==season)].Date.values[0]
+sub_title = f"{league} {data_as_of}"
 
 df = load_data(league.replace(" ","%20"),data_as_of.replace(" ","%20"))
 

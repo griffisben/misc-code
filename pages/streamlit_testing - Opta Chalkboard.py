@@ -4,15 +4,13 @@ import matplotlib.pyplot as plt
 from mplsoccer import Pitch
 
 # Load Data
-@st.cache_data
+@st.cache_data(ttl=60*5)
+
 def load_data(league,data_as_of):
-    st.cache_data.clear()
-    st.cache_resource.clear()
     url = f"https://github.com/griffisben/misc-code/raw/refs/heads/main/Events/{league}%20{data_as_of}%20with%20All%20Info.parquet"
     df = pd.read_parquet(url)
     return df
     
-@st.cache_data
 def load_lookup():
     url = "https://github.com/griffisben/misc-code/raw/refs/heads/main/Chalkboard_League_Lookups.csv"
     df = pd.read_csv(url)
@@ -22,15 +20,21 @@ def load_lookup():
 lookup = load_lookup()
 
 # Sidebar Selection Mode
-st.sidebar.header("Match or Individual Player Season")
-league = st.sidebar.selectbox("League", lookup.League.unique().tolist())
-season = st.sidebar.selectbox("Season", sorted(lookup[lookup.League==league].Season.unique().tolist(),reverse=True))
-data_as_of = lookup[(lookup.League==league) & (lookup.Season==season)].Date.values[0]
-sub_title = f"{league} {data_as_of}"
-
-league_url = league.replace(" ", "%20")
-data_as_of_url = data_as_of.replace(" ", "%20")
-df = load_data(league_url,data_as_of_url)
+with st.sidebar:
+    with st.form('League Options'):
+        submitted = st.form_submit_button("Submit Options")
+        st.sidebar.header("Match or Individual Player Season")
+        league = st.sidebar.selectbox("League", lookup.League.unique().tolist())
+        season = st.sidebar.selectbox("Season", sorted(lookup[lookup.League==league].Season.unique().tolist(),reverse=True))
+        data_as_of = lookup[(lookup.League==league) & (lookup.Season==season)].Date.values[0]
+        sub_title = f"{league} {data_as_of}"
+        
+        league_url = league.replace(" ", "%20")
+        data_as_of_url = data_as_of.replace(" ", "%20")
+        
+        st.cache_data.clear()
+        st.cache_resource.clear()
+        df = load_data(league_url,data_as_of_url)
 
 st.sidebar.header("Match or Individual Player Season")
 mode = st.sidebar.radio("Select View", ["Match View", "Player Season View"])

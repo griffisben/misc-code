@@ -161,13 +161,13 @@ if not include_set_pieces:
     axs['endnote'].text(.5, .5, "Excludes set piece passes & shots", va='center', ha='center',
                         fontsize=14, color='#4A2E19')
 
-axs['endnote'].text(0, .5, "Data via Opta", va='left', ha='center',
+axs['endnote'].text(0, .5, "Data via Opta", va='center', ha='left',
                     fontsize=14, color='#4A2E19')
 if data_as_of[:5] == "as of":
-    axs['endnote'].text(1, .5, f"Data {data_as_of}", va='right', ha='center',
+    axs['endnote'].text(1, .5, f"Data {data_as_of}", va='center', ha='right',
                         fontsize=14, color='#4A2E19')
 else:
-    axs['endnote'].text(1, .5, f"Data Final for {data_as_of}", va='right', ha='center',
+    axs['endnote'].text(1, .5, f"Data Final for {data_as_of}", va='center', ha='right',
                         fontsize=14, color='#4A2E19')
     
 st.pyplot(fig)

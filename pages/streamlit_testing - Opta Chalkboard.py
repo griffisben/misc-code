@@ -3,18 +3,28 @@ import pandas as pd
 import matplotlib.pyplot as plt
 from mplsoccer import Pitch
 
-st.set_page_config(page_title="Opta Chalkboard", page_icon="📈")
-
 # Load Data
 @st.cache_data
-def load_data():
-    url = "https://github.com/griffisben/misc-code/raw/refs/heads/main/Events/Danish%201.%20Division%20as%20of%2012-12-24%20with%20All%20Info.parquet"
+def load_data(league,data_as_of):
+    url = f"https://github.com/griffisben/misc-code/raw/refs/heads/main/Events/{league}%20{data_as_of}%20with%20All%20Info.parquet"
     df = pd.read_parquet(url)
     return df
+def load_lookup():
+    url = "https://github.com/griffisben/misc-code/raw/refs/heads/main/Chalkboard_League_Lookups.csv"
+    df = pd.read_csv(url)
+    return df
 
-df = load_data()
+
+lookup = load_lookup()
 
 # Sidebar Selection Mode
+st.sidebar.header("Match or Individual Player Season")
+league = st.sidebar.selectbox("League", lookup.League.unique().tolist())
+season = st.sidebar.selectbox("Season", sorted(lookup[lookup.League==league].Season.unique().tolist(),reverse=True))
+data_as_of = lookup[(lookup.League==league) & (lookup.Season==season)].Date.values[0]
+
+df = load_data(league.replace(" ","%20"),data_as_of.replace(" ","%20"))
+
 st.sidebar.header("Match or Individual Player Season")
 mode = st.sidebar.radio("Select View", ["Match View", "Player Season View"])
 
@@ -117,6 +127,42 @@ for _, row in filtered_df.iterrows():
         pitch.scatter(row['x'], row['y'], ax=axs['pitch'], color='k', marker='x', s=65)
     elif row['typeId'] == 74:  # Blocked Passes
         pitch.scatter(row['x'], row['y'], ax=axs['pitch'], color='silver', ec='k', marker='<', s=65)
+
+# setup the legend
+legend = axs['pitch'].legend(facecolor='#fbf9f4', handlelength=5, edgecolor='#4A2E19', loc='lower left')
+for text in legend.get_texts():
+    text.set_fontsize(15)
+
+if mode == "Match View":
+    if players:
+        if len(players) > 1:
+            axs['title'].text(.5, 1.2, f"{', '.join(players[:-1])} & {players[-1]} Actions", va='center', ha='center',
+                              fontsize=28, color='#4A2E19')
+            axs['title'].text(.5, .25, f"{team}, {sub_title}", va='center', ha='center',
+                              fontsize=20, color='#4A2E19')
+        else:
+            axs['title'].text(.5, 1.2, f"{players[0]} Actions", va='center', ha='center',
+                              fontsize=28, color='#4A2E19')
+            axs['title'].text(.5, .25, f"{team}, {sub_title}", va='center', ha='center',
+                              fontsize=20, color='#4A2E19')
+    else:
+        axs['title'].text(.5, 1.2, f"{team} Actions", va='center', ha='center',
+                          fontsize=28, color='#4A2E19')
+        axs['title'].text(.5, .25, sub_title, va='center', ha='center',
+                          fontsize=20, color='#4A2E19')
+
+else:
+        axs['title'].text(.5, 1.2, f"{team} Season Actions", va='center', ha='center',
+                          fontsize=28, color='#4A2E19')
+        axs['title'].text(.5, .25, {league} {season}, va='center', ha='center',
+                          fontsize=20, color='#4A2E19')
+
+if not include_set_pieces:
+    axs['endnote'].text(.5, .5, "Excludes set piece passes & shots", va='center', ha='center',
+                        fontsize=14, color='#4A2E19')
+
+axs['endnote'].text(0, .5, "Data via Opta", va='center', ha='center',
+                    fontsize=14, color='#4A2E19')
 
 st.pyplot(fig)
 

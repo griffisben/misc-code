@@ -63,10 +63,6 @@ else:
 event_types = st.sidebar.multiselect("Select Event Types", ["Pass", "Shot", "Tackle", "Interception", "Dribble", "Aerial", "Missed Tackle", "Ball Recovery", "Blocked Pass"])
 include_set_pieces = st.sidebar.checkbox("Include Set Piece Passes/Shots", value=True)
 pass_types = st.sidebar.multiselect("Select Pass Types", ["Complete", "Incomplete", "Shot Assist"])
-possessions = st.sidebar.multiselect("Show Individual Possession(s)", filtered_df.Sequence.unique())
-
-if possessions:
-    filtered_df = filtered_df[filtered_df.Sequence.isin(possessions)]
     
 # Apply Event Type Filters
 if event_types:
@@ -178,7 +174,7 @@ else:
 st.pyplot(fig)
 
 filtered_df['Sequence'] = filtered_df['Sequence'].bfill()
-filtered_df = filtered_df[['playerName','typeId','timeMin','timeSec','outcome','xT','xG','xGA','Sequence','seq_xT','seq_xG','Passes in Sequence','Gamestate']].rename(columns={
+filtered_df = filtered_df[['Match','playerName','typeId','timeMin','timeSec','outcome','xT','xG','xGA','Gamestate']].rename(columns={
     'playerName':'Player','timeMin':'Minute','timeSec':'Second','Sequence':'Poss. ID','seq_xT':'xT of Poss.','seq_xG':'xG of Poss.','Passes in Sequence':'Passes in Poss.'
 })
 filtered_df

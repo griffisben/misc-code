@@ -26,7 +26,9 @@ season = st.sidebar.selectbox("Season", sorted(lookup[lookup.League==league].Sea
 data_as_of = lookup[(lookup.League==league) & (lookup.Season==season)].Date.values[0]
 sub_title = f"{league} {data_as_of}"
 
-df = load_data(league.replace(" ","%20"),data_as_of.replace(" ","%20"))
+league_url = league.replace(" ", "%20")
+data_as_of_url = data_as_of.replace(" ", "%20")
+df = load_data(league_url,data_as_of_url)
 
 st.sidebar.header("Match or Individual Player Season")
 mode = st.sidebar.radio("Select View", ["Match View", "Player Season View"])

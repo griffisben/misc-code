@@ -66,7 +66,6 @@ season = st.sidebar.selectbox("Select Season", sorted(seasons, reverse=True))
 
 # Filter data for selected team and season
 team_data = df_percentiles[(df_percentiles["Team"] == team) & (df_percentiles["Season"] == season)]
-team_data_raw = df_raw[(df_raw["Team"] == team) & (df_raw["Season"] == season)]
 league = team_data.League.values[0]
 metrics = ['Counters','High Press','Low Block','Long Balls','GK Buildup','Circulation','Territory','Wing Play','Crossing',]
 
@@ -90,7 +89,6 @@ fig = go.Figure()
 fig.add_trace(go.Barpolar(
     r=team_data[metrics].values.flatten(),
     theta=metrics,
-    hover_data=team_data_raw[metrics].values.flatten(),
     marker=dict(color=text_inv_cs, line_width=1.5, line_color=text_cs)
 ))
 fig.update_layout(polar=dict(radialaxis=dict(showticklabels=False, visible=True, range=[0, 1])), showlegend=False)
@@ -116,3 +114,17 @@ st.subheader("Most Similar Teams")
 # closest_teams = similarities.sort_values("Similarity", ascending=False).head(10)
 similar_teams = similar_teams(team, season, metrics)
 st.dataframe(similar_teams[['Team','League','Season','Similarity']].head(20))
+
+
+# st.subheader("Team Finder")
+
+# circulation = st.slider('Short & Medium Pass Cmp %', 0.0, 1.0, 0.0, key='slider1')
+# territory = st.slider('Long Pass Cmp %', 0.0, 1.0, 0.0, key='slider2')
+# passestot = st.slider('Passes per 90', 0.0, 1.0, 0.0, key='slider3')
+# smart = st.slider('Smart Passes per 90', 0.0, 1.0, 0.0, key='slider4')
+# crosspct = st.slider('Cross Cmp %', 0.0, 1.0, 0.0, key='slider5')
+# crosses = st.slider('Crosses per 90', 0.0, 1.0, 0.0, key='slider6')
+# shotassist = st.slider('Shot Assists per 90', 0.0, 1.0, 0.0, key='slider7')
+# xa = st.slider('xA per 90', 0.0, 1.0, 0.0, key='slider8')
+# xasa = st.slider('xA per Shot Assist', 0.0, 1.0, 0.0, key='slider9')
+

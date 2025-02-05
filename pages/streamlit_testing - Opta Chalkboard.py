@@ -18,14 +18,14 @@ def load_lookup():
 
 
 lookup = load_lookup()
-
+    
 # Sidebar Selection Mode
 with st.sidebar:
     with st.form('League Options'):
         submitted = st.form_submit_button("Submit Options")
-        st.sidebar.header("Match or Individual Player Season")
-        league = st.sidebar.selectbox("League", lookup.League.unique().tolist())
-        season = st.sidebar.selectbox("Season", sorted(lookup[lookup.League==league].Season.unique().tolist(),reverse=True))
+        st.header("Match or Individual Player Season")
+        league = st.selectbox("League", lookup.League.unique().tolist())
+        season = st.selectbox("Season", sorted(lookup[lookup.League==league].Season.unique().tolist(),reverse=True))
         data_as_of = lookup[(lookup.League==league) & (lookup.Season==season)].Date.values[0]
         sub_title = f"{league} {data_as_of}"
         

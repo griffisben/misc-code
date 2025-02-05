@@ -62,6 +62,7 @@ else:
     player = st.sidebar.selectbox("Select Player", team_players)
     filtered_df = df[(df["Team"] == team) & (df["playerName"] == player)]
 
+del df
 # Event Type Filters
 event_types = st.sidebar.multiselect("Select Event Types", ["Pass", "Shot", "Tackle", "Interception", "Dribble", "Aerial", "Missed Tackle", "Ball Recovery", "Blocked Pass"])
 include_set_pieces = st.sidebar.checkbox("Include Set Piece Passes/Shots", value=True)

@@ -6,6 +6,10 @@ import numpy as np
 import warnings
 warnings.filterwarnings("ignore")
 
+def _update_slider(value):
+    for i in range(1, 9):
+        st.session_state[f"slider{i}"] = value
+
 def color_percentile(pc):
     if 1-pc <= 0.1:
         color = ('#01349b', '#d9e3f6')  # Elite
@@ -129,16 +133,17 @@ st.dataframe(similar_teams[['Team','League','Season','Similarity']].head(20))
 
 
 st.subheader("Team Finder")
+st.button("Reset Sliders", on_click=_update_slider, kwargs={"value": (0.0,1.0)})
 
-gkbuildup_filter = st.slider('GK Buildup', 0.0, 1.0, (0.0,1.0), key='slider2')
-circulation_filter = st.slider('Circulation', 0.0, 1.0, (0.0,1.0), key='slider3')
-territory_filter = st.slider('Territory', 0.0, 1.0, (0.0,1.0), key='slider4')
-wingplay_filter = st.slider('Wing Play', 0.0, 1.0, (0.0,1.0), key='slider5')
-crossing_filter = st.slider('Crossing', 0.0, 1.0, (0.0,1.0), key='slider9')
+gkbuildup_filter = st.slider('GK Buildup', 0.0, 1.0, (0.0,1.0), key='slider1')
+circulation_filter = st.slider('Circulation', 0.0, 1.0, (0.0,1.0), key='slider2')
+territory_filter = st.slider('Territory', 0.0, 1.0, (0.0,1.0), key='slider3')
+wingplay_filter = st.slider('Wing Play', 0.0, 1.0, (0.0,1.0), key='slider4')
+crossing_filter = st.slider('Crossing', 0.0, 1.0, (0.0,1.0), key='slider5')
 counters_filter = st.slider('Counters', 0.0, 1.0, (0.0,1.0), key='slider6')
 highpress_filter = st.slider('High Press', 0.0, 1.0, (0.0,1.0), key='slider7')
 lowbloack_filter = st.slider('Low Block', 0.0, 1.0, (0.0,1.0), key='slider8')
-longballs_filter = st.slider('Long Balls', 0.0, 1.0, (0.0,1.0), key='slider1')
+longballs_filter = st.slider('Long Balls', 0.0, 1.0, (0.0,1.0), key='slider9')
 
 filtered_teams_table = df_percentiles[
 (df_percentiles['GK Buildup'].between(gkbuildup_filter[0],gkbuildup_filter[1])) & 

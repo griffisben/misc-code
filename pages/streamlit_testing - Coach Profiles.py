@@ -6,6 +6,18 @@ import numpy as np
 import warnings
 warnings.filterwarnings("ignore")
 
+def color_percentile(pc):
+    if 1-pc <= 0.1:
+        color = ('#01349b', '#d9e3f6')  # Elite
+    elif 0.1 < 1-pc <= 0.35:
+        color = ('#007f35', '#d9f0e3')  # Above Avg
+    elif 0.35 < 1-pc <= 0.66:
+        color = ('#9b6700', '#fff2d9')  # Avg
+    else:
+        color = ('#b60918', '#fddbde')  # Below Avg
+
+    return f'background-color: {color[1]}'
+
 def similar_teams(team, season, metrics):
     df_base = pd.read_csv("https://raw.githubusercontent.com/griffisben/misc-code/refs/heads/main/files/Coaching%20Profiles%20Percentiles.csv")
         
@@ -140,4 +152,5 @@ filtered_teams_table = df_percentiles[
 (df_percentiles['Long Balls'].between(longballs_filter[0],longballs_filter[1]))
 ]
 
-filtered_teams_table[['Team','League','Season']+metrics]
+filtered_teams_table = filtered_teams_table[['Team','League','Season']+metrics]
+st.dataframe(filtered_teams_table.style.applymap(color_percentile, subset=filtered_teams_table.columns[3:]))

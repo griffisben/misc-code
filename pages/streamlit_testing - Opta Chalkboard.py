@@ -144,17 +144,17 @@ if mode == "Match View":
         if len(players) > 1:
             axs['title'].text(.5, 1.2, f"{', '.join(players[:-1])} & {players[-1]} Actions", va='center', ha='center',
                               fontsize=28, color='#4A2E19')
-            axs['title'].text(.5, .25, f"{team}, {sub_title}", va='center', ha='center',
+            axs['title'].text(.5, .25, f"{team}, {match}", va='center', ha='center',
                               fontsize=20, color='#4A2E19')
         else:
             axs['title'].text(.5, 1.2, f"{players[0]} Actions", va='center', ha='center',
                               fontsize=28, color='#4A2E19')
-            axs['title'].text(.5, .25, f"{team}, {sub_title}", va='center', ha='center',
+            axs['title'].text(.5, .25, f"{team}, {match}", va='center', ha='center',
                               fontsize=20, color='#4A2E19')
     else:
         axs['title'].text(.5, 1.2, f"{team} Actions", va='center', ha='center',
                           fontsize=28, color='#4A2E19')
-        axs['title'].text(.5, .25, sub_title, va='center', ha='center',
+        axs['title'].text(.5, .25, match, va='center', ha='center',
                           fontsize=20, color='#4A2E19')
 
 else:

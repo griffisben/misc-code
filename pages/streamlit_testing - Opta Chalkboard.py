@@ -79,7 +79,7 @@ if event_types:
 if not include_set_pieces:
     filtered_df = filtered_df[~((filtered_df["typeId"] == 1) & (filtered_df[["FK", "GK", "ThrowIn", "Corner", "KickOff"]].sum(axis=1) > 0))]
     filtered_df = filtered_df[~((filtered_df["typeId"].between(13, 16)) & (filtered_df["Corner"] == 1))]
-    filtered_df = filtered_df[~(((filtered_df["Penalty"] == 1))]
+    filtered_df = filtered_df[~((filtered_df["Penalty"] == 1))]
 
 if pass_types:
     if "Complete" not in pass_types:
@@ -164,7 +164,7 @@ else:
                       fontsize=20, color='#4A2E19')
 
 if not include_set_pieces:
-    axs['endnote'].text(.5, .5, "Excludes set piece passes & shots", va='center', ha='center',
+    axs['endnote'].text(.5, .5, "Excludes set piece passes & shots and penalties", va='center', ha='center',
                         fontsize=14, color='#4A2E19')
 
 axs['endnote'].text(0, .5, "Data via Opta", va='center', ha='left',

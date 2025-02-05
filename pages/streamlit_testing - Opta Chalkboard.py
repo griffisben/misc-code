@@ -6,6 +6,8 @@ from mplsoccer import Pitch
 # Load Data
 @st.cache_data
 def load_data(league,data_as_of):
+    st.cache_data.clear()
+    st.cache_resource.clear()
     url = f"https://github.com/griffisben/misc-code/raw/refs/heads/main/Events/{league}%20{data_as_of}%20with%20All%20Info.parquet"
     df = pd.read_parquet(url)
     return df

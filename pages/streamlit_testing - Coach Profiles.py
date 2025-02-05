@@ -130,14 +130,14 @@ longballs_filter = st.slider('Long Balls', 0.0, 1.0, (0.0,1.0), key='slider1')
 
 filtered_teams_table = df_percentiles[
 (df_percentiles['GK Buildup'].between(gkbuildup_filter[0],gkbuildup_filter[1])) & 
-(df_percentiles['Circulation'].between(circulation_filter)) & 
-(df_percentiles['Territory'].between(territory_filter)) & 
-(df_percentiles['Wing Play'].between(wingplay_filter)) & 
-(df_percentiles['Crossing'].between(crossing_filter)) & 
-(df_percentiles['Counters'].between(counters_filter)) & 
-(df_percentiles['High Press'].between(highpress_filter)) & 
-(df_percentiles['Low Block'].between(lowbloack_filter)) & 
-(df_percentiles['Long Balls'].between(longballs_filter))
+(df_percentiles['Circulation'].between(circulation_filter[0],circulation_filter[1])) & 
+(df_percentiles['Territory'].between(territory_filter[0],territory_filter[1])) & 
+(df_percentiles['Wing Play'].between(wingplay_filter[0],wingplay_filter[1])) & 
+(df_percentiles['Crossing'].between(crossing_filter[0],crossing_filter[1])) & 
+(df_percentiles['Counters'].between(counters_filter[0],counters_filter[1])) & 
+(df_percentiles['High Press'].between(highpress_filter[0],highpress_filter[1])) & 
+(df_percentiles['Low Block'].between(lowbloack_filter[0],lowbloack_filter[1])) & 
+(df_percentiles['Long Balls'].between(longballs_filter[0],longballs_filter[1]))
 ]
 
 filtered_teams_table[['Team','League','Season']+metrics]

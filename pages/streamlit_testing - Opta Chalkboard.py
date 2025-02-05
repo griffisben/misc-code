@@ -104,34 +104,34 @@ for _, row in filtered_df.iterrows():
         pass_color = cmp_color if row['outcome'] == 1 else inc_color
         if row.get('assist', 0) == 1 or row.get('keyPass', 0) == 1:
             pass_color = key_color
-        pitch.lines(row['x'], row['y'], row['endX'], row['endY'], label="Pass",
+        pitch.lines(row['x'], row['y'], row['endX'], row['endY'],
                     comet=True, alpha=0.3, lw=5, color=pass_color, ax=axs['pitch'])
         pitch.scatter(row['endX'], row['endY'], s=45, ec='k', lw=.3, c=pass_color, zorder=2, ax=axs['pitch'])
     elif row['typeId'] in [13, 14, 15]:  # Shots
-        pitch.scatter(row['x'], row['y'], ax=axs['pitch'], color='lightgrey', ec='k', s=(500 * row.get('xG', 0.05))+30, label="Shot")
+        pitch.scatter(row['x'], row['y'], ax=axs['pitch'], color='lightgrey', ec='k', s=(500 * row.get('xG', 0.05))+30)
     elif row['typeId'] in [16]:  # Goals
-        pitch.scatter(row['x'], row['y'], ax=axs['pitch'], marker='*', color='gold', ec='k', s=(1100 * row.get('xG', 0.05))+75, zorder=3, label="Goal")
+        pitch.scatter(row['x'], row['y'], ax=axs['pitch'], marker='*', color='gold', ec='k', s=(1100 * row.get('xG', 0.05))+75, zorder=3)
     elif row['typeId'] == 7:  # Tackles
-        pitch.scatter(row['x'], row['y'], ax=axs['pitch'], color='tab:blue', ec='k', marker='D', s=65, label="Tackle")
+        pitch.scatter(row['x'], row['y'], ax=axs['pitch'], color='tab:blue', ec='k', marker='D', s=65)
     elif row['typeId'] in [45, 83]:  # Missed Tackles
-        pitch.scatter(row['x'], row['y'], ax=axs['pitch'], color='tab:orange', ec='k', marker='D', s=65, label="Missed Tkl")
+        pitch.scatter(row['x'], row['y'], ax=axs['pitch'], color='tab:orange', ec='k', marker='D', s=65)
     elif row['typeId'] == 8:  # Interceptions
-        pitch.scatter(row['x'], row['y'], ax=axs['pitch'], color='tab:blue', ec='k', marker='s', s=65, label="Interception")
+        pitch.scatter(row['x'], row['y'], ax=axs['pitch'], color='tab:blue', ec='k', marker='s', s=65)
     elif row['typeId'] == 3:  # Dribbles
         dribble_color = won_color if row['outcome'] == 1 else lost_color
-        pitch.scatter(row['x'], row['y'], ax=axs['pitch'], color=dribble_color, ec='k', marker='>', s=65, label="Dribble")
+        pitch.scatter(row['x'], row['y'], ax=axs['pitch'], color=dribble_color, ec='k', marker='>', s=65)
     elif row['typeId'] == 44:  # Aerials
         aerial_color = won_color if row['outcome'] == 1 else lost_color
-        pitch.scatter(row['x'], row['y'], ax=axs['pitch'], color=aerial_color, ec='k', marker='^', s=65, label="Aerial")
+        pitch.scatter(row['x'], row['y'], ax=axs['pitch'], color=aerial_color, ec='k', marker='^', s=65)
     elif row['typeId'] == 49:  # Ball Recoveries
-        pitch.scatter(row['x'], row['y'], ax=axs['pitch'], color='k', marker='x', s=65, label="Recovery")
+        pitch.scatter(row['x'], row['y'], ax=axs['pitch'], color='k', marker='x', s=65)
     elif row['typeId'] == 74:  # Blocked Passes
-        pitch.scatter(row['x'], row['y'], ax=axs['pitch'], color='silver', ec='k', marker='<', s=65, label="Blocked Pass")
+        pitch.scatter(row['x'], row['y'], ax=axs['pitch'], color='silver', ec='k', marker='<', s=65)
 
-# setup the legend
-legend = axs['pitch'].legend(facecolor='#fbf9f4', handlelength=5, edgecolor='#4A2E19', loc='lower left')
-for text in legend.get_texts():
-    text.set_fontsize(15)
+# # setup the legend
+# legend = axs['pitch'].legend(facecolor='#fbf9f4', handlelength=5, edgecolor='#4A2E19', loc='lower left')
+# for text in legend.get_texts():
+#     text.set_fontsize(15)
 
 if mode == "Match View":
     if players:

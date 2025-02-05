@@ -24,7 +24,7 @@ with st.sidebar:
     with st.form('League Options'):
         submitted = st.form_submit_button("Submit League")
         league = st.selectbox("Choose League", lookup.League.unique().tolist())
-    with st.form("Season Options")
+    with st.form("Season Options"):
         submitted = st.form_submit_button("Submit Season")
         season = st.selectbox("Season", sorted(lookup[lookup.League==league].Season.unique().tolist(),reverse=True))
         data_as_of = lookup[(lookup.League==league) & (lookup.Season==season)].Date.values[0]

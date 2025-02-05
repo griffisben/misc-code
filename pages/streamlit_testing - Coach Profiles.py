@@ -129,7 +129,7 @@ lowbloack_filter = st.slider('Low Block', 0.0, 1.0, (0.0,1.0), key='slider8')
 longballs_filter = st.slider('Long Balls', 0.0, 1.0, (0.0,1.0), key='slider1')
 
 filtered_teams_table = df_percentiles[
-(df_percentiles['GK Buildup'].between(gkbuildup_filter)) & 
+(df_percentiles['GK Buildup'].between(gkbuildup_filter[0],gkbuildup_filter[1])) & 
 (df_percentiles['Circulation'].between(circulation_filter)) & 
 (df_percentiles['Territory'].between(territory_filter)) & 
 (df_percentiles['Wing Play'].between(wingplay_filter)) & 

@@ -66,6 +66,7 @@ season = st.sidebar.selectbox("Select Season", sorted(seasons, reverse=True))
 
 # Filter data for selected team and season
 team_data = df_percentiles[(df_percentiles["Team"] == team) & (df_percentiles["Season"] == season)]
+team_data_raw = df_raw[(df_raw["Team"] == team) & (df_raw["Season"] == season)]
 league = team_data.League.values[0]
 metrics = ['Counters','High Press','Low Block','Long Balls','GK Buildup','Circulation','Territory','Wing Play','Crossing',]
 
@@ -89,6 +90,7 @@ fig = go.Figure()
 fig.add_trace(go.Barpolar(
     r=team_data[metrics].values.flatten(),
     theta=metrics,
+    hover_data=team_data_raw[metrics].values.flatten(),
     marker=dict(color=text_inv_cs, line_width=1.5, line_color=text_cs)
 ))
 fig.update_layout(polar=dict(radialaxis=dict(showticklabels=False, visible=True, range=[0, 1])), showlegend=False)

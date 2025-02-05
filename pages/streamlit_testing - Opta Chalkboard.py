@@ -42,7 +42,7 @@ team = st.sidebar.selectbox("Select Team", sorted(df["Team"].unique()))
 
 if mode == "Match View":
     # Filter matches based on team
-    team_matches = df[df["Team"] == team]["Match"].unique()
+    team_matches = df[df["Team"] == team].groupby(['Match','Date']).x.count().reset_index().sort_values(by=['Date']).reset_index().Match.tolist()
     match = st.sidebar.selectbox("Select Match", team_matches)
     
     # Filter players based on team and match

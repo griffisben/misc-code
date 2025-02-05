@@ -154,7 +154,7 @@ if mode == "Match View":
 else:
         axs['title'].text(.5, 1.2, f"{team} Season Actions", va='center', ha='center',
                           fontsize=28, color='#4A2E19')
-        axs['title'].text(.5, .25, {league} {season}, va='center', ha='center',
+        axs['title'].text(.5, .25, f"{league} {season}", va='center', ha='center',
                           fontsize=20, color='#4A2E19')
 
 if not include_set_pieces:

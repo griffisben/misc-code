@@ -104,7 +104,7 @@ for _, row in filtered_df.iterrows():
         pass_color = cmp_color if row['outcome'] == 1 else inc_color
         if row.get('assist', 0) == 1 or row.get('keyPass', 0) == 1:
             pass_color = key_color
-        pitch.lines(row['x'], row['y'], row['endX'], row['endY'], label="Pass"
+        pitch.lines(row['x'], row['y'], row['endX'], row['endY'], label="Pass",
                     comet=True, alpha=0.3, lw=5, color=pass_color, ax=axs['pitch'])
         pitch.scatter(row['endX'], row['endY'], s=45, ec='k', lw=.3, c=pass_color, zorder=2, ax=axs['pitch'])
     elif row['typeId'] in [13, 14, 15]:  # Shots

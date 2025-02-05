@@ -152,5 +152,5 @@ filtered_teams_table = df_percentiles[
 (df_percentiles['Long Balls'].between(longballs_filter[0],longballs_filter[1]))
 ]
 
-filtered_teams_table = filtered_teams_table[['Team','League','Season']+metrics]
+filtered_teams_table = filtered_teams_table[['Team','League','Season','GK Buildup','Circulation','Territory','Wing Play','Crossing','Counters','High Press','Low Block','Long Balls',]]
 st.dataframe(filtered_teams_table.style.applymap(color_percentile, subset=filtered_teams_table.columns[3:]))

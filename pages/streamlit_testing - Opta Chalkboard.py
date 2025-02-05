@@ -9,6 +9,8 @@ def load_data(league,data_as_of):
     url = f"https://github.com/griffisben/misc-code/raw/refs/heads/main/Events/{league}%20{data_as_of}%20with%20All%20Info.parquet"
     df = pd.read_parquet(url)
     return df
+    
+@st.cache_data
 def load_lookup():
     url = "https://github.com/griffisben/misc-code/raw/refs/heads/main/Chalkboard_League_Lookups.csv"
     df = pd.read_csv(url)

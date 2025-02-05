@@ -173,7 +173,7 @@ else:
     
 st.pyplot(fig)
 
-filtered_df['Sequence'] = filtered_df['Sequence'].bfill()
+# filtered_df['Sequence'] = filtered_df['Sequence'].bfill()
 filtered_df = filtered_df[['Match','playerName','typeId','timeMin','timeSec','outcome','xT','xG','xGA','Gamestate']].rename(columns={
     'playerName':'Player','timeMin':'Minute','timeSec':'Second','Sequence':'Poss. ID','seq_xT':'xT of Poss.','seq_xG':'xG of Poss.','Passes in Sequence':'Passes in Poss.'
 })

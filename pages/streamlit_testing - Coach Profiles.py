@@ -116,15 +116,28 @@ similar_teams = similar_teams(team, season, metrics)
 st.dataframe(similar_teams[['Team','League','Season','Similarity']].head(20))
 
 
-# st.subheader("Team Finder")
+st.subheader("Team Finder")
 
-# circulation = st.slider('Short & Medium Pass Cmp %', 0.0, 1.0, 0.0, key='slider1')
-# territory = st.slider('Long Pass Cmp %', 0.0, 1.0, 0.0, key='slider2')
-# passestot = st.slider('Passes per 90', 0.0, 1.0, 0.0, key='slider3')
-# smart = st.slider('Smart Passes per 90', 0.0, 1.0, 0.0, key='slider4')
-# crosspct = st.slider('Cross Cmp %', 0.0, 1.0, 0.0, key='slider5')
-# crosses = st.slider('Crosses per 90', 0.0, 1.0, 0.0, key='slider6')
-# shotassist = st.slider('Shot Assists per 90', 0.0, 1.0, 0.0, key='slider7')
-# xa = st.slider('xA per 90', 0.0, 1.0, 0.0, key='slider8')
-# xasa = st.slider('xA per Shot Assist', 0.0, 1.0, 0.0, key='slider9')
+gkbuildup_filter = st.slider('GK Buildup', 0.0, 1.0, (0.0,1.0), key='slider2')
+circulation_filter = st.slider('Circulation', 0.0, 1.0, (0.0,1.0), key='slider3')
+territory_filter = st.slider('Territory', 0.0, 1.0, (0.0,1.0), key='slider4')
+wingplay_filter = st.slider('Wing Play', 0.0, 1.0, (0.0,1.0), key='slider5')
+crossing_filter = st.slider('Crossing', 0.0, 1.0, (0.0,1.0), key='slider6')
+counters_filter = st.slider('Counters', 0.0, 1.0, (0.0,1.0), key='slider6')
+highpress_filter = st.slider('High Press', 0.0, 1.0, (0.0,1.0), key='slider7')
+lowbloack_filter = st.slider('Low Block', 0.0, 1.0, (0.0,1.0), key='slider8')
+longballs_filter = st.slider('Long Balls', 0.0, 1.0, (0.0,1.0), key='slider1')
 
+filtered_teams_table = df_percentiles[
+(df_percentiles['GK Buildup'].between(gkbuildup_filter)) & 
+(df_percentiles['Circulation'].between(circulation_filter)) & 
+(df_percentiles['Territory'].between(territory_filter)) & 
+(df_percentiles['Wing Play'].between(wingplay_filter)) & 
+(df_percentiles['Crossing'].between(crossing_filter)) & 
+(df_percentiles['Counters'].between(counters_filter)) & 
+(df_percentiles['High Press'].between(highpress_filter)) & 
+(df_percentiles['Low Block'].between(lowbloack_filter)) & 
+(df_percentiles['Long Balls'].between(longballs_filter))
+]
+
+filtered_teams_table[['Team','League','Season']+metrics]

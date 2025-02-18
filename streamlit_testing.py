@@ -163,6 +163,6 @@ timeseries = base.mark_bar(width=8, strokeOpacity=.8).encode(
     )
 )
 
-st.altair_chart(points , timeseries)
+st.altair_chart((points , timeseries))
 
 

@@ -79,7 +79,7 @@ for player in filtered_data_player['player'].unique():
     ax[1].bar(player_data['date'], player_data[f"{var}/90"])
 
 ax[1].set_xlim(date_min, date_max)
-ax[1].set_ylim(y_domain_min, y_domain_max)
+# ax[1].set_ylim(y_domain_min, y_domain_max)
 ax[1].set_xlabel('Match Date')
 ax[1].set_ylabel(f"{var.replace('_',' ').title()} per 90'")
 ax[1].set_title(f"{var.replace('_',' ').title()} per 90', Match-by-Match Breakdown\nOnly includes games that players played at least {min_mins} mins.")

@@ -62,7 +62,9 @@ if team_dropdown:
 player_dropdown = st.selectbox("Player", filtered_data.player.unique().tolist())
 
 if player_dropdown:
-    filtered_data = filtered_data[filtered_data['player'] == player_dropdown]
+    filtered_data_player = filtered_data[filtered_data['player'] == player_dropdown]
+else:
+    filtered_data_player = filtered_data
 
 bar_data = filtered_data.groupby('player')[f"{var}/90"].mean().sort_values(ascending=False)
 ax[0].barh(bar_data.index, bar_data.values, color='#806c5e', edgecolor='#4a2e19', linewidth=0.5)
@@ -72,9 +74,9 @@ ax[0].set_ylabel("Player")
 ax[0].set_title(f"{league} {ssn}, {var.replace('_',' ').title()} per 90'\nIncludes players with at least {mins} minutes played")
 
 # Time series chart
-for player in filtered_data['player'].unique():
+for player in filtered_data_player['player'].unique():
     player_data = filtered_data[filtered_data['player'] == player]
-    ax[1].plot(player_data['date'], player_data[f"{var}/90"], label=player, marker='o')
+    ax[1].bar(player_data['date'], player_data[f"{var}/90"])
 
 ax[1].set_xlim(date_min, date_max)
 ax[1].set_ylim(y_domain_min, y_domain_max)

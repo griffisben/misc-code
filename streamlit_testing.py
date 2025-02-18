@@ -95,8 +95,8 @@ date_max = data.date.max()
 selector = alt.selection_point(fields=['player'])
 
 base = alt.Chart(data).properties(
-    width=650,
-    height=640
+    # width=650,
+    # height=640
 ).add_params(selector)
 
 points = base.mark_bar(
@@ -163,6 +163,6 @@ timeseries = base.mark_bar(width=8, strokeOpacity=.8).encode(
     )
 )
 
-st.altair_chart(points | timeseries, use_container_width=True)
+st.altair_chart(points | timeseries)
 
 

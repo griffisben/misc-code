@@ -36,8 +36,8 @@ data[f"{var}/90"] = data[var] / (data['minutes_on_field']/90)
 data['match_name'] = data.teamA + " " + data.score + " " + data.teamB
 data = data[data['minutes_on_field']>=min_mins]
 
-positions = ['']+sorted(data['main_position'].unique().tolist())
-teams = ['']+sorted(data.club.unique().tolist())
+positions = sorted(data['main_position'].unique().tolist())
+teams = sorted(data.club.unique().tolist())
 
 y_domain_min = 0 if min(data[f"{var}/90"]) >= 0 else min(data[f"{var}/90"])-1
 y_domain_max = max(data[f"{var}/90"])+1
@@ -50,14 +50,14 @@ date_max = data.date.max()
 fig, ax = plt.subplots(2, 1, figsize=(10, 12))
 
 # Bar chart
-team_dropdown = st.selectbox("Team", teams)
-pos_dropdown = st.selectbox("Position", positions)
+team_dropdown = st.multiselect("Team", teams)
+pos_dropdown = st.multiselect("Position", positions)
 
 filtered_data = data
 if pos_dropdown:
-    filtered_data = filtered_data[filtered_data['main_position'] == pos_dropdown]
+    filtered_data = filtered_data[filtered_data['main_position'].isin(pos_dropdown)]
 if team_dropdown:
-    filtered_data = filtered_data[filtered_data['club'] == team_dropdown]
+    filtered_data = filtered_data[filtered_data['club'].isin(team_dropdown)]
 
 player_dropdown = st.selectbox("Player", sorted(filtered_data.player.unique().tolist()))
 

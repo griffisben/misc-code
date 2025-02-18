@@ -85,7 +85,8 @@ ax[1].set_ylabel(f"{var.replace('_',' ').title()} per 90'")
 ax[1].set_title(f"{var.replace('_',' ').title()} per 90', Match-by-Match Breakdown\nOnly includes games that players played at least {min_mins} mins.")
 ax[1].xaxis.set_major_locator(mdates.MonthLocator())
 ax[1].xaxis.set_major_formatter(mdates.DateFormatter('%Y-%m'))
-ax[1].legend(loc='upper left', bbox_to_anchor=(1, 1))
+if not player_dropdown:
+    ax[1].legend(loc='upper left', bbox_to_anchor=(1, 1))
 
 plt.tight_layout()
 st.pyplot(fig)

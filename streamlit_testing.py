@@ -59,7 +59,7 @@ if pos_dropdown:
 if team_dropdown:
     filtered_data = filtered_data[filtered_data['club'] == team_dropdown]
 
-player_dropdown = st.selectbox("Player", filtered_data.player.unique().tolist())
+player_dropdown = st.selectbox("Player", sorted(filtered_data.player.unique().tolist()))
 
 if player_dropdown:
     filtered_data_player = filtered_data[filtered_data['player'] == player_dropdown]

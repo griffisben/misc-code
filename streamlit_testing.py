@@ -66,7 +66,7 @@ if player_dropdown:
 else:
     filtered_data_player = filtered_data
 
-bar_data = filtered_data.groupby('player')[f"{var}/90"].mean().sort_values(ascending=False)
+bar_data = filtered_data.groupby('player')[f"{var}/90"].mean().sort_values(ascending=False).reset_index()
 ax[0].barh(bar_data.index, bar_data.values, color='#806c5e', edgecolor='#4a2e19', linewidth=0.5)
 ax[0].set_xlim(0, x_domain_max)
 ax[0].set_xlabel(f"{var.replace('_',' ').title()} per 90'")

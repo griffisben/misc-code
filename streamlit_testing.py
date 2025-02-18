@@ -95,8 +95,8 @@ date_max = data.date.max()
 selector = alt.selection_point(fields=['player'])
 
 base = alt.Chart(data).properties(
-    # width=650,
-    # height=640
+    width=300,
+    height=640
 ).add_params(selector)
 
 points = base.mark_bar(

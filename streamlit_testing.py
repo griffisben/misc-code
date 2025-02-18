@@ -59,10 +59,10 @@ if pos_dropdown:
 if team_dropdown:
     filtered_data = filtered_data[filtered_data['club'] == team_dropdown]
 
-player_dropdown = st.selectbox("Player", filtered_data.full_name.unique().tolist())
+player_dropdown = st.selectbox("Player", filtered_data.player.unique().tolist())
 
 if player_dropdown:
-    filtered_data = filtered_data[filtered_data['full_name'] == player_dropdown]
+    filtered_data = filtered_data[filtered_data['player'] == player_dropdown]
 
 bar_data = filtered_data.groupby('player')[f"{var}/90"].mean().sort_values(ascending=False)
 ax[0].barh(bar_data.index, bar_data.values, color='#806c5e', edgecolor='#4a2e19', linewidth=0.5)

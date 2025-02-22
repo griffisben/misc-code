@@ -2461,12 +2461,13 @@ with similarity_tab:
     with st.form('Similar Player Search'):
         submitted = st.form_submit_button("Find Similar Players")
         similar_player_lg_lookup = pd.read_csv('https://raw.githubusercontent.com/griffisben/Wyscout_Prospect_Research/main/league_info_lookup.csv')
-        geo_input = st.selectbox("Geography Region", ('League','Country',"Region",'Continent'))
+        geo_input = st.selectbox("Geography Region", ('League','Country',"Region",'Continent','Scouting Group'))
         geo_mapping = {
             'Region': 'Nordics',
             'Country': 'Denmark',
             'Continent': 'Europe',
-            'League': 'Danish 1. Division'
+            'League': 'Danish 1. Division',
+            'Scouting Group':'Proactive Primary'
         }
         default_region_area = geo_mapping.get(geo_input, 'Unknown')
         region = st.multiselect(f"{geo_input}(s) to include (leave blank to include all)", similar_player_lg_lookup[geo_input].unique().tolist(), default=default_region_area)
@@ -2512,12 +2513,13 @@ with filter_tab:
                                 'Central Midfielders no CAM (DM, CM)', 'Central Midfielders no DM (CM, CAM)', 'Fullbacks (FBs/WBs)',
                                 'Defenders (CB, FB/WB, DM)', 'Centre-Backs', 'CBs & DMs','Goalkeepers'))
         similar_player_lg_lookup_filters = pd.read_csv('https://raw.githubusercontent.com/griffisben/Wyscout_Prospect_Research/main/league_info_lookup.csv')
-        geo_input_filters = st.selectbox("Geography Region", ('League','Country',"Region",'Continent'))
+        geo_input_filters = st.selectbox("Geography Region", ('League','Country',"Region",'Continent','Scouting Group'))
         geo_mapping_filters = {
             'Region': 'Nordics',
             'Country': 'Denmark',
             'Continent': 'Europe',
-            'League': 'Danish 1. Division'
+            'League': 'Danish 1. Division',
+            'Scouting Group':'Proactive Primary'
         }
         default_region_area_filters = geo_mapping_filters.get(geo_input_filters, 'Unknown')
         region_filters = st.multiselect(f"{geo_input_filters}(s) to include (leave blank to include all)", similar_player_lg_lookup_filters[geo_input_filters].unique().tolist(), default=default_region_area_filters)
@@ -2702,12 +2704,13 @@ with ranking_tab:
     with st.form('Geo Selection for Ranking'):
         submitted = st.form_submit_button("Submit League Choice(s)")
         similar_player_lg_lookup_ranking = pd.read_csv('https://raw.githubusercontent.com/griffisben/Wyscout_Prospect_Research/main/league_info_lookup.csv')
-        geo_input_ranking = st.selectbox("Geography Region", ('League','Country',"Region",'Continent'))
+        geo_input_ranking = st.selectbox("Geography Region", ('League','Country',"Region",'Continent','Scouting Group'))
         geo_mapping_ranking = {
             'Region': 'Nordics',
             'Country': 'Denmark',
             'Continent': 'Europe',
-            'League': 'Danish 1. Division'
+            'League': 'Danish 1. Division',
+            'Scouting Group':'Proactive Primary'
         }
         default_region_area_ranking = geo_mapping_ranking.get(geo_input_ranking, 'Unknown')
         region_ranking = st.multiselect(f"{geo_input_filters}(s) to include (leave blank to include all)", similar_player_lg_lookup_ranking[geo_input_ranking].unique().tolist(), default=default_region_area_ranking)

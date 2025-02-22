@@ -73,8 +73,6 @@ def prep_similarity_df(geo_input, region, tiers, time_frame):
             sim_lg_lookup = sim_lg_lookup[sim_lg_lookup['Scouting Group'].isin(region)].sort_values(by=['Season'],ascending=False)
         if tiers != []:
             sim_lg_lookup = sim_lg_lookup[sim_lg_lookup.Tier.isin(tiers)]
-        st.write(len(sim_lg_lookup))
-        st.write(sim_lg_lookup.League.unique())
     
     sim_lg_lookup_recent = sim_lg_lookup.drop_duplicates(subset=['League','Country'])
     sim_lg_lookup_recent2 = sim_lg_lookup.drop(sim_lg_lookup_recent.index)
@@ -164,7 +162,7 @@ def prep_similarity_df_filters(geo_input, region, tiers, time_frame):
             sim_lg_lookup = sim_lg_lookup[sim_lg_lookup['Scouting Group'].isin(region)].sort_values(by=['Season'],ascending=False)
         if tiers != []:
             sim_lg_lookup = sim_lg_lookup[sim_lg_lookup.Tier.isin(tiers)]
-
+        sim_lg_lookup = sim_lg_lookup[sim_lg_lookup.Season.isin(time_frame)]
     
     dfs = []
     char_replacements = str.maketrans({" ": "%20", "ü": "u", "ó": "o", "ö": "o", "ã": "a", "ç": "c"})

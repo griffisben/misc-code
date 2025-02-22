@@ -66,7 +66,16 @@ def prep_similarity_df(geo_input, region, tiers, time_frame):
             sim_lg_lookup = sim_lg_lookup.sort_values(by=['Season'],ascending=False)
         else:
             sim_lg_lookup = sim_lg_lookup[sim_lg_lookup.League.isin(region)].sort_values(by=['Season'],ascending=False)
-
+    if geo_input == 'Scouting Group':
+        if region==[]:
+            sim_lg_lookup = sim_lg_lookup.sort_values(by=['Season'],ascending=False)
+        else:
+            sim_lg_lookup = sim_lg_lookup[sim_lg_lookup['Scouting Group'].isin(region)].sort_values(by=['Season'],ascending=False)
+        if tiers != []:
+            sim_lg_lookup = sim_lg_lookup[sim_lg_lookup.Tier.isin(tiers)]
+        st.write(len(sim_lg_lookup))
+        st.write(sim_lg_lookup.League.unique())
+    
     sim_lg_lookup_recent = sim_lg_lookup.drop_duplicates(subset=['League','Country'])
     sim_lg_lookup_recent2 = sim_lg_lookup.drop(sim_lg_lookup_recent.index)
     sim_lg_lookup_recent2 = sim_lg_lookup_recent2.drop_duplicates(subset=['League','Country'])
@@ -147,7 +156,15 @@ def prep_similarity_df_filters(geo_input, region, tiers, time_frame):
             sim_lg_lookup = sim_lg_lookup.sort_values(by=['Season'],ascending=False)
         else:
             sim_lg_lookup = sim_lg_lookup[sim_lg_lookup.League.isin(region)].sort_values(by=['Season'],ascending=False)
-        sim_lg_lookup = sim_lg_lookup[sim_lg_lookup['League-Season'].isin(time_frame)]        
+        sim_lg_lookup = sim_lg_lookup[sim_lg_lookup['League-Season'].isin(time_frame)]     
+    if geo_input == 'Scouting Group':
+        if region==[]:
+            sim_lg_lookup = sim_lg_lookup.sort_values(by=['Season'],ascending=False)
+        else:
+            sim_lg_lookup = sim_lg_lookup[sim_lg_lookup['Scouting Group'].isin(region)].sort_values(by=['Season'],ascending=False)
+        if tiers != []:
+            sim_lg_lookup = sim_lg_lookup[sim_lg_lookup.Tier.isin(tiers)]
+
     
     dfs = []
     char_replacements = str.maketrans({" ": "%20", "ü": "u", "ó": "o", "ö": "o", "ã": "a", "ç": "c"})

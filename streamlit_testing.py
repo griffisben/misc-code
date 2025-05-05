@@ -25,7 +25,7 @@ cmap = matplotlib.colormaps['coolwarm']
 
 def table_start_end(df,start_date,end_date):
     df.Date = pd.to_datetime(df.Date)
-    df = df[start_date <= df.Date <= end_date]
+    df = df[pd.to_datetime(start_date) <= df.Date <= pd.to_datetime(end_date)]
 
     table = df.groupby(['Team']).agg({'Result':'count','Pts':'sum','xPts':'sum','Win':'sum','Draw':'sum','Loss':'sum','Goals':'sum','Goals Conceded':'sum','GD':'sum','xG':'sum','xGA':'sum','xGD':'sum'}).reset_index().sort_values(by=['Pts','GD','Goals','Win'],ascending=[False,False,False,False]).rename(columns={'Win':'W','Draw':'D','Loss':'L','Goals':'GF','Goals Conceded':'GA','Result':'GP'})
     table.reset_index(drop=True,inplace=True)

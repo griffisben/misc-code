@@ -31,6 +31,7 @@ def table_start_end(df,start_date,end_date):
     table.reset_index(drop=True,inplace=True)
     table.reset_index(drop=False,inplace=True)
     table.rename(columns={'index':'Pos'},inplace=True)
+    table.Pos = 1+table.Pos
 
     return table
     

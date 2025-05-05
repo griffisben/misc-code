@@ -215,7 +215,7 @@ def ben_theme():
 # alt.themes.enable('ben_theme')
 ################################
 
-report_tab, data_tab, graph_tab, rank_tab, full_ranks_tab, xg_tab, scatter_tab = st.tabs(['Match Report', 'Data by Match - Table', 'Data by Match - Graph', 'League Rankings', 'Full League Ranks', 'xG & xGA By Match', 'Variable Scatters'])
+report_tab, league_table_tab, data_tab, graph_tab, rank_tab, full_ranks_tab, xg_tab, scatter_tab = st.tabs(['Match Report', 'League Table', 'Data by Match - Table', 'Data by Match - Graph', 'League Rankings', 'Full League Ranks', 'xG & xGA By Match', 'Variable Scatters'])
 
 for i in range(len(render_matches)):
     try:
@@ -309,11 +309,11 @@ league_data[available_vars] = league_data[available_vars].astype(float)
 league_data_base = league_data.copy()
 
 ####################
-with st.sidebar:
+with league_table_tab:
     start_date = st.date_input("Start Date for Table", value=league_data.Date.min(), min_value=league_data.Date.min(), max_value=league_data.Date.max(), format="YYYY-MM-DD")
     end_date = st.date_input("Start Date for Table", value=league_data.Date.max(), min_value=league_data.Date.min(), max_value=league_data.Date.max(), format="YYYY-MM-DD")
 
-    st.table(table_start_end(league_data,start_date,end_date))
+    st.dataframe(table_start_end(league_data,start_date,end_date))
 ###################
 
 data_tab.write(team_data)

@@ -26,7 +26,7 @@ cmap = matplotlib.colormaps['coolwarm']
 def table_start_end(df,start_date,end_date):
     df = df[df.Date.between(start_date,end_date)]
 
-    table = df.groupby(['Team']).agg({'Result':'count','Pts':'sum','xPts':'sum','Win':'sum','Draw':'sum','Loss':'sum','Goals':'sum','Goals Conceded':'sum','GD','xG':'sum','xGA':'sum','xGD':'sum'}).reset_index().sort_values(by=['Pts','GD','Goals','Win'],ascending=[False,False,False,False]).rename(columns={'Win':'W','Draw':'D','Loss':'L','Goals':'GF','Goals Conceded':'GA','Result':'GP'})
+    table = df.groupby(['Team']).agg({'Result':'count','Pts':'sum','xPts':'sum','Win':'sum','Draw':'sum','Loss':'sum','Goals':'sum','Goals Conceded':'sum','GD':'sum','xG':'sum','xGA':'sum','xGD':'sum'}).reset_index().sort_values(by=['Pts','GD','Goals','Win'],ascending=[False,False,False,False]).rename(columns={'Win':'W','Draw':'D','Loss':'L','Goals':'GF','Goals Conceded':'GA','Result':'GP'})
     table.reset_index(drop=True,inplace=True)
 
     return table

@@ -74,6 +74,10 @@ Second Striker,Midfielder no DM,mult,either,any,5,Second Striker,RM
 Advanced Playmaker,Midfielder no DM,mult,either,any,5,Advanced Playmaker,LM
 Classic 10,Midfielder no DM,mult,either,any,5,Classic 10,LM
 Second Striker,Midfielder no DM,mult,either,any,5,Second Striker,LM
+Wide Playmaker,Winger,mult,either,any,5,Wide Playmaker,RM
+Wide Playmaker,Winger,mult,either,any,5,Wide Playmaker,LM
+Wide Playmaker,Winger,mult,either,any,5,Wide Playmaker,RW
+Wide Playmaker,Winger,mult,either,any,5,Wide Playmaker,LW
 Complete Striker,CF,single,either,any,5,Complete Striker,ST
 Target Man,CF,single,either,any,5,Target Man,ST
 Playmaking Striker,CF,single,either,any,5,Playmaking Striker,ST

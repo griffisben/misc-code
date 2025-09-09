@@ -1528,7 +1528,6 @@ def scout_report(data_frame, gender, league, season, xtra, template, pos, player
                 
                 'extrapct2' : 'Shots',
                 'fwdpct2' : 'npxG',
-                'extrapct9' : 'npxG/shot',
                 'fwdpct1' : 'Non-pen\ngoals',
                 'fwdpct11' : 'Touches\nin box',
             },
@@ -1619,10 +1618,10 @@ def scout_report(data_frame, gender, league, season, xtra, template, pos, player
                               ]]
         if template == 'midfielders':
             raw_vals = raw_valsdf[["Player",
-                                gk11 ,mid2 ,mid1, extra13, extra20 ,extra11,extra12,extra14,extra15,fwd7 ,fwd4 ,fwd3,extra17,def10,fwd9 ,extra16 ,fwd5, extra7 ,fwd12 ,extra18,def3 ,def7 ,def2 ,extra2 ,fwd2 ,extra9 ,fwd1 ,fwd11
+                                gk11 ,mid2 ,mid1, extra13, extra20 ,extra11,extra12,extra14,extra15,fwd7 ,fwd4 ,fwd3,extra17,def10,fwd9 ,extra16 ,fwd5, extra7 ,fwd12 ,extra18,def3 ,def7 ,def2 ,extra2 ,fwd2 ,fwd1 ,fwd11
                               ]]
             raw_vals_full = raw_valsdf_full[["Player",
-                                gk11 ,mid2 ,mid1, extra13, extra20 ,extra11,extra12,extra14,extra15,fwd7 ,fwd4 ,fwd3,extra17,def10,fwd9 ,extra16 ,fwd5, extra7 ,fwd12 ,extra18,def3 ,def7 ,def2 ,extra2 ,fwd2 ,extra9 ,fwd1 ,fwd11
+                                gk11 ,mid2 ,mid1, extra13, extra20 ,extra11,extra12,extra14,extra15,fwd7 ,fwd4 ,fwd3,extra17,def10,fwd9 ,extra16 ,fwd5, extra7 ,fwd12 ,extra18,def3 ,def7 ,def2 ,extra2 ,fwd2 ,fwd1 ,fwd11
                               ]]
         if template == 'fullbacks':
             raw_vals = raw_valsdf[["Player",
@@ -1812,7 +1811,7 @@ def scout_report(data_frame, gender, league, season, xtra, template, pos, player
                     df1['Group'][i] = 'Ball Movement'
                 elif df1['Group'][i] <= 23:
                     df1['Group'][i] = 'Defense'
-                elif df1['Group'][i] <= 28:
+                elif df1['Group'][i] <= 27:
                     df1['Group'][i] = 'Direct'
                     
         if template == 'fullbacks':
@@ -1877,7 +1876,7 @@ def scout_report(data_frame, gender, league, season, xtra, template, pos, player
         template_group_sizes = {
             'strikers': [3,4,4,5,8],
             'wingers': [6,4,4,5,7],
-            'midfielders': [5,4,5,3,6,5],
+            'midfielders': [5,4,5,3,6,4],
             'fullbacks': [4,2,4,2,6,4],
             'centerbacks': [5,4,2,6,3],
             'goalkeepers': [6,6],

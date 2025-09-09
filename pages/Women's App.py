@@ -1495,6 +1495,7 @@ def scout_report(data_frame, gender, league, season, xtra, template, pos, player
                 'fwdpct1' : 'Non-pen\ngoals',
                 'fwdpct6' : 'Goal\nconv. %',
                 'fwdpct11' : 'Touches\nin box',
+                'extrapct8' : 'Fouls\nWon'
             },
             'midfielders': {
                 'gkpct11' : '% passes\nbeing short',

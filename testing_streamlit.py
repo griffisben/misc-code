@@ -1667,12 +1667,22 @@ def scout_report(data_frame, gender, league, season, xtra, template, pos, player
             'defpct2', 'defpct7', 'defpct6', 'gkpct7', 'defpct8', 'extrapct7', 'defpct4', 'gkpct3',
             'gkpct1', 'gkpct4', 'gkpct2', 'gkpct14', 'gkpct5', 'gkpct6', 'gkpct10'
         ]
+        var_index = [
+            1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,
+        ]
     
         # Create mapping dictionaries
         metric_to_name = dict(zip(all_possible_vars, names))
         metric_to_base = dict(zip(all_possible_vars, base_var_names))
-    
-        # Generate metric_rename and base_vars directly from selections
+        metric_to_num = dict(zip(all_possible_vars, var_index))
+        
+        ### Generate metric_rename and base_vars directly from selections
+        # metric_rename = [metric_to_name[metric] for metric in metric_selections]
+        # base_vars = [metric_to_base[metric] for metric in metric_selections]
+        var_index_nums = [metric_to_num[metric] for metric in metric_selections]
+        var_sorted_df = pd.DataFrame({'Metric':metric_selections,'Number':var_index_nums})
+        var_sorted_df = var_sorted_df.sort_values(by=['Number']).reset_index(drop=True)
+        metric_selections = var_sorted_df.Metric.tolist()
         metric_rename = [metric_to_name[metric] for metric in metric_selections]
         base_vars = [metric_to_base[metric] for metric in metric_selections]
     

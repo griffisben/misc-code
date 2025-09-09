@@ -1775,15 +1775,15 @@ def scout_report(data_frame, gender, league, season, xtra, template, pos, player
     if custom_radar == 'n':
         if template == 'strikers':
             for i in range(len(df1)):
-                if df1['Group'][i] <= 3+1:
+                if df1['Group'][i] <= 2:
                     df1['Group'][i] = 'Passing'
-                elif df1['Group'][i] <= 3+1+4:
+                elif df1['Group'][i] <= 6:
                     df1['Group'][i] = 'Creativity'
-                elif df1['Group'][i] <= 3+1+4+4:
+                elif df1['Group'][i] <= 10:
                     df1['Group'][i] = 'Shooting'
-                elif df1['Group'][i] <= 3+1+4+4+5:
+                elif df1['Group'][i] <= 15:
                     df1['Group'][i] = 'Ball Movement'
-                elif df1['Group'][i] <= 3+1+4+4+5+8:
+                elif df1['Group'][i] <= 23:
                     df1['Group'][i] = 'Defense'
     
         if template == 'wingers':

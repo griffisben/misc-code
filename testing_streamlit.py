@@ -23,6 +23,7 @@ import pycountry
 import altair as alt
 from sklearn.metrics.pairwise import cosine_similarity
 from sklearn.decomposition import PCA
+from sklearn.preprocessing import StandardScaler
 
 st.set_page_config(page_title="Scouting & Radar App", page_icon="🌍")
 
@@ -418,23 +419,32 @@ def similar_players_search(df, ws_id, pos, pca_transform, compare_metrics, mins,
         df_compare_pca = pca.fit_transform(df_compare)
         focal_player_data_pca = pca.transform(focal_player_data)
         omega_i_pca = np.array(focal_player_data_pca).flatten()
-        similarity_results = []
-        for index, row in df_compare.iterrows():
-            if index != focal_player_index:  # Skip the focal player itself
-                other_player_data_pca = np.array(pca.fit_transform(row)).flatten()
-                similarity = calculate_similarity_afl_paper(omega_i_pca, other_player_data_pca)
-                similarity_results.append((index, similarity))
-        similarity_df = pd.DataFrame(similarity_results, columns=['Index', 'Similarity'])
+        # Vectorized calculation
+        dot_products = np.dot(df_compare_pca, omega_i_pca)
+        magnitudes_i = np.linalg.norm(omega_i_pca)
+        magnitudes_j = np.linalg.norm(df_compare_pca, axis=1)
+        cos_theta = dot_products / (magnitudes_i * magnitudes_j)
+        theta = np.arccos(np.clip(cos_theta, -1, 1))
+        similarity = 100 * (1 - (2 / np.pi) * theta)
+        similarity_df = pd.DataFrame({'Index': df_compare.index, 'Similarity': similarity})
+        similarity_df = similarity_df[similarity_df.index != focal_player_index]
+
         
     if pca_transform == 'No':
-        omega_i = np.array(focal_player_data).flatten()
-        similarity_results = []
-        for index, row in df_compare.iterrows():
-            if index != focal_player_index:  # Skip the focal player itself
-                other_player_data = np.array(row).flatten()
-                similarity = calculate_similarity_afl_paper(omega_i, other_player_data)
-                similarity_results.append((index, similarity))
-        similarity_df = pd.DataFrame(similarity_results, columns=['Index', 'Similarity'])
+        # Optionally normalize data
+        scaler = StandardScaler()
+        df_compare_scaled = scaler.fit_transform(df_compare)
+        focal_player_data_scaled = scaler.transform([focal_player_data])[0]
+        omega_i = focal_player_data_scaled
+        # Vectorized calculation
+        dot_products = np.dot(df_compare_scaled, omega_i)
+        magnitudes_i = np.linalg.norm(omega_i)
+        magnitudes_j = np.linalg.norm(df_compare_scaled, axis=1)
+        cos_theta = dot_products / (magnitudes_i * magnitudes_j)
+        theta = np.arccos(np.clip(cos_theta, -1, 1))
+        similarity = 100 * (1 - (2 / np.pi) * theta)
+        similarity_df = pd.DataFrame({'Index': df_compare.index, 'Similarity': similarity})
+        similarity_df = similarity_df[similarity_df.index != focal_player_index]
 
     
     # Add additional columns to the result DataFrame
@@ -1696,9 +1706,9 @@ def scout_report(data_frame, gender, league, season, xtra, template, pos, player
         dfRadarMF.rename(columns=selected_columns, inplace=True)
 
         v_passing = ['Received passes per 90','Passes per 90','Pct of passes being short','Pct of passes being lateral','Accurate passes, %','Accurate short / medium passes, %','Accurate long passes, %','Crosses per 90','Accurate crosses, %']
-        v_playmaking = ['Smart passes per 90','Shot assists per 90','xA per 90','xA per Shot Assist','Assists per 90','Second assists per 90','Third assists per 90','1st, 2nd, 3rd assists','Progressive passes per 90','Progressive runs per 90']
+        v_playmaking = ['Smart passes per 90','Shot assists per 90','xA per 90','xA per Shot Assist','Assists per 90','Second assists per 90','Third assists per 90','1st, 2nd, 3rd assists','Progressive passes per 90']
         v_shooting = ['Shots per 90','npxG per 90','Non-penalty goals per 90','npxG per shot','Goal conversion, %']
-        v_attacking = ['Successful dribbles, %','Accelerations per 90','Touches in box per 90','Fouls suffered per 90']
+        v_attacking = ['Successful dribbles, %','Accelerations per 90','Progressive runs per 90','Touches in box per 90','Fouls suffered per 90']
         v_defending = ['Successful defensive actions per 90','Duels won, %','Defensive duels won, %','pAdj Tkl+Int per 90','PAdj Sliding tackles','PAdj Interceptions','Shots blocked per 90','Aerial duels per 90','Aerial duels won, %','Aerial duels won per 90','Fouls per 90']
         v_goalkeeping = ['Shots against per 90','Conceded goals per 90','Save rate, %','Prevented goals per 90','Goals prevented %','Clean sheets, %','Exits per 90','Average long pass length, m']
         

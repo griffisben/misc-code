@@ -431,19 +431,24 @@ def similar_players_search(df, ws_id, pos, pca_transform, compare_metrics, mins,
 
         
     if pca_transform == 'No':
-        # Optionally normalize data
-        scaler = StandardScaler()
-        df_compare_scaled = scaler.fit_transform(df_compare)
-        focal_player_data_scaled = scaler.transform([focal_player_data])[0]
-        omega_i = focal_player_data_scaled
+        omega_i = np.array(focal_player_data).flatten()
+        # Ensure df_compare is a numpy array
+        compare_array = df_compare.values
+        # Check shapes
+        assert len(omega_i) == compare_array.shape[1], "Feature count mismatch!"
         # Vectorized calculation
-        dot_products = np.dot(df_compare_scaled, omega_i)
+        dot_products = np.dot(compare_array, omega_i)
         magnitudes_i = np.linalg.norm(omega_i)
-        magnitudes_j = np.linalg.norm(df_compare_scaled, axis=1)
+        magnitudes_j = np.linalg.norm(compare_array, axis=1)
         cos_theta = dot_products / (magnitudes_i * magnitudes_j)
-        theta = np.arccos(np.clip(cos_theta, -1, 1))
+        # Handle numerical issues
+        cos_theta = np.clip(cos_theta, -1, 1)
+        theta = np.arccos(cos_theta)
         similarity = 100 * (1 - (2 / np.pi) * theta)
-        similarity_df = pd.DataFrame({'Index': df_compare.index, 'Similarity': similarity})
+        similarity_df = pd.DataFrame({
+            'Index': df_compare.index,
+            'Similarity': similarity
+        })
         similarity_df = similarity_df[similarity_df.index != focal_player_index]
 
     

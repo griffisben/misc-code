@@ -1450,6 +1450,7 @@ def scout_report(data_frame, gender, league, season, xtra, template, pos, player
                 'extrapct6' : 'Accelerations',
                 'fwdpct9' : 'Prog.\nruns',
                 'extrapct16' : 'Dribbles',
+                'fwdpct5' : 'Dribble\nwin %',
                 
                 'extrapct7' : 'Aerial\nwins',
                 'fwdpct12' : 'Aerial\nwin %',
@@ -1493,7 +1494,6 @@ def scout_report(data_frame, gender, league, season, xtra, template, pos, player
                 'fwdpct2' : 'npxG',
                 'extrapct9' : 'npxG/shot',
                 'fwdpct1' : 'Non-pen\ngoals',
-                'extrapct19' : 'Head\ngoals',
                 'fwdpct6' : 'Goal\nconv. %',
                 'fwdpct11' : 'Touches\nin box',
             },
@@ -1601,17 +1601,17 @@ def scout_report(data_frame, gender, league, season, xtra, template, pos, player
         }
         if template == 'strikers':
             raw_vals = raw_valsdf[["Player",
-                               extra11,extra12,extra14,extra15,extra13,fwd7 ,fwd4 ,fwd3 ,extra17,extra6 ,fwd9 ,extra16 ,extra7 ,fwd12 ,extra18,def3 ,mid12 ,extra2 ,fwd2 ,extra9 ,fwd1 ,extra19,fwd6 ,fwd11
+                               extra11,extra12,extra14,extra15,extra13,fwd7 ,fwd4 ,fwd3 ,extra17,extra6 ,fwd9 ,extra16 ,fwd5,extra7 ,fwd12 ,extra18,def3 ,mid12 ,extra2 ,fwd2 ,extra9 ,fwd1 ,extra19,fwd6 ,fwd11
                               ]]
             raw_vals_full = raw_valsdf_full[["Player",
-                               extra11,extra12,extra14,extra15,extra13,fwd7 ,fwd4 ,fwd3 ,extra17,extra6 ,fwd9 ,extra16 ,extra7 ,fwd12 ,extra18,def3 ,mid12 ,extra2 ,fwd2 ,extra9 ,fwd1 ,extra19,fwd6 ,fwd11
+                               extra11,extra12,extra14,extra15,extra13,fwd7 ,fwd4 ,fwd3 ,extra17,extra6 ,fwd9 ,extra16 ,fwd5,extra7 ,fwd12 ,extra18,def3 ,mid12 ,extra2 ,fwd2 ,extra9 ,fwd1 ,extra19,fwd6 ,fwd11
                               ]]
         if template == 'wingers':
             raw_vals = raw_valsdf[["Player",
-                                extra3 ,extra11,extra12,extra14,extra15,extra13,fwd7 ,fwd4 ,fwd3 ,extra17,extra6 ,fwd9 ,extra16,fwd5 ,extra7 ,fwd12 ,extra18,def3 ,mid12 ,extra2 ,fwd2 ,extra9 ,fwd1 ,extra19,fwd6 ,fwd11
+                                extra3 ,extra11,extra12,extra14,extra15,extra13,fwd7 ,fwd4 ,fwd3 ,extra17,extra6 ,fwd9 ,extra16,fwd5 ,extra7 ,fwd12 ,extra18,def3 ,mid12 ,extra2 ,fwd2 ,extra9 ,fwd1,fwd6 ,fwd11
                               ]]
             raw_vals_full = raw_valsdf_full[["Player",
-                                extra3 ,extra11,extra12,extra14,extra15,extra13,fwd7 ,fwd4 ,fwd3 ,extra17,extra6 ,fwd9 ,extra16,fwd5 ,extra7 ,fwd12 ,extra18,def3 ,mid12 ,extra2 ,fwd2 ,extra9 ,fwd1 ,extra19,fwd6 ,fwd11
+                                extra3 ,extra11,extra12,extra14,extra15,extra13,fwd7 ,fwd4 ,fwd3 ,extra17,extra6 ,fwd9 ,extra16,fwd5 ,extra7 ,fwd12 ,extra18,def3 ,mid12 ,extra2 ,fwd2 ,extra9 ,fwd1,fwd6 ,fwd11
                               ]]
         if template == 'midfielders':
             raw_vals = raw_valsdf[["Player",
@@ -1776,11 +1776,11 @@ def scout_report(data_frame, gender, league, season, xtra, template, pos, player
                     df1['Group'][i] = 'Passing'
                 elif df1['Group'][i] <= 9:
                     df1['Group'][i] = 'Creativity'
-                elif df1['Group'][i] <= 12:
+                elif df1['Group'][i] <= 13:
                     df1['Group'][i] = 'Shooting'
-                elif df1['Group'][i] <= 17:
+                elif df1['Group'][i] <= 18:
                     df1['Group'][i] = 'Ball Movement'
-                elif df1['Group'][i] <= 24:
+                elif df1['Group'][i] <= 25:
                     df1['Group'][i] = 'Defense'
     
         if template == 'wingers':
@@ -1793,7 +1793,7 @@ def scout_report(data_frame, gender, league, season, xtra, template, pos, player
                     df1['Group'][i] = 'Shooting'
                 elif df1['Group'][i] <= 19:
                     df1['Group'][i] = 'Ball Movement'
-                elif df1['Group'][i] <= 26:
+                elif df1['Group'][i] <= 25:
                     df1['Group'][i] = 'Defense'
     
         if template == 'midfielders':

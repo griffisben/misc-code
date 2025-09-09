@@ -25,7 +25,7 @@ from sklearn.metrics.pairwise import cosine_similarity
 from sklearn.decomposition import PCA
 from sklearn.preprocessing import StandardScaler
 
-st.set_page_config(page_title="Scouting & Radar App", page_icon="🌍")
+st.set_page_config(page_title="Scouting & Radar App", page_icon="⚽")
 
 colorscales = px.colors.named_colorscales()
 colorscales2 = [f"{cc}_r" for cc in colorscales]

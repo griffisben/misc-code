@@ -25,7 +25,7 @@ from sklearn.metrics.pairwise import cosine_similarity
 from sklearn.decomposition import PCA
 from sklearn.preprocessing import StandardScaler
 
-st.set_page_config(page_title="Scouting & Radar App", page_icon="⚽")
+st.set_page_config(page_title="Best XI Women's", page_icon="⚽")
 
 colorscales = px.colors.named_colorscales()
 colorscales2 = [f"{cc}_r" for cc in colorscales]
@@ -2240,6 +2240,10 @@ formation_positions = {442:['GK','RCB','LCB','RB','LB','RCM','LCM','RW','LW','RS
 
 rank_11_base = read_csv('https://raw.githubusercontent.com/griffisben/misc-code/main/RoleRanksApp/Ranking_XI.csv')
 role_position_lookup = read_csv('https://raw.githubusercontent.com/griffisben/misc-code/main/RoleRanksApp/Role_Positions_Lookup.csv')
+
+
+st.subheader("All data from Wyscout. Created by Ben Griffis (@BeGriffis on socials)")
+st.subheader("You are encouraged to use any of the images you create here in your own work, but you may not alter the images.")
 
 with st.expander('Instructions'):
     st.write('''

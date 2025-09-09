@@ -1611,10 +1611,10 @@ def scout_report(data_frame, gender, league, season, xtra, template, pos, player
                               ]]
         if template == 'wingers':
             raw_vals = raw_valsdf[["Player",
-                                extra3 ,extra11,extra12,extra14,extra15,extra13,fwd7 ,fwd4 ,fwd3 ,extra17,extra6 ,fwd9 ,extra16,fwd5 ,extra7 ,fwd12 ,extra18,def3 ,mid12 ,extra2 ,fwd2 ,extra9 ,fwd1,fwd6 ,fwd11
+                                extra3 ,extra11,extra12,extra14,extra15,extra13,fwd7 ,fwd4 ,fwd3 ,extra17,extra6 ,fwd9 ,extra16,fwd5 ,extra7 ,fwd12 ,extra18,def3 ,mid12 ,extra2 ,fwd2 ,extra9 ,fwd1,fwd6 ,fwd11,extra8
                               ]]
             raw_vals_full = raw_valsdf_full[["Player",
-                                extra3 ,extra11,extra12,extra14,extra15,extra13,fwd7 ,fwd4 ,fwd3 ,extra17,extra6 ,fwd9 ,extra16,fwd5 ,extra7 ,fwd12 ,extra18,def3 ,mid12 ,extra2 ,fwd2 ,extra9 ,fwd1,fwd6 ,fwd11
+                                extra3 ,extra11,extra12,extra14,extra15,extra13,fwd7 ,fwd4 ,fwd3 ,extra17,extra6 ,fwd9 ,extra16,fwd5 ,extra7 ,fwd12 ,extra18,def3 ,mid12 ,extra2 ,fwd2 ,extra9 ,fwd1,fwd6 ,fwd11,extra8
                               ]]
         if template == 'midfielders':
             raw_vals = raw_valsdf[["Player",
@@ -1796,7 +1796,7 @@ def scout_report(data_frame, gender, league, season, xtra, template, pos, player
                     df1['Group'][i] = 'Shooting'
                 elif df1['Group'][i] <= 19:
                     df1['Group'][i] = 'Ball Movement'
-                elif df1['Group'][i] <= 25:
+                elif df1['Group'][i] <= 26:
                     df1['Group'][i] = 'Defense'
     
         if template == 'midfielders':
@@ -1875,7 +1875,7 @@ def scout_report(data_frame, gender, league, season, xtra, template, pos, player
     if custom_radar == 'n':
         template_group_sizes = {
             'strikers': [3,4,4,5,8],
-            'wingers': [6,4,4,5,6],
+            'wingers': [6,4,4,5,7],
             'midfielders': [5,4,5,3,6,5],
             'fullbacks': [4,2,4,2,6,4],
             'centerbacks': [5,4,2,6,3],

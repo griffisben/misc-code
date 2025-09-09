@@ -1774,6 +1774,7 @@ def scout_report(data_frame, gender, league, season, xtra, template, pos, player
                 df1['Group'][i] = 'Goalkeeping'
     if custom_radar == 'n':
         if template == 'strikers':
+            print(df1)
             for i in range(len(df1)):
                 if df1['Group'][i] <= 3:
                     df1['Group'][i] = 'Passing'

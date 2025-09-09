@@ -2906,7 +2906,7 @@ with ranking_tab:
         with st.form('Time Frame Filters, League Ranking'):
             similar_player_lg_lookup_ranking['League-Season'] = similar_player_lg_lookup_ranking.League + " " + similar_player_lg_lookup_ranking.Season
             submitted = st.form_submit_button("Submit Seasons")
-            time_frame_ranking = st.multiselect('League-Seasons', (similar_player_lg_lookup_ranking[similar_player_lg_lookup_ranking.League.isin(region_ranking)].sort_values(by=['Country','Tier','Season'],ascending=[True,True,False])['League-Season'].tolist()), default=f'{default_danish_league} {default_danish_season}')
+            time_frame_ranking = st.multiselect('League-Seasons', (similar_player_lg_lookup_ranking[similar_player_lg_lookup_ranking.League.isin(region_ranking)].sort_values(by=['Country','Tier','Season'],ascending=[True,True,False])['League-Season'].tolist()), default=similar_player_lg_lookup_ranking[similar_player_lg_lookup_ranking.League.isin(region_ranking)].sort_values(by=['Country','Tier','Season'],ascending=[True,True,False])['League-Season'].tolist()[0])
     
     if geo_input_ranking != 'League':
         with st.form('Time Frame Filters, Non-League Ranking'):
@@ -2914,7 +2914,7 @@ with ranking_tab:
             time_frame_ranking = st.multiselect('League-Seasons', (sorted(similar_player_lg_lookup_ranking.Season.unique().tolist(), reverse=True)), default='24-25')
 
     try:
-        print(f"SELECTED OPTIONS:\nGeography Region: {geo_input_filters}\nArea: {region_filters}\nTiers: {tiers_filters}\nTime Frame: {time_frame_filters}\nPosition(s): {pos_select_filters}")
+        print(f"")
     except:
         geo_input_ranking='League',
         region_ranking=default_danish_league,

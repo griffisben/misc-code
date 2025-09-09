@@ -1604,10 +1604,8 @@ with st.expander('Instructions'):
     ''')
 
 
+gender = "Men"
 
-with st.sidebar:
-    st.header('Choose Gender')
-    gender = st.selectbox('Gender', ('Men','Women'))
 if gender == 'Men':
     lg_lookup = read_csv('https://raw.githubusercontent.com/griffisben/Wyscout_Prospect_Research/main/league_info_lookup.csv')
     logo_dict_df = read_csv('https://raw.githubusercontent.com/griffisben/Wyscout_Prospect_Research/main/Wyscout_Logo_Dict.csv')

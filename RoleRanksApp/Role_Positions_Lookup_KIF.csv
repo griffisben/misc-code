@@ -1,98 +1,98 @@
-﻿pos_,pos,pos_bucket,foot,main_position,num,pos_role,form_pos
-Distributor,GK,single,either,any,5,Distributor,GK
-Pure Shot-Stopper,GK,single,either,any,5,Pure Shot-Stopper,GK
-Balanced Keeper,GK,single,either,any,5,Balanced Keeper,GK
-Ball Playing CB,CB,single,either,any,5,Ball Playing CB,LCB
-Wide CB,CB,single,either,any,5,Wide CB,LCB
-Defensive CB,CB,single,either,any,5,Defensive CB,LCB
-Goalscoring CB,CB,single,either,any,5,Goalscoring CB,LCB
-Balanced CB,CB,single,either,any,5,Balanced CB,LCB
-Ball Playing CB,CB,single,either,any,5,Ball Playing CB,RCB
-Wide CB,CB,single,either,any,5,Wide CB,RCB
-Defensive CB,CB,single,either,any,5,Defensive CB,RCB
-Goalscoring CB,CB,single,either,any,5,Goalscoring CB,RCB
-Balanced CB,CB,single,either,any,5,Balanced CB,RCB
-Ball Playing CB,CB,single,either,any,5,Ball Playing CB,CB
-Wide CB,CB,single,either,any,5,Wide CB,CB
-Defensive CB,CB,single,either,any,5,Defensive CB,CB
-Goalscoring CB,CB,single,either,any,5,Goalscoring CB,CB
-Balanced CB,CB,single,either,any,5,Balanced CB,CB
-Defensive FB,Fullback,mult,either,LB|LWB,5,Defensive LB,LB
-Inverted FB,Fullback,mult,either,LB|LWB,5,Inverted LB,LB
-Attacking FB,Fullback,mult,either,LB|LWB,5,Attacking LB,LB
-Wingback,Fullback,mult,either,LB|LWB,5,Left Wingback,LB
-Defensive FB,Fullback,mult,either,any,5,Defensive FB,LB
-Inverted FB,Fullback,mult,either,any,5,Inverted FB,LB
-Attacking FB,Fullback,mult,either,any,5,Attacking FB,LB
-Wingback,Fullback,mult,either,any,5,Wingback,LB
-Defensive FB,Fullback,mult,either,RB|RWB,5,Defensive RB,RB
-Inverted FB,Fullback,mult,either,RB|RWB,5,Inverted RB,RB
-Attacking FB,Fullback,mult,either,RB|RWB,5,Attacking RB,RB
-Wingback,Fullback,mult,either,RB|RWB,5,Right Wingback,RB
-Defensive FB,Fullback,mult,either,any,5,Defensive FB,RB
-Inverted FB,Fullback,mult,either,any,5,Inverted FB,RB
-Attacking FB,Fullback,mult,either,any,5,Attacking FB,RB
-Wingback,Fullback,mult,either,any,5,Wingback,RB
-Midfield Anchor,Midfielder no CAM,mult,either,any,5,Midfield Anchor,CM
-Holding Mid,Midfielder no CAM,mult,either,any,5,Holding Mid,CM
-Deep-Lying Playmaker,Midfielder no CAM,mult,either,any,5,Deep-Lying Playmaker,CM
-Box-to-Box Midfielder,Midfielder,mult,either,any,5,Box-to-Box Midfielder,CM
-Midfield Anchor,Midfielder no CAM,mult,either,any,5,Midfield Anchor,LCM
-Holding Mid,Midfielder no CAM,mult,either,any,5,Holding Mid,LCM
-Deep-Lying Playmaker,Midfielder no CAM,mult,either,any,5,Deep-Lying Playmaker,LCM
-Box-to-Box Midfielder,Midfielder,mult,either,any,5,Box-to-Box Midfielder,LCM
-Advanced Playmaker,Midfielder no DM,mult,either,any,5,Advanced Playmaker,LCM
-Midfield Anchor,Midfielder no CAM,mult,either,any,5,Midfield Anchor,RCM
-Holding Mid,Midfielder no CAM,mult,either,any,5,Holding Mid,RCM
-Deep-Lying Playmaker,Midfielder no CAM,mult,either,any,5,Deep-Lying Playmaker,RCM
-Box-to-Box Midfielder,Midfielder,mult,either,any,5,Box-to-Box Midfielder,RCM
-Advanced Playmaker,Midfielder no DM,mult,either,any,5,Advanced Playmaker,RCM
-Advanced Playmaker,Midfielder no DM,mult,either,any,5,Advanced Playmaker,CAM
-Classic 10,Midfielder no DM,mult,either,any,5,Classic 10,CAM
-Second Striker,Midfielder no DM,mult,either,any,5,Second Striker,CAM
-Advanced Playmaker,Midfielder no DM,mult,either,any,5,Advanced Playmaker,RAM
-Classic 10,Midfielder no DM,mult,either,any,5,Classic 10,RAM
-Second Striker,Midfielder no DM,mult,either,any,5,Second Striker,RAM
-Advanced Playmaker,Midfielder no DM,mult,either,any,5,Advanced Playmaker,LAM
-Classic 10,Midfielder no DM,mult,either,any,5,Classic 10,LAM
-Second Striker,Midfielder no DM,mult,either,any,5,Second Striker,LAM
-Traditional Winger,Winger,mult,either,any,5,Traditional Winger,LW
-Inverted Winger,Winger,mult,either,any,5,Inverted Winger,LW
-Inside Forward,Winger,mult,either,any,5,Inside Forward,LW
-Traditional Winger,Winger,mult,either,any,5,Traditional Winger,RW
-Inverted Winger,Winger,mult,either,any,5,Inverted Winger,RW
-Inside Forward,Winger,mult,either,any,5,Inside Forward,RW
-Traditional Winger,Winger,mult,either,any,5,Traditional Winger,LM
-Inverted Winger,Winger,mult,either,any,5,Inverted Winger,LM
-Inside Forward,Winger,mult,either,any,5,Inside Forward,LM
-Traditional Winger,Winger,mult,either,any,5,Traditional Winger,RM
-Inverted Winger,Winger,mult,either,any,5,Inverted Winger,RM
-Inside Forward,Winger,mult,either,any,5,Inside Forward,RM
-Advanced Playmaker,Midfielder no DM,mult,either,any,5,Advanced Playmaker,RM
-Classic 10,Midfielder no DM,mult,either,any,5,Classic 10,RM
-Second Striker,Midfielder no DM,mult,either,any,5,Second Striker,RM
-Advanced Playmaker,Midfielder no DM,mult,either,any,5,Advanced Playmaker,LM
-Classic 10,Midfielder no DM,mult,either,any,5,Classic 10,LM
-Second Striker,Midfielder no DM,mult,either,any,5,Second Striker,LM
-Wide Playmaker,Winger,mult,either,any,5,Wide Playmaker,RM
-Wide Playmaker,Winger,mult,either,any,5,Wide Playmaker,LM
-Wide Playmaker,Winger,mult,either,any,5,Wide Playmaker,RW
-Wide Playmaker,Winger,mult,either,any,5,Wide Playmaker,LW
-Complete Striker,CF,single,either,any,5,Complete Striker,ST
-Target Man,CF,single,either,any,5,Target Man,ST
-Playmaking Striker,CF,single,either,any,5,Playmaking Striker,ST
-Transitional Threat,CF,single,either,any,5,Transitional Threat,ST
-Pressing Striker,CF,single,either,any,5,Pressing Striker,ST
-Poacher,CF,single,either,any,5,Poacher,ST
-Complete Striker,CF,single,either,any,5,Complete Striker,LS
-Target Man,CF,single,either,any,5,Target Man,LS
-Playmaking Striker,CF,single,either,any,5,Playmaking Striker,LS
-Transitional Threat,CF,single,either,any,5,Transitional Threat,LS
-Pressing Striker,CF,single,either,any,5,Pressing Striker,LS
-Poacher,CF,single,either,any,5,Poacher,LS
-Complete Striker,CF,single,either,any,5,Complete Striker,RS
-Target Man,CF,single,either,any,5,Target Man,RS
-Playmaking Striker,CF,single,either,any,5,Playmaking Striker,RS
-Transitional Threat,CF,single,either,any,5,Transitional Threat,RS
-Pressing Striker,CF,single,either,any,5,Pressing Striker,RS
-Poacher,CF,single,either,any,5,Poacher,RS
+﻿pos_,pos,pos_bucket,foot,main_position,num,pos_role,form_pos,all_check
+Distributor,GK,single,either,any,5,Distributor,GK,1
+Pure Shot-Stopper,GK,single,either,any,5,Pure Shot-Stopper,GK,1
+Balanced Keeper,GK,single,either,any,5,Balanced Keeper,GK,1
+Ball Playing CB,CB,single,either,any,5,Ball Playing CB,LCB,1
+Wide CB,CB,single,either,any,5,Wide CB,LCB,1
+Defensive CB,CB,single,either,any,5,Defensive CB,LCB,1
+Goalscoring CB,CB,single,either,any,5,Goalscoring CB,LCB,1
+Balanced CB,CB,single,either,any,5,Balanced CB,LCB,1
+Ball Playing CB,CB,single,either,any,5,Ball Playing CB,RCB,0
+Wide CB,CB,single,either,any,5,Wide CB,RCB,0
+Defensive CB,CB,single,either,any,5,Defensive CB,RCB,0
+Goalscoring CB,CB,single,either,any,5,Goalscoring CB,RCB,0
+Balanced CB,CB,single,either,any,5,Balanced CB,RCB,0
+Ball Playing CB,CB,single,either,any,5,Ball Playing CB,CB,0
+Wide CB,CB,single,either,any,5,Wide CB,CB,0
+Defensive CB,CB,single,either,any,5,Defensive CB,CB,0
+Goalscoring CB,CB,single,either,any,5,Goalscoring CB,CB,0
+Balanced CB,CB,single,either,any,5,Balanced CB,CB,0
+Defensive FB,Fullback,mult,either,LB|LWB,5,Defensive LB,LB,0
+Inverted FB,Fullback,mult,either,LB|LWB,5,Inverted LB,LB,0
+Attacking FB,Fullback,mult,either,LB|LWB,5,Attacking LB,LB,0
+Wingback,Fullback,mult,either,LB|LWB,5,Left Wingback,LB,0
+Defensive FB,Fullback,mult,either,any,5,Defensive FB,LB,1
+Inverted FB,Fullback,mult,either,any,5,Inverted FB,LB,1
+Attacking FB,Fullback,mult,either,any,5,Attacking FB,LB,1
+Wingback,Fullback,mult,either,any,5,Wingback,LB,1
+Defensive FB,Fullback,mult,either,RB|RWB,5,Defensive RB,RB,0
+Inverted FB,Fullback,mult,either,RB|RWB,5,Inverted RB,RB,0
+Attacking FB,Fullback,mult,either,RB|RWB,5,Attacking RB,RB,0
+Wingback,Fullback,mult,either,RB|RWB,5,Right Wingback,RB,0
+Defensive FB,Fullback,mult,either,any,5,Defensive FB,RB,0
+Inverted FB,Fullback,mult,either,any,5,Inverted FB,RB,0
+Attacking FB,Fullback,mult,either,any,5,Attacking FB,RB,0
+Wingback,Fullback,mult,either,any,5,Wingback,RB,0
+Midfield Anchor,Midfielder no CAM,mult,either,any,5,Midfield Anchor,CM,1
+Holding Mid,Midfielder no CAM,mult,either,any,5,Holding Mid,CM,1
+Deep-Lying Playmaker,Midfielder no CAM,mult,either,any,5,Deep-Lying Playmaker,CM,1
+Box-to-Box Midfielder,Midfielder,mult,either,any,5,Box-to-Box Midfielder,CM,1
+Midfield Anchor,Midfielder no CAM,mult,either,any,5,Midfield Anchor,LCM,0
+Holding Mid,Midfielder no CAM,mult,either,any,5,Holding Mid,LCM,0
+Deep-Lying Playmaker,Midfielder no CAM,mult,either,any,5,Deep-Lying Playmaker,LCM,0
+Box-to-Box Midfielder,Midfielder,mult,either,any,5,Box-to-Box Midfielder,LCM,0
+Advanced Playmaker,Midfielder no DM,mult,either,any,5,Advanced Playmaker,LCM,1
+Midfield Anchor,Midfielder no CAM,mult,either,any,5,Midfield Anchor,RCM,0
+Holding Mid,Midfielder no CAM,mult,either,any,5,Holding Mid,RCM,0
+Deep-Lying Playmaker,Midfielder no CAM,mult,either,any,5,Deep-Lying Playmaker,RCM,0
+Box-to-Box Midfielder,Midfielder,mult,either,any,5,Box-to-Box Midfielder,RCM,0
+Advanced Playmaker,Midfielder no DM,mult,either,any,5,Advanced Playmaker,RCM,0
+Advanced Playmaker,Midfielder no DM,mult,either,any,5,Advanced Playmaker,CAM,0
+Classic 10,Midfielder no DM,mult,either,any,5,Classic 10,CAM,1
+Second Striker,Midfielder no DM,mult,either,any,5,Second Striker,CAM,1
+Advanced Playmaker,Midfielder no DM,mult,either,any,5,Advanced Playmaker,RAM,0
+Classic 10,Midfielder no DM,mult,either,any,5,Classic 10,RAM,0
+Second Striker,Midfielder no DM,mult,either,any,5,Second Striker,RAM,0
+Advanced Playmaker,Midfielder no DM,mult,either,any,5,Advanced Playmaker,LAM,0
+Classic 10,Midfielder no DM,mult,either,any,5,Classic 10,LAM,0
+Second Striker,Midfielder no DM,mult,either,any,5,Second Striker,LAM,0
+Traditional Winger,Winger,mult,either,any,5,Traditional Winger,LW,1
+Inverted Winger,Winger,mult,either,any,5,Inverted Winger,LW,1
+Inside Forward,Winger,mult,either,any,5,Inside Forward,LW,1
+Traditional Winger,Winger,mult,either,any,5,Traditional Winger,RW,0
+Inverted Winger,Winger,mult,either,any,5,Inverted Winger,RW,0
+Inside Forward,Winger,mult,either,any,5,Inside Forward,RW,0
+Traditional Winger,Winger,mult,either,any,5,Traditional Winger,LM,0
+Inverted Winger,Winger,mult,either,any,5,Inverted Winger,LM,0
+Inside Forward,Winger,mult,either,any,5,Inside Forward,LM,0
+Traditional Winger,Winger,mult,either,any,5,Traditional Winger,RM,0
+Inverted Winger,Winger,mult,either,any,5,Inverted Winger,RM,0
+Inside Forward,Winger,mult,either,any,5,Inside Forward,RM,0
+Advanced Playmaker,Midfielder no DM,mult,either,any,5,Advanced Playmaker,RM,0
+Classic 10,Midfielder no DM,mult,either,any,5,Classic 10,RM,0
+Second Striker,Midfielder no DM,mult,either,any,5,Second Striker,RM,0
+Advanced Playmaker,Midfielder no DM,mult,either,any,5,Advanced Playmaker,LM,0
+Classic 10,Midfielder no DM,mult,either,any,5,Classic 10,LM,0
+Second Striker,Midfielder no DM,mult,either,any,5,Second Striker,LM,0
+Wide Playmaker,Winger,mult,either,any,5,Wide Playmaker,RM,1
+Wide Playmaker,Winger,mult,either,any,5,Wide Playmaker,LM,0
+Wide Playmaker,Winger,mult,either,any,5,Wide Playmaker,RW,0
+Wide Playmaker,Winger,mult,either,any,5,Wide Playmaker,LW,0
+Complete Striker,CF,single,either,any,5,Complete Striker,ST,1
+Target Man,CF,single,either,any,5,Target Man,ST,1
+Playmaking Striker,CF,single,either,any,5,Playmaking Striker,ST,1
+Transitional Threat,CF,single,either,any,5,Transitional Threat,ST,1
+Pressing Striker,CF,single,either,any,5,Pressing Striker,ST,1
+Poacher,CF,single,either,any,5,Poacher,ST,1
+Complete Striker,CF,single,either,any,5,Complete Striker,LS,0
+Target Man,CF,single,either,any,5,Target Man,LS,0
+Playmaking Striker,CF,single,either,any,5,Playmaking Striker,LS,0
+Transitional Threat,CF,single,either,any,5,Transitional Threat,LS,0
+Pressing Striker,CF,single,either,any,5,Pressing Striker,LS,0
+Poacher,CF,single,either,any,5,Poacher,LS,0
+Complete Striker,CF,single,either,any,5,Complete Striker,RS,0
+Target Man,CF,single,either,any,5,Target Man,RS,0
+Playmaking Striker,CF,single,either,any,5,Playmaking Striker,RS,0
+Transitional Threat,CF,single,either,any,5,Transitional Threat,RS,0
+Pressing Striker,CF,single,either,any,5,Pressing Striker,RS,0
+Poacher,CF,single,either,any,5,Poacher,RS,0

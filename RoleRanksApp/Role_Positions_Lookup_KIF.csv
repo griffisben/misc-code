@@ -5,17 +5,17 @@ Balanced Keeper,GK,single,either,any,5,Balanced Keeper,GK,1
 Ball Playing CB,CB,single,either,any,5,Ball Playing CB,LCB,1
 Wide CB,CB,single,either,any,5,Wide CB,LCB,1
 Defensive CB,CB,single,either,any,5,Defensive CB,LCB,1
-Set-Piece CB,CB,single,either,any,5,Set-Piece CB,LCB,1
+Goalscoring CB,CB,single,either,any,5,Goalscoring CB,LCB,1
 Balanced CB,CB,single,either,any,5,Balanced CB,LCB,1
 Ball Playing CB,CB,single,either,any,5,Ball Playing CB,RCB,0
 Wide CB,CB,single,either,any,5,Wide CB,RCB,0
 Defensive CB,CB,single,either,any,5,Defensive CB,RCB,0
-Set-Piece CB,CB,single,either,any,5,Set-Piece CB,RCB,0
+Goalscoring CB,CB,single,either,any,5,Goalscoring CB,RCB,0
 Balanced CB,CB,single,either,any,5,Balanced CB,RCB,0
 Ball Playing CB,CB,single,either,any,5,Ball Playing CB,CB,0
 Wide CB,CB,single,either,any,5,Wide CB,CB,0
 Defensive CB,CB,single,either,any,5,Defensive CB,CB,0
-Set-Piece CB,CB,single,either,any,5,Set-Piece CB,CB,0
+Goalscoring CB,CB,single,either,any,5,Goalscoring CB,CB,0
 Balanced CB,CB,single,either,any,5,Balanced CB,CB,0
 Defensive FB,Fullback,mult,either,LB|LWB,5,Defensive LB,LB,0
 Inverted FB,Fullback,mult,either,LB|LWB,5,Inverted LB,LB,0
@@ -37,25 +37,16 @@ Midfield Anchor,Midfielder no CAM,mult,either,any,5,Midfield Anchor,CM,1
 Holding Mid,Midfielder no CAM,mult,either,any,5,Holding Mid,CM,1
 Deep-Lying Playmaker,Midfielder no CAM,mult,either,any,5,Deep-Lying Playmaker,CM,1
 Box-to-Box Midfielder,Midfielder,mult,either,any,5,Box-to-Box Midfielder,CM,1
-Progressive Midfielder,Midfielder no CAM,mult,either,any,5,Progressive Midfielder,CM,1
-Number 6,Midfielder no CAM,mult,either,any,5,Number 6,CM,1
-Possession Enabler,Midfielder no CAM,mult,either,any,5,Possession Enabler,CM,1
 Midfield Anchor,Midfielder no CAM,mult,either,any,5,Midfield Anchor,LCM,0
 Holding Mid,Midfielder no CAM,mult,either,any,5,Holding Mid,LCM,0
 Deep-Lying Playmaker,Midfielder no CAM,mult,either,any,5,Deep-Lying Playmaker,LCM,0
 Box-to-Box Midfielder,Midfielder,mult,either,any,5,Box-to-Box Midfielder,LCM,0
 Advanced Playmaker,Midfielder no DM,mult,either,any,5,Advanced Playmaker,LCM,1
-Progressive Midfielder,Midfielder no CAM,mult,either,any,5,Progressive Midfielder,LCM,0
-Number 6,Midfielder no CAM,mult,either,any,5,Number 6,LCM,0
-Possession Enabler,Midfielder no CAM,mult,either,any,5,Possession Enabler,LCM,0
 Midfield Anchor,Midfielder no CAM,mult,either,any,5,Midfield Anchor,RCM,0
 Holding Mid,Midfielder no CAM,mult,either,any,5,Holding Mid,RCM,0
 Deep-Lying Playmaker,Midfielder no CAM,mult,either,any,5,Deep-Lying Playmaker,RCM,0
 Box-to-Box Midfielder,Midfielder,mult,either,any,5,Box-to-Box Midfielder,RCM,0
 Advanced Playmaker,Midfielder no DM,mult,either,any,5,Advanced Playmaker,RCM,0
-Progressive Midfielder,Midfielder no CAM,mult,either,any,5,Progressive Midfielder,RCM,0
-Number 6,Midfielder no CAM,mult,either,any,5,Number 6,RCM,0
-Possession Enabler,Midfielder no CAM,mult,either,any,5,Possession Enabler,RCM,0
 Advanced Playmaker,Midfielder no DM,mult,either,any,5,Advanced Playmaker,CAM,0
 Classic 10,Midfielder no DM,mult,either,any,5,Classic 10,CAM,1
 Second Striker,Midfielder no DM,mult,either,any,5,Second Striker,CAM,1
@@ -90,21 +81,18 @@ Wide Playmaker,Winger,mult,either,any,5,Wide Playmaker,LW,0
 Complete Striker,CF,single,either,any,5,Complete Striker,ST,1
 Target Man,CF,single,either,any,5,Target Man,ST,1
 Playmaking Striker,CF,single,either,any,5,Playmaking Striker,ST,1
-Transitional Striker,CF,single,either,any,5,Transitional Striker,ST,1
+Transitional Threat,CF,single,either,any,5,Transitional Threat,ST,1
 Pressing Striker,CF,single,either,any,5,Pressing Striker,ST,1
 Poacher,CF,single,either,any,5,Poacher,ST,1
-Link-Up Striker,CF,single,either,any,5,Link-Up Striker,ST,1
 Complete Striker,CF,single,either,any,5,Complete Striker,LS,0
 Target Man,CF,single,either,any,5,Target Man,LS,0
 Playmaking Striker,CF,single,either,any,5,Playmaking Striker,LS,0
-Transitional Striker,CF,single,either,any,5,Transitional Striker,LS,0
+Transitional Threat,CF,single,either,any,5,Transitional Threat,LS,0
 Pressing Striker,CF,single,either,any,5,Pressing Striker,LS,0
 Poacher,CF,single,either,any,5,Poacher,LS,0
-Link-Up Striker,CF,single,either,any,5,Link-Up Striker,LS,0
 Complete Striker,CF,single,either,any,5,Complete Striker,RS,0
 Target Man,CF,single,either,any,5,Target Man,RS,0
 Playmaking Striker,CF,single,either,any,5,Playmaking Striker,RS,0
-Transitional Striker,CF,single,either,any,5,Transitional Striker,RS,0
+Transitional Threat,CF,single,either,any,5,Transitional Threat,RS,0
 Pressing Striker,CF,single,either,any,5,Pressing Striker,RS,0
 Poacher,CF,single,either,any,5,Poacher,RS,0
-Link-Up Striker,CF,single,either,any,5,Link-Up Striker,RS,0

@@ -1,0 +1,35 @@
+metric,better,scaling,source
+Accelerations per 90,higher,minmax,wyscout
+"Accurate long passes, %",higher,minmax,wyscout
+"Accurate short / medium passes, %",higher,minmax,wyscout
+Aerial duels won per 90,higher,minmax,derived
+"Aerial duels won, %",higher,minmax,wyscout
+Crosses per 90,higher,minmax,wyscout
+Defensive duels per 90,higher,minmax,wyscout
+"Defensive duels won, %",higher,minmax,wyscout
+Exits per 90,higher,minmax,wyscout
+Fouls per 90,lower,neg_z,wyscout
+"Goal conversion, %",higher,minmax,wyscout
+Head goals per 90,higher,minmax,wyscout
+Key passes per 90,higher,minmax,wyscout
+"Offensive duels won, %",higher,minmax,wyscout
+PAdj Interceptions,higher,minmax,wyscout
+Passes per 90,higher,minmax,wyscout
+Passes to final third & deep completions,higher,minmax,derived
+Passes to final third per 90,higher,minmax,wyscout
+Passes to penalty area per 90,higher,minmax,wyscout
+Pct of passes being lateral,higher,minmax,derived
+Pct of passes being short,higher,minmax,derived
+Prevented goals per 90,higher,minmax,wyscout
+Progressive passes per 90,higher,minmax,wyscout
+Progressive runs per 90,higher,minmax,wyscout
+Received passes per 90,higher,minmax,wyscout
+"Save rate, %",higher,minmax,wyscout
+Short / medium passes per 90,higher,minmax,wyscout
+Shot assists per 90,higher,minmax,wyscout
+Shots per 90,higher,minmax,wyscout
+Successful dribbles per 90,higher,minmax,derived
+Through passes per 90,higher,minmax,wyscout
+Touches in box per 90,higher,minmax,wyscout
+npxG per 90,higher,minmax,derived
+xA per 90,higher,minmax,wyscout

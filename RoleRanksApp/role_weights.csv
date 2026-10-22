@@ -1,0 +1,249 @@
+role,metric,weight
+Distributor,Prevented goals per 90,.15
+Distributor,Short / medium passes per 90,.25
+Distributor,Pct of passes being short,.2
+Distributor,"Accurate long passes, %",.15
+Distributor,Progressive passes per 90,.2
+Distributor,"Save rate, %",.05
+Pure Shot-Stopper,Prevented goals per 90,.5
+Pure Shot-Stopper,Short / medium passes per 90,.1
+Pure Shot-Stopper,"Accurate long passes, %",.1
+Pure Shot-Stopper,"Save rate, %",.15
+Pure Shot-Stopper,Exits per 90,.15
+Balanced Keeper,Prevented goals per 90,.35
+Balanced Keeper,Short / medium passes per 90,.15
+Balanced Keeper,Pct of passes being short,.1
+Balanced Keeper,"Accurate long passes, %",.1
+Balanced Keeper,Progressive passes per 90,.1
+Balanced Keeper,"Save rate, %",.1
+Balanced Keeper,Exits per 90,.1
+Ball Playing CB,"Accurate long passes, %",.2
+Ball Playing CB,Passes to final third & deep completions,.2
+Ball Playing CB,Progressive passes per 90,.2
+Ball Playing CB,"Aerial duels won, %",.1
+Ball Playing CB,"Defensive duels won, %",.1
+Ball Playing CB,Aerial duels won per 90,.1
+Ball Playing CB,Through passes per 90,.1
+Wide CB,Passes to final third & deep completions,.15
+Wide CB,Progressive passes per 90,.1
+Wide CB,"Aerial duels won, %",.1
+Wide CB,"Defensive duels won, %",.15
+Wide CB,Aerial duels won per 90,.1
+Wide CB,Progressive runs per 90,.25
+Wide CB,Crosses per 90,.15
+Defensive CB,Fouls per 90,.1
+Defensive CB,Progressive passes per 90,.1
+Defensive CB,"Aerial duels won, %",.25
+Defensive CB,"Defensive duels won, %",.3
+Defensive CB,Aerial duels won per 90,.25
+Set-Piece CB,"Aerial duels won, %",.25
+Set-Piece CB,"Defensive duels won, %",.1
+Set-Piece CB,Aerial duels won per 90,.1
+Set-Piece CB,Shots per 90,.05
+Set-Piece CB,Touches in box per 90,.3
+Set-Piece CB,npxG per 90,.1
+Set-Piece CB,Head goals per 90,.1
+Balanced CB,"Accurate long passes, %",.1
+Balanced CB,Passes to final third & deep completions,.05
+Balanced CB,Progressive passes per 90,.1
+Balanced CB,Short / medium passes per 90,.1
+Balanced CB,"Aerial duels won, %",.25
+Balanced CB,"Defensive duels won, %",.25
+Balanced CB,Aerial duels won per 90,.05
+Balanced CB,Progressive runs per 90,.1
+Defensive FB,Fouls per 90,.1
+Defensive FB,"Aerial duels won, %",.15
+Defensive FB,"Defensive duels won, %",.25
+Defensive FB,Aerial duels won per 90,.1
+Defensive FB,PAdj Interceptions,.15
+Defensive FB,Crosses per 90,.1
+Defensive FB,Defensive duels per 90,.15
+Inverted FB,Passes to final third & deep completions,.1
+Inverted FB,Progressive passes per 90,.15
+Inverted FB,"Aerial duels won, %",.05
+Inverted FB,"Defensive duels won, %",.1
+Inverted FB,Aerial duels won per 90,.1
+Inverted FB,PAdj Interceptions,.1
+Inverted FB,Crosses per 90,.1
+Inverted FB,Passes to penalty area per 90,.1
+Inverted FB,Defensive duels per 90,.1
+Inverted FB,Shot assists per 90,.1
+Attacking FB,Passes to final third & deep completions,.05
+Attacking FB,"Defensive duels won, %",.05
+Attacking FB,Shots per 90,.05
+Attacking FB,Touches in box per 90,.1
+Attacking FB,PAdj Interceptions,.05
+Attacking FB,Crosses per 90,.2
+Attacking FB,Passes to penalty area per 90,.05
+Attacking FB,Shot assists per 90,.1
+Attacking FB,xA per 90,.05
+Attacking FB,Successful dribbles per 90,.15
+Attacking FB,Progressive runs per 90,.15
+Wingback,"Defensive duels won, %",.05
+Wingback,Aerial duels won per 90,.05
+Wingback,Shots per 90,.05
+Wingback,Touches in box per 90,.05
+Wingback,Crosses per 90,.15
+Wingback,Passes to penalty area per 90,.05
+Wingback,Defensive duels per 90,.1
+Wingback,Shot assists per 90,.1
+Wingback,xA per 90,.05
+Wingback,Successful dribbles per 90,.2
+Wingback,npxG per 90,.05
+Wingback,Progressive runs per 90,.1
+Midfield Anchor,"Defensive duels won, %",.25
+Midfield Anchor,Defensive duels per 90,.25
+Midfield Anchor,Aerial duels won per 90,.1
+Midfield Anchor,"Aerial duels won, %",.1
+Midfield Anchor,PAdj Interceptions,.1
+Midfield Anchor,Pct of passes being short,.1
+Midfield Anchor,Progressive passes per 90,.05
+Midfield Anchor,Passes to final third per 90,.05
+Holding Mid,"Defensive duels won, %",.25
+Holding Mid,"Aerial duels won, %",.1
+Holding Mid,PAdj Interceptions,.1
+Holding Mid,Short / medium passes per 90,.2
+Holding Mid,Pct of passes being short,.15
+Holding Mid,Progressive passes per 90,.1
+Holding Mid,Passes to final third per 90,.1
+Deep-Lying Playmaker,"Defensive duels won, %",.1
+Deep-Lying Playmaker,Defensive duels per 90,.1
+Deep-Lying Playmaker,PAdj Interceptions,.05
+Deep-Lying Playmaker,Progressive passes per 90,.25
+Deep-Lying Playmaker,Received passes per 90,.1
+Deep-Lying Playmaker,Passes to final third per 90,.15
+Deep-Lying Playmaker,Passes to penalty area per 90,.15
+Deep-Lying Playmaker,xA per 90,.1
+Box-to-Box Midfielder,"Defensive duels won, %",.1
+Box-to-Box Midfielder,Defensive duels per 90,.2
+Box-to-Box Midfielder,Aerial duels won per 90,.05
+Box-to-Box Midfielder,PAdj Interceptions,.05
+Box-to-Box Midfielder,Progressive passes per 90,.1
+Box-to-Box Midfielder,Passes to final third per 90,.1
+Box-to-Box Midfielder,Passes to penalty area per 90,.05
+Box-to-Box Midfielder,Touches in box per 90,.15
+Box-to-Box Midfielder,Progressive runs per 90,.1
+Box-to-Box Midfielder,Shots per 90,.1
+Progressive Midfielder,Received passes per 90,.15
+Progressive Midfielder,Passes to final third per 90,.2
+Progressive Midfielder,Progressive passes per 90,.225
+Progressive Midfielder,"Offensive duels won, %",.1
+Progressive Midfielder,Accelerations per 90,.1
+Progressive Midfielder,Progressive runs per 90,.225
+Number 6,"Defensive duels won, %",.3
+Number 6,Fouls per 90,.1
+Number 6,Pct of passes being short,.2
+Number 6,"Accurate short / medium passes, %",.25
+Number 6,"Offensive duels won, %",.15
+Possession Enabler,"Accurate short / medium passes, %",.3
+Possession Enabler,Pct of passes being short,.2
+Possession Enabler,Fouls per 90,.1
+Possession Enabler,Passes per 90,.1
+Possession Enabler,Pct of passes being lateral,.3
+Advanced Playmaker,Progressive passes per 90,.05
+Advanced Playmaker,Through passes per 90,.1
+Advanced Playmaker,Passes to final third per 90,.15
+Advanced Playmaker,Passes to penalty area per 90,.15
+Advanced Playmaker,Touches in box per 90,.1
+Advanced Playmaker,Successful dribbles per 90,.05
+Advanced Playmaker,Shots per 90,.05
+Advanced Playmaker,xA per 90,.15
+Advanced Playmaker,Shot assists per 90,.2
+Classic 10,Through passes per 90,.1
+Classic 10,Passes to penalty area per 90,.15
+Classic 10,Touches in box per 90,.2
+Classic 10,Successful dribbles per 90,.15
+Classic 10,Shots per 90,.05
+Classic 10,npxG per 90,.05
+Classic 10,xA per 90,.1
+Classic 10,Shot assists per 90,.2
+Second Striker,Touches in box per 90,.3
+Second Striker,Successful dribbles per 90,.15
+Second Striker,Shots per 90,.25
+Second Striker,npxG per 90,.25
+Second Striker,Shot assists per 90,.05
+Traditional Winger,Defensive duels per 90,.1
+Traditional Winger,Touches in box per 90,.1
+Traditional Winger,Successful dribbles per 90,.25
+Traditional Winger,Crosses per 90,.25
+Traditional Winger,xA per 90,.1
+Traditional Winger,Shot assists per 90,.1
+Traditional Winger,Progressive runs per 90,.1
+Inverted Winger,Passes to penalty area per 90,.1
+Inverted Winger,Touches in box per 90,.2
+Inverted Winger,Successful dribbles per 90,.15
+Inverted Winger,Crosses per 90,.05
+Inverted Winger,Shots per 90,.15
+Inverted Winger,npxG per 90,.1
+Inverted Winger,xA per 90,.1
+Inverted Winger,Shot assists per 90,.15
+Inside Forward,Touches in box per 90,.25
+Inside Forward,Successful dribbles per 90,.15
+Inside Forward,Passes to penalty area per 90,.1
+Inside Forward,Shots per 90,.15
+Inside Forward,npxG per 90,.2
+Inside Forward,xA per 90,.05
+Inside Forward,Shot assists per 90,.1
+Wide Playmaker,Touches in box per 90,.05
+Wide Playmaker,Successful dribbles per 90,.1
+Wide Playmaker,npxG per 90,.05
+Wide Playmaker,xA per 90,.15
+Wide Playmaker,Shot assists per 90,.25
+Wide Playmaker,Passes to penalty area per 90,.1
+Wide Playmaker,Through passes per 90,.15
+Wide Playmaker,Progressive passes per 90,.15
+Complete Striker,Defensive duels per 90,.1
+Complete Striker,Touches in box per 90,.1
+Complete Striker,Successful dribbles per 90,.1
+Complete Striker,Shots per 90,.15
+Complete Striker,npxG per 90,.15
+Complete Striker,"Goal conversion, %",.1
+Complete Striker,xA per 90,.1
+Complete Striker,Shot assists per 90,.1
+Complete Striker,"Aerial duels won, %",.1
+Target Man,Defensive duels per 90,.1
+Target Man,Touches in box per 90,.1
+Target Man,Shots per 90,.15
+Target Man,npxG per 90,.2
+Target Man,Aerial duels won per 90,.15
+Target Man,"Aerial duels won, %",.15
+Target Man,Head goals per 90,.15
+Poacher,Touches in box per 90,.2
+Poacher,Shots per 90,.2
+Poacher,npxG per 90,.2
+Poacher,"Goal conversion, %",.2
+Poacher,Aerial duels won per 90,.1
+Poacher,"Aerial duels won, %",.1
+Playmaking Striker,Touches in box per 90,.05
+Playmaking Striker,Successful dribbles per 90,.05
+Playmaking Striker,Key passes per 90,.2
+Playmaking Striker,xA per 90,.15
+Playmaking Striker,Shot assists per 90,.2
+Playmaking Striker,Passes to penalty area per 90,.1
+Playmaking Striker,Through passes per 90,.1
+Playmaking Striker,Passes to final third per 90,.1
+Playmaking Striker,Progressive passes per 90,.05
+Transitional Striker,Defensive duels per 90,.1
+Transitional Striker,Touches in box per 90,.1
+Transitional Striker,Successful dribbles per 90,.2
+Transitional Striker,Shots per 90,.15
+Transitional Striker,npxG per 90,.2
+Transitional Striker,xA per 90,.05
+Transitional Striker,Progressive runs per 90,.2
+Pressing Striker,Defensive duels per 90,.3
+Pressing Striker,"Defensive duels won, %",.1
+Pressing Striker,PAdj Interceptions,.15
+Pressing Striker,Touches in box per 90,.1
+Pressing Striker,Successful dribbles per 90,.05
+Pressing Striker,Shots per 90,.1
+Pressing Striker,npxG per 90,.1
+Pressing Striker,xA per 90,.05
+Pressing Striker,Shot assists per 90,.05
+Link-Up Striker,"Accurate short / medium passes, %",.2
+Link-Up Striker,Pct of passes being short,.05
+Link-Up Striker,Shot assists per 90,.1
+Link-Up Striker,Key passes per 90,.1
+Link-Up Striker,Touches in box per 90,.1
+Link-Up Striker,"Offensive duels won, %",.1
+Link-Up Striker,Pct of passes being lateral,.15
+Link-Up Striker,Received passes per 90,.2
